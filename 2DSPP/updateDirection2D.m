@@ -16,12 +16,9 @@ y =     2;
 phi =   3;
 
 N = size(arrayPrev,1);
-ndim = 2;
 
 % find distances between all pairs of objects
 distanceMatrixXY = computeDistancesWithBCs(arrayPrev(:,[x y]),L,bc);
-distanceMatrix = sqrt(sum(distanceMatrixXY.^2,3)); % reduce to scalar
-
 
 for objCtr = 1:N
     % calculate force contributions
@@ -31,13 +28,7 @@ for objCtr = 1:N
     Fa = [cos(arrayPrev(objCtr,phi)); sin(arrayPrev(objCtr,phi))]; % self-alignment (persistence)
     
     % core repulsion (volume exclusion)
-    collisionNbrs = distanceMatrix(:,objCtr)<=rc;
-    collisionNbrs(objCtr) = false; % no self-repulsion
-    Nc = nnz(collisionNbrs);
-    Fc = sum(... % sum over all collision neighbours
-        reshape(distanceMatrixXY(objCtr,collisionNbrs,:),Nc,ndim)... %direction FROM neighbours TO object (use reshape rather than squeeze for case when Nc = 1)
-        ./distanceMatrix(collisionNbrs,objCtr*ones(1,ndim))... % normalise for distance
-        ,1)'; % made into column vector
+    Fc = exclusionForce(distanceMatrixXY,objCtr, rc);
     
     % sum forces
     F = Fa + 1e100*Fc;

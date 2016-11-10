@@ -20,7 +20,7 @@
 % issues/to-do's:
 % - 
 
-function xyphiarray = runSPP2D(T,N,L,varargin)
+function xyphiarray = run2DSPP(T,N,L,varargin)
 
 % parse inputs (see matlab documentation)
 iP = inputParser;
