@@ -17,6 +17,8 @@ arrayNow(:,x) = arrayPrev(:,x) + ...
 arrayNow(:,y) = arrayPrev(:,y) + ...
     v0*sin(arrayNow(:,phi));
 
+ndim = size(arrayNow,2)-1;
+
 % check boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can
 %   be single number or 2 element array {'bcx','bcy'} for different
 %   bcs along different dimensions
@@ -26,7 +28,7 @@ if iscell(bc)&&numel(bc)==2
         switch bc{dimCtr}
             case 'periodic'
                 cellIdcsUnder0 = arrayNow(:,dimCtr)<0;
-                if numel(L)==3 % vector domain size [L_x L_y]
+                if numel(L)==ndim % vector domain size [L_x L_y]
                     arrayNow(cellIdcsUnder0,dimCtr)  = arrayNow(cellIdcsUnder0,dimCtr) + L(dimCtr);
                     cellIdcsOverL = arrayNow(:,dimCtr)>=L(dimCtr);
                     arrayNow(cellIdcsOverL,dimCtr)  = arrayNow(cellIdcsOverL,dimCtr) - L(dimCtr);
@@ -38,7 +40,7 @@ if iscell(bc)&&numel(bc)==2
             case 'noflux'
                 cellIdcsUnder0 = arrayNow(:,dimCtr)<0;
                 arrayNow(cellIdcsUnder0,dimCtr)  = - arrayNow(cellIdcsUnder0,dimCtr);
-                if numel(L)==3 % vector domain size [L_x L_y]
+                if numel(L)==ndim % vector domain size [L_x L_y]
                     cellIdcsOverL = arrayNow(:,dimCtr)>=L(dimCtr);
                     arrayNow(cellIdcsOverL,dimCtr)  = 2*L(dimCtr) - arrayNow(cellIdcsOverL,dimCtr);
                 else % scalar domain size
@@ -53,14 +55,15 @@ if iscell(bc)&&numel(bc)==2
 else
     switch bc
         case 'periodic'
-            cellIdcsUnder0 = arrayNow(:,[x y])<0;
-            if numel(L)==3 % vector domain size [L_x L_y]
+            if numel(L)==ndim % vector domain size [L_x L_y]
                 for dimCtr = [x y]
-                    arrayNow(cellIdcsUnder0)  = arrayNow(cellIdcsUnder0) + L(dimCtr);
+                    cellIdcsUnder0 = arrayNow(:,dimCtr)<0;
+                    arrayNow(cellIdcsUnder0,dimCtr)  = arrayNow(cellIdcsUnder0,dimCtr) + L(dimCtr);
                     cellIdcsOverL = arrayNow(:,dimCtr)>=L(dimCtr);
                     arrayNow(cellIdcsOverL,dimCtr)  = arrayNow(cellIdcsOverL,dimCtr) - L(dimCtr);
                 end
             else % scalar domain size
+                cellIdcsUnder0 = arrayNow(:,[x y])<0;
                 arrayNow(cellIdcsUnder0)  = arrayNow(cellIdcsUnder0) + L;
                 cellIdcsOverL = arrayNow(:,[x y])>=L;
                 arrayNow(cellIdcsOverL)  = arrayNow(cellIdcsOverL) - L;
@@ -69,7 +72,7 @@ else
             for dimCtr = [x y]
                 cellIdcsUnder0 = arrayNow(:,dimCtr)<0;
                 arrayNow(cellIdcsUnder0,dimCtr)  = - arrayNow(cellIdcsUnder0,dimCtr);
-                if numel(L)==3 % vector domain size [L_x L_y]
+                if numel(L)==ndim % vector domain size [L_x L_y]
                     cellIdcsOverL = arrayNow(:,dimCtr)>=L(dimCtr);
                     arrayNow(cellIdcsOverL,dimCtr)  = 2*L(dimCtr) - arrayNow(cellIdcsOverL,dimCtr);
                 else % scalar domain size

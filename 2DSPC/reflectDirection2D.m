@@ -8,7 +8,7 @@ y =     2;
 switch dimension
     case x % phi goes to pi - phi (or -pi + phi)
         angles(:,1) = wrapToPi(pi - angles(:,1));
-    case y % phi goes to -theta
+    case y % phi goes to -phi
         angles(:,1) = - angles(:,1);
 end
 reflected = angles;

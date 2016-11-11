@@ -3,8 +3,9 @@ function [outArray] = initialiseChains2D(inArray,L,segmentLength,deltaTheta)
 % uniformly randomly distributed
 
 % issues/to-do's:
-% - initial positions do not currently respect volume exclusion
-% - could implement non-random initial positions, e.g. regularly spaced
+% - initial positions do not currently respect volume exclusion or chain
+% overlap
+
 
 % short-hand for indexing coordinates
 x =     1;
@@ -17,10 +18,12 @@ if size(L,1)>size(L,2)
     L = L';
 end
 
+L0 = M*segmentLength;
+
 for objCtr = 1:N
     % initialise head node
     % Position, should work for both scalar and vector L
-    inArray(objCtr,1,[x y],1) = L.*rand(1,2);
+    inArray(objCtr,1,[x y],1) = L0 + (L - 2*L0).*rand(1,2); % initialise positions at least one chain length away from edge
     % Direction
     inArray(objCtr,1,phi,1) = pi*(2*rand - 1);   % phi between -pi and pi
     for nodeCtr = 2:M % initialise chain positions, node by node

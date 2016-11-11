@@ -48,9 +48,9 @@ xyphiarray = initialiseChains2D(xyphiarray,L,segmentLength,deltaTheta);
 
 for t=2:T
     % update direction
-    xyphiarray(:,:,:,t) = updateDirection2D(xyphiarray(:,:,t),xyphiarray(:,:,t-1),L,rc,bc);
+    xyphiarray(:,:,:,t) = updateChainDirection2D(xyphiarray(:,:,:,t),xyphiarray(:,:,:,t-1),L,rc,bc);
     % update position
-    xyphiarray(:,:,:,t) = updatePosition2D(xyphiarray(:,:,t),xyphiarray(:,:,t-1),v0,bc,L);
+    xyphiarray(:,:,:,t) = updateChainPosition2D(xyphiarray(:,:,:,t),xyphiarray(:,:,:,t-1),v0,bc,L);
 end
 end
 
