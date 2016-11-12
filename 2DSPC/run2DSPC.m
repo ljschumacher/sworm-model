@@ -50,7 +50,7 @@ for t=2:T
     % update direction
     xyphiarray(:,:,:,t) = updateChainDirection2D(xyphiarray(:,:,:,t),xyphiarray(:,:,:,t-1),L,rc,bc);
     % update position
-    xyphiarray(:,:,:,t) = updateChainPosition2D(xyphiarray(:,:,:,t),xyphiarray(:,:,:,t-1),v0,bc,L);
+    xyphiarray(:,:,:,t) = updateChainPosition2D(xyphiarray(:,:,:,t),xyphiarray(:,:,:,t-1),v0,bc,L,segmentLength);
 end
 end
 

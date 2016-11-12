@@ -19,7 +19,10 @@ for frameCtr=1:nFrames
     quiver(xyphiarray(:,:,1,frameCtr),xyphiarray(:,:,2,frameCtr),...
         cos(xyphiarray(:,:,3,frameCtr)),sin(xyphiarray(:,:,3,frameCtr)),0.05,...% scaling factor, works as segment between nodes if quiver speed is 1
         'Marker','o','ShowArrowHead','off');
-    xlim(xrange), ylim(yrange)
+    ax = gca;
+    ax.XLim = xrange;
+    ax.YLim = yrange;
+    ax.DataAspectRatio = [1 1 1];
     writeVideo(vid,getframe)
 end
 close(vid)

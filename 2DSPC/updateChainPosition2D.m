@@ -1,16 +1,17 @@
-function arrayOut = updateChainPosition2D(arrayNow,arrayPrev,v0,bc,L)
+function arrayOut = updateChainPosition2D(arrayNow,arrayPrev,v0,bc,L,segmentLength)
 % update positions based on current directions
 
 % issues/to-do's:
-%   - could try to optimise the code for the vector domain size/mixed
-%   boundary condition cases to get rid of loops...
-%   - mixed periodic boundary conditions can be quite slow?
-%   - move check of boundary conditions to separate function?
+%   - assert length constraints enforcement
+%   - length can be violated again by checking boundary conditions (though
+%   should be met considering arclength of high M limit)
 
 % short-hand for indexing coordinates
 x =     1;
 y =     2;
 phi =   3;
+
+M = size(arrayPrev,2); % number of nodes
 
 % update position
 arrayNow(:,:,x) = arrayPrev(:,:,x) + ...
@@ -18,84 +19,16 @@ arrayNow(:,:,x) = arrayPrev(:,:,x) + ...
 arrayNow(:,:,y) = arrayPrev(:,:,y) + ...
     v0*sin(arrayNow(:,:,phi));
 
-N = size(arrayNow,1);
-M = size(arrayNow,2);
-ndim = size(arrayNow,3)-1;
-
-% check boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can
-%   be single number or 2 element array {'bcx','bcy'} for different
-%   bcs along different dimensions
-
-if iscell(bc)&&numel(bc)==ndim
-    for dimCtr = [x y]
-        switch bc{dimCtr}
-            case 'periodic'
-                nodeIndsUnder0 = find(arrayNow(:,:,dimCtr)<0) + N*M*(dimCtr - 1);
-                if numel(L)==ndim % vector domain size [L_x L_y]
-                    arrayNow(nodeIndsUnder0)  = arrayNow(nodeIndsUnder0) + L(dimCtr);
-                    nodeIndsOverL = find(arrayNow(:,:,dimCtr)>=L(dimCtr)) + N*M*(dimCtr - 1);
-                    arrayNow(nodeIndsOverL)  = arrayNow(nodeIndsOverL) - L(dimCtr);
-                else % scalar domain size
-                    arrayNow(nodeIndsUnder0)  = arrayNow(nodeIndsUnder0) + L;
-                    nodeIndsOverL = find(arrayNow(:,:,dimCtr)>=L) + N*M*(dimCtr - 1);
-                    arrayNow(nodeIndsOverL)  = arrayNow(nodeIndsOverL) - L;
-                end
-            case 'noflux'
-                nodeIndsUnder0 = find(arrayNow(:,:,dimCtr)<0) + N*M*(dimCtr - 1);
-                arrayNow(nodeIndsUnder0)  = - arrayNow(nodeIndsUnder0);
-                if numel(L)==ndim % vector domain size [L_x L_y]
-                    nodeIndsOverL = find(arrayNow(:,:,dimCtr)>=L(dimCtr)) + N*M*(dimCtr - 1);
-                    arrayNow(nodeIndsOverL)  = 2*L(dimCtr) - arrayNow(nodeIndsOverL);
-                else % scalar domain size
-                    nodeIndsOverL = find(arrayNow(:,:,dimCtr)>=L) + N*M*(dimCtr - 1);
-                    arrayNow(nodeIndsOverL)  = 2*L - arrayNow(nodeIndsOverL);
-                end
-                % change direction of movement upon reflection
-                arrayNow(union(nodeIndsUnder0,nodeIndsOverL) + N*M*(phi - dimCtr)) = ... % ugly use of indexing
-                    reflectDirection2D(...
-                    arrayNow(union(nodeIndsUnder0,nodeIndsOverL) + N*M*(phi - dimCtr))...
-                    ,dimCtr);
-        end
-    end
-else
-    switch bc
-        case 'periodic'
-            if numel(L)==ndim % vector domain size [L_x L_y]
-                for dimCtr = [x y]
-                    nodeIndsUnder0 = find(arrayNow(:,:,dimCtr)<0) + N*M*(dimCtr - 1);
-                    arrayNow(nodeIndsUnder0)  = arrayNow(nodeIndsUnder0) + L(dimCtr);
-                    nodeIndsOverL = find(arrayNow(:,:,dimCtr)>=L(dimCtr)) + N*M*(dimCtr - 1);
-                    arrayNow(nodeIndsOverL)  = arrayNow(nodeIndsOverL) - L(dimCtr);
-                end
-            else % scalar domain size
-                nodeLogiUnder0 = arrayNow(:,:,[x y])<0;
-                arrayNow(nodeLogiUnder0)  = arrayNow(nodeLogiUnder0) + L;
-                nodeLogiOverL = arrayNow(:,:,[x y])>=L;
-                arrayNow(nodeLogiOverL)  = arrayNow(nodeLogiOverL) - L;
-            end
-        case 'noflux'
-            for dimCtr = [x y]
-                nodeIndsUnder0 = find(arrayNow(:,:,dimCtr)<0) + N*M*(dimCtr - 1);
-                    arrayNow(nodeIndsUnder0)  = - arrayNow(nodeIndsUnder0);
-                if numel(L)==ndim % vector domain size [L_x L_y]
-                    nodeIndsOverL = find(arrayNow(:,:,dimCtr)>=L(dimCtr)) + N*M*(dimCtr - 1);
-                    if any(nodeIndsOverL)
-                        arrayNow(nodeIndsOverL)  = 2*L(dimCtr) - arrayNow(nodeIndsOverL);
-                    end
-                else % scalar domain size
-                    nodeIndsOverL = find(arrayNow(:,:,dimCtr)>=L) + N*M*(dimCtr - 1);
-                    if any(nodeIndsOverL)
-                        arrayNow(nodeIndsOverL)  = 2*L - arrayNow(nodeIndsOverL);
-                    end
-                end
-                % change direction of movement upon reflection
-                arrayNow(union(nodeIndsUnder0,nodeIndsOverL) + N*M*(phi - dimCtr)) = ... % ugly use of indexing
-                    reflectDirection2D(...
-                    arrayNow(union(nodeIndsUnder0,nodeIndsOverL) + N*M*(phi - dimCtr))...
-                    ,dimCtr);
-            end
-    end
+% enforce length constraints within chain
+% reset positions to one segmentLength away from previous node, along line
+% of connection
+for nodeCtr = 2:M
+    segmentVec = arrayNow(:,nodeCtr,[x y]) - arrayNow(:,nodeCtr - 1,[x y]); % vec from prev to current node's current pos
+    arrayNow(:,nodeCtr,[x y]) = arrayNow(:,nodeCtr - 1,[x y]) ...%prev node's current pos
+        + segmentLength*(segmentVec)./...
+        repmat(sqrt(sum(segmentVec.^2,3)),1,1,2); % normalise for length of vec connecting nodes
 end
 
+arrayNow = checkChainBoundaryConditions(arrayNow,bc,L);
 
 arrayOut = arrayNow;
