@@ -4,7 +4,6 @@ function [ ] = animateChainTrajectories(xyphiarray,filename)
 
 % issues/to-do:
 % - node size is not to scale
-% - plot segments of correct length
 
 vid = VideoWriter(filename,'MPEG-4');
 open(vid)
@@ -16,9 +15,8 @@ xrange = [floor(xrange(1)) ceil(xrange(2))];
 yrange = [floor(yrange(1)) ceil(yrange(2))];
 
 for frameCtr=1:nFrames
-    quiver(xyphiarray(:,:,1,frameCtr),xyphiarray(:,:,2,frameCtr),...
-        cos(xyphiarray(:,:,3,frameCtr)),sin(xyphiarray(:,:,3,frameCtr)),0.05,...% scaling factor, works as segment between nodes if quiver speed is 1
-        'Marker','o','ShowArrowHead','off');
+    plot(xyphiarray(:,:,1,frameCtr)',xyphiarray(:,:,2,frameCtr)','-',...
+        'Marker','.','Color','k');
     ax = gca;
     ax.XLim = xrange;
     ax.YLim = yrange;

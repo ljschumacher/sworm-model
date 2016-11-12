@@ -31,17 +31,26 @@ addRequired(iP,'T',checkInt);
 addRequired(iP,'N',checkInt);
 addRequired(iP,'M',checkInt);
 addRequired(iP,'L',@checkL);
-addOptional(iP,'v0',0.05,@isnumeric)
-addOptional(iP,'rc',0.2,@isnumeric)
-addOptional(iP,'segmentLength',1/M,@isnumeric)
+addOptional(iP,'v0',0.33,@isnumeric) % worm forward speed is approx 330mu/s
+addOptional(iP,'dT',1/9,@isnumeric) % adjusts speed, default 1/9 seconds
+addOptional(iP,'rc',0.035,@isnumeric) % worm width is approx 50 to 90 mu = approx 0.07mm
+addOptional(iP,'segmentLength',1.2/M,@isnumeric) % worm length is approx 1.2 mm
 addOptional(iP,'deltaTheta',pi/M,@isnumeric)
 addOptional(iP,'bc','free',@checkBcs)
 parse(iP,T,N,M,L,varargin{:})
-v0 = iP.Results.v0;
+dT = iP.Results.dT;
+v0 = iP.Results.v0*dT;
 rc = iP.Results.rc;
 bc = iP.Results.bc;
 segmentLength = iP.Results.segmentLength;
 deltaTheta = iP.Results.deltaTheta;
+
+% check input relationships to each other
+assert(segmentLength>2*rc,...
+    'Segment length must be bigger than node diameter (2*rc). Decrease segment number (M), rc, or increase segmentLength')
+assert(min(L)>segmentLength*M,...
+    'Domain size (L) must be bigger than object length (segmentLength*M). Increase L.')
+
 
 xyphiarray = NaN(N,M,3,T);
 xyphiarray = initialiseChains2D(xyphiarray,L,segmentLength,deltaTheta);

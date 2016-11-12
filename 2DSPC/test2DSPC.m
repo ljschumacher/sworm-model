@@ -5,8 +5,8 @@ clear
 
 T = 100;
 N = 40;
-M = 7;
-L = [5 10];
+M = 17;
+L = 10;
 
 xyphiarray = run2DSPC(T,N,M,L,'bc','free');
 animateChainTrajectories(xyphiarray,'tests/test_bcfree');

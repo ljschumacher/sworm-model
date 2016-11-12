@@ -1,13 +1,10 @@
 function arrayOut = updateChainDirection2D(arrayNow,arrayPrev,L,rc,bc)
-% updates object directions according to update rules 
+% updates object directions according to update rules
 
 % issues/to-do's:
 % - does it matter if we have discontinuities in our force laws curves?
-% - could also implement collisions as stopping or random direction
-% - periodic boundaries are only implemented for L>2*rc (I think)
 % - mixed periodic boundary conditions can be quite slow
-% - extend to enforce segment length
-% - move collision detection into a separate function?
+% - improve loop structure and motile vs exclusion force
 
 % short-hand for indexing coordinates
 x =     1;
@@ -22,6 +19,7 @@ distanceMatrixXY = computeChainDistancesWithBCs(arrayPrev(:,:,[x y]),L,bc);
 
 for objCtr = 1:N
     % calculate force contributions
+    F = NaN(2,M);
     
     % motile
     Fm = NaN(2,M);
@@ -34,11 +32,17 @@ for objCtr = 1:N
     % core repulsion (volume exclusion)
     Fc = NaN(2,M);
     for nodeCtr = 1:M
-        Fc(:,nodeCtr) = exclusionForce(squeeze(distanceMatrixXY(:,nodeCtr,:,nodeCtr,:)),objCtr, rc);
+        Fc(:,nodeCtr) = exclusionForce(squeeze(distanceMatrixXY(objCtr,nodeCtr,:,:,:)),objCtr,nodeCtr,2*rc); % factor of two so that rc is node radius
     end
     
     % sum forces
-    F = Fm + 1e100*Fc;
+    for nodeCtr = 1:M
+        if any(Fc(:,nodeCtr))
+            F(:,nodeCtr) = Fc(:,nodeCtr);
+        else
+            F(:,nodeCtr) = Fm(:,nodeCtr);
+        end
+    end
     % 1e100 to represent Inf vector, but still have direction, should work as long as Fc~O(L)<1.3408e+54
     
     % update directions
