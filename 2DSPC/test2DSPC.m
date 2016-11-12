@@ -3,10 +3,10 @@
 %   add test cases for both square and unequal dimensions
 clear
 
-T = 100;
+T = 1000;
 N = 40;
 M = 17;
-L = 10;
+L = 12;
 
 xyphiarray = run2DSPC(T,N,M,L,'bc','free');
 animateChainTrajectories(xyphiarray,'tests/test_bcfree');

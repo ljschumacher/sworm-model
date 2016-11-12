@@ -35,10 +35,11 @@ for objCtr = 1:N
         Fc(:,nodeCtr) = exclusionForce(squeeze(distanceMatrixXY(objCtr,nodeCtr,:,:,:)),objCtr,nodeCtr,2*rc); % factor of two so that rc is node radius
     end
     
-    % sum forces
+    % sum motile and exclusion forces with equal magnitude
     for nodeCtr = 1:M
         if any(Fc(:,nodeCtr))
-            F(:,nodeCtr) = Fc(:,nodeCtr);
+            F(:,nodeCtr) = Fm(:,nodeCtr)./sqrt(sum(Fm(:,nodeCtr).^2)) ...
+                + Fc(:,nodeCtr)./sqrt(sum(Fc(:,nodeCtr).^2));
         else
             F(:,nodeCtr) = Fm(:,nodeCtr);
         end
