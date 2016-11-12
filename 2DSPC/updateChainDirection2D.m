@@ -16,6 +16,7 @@ M = size(arrayPrev,2);
 
 % find distances between all pairs of objects
 distanceMatrixXY = computeChainDistancesWithBCs(arrayPrev(:,:,[x y]),L,bc);
+distanceMatrixXY = permute(distanceMatrixXY,[3 4 5 1 2]); % this will make indexing later on faster without need for squeeze()
 
 for objCtr = 1:N
     % calculate force contributions
@@ -32,7 +33,7 @@ for objCtr = 1:N
     % core repulsion (volume exclusion)
     Fc = NaN(2,M);
     for nodeCtr = 1:M
-        Fc(:,nodeCtr) = exclusionForce(squeeze(distanceMatrixXY(objCtr,nodeCtr,:,:,:)),objCtr,nodeCtr,2*rc); % factor of two so that rc is node radius
+        Fc(:,nodeCtr) = exclusionForce(distanceMatrixXY(:,:,:,objCtr,nodeCtr),objCtr,nodeCtr,2*rc); % factor of two so that rc is node radius
     end
     
     % sum motile and exclusion forces with equal magnitude

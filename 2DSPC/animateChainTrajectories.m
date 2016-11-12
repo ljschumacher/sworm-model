@@ -41,7 +41,7 @@ for frameCtr=1:nFrames
     for objCtr = 1:N
         patch(xyphiarray(objCtr*ones(nAngles,1),:,x,frameCtr) + rc*cos(angles(:,ones(M,1))),...
             xyphiarray(objCtr*ones(nAngles,1),:,y,frameCtr) + rc*sin(angles(:,ones(M,1))),...
-            plotColors(objCtr,:))
+            plotColors(objCtr,:),'EdgeColor',plotColors(objCtr,:))
     end
     writeVideo(vid,getframe)
     hold off
