@@ -24,7 +24,7 @@ for objCtr = 1:N
     % Position, should work for both scalar and vector L
     inArray(objCtr,1,[x y],1) = L0 + (L - 2*L0).*rand(1,2); % initialise positions at least one woid length away from edge
     % Direction
-    inArray(objCtr,:,phi,1) = wrapToPi(pi*(2*rand - 1) + theta(objCtr,:));   % random orientation between -pi and pi for each object plus undulations
+    inArray(objCtr,:,phi,1) = wrapToPi(pi*(2*rand - 1) - theta(objCtr,:));   % random orientation between -pi and pi for each object plus undulations
     for nodeCtr = 2:M % initialise woid positions, node by node
         % initialise the next node in the right direction at segmentLength away
         inArray(objCtr,nodeCtr,[x y],1) = squeeze(inArray(objCtr,nodeCtr - 1,[x y],1))... % previous node's position

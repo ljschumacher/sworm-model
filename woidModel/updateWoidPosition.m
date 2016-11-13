@@ -5,6 +5,7 @@ function arrayOut = updateWoidPosition(arrayNow,arrayPrev,v0,bc,L,segmentLength)
 %   - assert length constraints enforcement
 %   - length can be violated again by checking boundary conditions (though
 %   should be met considering arclength of high M limit)
+%   - could move length constraint as force into updateWoidDirections
 
 % short-hand for indexing coordinates
 x =     1;
@@ -27,6 +28,9 @@ for nodeCtr = 2:M
     arrayNow(:,nodeCtr,[x y]) = arrayNow(:,nodeCtr - 1,[x y]) ...%prev node's current pos
         + segmentLength*(segmentVec)./...
         repmat(sqrt(sum(segmentVec.^2,3)),1,1,2); % normalise for length of vec connecting nodes
+    % update direction to how the node actually moved
+    dx = arrayNow(:,nodeCtr,[x y]) - arrayPrev(:,nodeCtr,[x y]);
+    arrayNow(:,nodeCtr,phi) = atan2(dx(:,y),dx(:,x));
 end
 
 arrayNow = checkWoidBoundaryConditions(arrayNow,bc,L);

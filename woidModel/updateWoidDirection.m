@@ -33,8 +33,8 @@ for objCtr = 1:N
         Fm(:,nodeCtr) = arrayPrev(objCtr,nodeCtr - 1,[x y]) ...
             - arrayPrev(objCtr,nodeCtr,[x y]);% move towards previous node's position    
     end
-%     angles = atan2(Fm(y,2:end),Fm(x,2:end)) + diff(theta(objCtr,2:end,:),1,3); ... % undulations incl phase shift along worm
-%     Fm(:,2:end) = [cos(angles); sin(angles)];
+    angles = arrayPrev(objCtr,2:end,phi) + diff(theta(objCtr,2:end,:),1,3); % undulations incl phase shift along worm
+    Fm(:,2:end) = [cos(angles); sin(angles)];
     
     % core repulsion (volume exclusion)
     Fc = NaN(2,M);
