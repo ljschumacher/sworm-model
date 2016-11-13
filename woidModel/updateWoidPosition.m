@@ -21,7 +21,7 @@ arrayNow(:,:,y) = arrayPrev(:,:,y) + ...
 
 % enforce length constraints within Woid
 % reset positions to one segmentLength away from previous node, along line
-% of connection
+% of connection - % WARNING this doesn't currently work for periodic boundaries, as the direction can point to the other side of the domain
 for nodeCtr = 2:M
     segmentVec = arrayNow(:,nodeCtr,[x y]) - arrayNow(:,nodeCtr - 1,[x y]); % vec from prev to current node's current pos
     arrayNow(:,nodeCtr,[x y]) = arrayNow(:,nodeCtr - 1,[x y]) ...%prev node's current pos

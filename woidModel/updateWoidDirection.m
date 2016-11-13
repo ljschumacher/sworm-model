@@ -27,12 +27,14 @@ for objCtr = 1:N
     
     % motile
     Fm = NaN(2,M);
-    Fm(:,1) = [cos(arrayPrev(objCtr,1,phi) + diff(theta(objCtr,:)));...
-        sin(arrayPrev(objCtr,1,phi) + diff(theta(objCtr,:)))]; % alignment with CoM velocity + undulations
+    angle = arrayPrev(objCtr,1,phi) + diff(theta(objCtr,1,:));
+    Fm(:,1) = [cos(angle); sin(angle)]; 
     for nodeCtr = 2:M % WARNING this doesn't currently work for periodic boundaries, as the direction can point to the other side of the domain
         Fm(:,nodeCtr) = arrayPrev(objCtr,nodeCtr - 1,[x y]) ...
-            - arrayPrev(objCtr,nodeCtr,[x y]);% move towards previous node's position
+            - arrayPrev(objCtr,nodeCtr,[x y]);% move towards previous node's position    
     end
+%     angles = atan2(Fm(y,2:end),Fm(x,2:end)) + diff(theta(objCtr,2:end,:),1,3); ... % undulations incl phase shift along worm
+%     Fm(:,2:end) = [cos(angles); sin(angles)];
     
     % core repulsion (volume exclusion)
     Fc = NaN(2,M);

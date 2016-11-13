@@ -68,7 +68,7 @@ else
         case 'noflux'
             for dimCtr = [x y]
                 nodeIndsUnder0 = find(xyphiarray(:,:,dimCtr)<0) + N*M*(dimCtr - 1);
-                    xyphiarray(nodeIndsUnder0)  = - xyphiarray(nodeIndsUnder0);
+                xyphiarray(nodeIndsUnder0)  = - xyphiarray(nodeIndsUnder0);
                 if numel(L)==ndim % vector domain size [L_x L_y]
                     nodeIndsOverL = find(xyphiarray(:,:,dimCtr)>=L(dimCtr)) + N*M*(dimCtr - 1);
                     if any(nodeIndsOverL)
@@ -80,11 +80,13 @@ else
                         xyphiarray(nodeIndsOverL)  = 2*L - xyphiarray(nodeIndsOverL);
                     end
                 end
-                % change direction of movement upon reflection
-                xyphiarray(union(nodeIndsUnder0,nodeIndsOverL) + N*M*(phi - dimCtr)) = ... % ugly use of indexing
-                    reflectDirection2D(...
-                    xyphiarray(union(nodeIndsUnder0,nodeIndsOverL) + N*M*(phi - dimCtr))...
-                    ,dimCtr);
+                if any(nodeIndsUnder0)|any(nodeIndsOverL)
+                    % change direction of movement upon reflection
+                    xyphiarray(union(nodeIndsUnder0,nodeIndsOverL) + N*M*(phi - dimCtr)) = ... % ugly use of indexing
+                        reflectDirection2D(...
+                        xyphiarray(union(nodeIndsUnder0,nodeIndsOverL) + N*M*(phi - dimCtr))...
+                        ,dimCtr);
+                end
             end
     end
 end

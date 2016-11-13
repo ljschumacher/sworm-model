@@ -17,12 +17,19 @@ collisionNbrs = distanceMatrix<=cutoff; % check distance too all other nodes of 
 collisionNbrs(objInd,nodeInd) = false; % no self-repulsion
 % Nc = nnz(collisionNbrs);
 if any(collisionNbrs(:))
-    F_excl = sum(... % sum over all collision neighbours
-        [distanceMatrixFull(collisionNbrs) distanceMatrixFull(find(collisionNbrs) + N*M)]... %direction FROM neighbours TO object [x, y]
-        ./repmat(distanceMatrix(collisionNbrs),1,ndim)... % normalise for distance
-        ,1)'; % made into column vector
+    if N>1
+        F_excl = sum(... % sum over all collision neighbours
+            [distanceMatrixFull(collisionNbrs(:)) distanceMatrixFull(find(collisionNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
+            ./repmat(distanceMatrix(collisionNbrs(:)),1,ndim)... % normalise for distance
+            ,1)'; % made into column vector
+    elseif N==1 % special case due to how indexed entries return (annoying)
+        F_excl = sum(... % sum over all collision neighbours
+            [distanceMatrixFull(collisionNbrs(:)) distanceMatrixFull(find(collisionNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
+            ./repmat(distanceMatrix(collisionNbrs(:))',1,ndim)... % normalise for distance
+            ,1)'; % made into column vector
+    end
 else
-    F_excl = [0, 0];
+    F_excl = [0; 0];
 end
 end
 

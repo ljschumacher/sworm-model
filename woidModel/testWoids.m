@@ -13,7 +13,7 @@ animateWoidTrajectories(xyphiarray,'tests/test_bcfree');
 xyphiarray = runWoids(1000,N,M,L,'bc','noflux');
 animateWoidTrajectories(xyphiarray,'tests/test_noflux');
 
-% xyphiarray = runWoids(T,N,M,L,'bc','periodic');
+% xyphiarray = runWoids(100,N,M,L,'bc','periodic');
 % animateWoidTrajectories(xyphiarray,'tests/test_periodic');
 
 
