@@ -45,7 +45,6 @@ for objCtr = 1:N
             F(:,nodeCtr) = Fm(:,nodeCtr);
         end
     end
-    % 1e100 to represent Inf vector, but still have direction, should work as long as Fc~O(L)<1.3408e+54
     
     % update directions
     arrayNow(objCtr,:,phi) = atan2(F(y,:),F(x,:));
