@@ -4,9 +4,9 @@
 clear
 
 N = 40;
-M = 16;
+M = 17;
 L = 12;
-dT = 1/20;
+dT = 1.2/17/0.33/4;
 
 xyphiarray = runWoids(250,N,M,L,'bc','free','dT',dT);
 animateWoidTrajectories(xyphiarray,'tests/test_bcfree');

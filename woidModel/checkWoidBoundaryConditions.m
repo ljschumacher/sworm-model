@@ -7,7 +7,6 @@ function [ xyphiarray ] = checkWoidBoundaryConditions( xyphiarray, bc, L)
 %   - could try to optimise the code for the vector domain size/mixed
 %   boundary condition cases to get rid of loops...
 %   - mixed periodic boundary conditions can be quite slow?
-%   - move check of boundary conditions to separate function?
 
 % short-hand for indexing coordinates
 x =     1;

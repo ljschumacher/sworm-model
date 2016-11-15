@@ -20,7 +20,8 @@
 
 % issues/to-do's:
 % - is there a more efficient way of storing the coords than 4-d array?
-% - make object-orientated, see eg ../woid.m class
+% - make object-orientated, see eg ../woid.m class, vector of woid
+% objects...
 
 function xyphiarray = runWoids(T,N,M,L,varargin)
 
@@ -40,6 +41,9 @@ addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation
 addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement direction, default pi/4
 addOptional(iP,'bc','free',@checkBcs)
 addOptional(iP,'deltaPhase',2*pi/M*1.2/0.62,@isnumeric) % for phase shift in undulations and initial positions, default given by primary worm wavelength, 620 mu
+% reversals
+addOptional(iP,'revRate',1/13,@isnumeric) % rate for poisson-distributed reversals, default 1/13s
+addOptional(iP,'revTime',2,@numeric) % duration of reversal events, default 2s (will be rounded to integer number of time-steps)
 
 parse(iP,T,N,M,L,varargin{:})
 dT = iP.Results.dT;
@@ -50,6 +54,8 @@ segmentLength = iP.Results.segmentLength;
 deltaPhase = iP.Results.deltaPhase;
 omega_m = iP.Results.omega_m*dT;
 theta_0 = iP.Results.theta_0;
+revRate = iP.Results.revRate*dT;
+revTime = round(iP.Results.revTime/dT);
 
 % check input relationships to each other
 assert(segmentLength>2*rc,...
@@ -63,18 +69,29 @@ xyphiarray = NaN(N,M,3,T);
 theta = NaN(N,M,T);
 phaseOffset = rand(N,1)*2*pi*ones(1,M) - ones(N,1)*deltaPhase*(1:M); % for each object with random phase offset plus phase shift for each node
 theta(:,:,1) = theta_0*sin(omega_m*ones(N,M) + phaseOffset);
+% generate reversal times
+reversalLogi = logical(poissrnd(revRate,N,T)); % generate reversal events
+[reversalWormInd, reversalTimeInd] = find(reversalLogi);
+for revCtr = 1:length(reversalWormInd)
+    revStart = reversalTimeInd(revCtr);
+    if ~reversalLogi(revStart+1) % ignore reversals during reversals
+    revEnd = min(revStart + revTime - 1,T);
+    reversalLogi(reversalWormInd(revCtr),revStart:revEnd) = true; % set length of all reversal events
+    end
+end
+
 % initialise worm positions and node directions
 xyphiarray = initialiseWoids(xyphiarray,L,segmentLength,theta(:,:,1));
 
 for t=2:T
     % update internal oscillators
-    theta(:,:,t) = theta_0*sin(omega_m*ones(N,M)*t + phaseOffset);
+    theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,omega_m,t,phaseOffset,reversalLogi(:,t));
     % update direction
     xyphiarray(:,:,:,t) = updateWoidDirection(xyphiarray(:,:,:,t),...
-        xyphiarray(:,:,:,t-1),L,rc,bc,theta(:,:,(t - 1):t));
+        xyphiarray(:,:,:,t-1),L,rc,bc,theta(:,:,(t - 1):t),reversalLogi(:,t));
     % update position
     xyphiarray(:,:,:,t) = updateWoidPosition(xyphiarray(:,:,:,t),...
-        xyphiarray(:,:,:,t-1),v0,bc,L,segmentLength);
+        xyphiarray(:,:,:,t-1),v0,bc,L,segmentLength,reversalLogi(:,t));
 end
 end
 

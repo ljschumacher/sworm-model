@@ -1,4 +1,4 @@
-function arrayOut = updateWoidDirection(arrayNow,arrayPrev,L,rc,bc,theta)
+function arrayOut = updateWoidDirection(arrayNow,arrayPrev,L,rc,bc,theta,reversals)
 % updates object directions according to update rules
 
 % issues/to-do's:
@@ -22,19 +22,29 @@ distanceMatrixXY = permute(distanceMatrixXY,[3 4 5 1 2]); % this will make index
 % phi_CoM = mean(arrayPrev(:,:,phi),2);
 
 for objCtr = 1:N
+    % check if worm is currently reversing
+    if ~reversals(objCtr)
+        headInd = 1;
+        bodyInd = 2:M;
+    else
+        headInd = M;
+        bodyInd = (M-1):-1:1;
+    end
+    movState = 1 - 2*reversals(objCtr); % =-1 if worm is reversing, 1 if not
     % calculate force contributions
     F = NaN(2,M);
     
     % motile
     Fm = NaN(2,M);
-    angle = arrayPrev(objCtr,1,phi) + diff(theta(objCtr,1,:));
-    Fm(:,1) = [cos(angle); sin(angle)]; 
-    for nodeCtr = 2:M % WARNING this doesn't currently work for periodic boundaries, as the direction can point to the other side of the domain
-        Fm(:,nodeCtr) = arrayPrev(objCtr,nodeCtr - 1,[x y]) ...
+    angle = arrayPrev(objCtr,headInd,phi) + diff(theta(objCtr,headInd,:));
+    Fm(:,headInd) = [cos(angle); sin(angle)]; 
+    for nodeCtr = bodyInd % WARNING this doesn't currently work for periodic boundaries, as the direction can point to the other side of the domain
+        Fm(:,nodeCtr) = arrayPrev(objCtr,nodeCtr - 1*movState,[x y]) ...
             - arrayPrev(objCtr,nodeCtr,[x y]);% move towards previous node's position    
     end
-    angles = arrayPrev(objCtr,2:end,phi) + diff(theta(objCtr,2:end,:),1,3); % undulations incl phase shift along worm
-    Fm(:,2:end) = [cos(angles); sin(angles)];
+    
+    angles = atan2(Fm(y,bodyInd),Fm(x,bodyInd)) - diff(theta(objCtr,bodyInd,:),1,3); % undulations incl phase shift along worm
+    Fm(:,bodyInd) = [cos(angles); sin(angles)];
     
     % core repulsion (volume exclusion)
     Fc = NaN(2,M);
