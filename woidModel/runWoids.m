@@ -88,7 +88,7 @@ for t=2:T
     theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,omega_m,t,phaseOffset,reversalLogi(:,t));
     % update direction
     xyphiarray(:,:,:,t) = updateWoidDirection(xyphiarray(:,:,:,t),...
-        xyphiarray(:,:,:,t-1),L,rc,bc,theta(:,:,(t - 1):t),reversalLogi(:,t));
+        xyphiarray(:,:,:,t-1),L,rc,bc,theta(:,:,(t-1):t),reversalLogi(:,(t-1):t));
     % update position
     xyphiarray(:,:,:,t) = updateWoidPosition(xyphiarray(:,:,:,t),...
         xyphiarray(:,:,:,t-1),v0,bc,L,segmentLength,reversalLogi(:,t));

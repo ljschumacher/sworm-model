@@ -8,7 +8,7 @@ M = 17;
 L = 12;
 dT = 1.2/17/0.33/4;
 
-xyphiarray = runWoids(250,N,M,L,'bc','free','dT',dT);
+xyphiarray = runWoids(400,N,M,L,'bc','free','dT',dT);
 animateWoidTrajectories(xyphiarray,'tests/test_bcfree');
 
 xyphiarray = runWoids(1000,N,M,L,'bc','noflux','dT',dT);

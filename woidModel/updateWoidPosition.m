@@ -36,7 +36,7 @@ if any(fwdInd)
         % %     arrayNow(:,nodeCtr,phi) = atan2(dx(:,y),dx(:,x));
     end
 end
-bwdInd = find(~reversals); % all the woids that are moving forward
+bwdInd = find(reversals); % all the woids that are moving forward
 if any(bwdInd)
     for nodeCtr = (M-1):-1:1
         segmentVec = arrayNow(bwdInd,nodeCtr,[x y]) - arrayNow(bwdInd,nodeCtr + 1,[x y]); % vec from prev to current node's current pos

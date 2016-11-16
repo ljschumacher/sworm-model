@@ -23,20 +23,22 @@ distanceMatrixXY = permute(distanceMatrixXY,[3 4 5 1 2]); % this will make index
 
 for objCtr = 1:N
     % check if worm is currently reversing
-    if ~reversals(objCtr)
+    if ~reversals(objCtr,2)
         headInd = 1;
         bodyInd = 2:M;
     else
         headInd = M;
         bodyInd = (M-1):-1:1;
     end
-    movState = 1 - 2*reversals(objCtr); % =-1 if worm is reversing, 1 if not
+    movState = 1 - 2*reversals(objCtr,2); % =-1 if worm is reversing, 1 if not
     % calculate force contributions
     F = NaN(2,M);
     
     % motile
     Fm = NaN(2,M);
-    angle = arrayPrev(objCtr,headInd,phi) + diff(theta(objCtr,headInd,:));
+    angle = wrapToPi(arrayPrev(objCtr,headInd,phi) ... % previous direction
+    + diff(theta(objCtr,headInd,:)) ...% change in internal oscillator
+    + pi*diff(reversals(objCtr,:))); % 180 degree turn when reversal starts or ends
     Fm(:,headInd) = [cos(angle); sin(angle)]; 
     for nodeCtr = bodyInd % WARNING this doesn't currently work for periodic boundaries, as the direction can point to the other side of the domain
         Fm(:,nodeCtr) = arrayPrev(objCtr,nodeCtr - 1*movState,[x y]) ...
