@@ -1,4 +1,4 @@
-function arrayOut = updateWoidPosition(arrayNow,arrayPrev,v0,bc,L,segmentLength,reversals)
+function arrayOut = updateWoidPosition(arrayNow,arrayPrev,v,bc,L,segmentLength,reversals)
 % update positions based on current directions
 
 % issues/to-do's:
@@ -13,13 +13,23 @@ x =     1;
 y =     2;
 phi =   3;
 
+N = size(arrayPrev,1); % number of woids
 M = size(arrayPrev,2); % number of nodes
 
 % update position
-arrayNow(:,:,x) = arrayPrev(:,:,x) + ...
-    v0*cos(arrayNow(:,:,phi));
-arrayNow(:,:,y) = arrayPrev(:,:,y) + ...
-    v0*sin(arrayNow(:,:,phi));
+if length(v)==1
+    arrayNow(:,:,x) = arrayPrev(:,:,x) + ...
+        v*cos(arrayNow(:,:,phi));
+    arrayNow(:,:,y) = arrayPrev(:,:,y) + ...
+        v*sin(arrayNow(:,:,phi));
+elseif length(v)==N
+    arrayNow(:,:,x) = arrayPrev(:,:,x) + ...
+        repmat(v,1,M).*cos(arrayNow(:,:,phi));
+    arrayNow(:,:,y) = arrayPrev(:,:,y) + ...
+        repmat(v,1,M).*sin(arrayNow(:,:,phi));
+else
+    error('Number of elements in velocity vectors must be 1 or N')
+end
 
 % enforce length constraints within Woid
 % reset positions to one segmentLength away from previous node, along line

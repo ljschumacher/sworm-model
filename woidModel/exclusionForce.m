@@ -1,4 +1,4 @@
-function [ F_excl ] = exclusionForce(distanceMatrixFull, objInd, nodeInd, cutoff)
+function [ F_excl ] = exclusionForce(distanceMatrixFull,distanceMatrix, objInd, nodeInd, cutoff)
 % calculates repulsive exclusion force between agents separated by less
 % that cutoff distance
 % inputs:
@@ -12,7 +12,6 @@ function [ F_excl ] = exclusionForce(distanceMatrixFull, objInd, nodeInd, cutoff
 N = size(distanceMatrixFull,1);
 M = size(distanceMatrixFull,2);
 ndim = size(distanceMatrixFull,3);
-distanceMatrix = sqrt(sum(distanceMatrixFull.^2,3)); % reduce to scalar
 collisionNbrs = distanceMatrix<=cutoff; % check distance too all other nodes of all other objects
 collisionNbrs(objInd,nodeInd) = false; % no self-repulsion
 % Nc = nnz(collisionNbrs);

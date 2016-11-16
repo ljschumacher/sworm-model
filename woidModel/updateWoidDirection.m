@@ -1,4 +1,4 @@
-function arrayOut = updateWoidDirection(arrayNow,arrayPrev,L,rc,bc,theta,reversals)
+function arrayOut = updateWoidDirection(arrayNow,arrayPrev,rc,distanceMatrixXY,distanceMatrix,theta,reversals)
 % updates object directions according to update rules
 
 % issues/to-do's:
@@ -14,8 +14,6 @@ phi =   3;
 N = size(arrayPrev,1);
 M = size(arrayPrev,2);
 
-% find distances between all pairs of objects
-distanceMatrixXY = computeWoidDistancesWithBCs(arrayPrev(:,:,[x y]),L,bc);
 distanceMatrixXY = permute(distanceMatrixXY,[3 4 5 1 2]); % this will make indexing later on faster without need for squeeze()
 
 % % calculate average direction of all nodes in object
@@ -52,7 +50,7 @@ for objCtr = 1:N
     Fc = NaN(2,M);
     for nodeCtr = 1:M
         Fc(:,nodeCtr) = exclusionForce(distanceMatrixXY(:,:,:,objCtr,nodeCtr),...
-            objCtr,nodeCtr,2*rc); % factor of two so that rc is node radius
+            distanceMatrix(:,:,objCtr,nodeCtr),objCtr,nodeCtr,2*rc); % factor of two so that rc is node radius
     end
     
     % sum motile and exclusion forces with equal magnitude

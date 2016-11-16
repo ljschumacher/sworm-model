@@ -59,10 +59,10 @@ else
                     xyphiarray(nodeIndsOverL)  = xyphiarray(nodeIndsOverL) - L(dimCtr);
                 end
             else % scalar domain size
-                nodeLogiUnder0 = xyphiarray(:,:,[x y])<0;
-                xyphiarray(nodeLogiUnder0)  = xyphiarray(nodeLogiUnder0) + L;
-                nodeLogiOverL = xyphiarray(:,:,[x y])>=L;
-                xyphiarray(nodeLogiOverL)  = xyphiarray(nodeLogiOverL) - L;
+                nodeLogIndUnder0 = xyphiarray(:,:,[x y])<0;
+                xyphiarray(nodeLogIndUnder0)  = xyphiarray(nodeLogIndUnder0) + L;
+                nodeLogIndOverL = xyphiarray(:,:,[x y])>=L;
+                xyphiarray(nodeLogIndOverL)  = xyphiarray(nodeLogIndOverL) - L;
             end
         case 'noflux'
             for dimCtr = [x y]

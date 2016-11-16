@@ -43,7 +43,10 @@ addOptional(iP,'bc','free',@checkBcs)
 addOptional(iP,'deltaPhase',2*pi/M*1.2/0.62,@isnumeric) % for phase shift in undulations and initial positions, default given by primary worm wavelength, 620 mu
 % reversals
 addOptional(iP,'revRate',1/13,@isnumeric) % rate for poisson-distributed reversals, default 1/13s
-addOptional(iP,'revTime',2,@numeric) % duration of reversal events, default 2s (will be rounded to integer number of time-steps)
+addOptional(iP,'revTime',2,@isnumeric) % duration of reversal events, default 2s (will be rounded to integer number of time-steps)
+% slowing down
+addOptional(iP,'rs',0.035*1.5,@isnumeric) % radius at which worms slow down, default 1.5 rc
+addOptional(iP,'vs',0.33/2,@isnumeric) % speed when slowed down, default v0/2
 
 parse(iP,T,N,M,L,varargin{:})
 dT = iP.Results.dT;
@@ -56,6 +59,8 @@ omega_m = iP.Results.omega_m*dT;
 theta_0 = iP.Results.theta_0;
 revRate = iP.Results.revRate*dT;
 revTime = round(iP.Results.revTime/dT);
+rs = iP.Results.rs;
+vs = iP.Results.vs*dT;
 
 % check input relationships to each other
 assert(segmentLength>2*rc,...
@@ -70,13 +75,13 @@ theta = NaN(N,M,T);
 phaseOffset = rand(N,1)*2*pi*ones(1,M) - ones(N,1)*deltaPhase*(1:M); % for each object with random phase offset plus phase shift for each node
 theta(:,:,1) = theta_0*sin(omega_m*ones(N,M) + phaseOffset);
 % generate reversal times
-reversalLogi = logical(poissrnd(revRate,N,T)); % generate reversal events
-[reversalWormInd, reversalTimeInd] = find(reversalLogi);
+reversalLogInd = logical(poissrnd(revRate,N,T)); % generate reversal events
+[reversalWormInd, reversalTimeInd] = find(reversalLogInd);
 for revCtr = 1:length(reversalWormInd)
     revStart = reversalTimeInd(revCtr);
-    if ~reversalLogi(revStart+1) % ignore reversals during reversals
+    if ~reversalLogInd(revStart+1) % ignore reversals during reversals
     revEnd = min(revStart + revTime - 1,T);
-    reversalLogi(reversalWormInd(revCtr),revStart:revEnd) = true; % set length of all reversal events
+    reversalLogInd(reversalWormInd(revCtr),revStart:revEnd) = true; % set length of all reversal events
     end
 end
 
@@ -85,13 +90,19 @@ xyphiarray = initialiseWoids(xyphiarray,L,segmentLength,theta(:,:,1));
 
 for t=2:T
     % update internal oscillators
-    theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,omega_m,t,phaseOffset,reversalLogi(:,t));
+    theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,omega_m,t,phaseOffset,reversalLogInd(:,t));
+    % find distances between all pairs of objects
+    distanceMatrixXY = computeWoidDistancesWithBCs(xyphiarray(:,:,1:2,t-1),L,bc);
+    distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar
     % update direction
     xyphiarray(:,:,:,t) = updateWoidDirection(xyphiarray(:,:,:,t),...
-        xyphiarray(:,:,:,t-1),L,rc,bc,theta(:,:,(t-1):t),reversalLogi(:,(t-1):t));
+        xyphiarray(:,:,:,t-1),rc,distanceMatrixXY,distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,(t-1):t));    
+    % check if any woids are slowed down by neighbors
+    slowLogInd = findWoidNeighbors(distanceMatrix,2*rs);
+    v = vs*slowLogInd + v0*(~slowLogInd);
     % update position
     xyphiarray(:,:,:,t) = updateWoidPosition(xyphiarray(:,:,:,t),...
-        xyphiarray(:,:,:,t-1),v0,bc,L,segmentLength,reversalLogi(:,t));
+        xyphiarray(:,:,:,t-1),v,bc,L,segmentLength,reversalLogInd(:,t));
 end
 end
 

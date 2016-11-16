@@ -11,7 +11,7 @@ y =     2;
 
 if nargin <=2
     rc = 0.035;
-    display(['Setting node radius to ' num2str(rc)])
+    display(['Setting node radius to ' num2str(rc) ' for animations.'])
 end
 
 vid = VideoWriter(filename,'MPEG-4');
@@ -30,6 +30,9 @@ xrange = [floor(xrange(1)) ceil(xrange(2))];
 yrange = [floor(yrange(1)) ceil(yrange(2))];
 
 figure
+% maximize figure
+jFrame = get(handle(gcf),'JavaFrame');
+jFrame.setMaximized(true);
 for frameCtr=1:nFrames
     plot(xyphiarray(:,:,x,frameCtr)',xyphiarray(:,:,y,frameCtr)','-',...
         'Marker','.','Color','k');
