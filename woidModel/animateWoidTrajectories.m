@@ -30,9 +30,6 @@ xrange = [floor(xrange(1)) ceil(xrange(2))];
 yrange = [floor(yrange(1)) ceil(yrange(2))];
 
 figure
-% maximize figure
-jFrame = get(handle(gcf),'JavaFrame');
-jFrame.setMaximized(true);
 for frameCtr=1:nFrames
     plot(xyphiarray(:,:,x,frameCtr)',xyphiarray(:,:,y,frameCtr)','-',...
         'Marker','.','Color','k');
