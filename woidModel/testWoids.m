@@ -4,14 +4,15 @@
 clear
 
 N = 40;
-M = 17;
+M = 18;
 L = 12;
 dT = 1.2/17/0.33/4;
+vs = 0.33/8;
 
-xyphiarray = runWoids(750,N,M,L,'bc','free','dT',dT);
+xyphiarray = runWoids(500,N,M,L,'bc','free','dT',dT,'vs',vs);
 animateWoidTrajectories(xyphiarray,'tests/test_bcfree');
 
-xyphiarray = runWoids(1500,N,M,L,'bc','noflux','dT',dT);
+xyphiarray = runWoids(500,N,M,L,'bc','noflux','dT',dT,'vs',vs);
 animateWoidTrajectories(xyphiarray,'tests/test_noflux');
 
 % xyphiarray = runWoids(100,N,M,L,'bc','periodic');

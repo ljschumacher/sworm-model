@@ -35,7 +35,7 @@ addRequired(iP,'L',@checkL);
 addOptional(iP,'v0',0.33,@isnumeric) % worm forward speed is approx 330mu/s
 addOptional(iP,'dT',1/9,@isnumeric) % adjusts speed and undulataions, default 1/9 seconds
 addOptional(iP,'rc',0.035,@isnumeric) % worm width is approx 50 to 90 mu = approx 0.07mm
-addOptional(iP,'segmentLength',1.2/M,@isnumeric) % worm length is approx 1.2 mm
+addOptional(iP,'segmentLength',1.2/(M - 1),@isnumeric) % worm length is approx 1.2 mm
 % undulations
 addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation of movement direction, default 0.6 Hz
 addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement direction, default pi/4
@@ -65,7 +65,7 @@ vs = iP.Results.vs*dT;
 % check input relationships to each other
 assert(segmentLength>2*rc,...
     'Segment length must be bigger than node diameter (2*rc). Decrease segment number (M), rc, or increase segmentLength')
-assert(min(L)>segmentLength*M,...
+assert(min(L)>segmentLength*(M - 1),...
     'Domain size (L) must be bigger than object length (segmentLength*M). Increase L.')
 
 
@@ -85,9 +85,10 @@ for revCtr = 1:length(reversalWormInd)
     end
 end
 
-% initialise worm positions and node directions
-xyphiarray = initialiseWoids(xyphiarray,L,segmentLength,theta(:,:,1));
-
+% initialise worm positions and node directions - respecting volume
+% exclusion
+xyphiarray = initialiseWoids(xyphiarray,L,segmentLength,theta(:,:,1),rc,bc);
+disp('Starting simulation...')
 for t=2:T
     % update internal oscillators
     theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,omega_m,t,phaseOffset,reversalLogInd(:,t));

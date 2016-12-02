@@ -3,7 +3,7 @@ function arrayOut = updateWoidPosition(arrayNow,arrayPrev,v,bc,L,segmentLength,r
 
 % issues/to-do's:
 %   - assert length constraints enforcement
-%   - length can be violated again by checking boundary conditions (though
+%   - length can be violated again by boundary conditions (though
 %   should be met considering arclength of high M limit)
 %   - could move length constraint as force into updateWoidDirections or
 %   separate function

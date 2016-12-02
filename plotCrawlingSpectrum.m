@@ -40,8 +40,8 @@ for wormCtr = 1:numWorms
     dp0 = dp./sqrt(dp.^2 + dn.^2);
     % check forward, paused, reverse moving states
     fwdIdx = worm.locomotion.motion.mode==1;
-%         psdIdx = worm.locomotion.motion.mode==0;
-%         bwdIdx = worm.locomotion.motion.mode==-1;
+    %         psdIdx = worm.locomotion.motion.mode==0;
+    %         bwdIdx = worm.locomotion.motion.mode==-1;
     
     dN{wormCtr} = dn0(:,fwdIdx(1:end-1));
     dP{wormCtr} = dp0(:,fwdIdx(1:end-1));
@@ -50,13 +50,11 @@ for wormCtr = 1:numWorms
     worm_freq(wormCtr) = nanmean(abs(worm.locomotion.bends.head.frequency(fwdIdx)));
 end
 
-%% plot aggregate results of all worms combined
+%% plot angles of movement of all worms combined
 % histogram2(horzcat(dP{:}),horzcat(dN{:}),'DisplayStyle','tile')
 % hold on, plot(0,0,'r+') % mark origin
-% ylim([-25,25])
-% xlim([-10 40])
 
-%plot the angles of velocity vector to CoM
+% %plot the angles of velocity vector to CoM
 % histogram(atan2(horzcat(dN{:}),horzcat(dP{:})),'EdgeColor','none')
 
 % dNall = horzcat(dN{:});
@@ -112,7 +110,7 @@ for wormCtr = 1:numWorms
     Pn_itp3 = Pn_itp3(1:L/2+1); Pn_itp3(2:end-1) = 2*Pn_itp3(2:end-1);% single-sided power spectrum
     PN_itp3(wormCtr,1:(L/2+1)) = Pn_itp3;
 end
-%% plot 
+%% plot
 wsize = 5; % for moving average smoothing power spectrum
 plot(f,movmean(nanmean(PN_itp3),wsize))
 hold on
@@ -120,6 +118,23 @@ plot(f,movmean(nanmean(PN_itp1),wsize))
 plot(f,movmean(nanmean(PN_nan0),wsize))
 % plot the frequency from database for comparison
 plot(mean(worm_freq).*[1 1],[0 0.05],'k--')
-legend('cubic','linear','NaN=0')
+legh = legend('cubic','linear','NaN=0');
+legh.Title.String = 'interpolation';
+legh.Title.FontWeight = 'normal';
+xlabel('frequency (Hz)')
+ylabel('amplitude^2')
 ylim([0 0.04])
-xlim([0 5])
+xlim([0 3])
+%% export figure
+exportOptions = struct('Format','eps2',...
+    'Color','rgb',...
+    'Width',10,...
+    'Resolution',300,...
+    'FontMode','fixed',...
+    'FontSize',10,...
+    'LineWidth',2);
+set(gcf,'PaperUnits','centimeters')
+filename = ['parameterisationPlots/crawlingSpectrum'];
+exportfig(gcf,[filename '.eps'],exportOptions);
+system(['epstopdf ' filename '.eps']);
+system(['rm ' filename '.eps']);
