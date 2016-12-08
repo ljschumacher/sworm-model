@@ -43,9 +43,9 @@ for frameCtr=1:nFrames
             xyphiarray(objCtr*ones(nAngles,1),:,y,frameCtr) + rc*sin(angles(:,ones(M,1))),...
             plotColors(objCtr,:),'EdgeColor',plotColors(objCtr,:))
         % patches seems to be faster than viscircles
-%         viscircles(squeeze(xyphiarray(objCtr,:,[x y],frameCtr)),rc*ones(M,1),...
-%             'Color',plotColors(objCtr,:),'EnhanceVisibility',false,...
-%             'LineWidth',1);
+        %         viscircles(squeeze(xyphiarray(objCtr,:,[x y],frameCtr)),rc*ones(M,1),...
+        %             'Color',plotColors(objCtr,:),'EnhanceVisibility',false,...
+        %             'LineWidth',1);
     end
     writeVideo(vid,getframe)
     hold off
@@ -53,4 +53,3 @@ end
 close(vid)
 
 end
-

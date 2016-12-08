@@ -27,7 +27,7 @@ function xyphiarray = runWoids(T,N,M,L,varargin)
 
 % parse inputs (see matlab documentation)
 iP = inputParser;
-checkInt = @(x) x>0&&~mod(x,1);
+checkInt = @(x) all(x>0&~mod(x,1));
 addRequired(iP,'T',checkInt);
 addRequired(iP,'N',checkInt);
 addRequired(iP,'M',checkInt);
@@ -45,8 +45,9 @@ addOptional(iP,'deltaPhase',2*pi/M*1.2/0.62,@isnumeric) % for phase shift in und
 addOptional(iP,'revRate',1/13,@isnumeric) % rate for poisson-distributed reversals, default 1/13s
 addOptional(iP,'revTime',2,@isnumeric) % duration of reversal events, default 2s (will be rounded to integer number of time-steps)
 % slowing down
-addOptional(iP,'rs',0.035*1.5,@isnumeric) % radius at which worms slow down, default 1.5 rc
-addOptional(iP,'vs',0.33/2,@isnumeric) % speed when slowed down, default v0/2
+addOptional(iP,'rs',0.035*2,@isnumeric) % radius at which worms slow down, default 2 rc
+addOptional(iP,'vs',0.33/3,@isnumeric) % speed when slowed down, default v0/3
+addOptional(iP,'slowingNodes',[1 M],checkInt) % which nodes sense proximity, default 1 and M
 
 parse(iP,T,N,M,L,varargin{:})
 dT = iP.Results.dT;
@@ -61,6 +62,7 @@ revRate = iP.Results.revRate*dT;
 revTime = round(iP.Results.revTime/dT);
 rs = iP.Results.rs;
 vs = iP.Results.vs*dT;
+slowingNodes = iP.Results.slowingNodes;
 
 % check input relationships to each other
 assert(segmentLength>2*rc,...
@@ -88,7 +90,7 @@ end
 % initialise worm positions and node directions - respecting volume
 % exclusion
 xyphiarray = initialiseWoids(xyphiarray,L,segmentLength,theta(:,:,1),rc,bc);
-disp('Starting simulation...')
+disp('Running simulation...')
 for t=2:T
     % update internal oscillators
     theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,omega_m,t,phaseOffset,reversalLogInd(:,t));
@@ -99,7 +101,7 @@ for t=2:T
     xyphiarray(:,:,:,t) = updateWoidDirection(xyphiarray(:,:,:,t),...
         xyphiarray(:,:,:,t-1),rc,distanceMatrixXY,distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,(t-1):t));    
     % check if any woids are slowed down by neighbors
-    slowLogInd = findWoidNeighbors(distanceMatrix,2*rs);
+    slowLogInd = findWoidNeighbors(distanceMatrix,2*rs,slowingNodes);
     v = vs*slowLogInd + v0*(~slowLogInd);
     % update position
     xyphiarray(:,:,:,t) = updateWoidPosition(xyphiarray(:,:,:,t),...
