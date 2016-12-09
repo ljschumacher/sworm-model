@@ -1,20 +1,35 @@
 % A function to run 2D woid model simulations
 % LJ Schumacher November 2016
 %
-% inputs
+% INPUTS
 % T: simulation duration (number of time-steps)
 % N: number of objects
 % M: number of nodes in each object
 % L: size of region containing initial positions
 %
 % optional inputs
+% -- general parameters--
 % v0: speed (default 0.05)
-% rc: core repulsion radius (default 0.2)
+% dT: time step, scales other parameters such as velocities and rates
+% (default 1/9s)
+% rc: core repulsion radius (default 0.07 microns)
+% segmentLength: length of a segment between nodes (default 1.2mm/(M-1))
 % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can
 %   be single number or 2 element array {'bcx','bcy'} for different
 %   bcs along different dimensions
+% -- undulation parameters --
+% omega_m: angular frequency of undulations (default 0.6Hz)
+% theta_0: amplitude of undulations (default pi/4)
+% deltaPhase: phase shift in undulations from node to node
+% -- reversal parameters --
+% revRate: rate for poisson-distributed reversals (default 1/13s)
+% revTime: duration of reversal events (default 2s, rounded to integer number of time-steps)
+% -- slow-down parameters --
+% rs: radius at which worms register contact (default 2 rc)
+% vs: speed when slowed down (default v0/3)
+% slowingNodes: which nodes register contact (default [1 M], ie head and tail)
 %
-% outputs
+% OUTPUTS
 % xyphiarray: Array containing the position, and movement direction for
 % every object and time-point. Format is N by M by [x,y,phi] by T.
 
@@ -36,10 +51,10 @@ addOptional(iP,'v0',0.33,@isnumeric) % worm forward speed is approx 330mu/s
 addOptional(iP,'dT',1/9,@isnumeric) % adjusts speed and undulataions, default 1/9 seconds
 addOptional(iP,'rc',0.035,@isnumeric) % worm width is approx 50 to 90 mu = approx 0.07mm
 addOptional(iP,'segmentLength',1.2/(M - 1),@isnumeric) % worm length is approx 1.2 mm
+addOptional(iP,'bc','free',@checkBcs)
 % undulations
 addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation of movement direction, default 0.6 Hz
 addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement direction, default pi/4
-addOptional(iP,'bc','free',@checkBcs)
 addOptional(iP,'deltaPhase',2*pi/M*1.2/0.62,@isnumeric) % for phase shift in undulations and initial positions, default given by primary worm wavelength, 620 mu
 % reversals
 addOptional(iP,'revRate',1/13,@isnumeric) % rate for poisson-distributed reversals, default 1/13s
