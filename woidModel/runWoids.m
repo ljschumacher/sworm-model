@@ -76,27 +76,22 @@ xyphiarray = NaN(N,M,3,T);
 theta = NaN(N,M,T);
 phaseOffset = rand(N,1)*2*pi*ones(1,M) - ones(N,1)*deltaPhase*(1:M); % for each object with random phase offset plus phase shift for each node
 theta(:,:,1) = theta_0*sin(omega_m*ones(N,M) + phaseOffset);
-% generate reversal times
-reversalLogInd = logical(poissrnd(revRate,N,T)); % generate reversal events
-[reversalWormInd, reversalTimeInd] = find(reversalLogInd);
-for revCtr = 1:length(reversalWormInd)
-    revStart = reversalTimeInd(revCtr);
-    if ~reversalLogInd(revStart+1) % ignore reversals during reversals
-    revEnd = min(revStart + revTime - 1,T);
-    reversalLogInd(reversalWormInd(revCtr),revStart:revEnd) = true; % set length of all reversal events
-    end
-end
+% preallocate reversal states
+reversalLogInd = false(N,T);
 
 % initialise worm positions and node directions - respecting volume
 % exclusion
 xyphiarray = initialiseWoids(xyphiarray,L,segmentLength,theta(:,:,1),rc,bc);
 disp('Running simulation...')
 for t=2:T
-    % update internal oscillators
-    theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,omega_m,t,phaseOffset,reversalLogInd(:,t));
     % find distances between all pairs of objects
     distanceMatrixXY = computeWoidDistancesWithBCs(xyphiarray(:,:,1:2,t-1),L,bc);
     distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar
+    % check if any worms are reversing due to contacts
+    reversalLogInd = generateReversals(reversalLogInd,t,distanceMatrix,...
+    2*rs,1,M,revRate,revTime,revRate/10,revTime);
+    % update internal oscillators
+    theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,omega_m,t,phaseOffset,reversalLogInd(:,t));
     % update direction
     xyphiarray(:,:,:,t) = updateWoidDirection(xyphiarray(:,:,:,t),...
         xyphiarray(:,:,:,t-1),rc,distanceMatrixXY,distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,(t-1):t));    
