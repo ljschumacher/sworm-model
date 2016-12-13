@@ -19,7 +19,7 @@ if size(L,1)>size(L,2)
     L = L';
 end
 
-L0 = M*segmentLength;
+L0 = (M-1)*segmentLength;
 disp('Initialising woid positions...')
 objCtr = 1;
 while objCtr <= N
