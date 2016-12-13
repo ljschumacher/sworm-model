@@ -15,7 +15,7 @@ function [ F_contact ] = resolveContacts(forceArray,distanceMatrixFull,distanceM
 N = size(distanceMatrixFull,1);
 M = size(distanceMatrixFull,2);
 ndim = size(distanceMatrixFull,3);
-collisionNbrs = distanceMatrix<=cutoff; % check distance too all other nodes of all other objects
+collisionNbrs = distanceMatrix<=cutoff; % check distance to all other nodes of all other objects
 collisionNbrs(objInd,:) = false; % no contact force with self or adjacent nodes, or max(nodeInd-1,1):min(nodeInd+1,M)
 % Nc = nnz(collisionNbrs);
 if any(collisionNbrs(:))

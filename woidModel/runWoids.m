@@ -119,7 +119,7 @@ for t=2:T
         distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,(t-1):t),segmentLength,v,kl);
     % update position (with boundary conditions)
     xyphiarray(:,:,:,t) = applyForces(xyphiarray(:,:,:,t-1),forceArray,bc,L);
-    assert(~nnz(isnan(xyphiarray(:,:,:,t))|isinf(xyphiarray(:,:,:,t))),'Uh-oh, something has gone wrong...')
+    assert(~nnz(isnan(xyphiarray(:,:,:,t))|isinf(xyphiarray(:,:,:,t))),'Uh-oh, something has gone wrong... (try using a smaller time-step?)')
 end
 end
 

@@ -15,10 +15,13 @@ clustFwdWorms = tailContacts&headContacts&~currentReversals;
 reversalLogInd(clustFwdWorms,t:(t+revTimeReduced)) ... % set reversal state for duration of reversal
     = repmat(logical(poissrnd(revRateReduced,nnz(clustFwdWorms),1)),1,revTimeReduced+1);
 
-% % stop reversal if tail is sticking out of cluster
-% reversalLogInd(~tailContacts&headContacts,t:end) = false;
-% % reverse if head is sticking out of cluster
-% reversalLogInd(tailContacts&~headContacts,t) = true;
+% stop reversal if tail is sticking out of cluster
+freeBwdTails = ~tailContacts&headContacts&currentReversals;
+reversalLogInd(freeBwdTails,t:end) = false;
+% reverse with normal rate if head is sticking out of cluster
+freeFwdHeads = tailContacts&~headContacts&~currentReversals;
+reversalLogInd(freeFwdHeads,t:(t+revTime)) ...
+    = repmat(logical(poissrnd(revRate,nnz(freeFwdHeads),1)),1,revTime+1);
 
 end
 
