@@ -1,4 +1,4 @@
-function arrayOut = updateWoidDirection(arrayNow,arrayPrev,rc,distanceMatrixXY,distanceMatrix,theta,reversals,segmentLength)
+function forceArray = calculateForces(arrayPrev,rc,distanceMatrixXY,distanceMatrix,theta,reversals,segmentLength,v_target)
 % updates object directions according to update rules
 
 % issues/to-do's:
@@ -7,7 +7,7 @@ function arrayOut = updateWoidDirection(arrayNow,arrayPrev,rc,distanceMatrixXY,d
 % - improve loop structure and motile vs exclusion force
 
 % short-hand for indexing coordinates
-x =     1;
+x =     1; 
 y =     2;
 phi =   3;
 
@@ -20,6 +20,8 @@ distanceMatrixXY = permute(distanceMatrixXY,[3 4 5 1 2]); % this will make index
 % % calculate average direction of all nodes in object
 % phi_CoM = mean(arrayPrev(:,:,phi),2);
 
+forceArray = zeros(N,M,2); % preallocate forces
+
 for objCtr = 1:N
     % check if worm is currently reversing
     if ~reversals(objCtr,2)
@@ -31,21 +33,23 @@ for objCtr = 1:N
     end
     movState = 1 - 2*reversals(objCtr,2); % =-1 if worm is reversing, 1 if not
     % calculate force contributions
-    F = NaN(2,M);
+    F = NaN(M,2);
     
     % motile
-    Fm = NaN(2,M);
+    Fm = NaN(M,2);
     angle = wrapToPi(arrayPrev(objCtr,headInd,phi) ... % previous direction
     + diff(theta(objCtr,headInd,:)) ...% change in internal oscillator
     + pi*diff(reversals(objCtr,:))); % 180 degree turn when reversal starts or ends
-    Fm(:,headInd) = [cos(angle); sin(angle)]; 
+    Fm(headInd,:) = [cos(angle), sin(angle)]; 
     for nodeCtr = bodyInd % WARNING this doesn't currently work for periodic boundaries, as the direction can point to the other side of the domain
-        Fm(:,nodeCtr) = arrayPrev(objCtr,nodeCtr - 1*movState,[x y]) ...
+        Fm(nodeCtr,:) = arrayPrev(objCtr,nodeCtr - 1*movState,[x y]) ...
             - arrayPrev(objCtr,nodeCtr,[x y]);% move towards previous node's position    
     end
     
-    angles = atan2(Fm(y,bodyInd),Fm(x,bodyInd)) - diff(theta(objCtr,bodyInd,:),1,3); % undulations incl phase shift along worm
-    Fm(:,bodyInd) = [cos(angles); sin(angles)];
+    angles = atan2(Fm(bodyInd,y),Fm(bodyInd,x)) - diff(theta(objCtr,bodyInd,:),1,3)'; % undulations incl phase shift along worm
+    Fm(bodyInd,:) = [cos(angles), sin(angles)];
+    % fix magnitue of motile force to give target velocity
+    Fm = v_target(objCtr).*Fm;
     
 %     % core repulsion (volume exclusion)
 %     Fc = NaN(2,M);
@@ -57,7 +61,7 @@ for objCtr = 1:N
     % length constraint
     dl = squeeze(arrayPrev(objCtr,2:M,[x y]) - arrayPrev(objCtr,1:M-1,[x y])) ... % direction to next node
         .*repmat(diag(squeeze(distanceMatrix(objCtr,2:M,objCtr,1:M-1))) - segmentLength,1,2); % deviation from segmentLength
-    Fl = [dl; 0 0]' - [0 0; dl]'; % add forces to next and previous nodes shifted
+    Fl = 4.*([dl; 0 0] - [0 0; dl]); % add forces to next and previous nodes shifted
     
 %     % sum motile and exclusion forces with equal magnitude
 %     for nodeCtr = 1:M
@@ -70,8 +74,5 @@ for objCtr = 1:N
 %     end
     F = Fm + Fl;
     
-    % update directions
-    arrayNow(objCtr,:,phi) = atan2(F(y,:),F(x,:));
+    forceArray(objCtr,:,:) = F;
 end
-
-arrayOut = arrayNow;

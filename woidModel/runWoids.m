@@ -102,20 +102,24 @@ for t=2:T
     % find distances between all pairs of objects
     distanceMatrixXY = computeWoidDistancesWithBCs(xyphiarray(:,:,1:2,t-1),L,bc);
     distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar
+    % check if any woids are slowed down by neighbors
+    slowLogInd = findWoidNeighbors(distanceMatrix,2*rs,slowingNodes);
+    v = vs*slowLogInd + v0*(~slowLogInd);
+    omega = omega_m*(~slowLogInd + vs/v0*slowLogInd);
     % check if any worms are reversing due to contacts
     reversalLogInd = generateReversals(reversalLogInd,t,distanceMatrix,...
     2*rs,1,M,revRate,revTime,revRate/10,revTime);
     % update internal oscillators
-    theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,omega_m,t,phaseOffset,reversalLogInd(:,t));
-    % update direction
-    xyphiarray(:,:,:,t) = updateWoidDirection(xyphiarray(:,:,:,t),...
-        xyphiarray(:,:,:,t-1),rc,distanceMatrixXY,distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,(t-1):t));    
-    % check if any woids are slowed down by neighbors
-    slowLogInd = findWoidNeighbors(distanceMatrix,2*rs,slowingNodes);
-    v = vs*slowLogInd + v0*(~slowLogInd);
+    theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,omega,t,phaseOffset,reversalLogInd(:,t));
+%     % update direction
+%     xyphiarray(:,:,:,t) = updateWoidDirection(xyphiarray(:,:,:,t),...
+%         xyphiarray(:,:,:,t-1),rc,distanceMatrixXY,distanceMatrix,theta(:,:,(t-1):t),...
+%         reversalLogInd(:,(t-1):t),segmentLength);      
+    % calculate forces
+    forceArray = calculateForces(xyphiarray(:,:,:,t-1),rc,distanceMatrixXY,...
+        distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,(t-1):t),segmentLength,v);
     % update position
-    xyphiarray(:,:,:,t) = updateWoidPosition(xyphiarray(:,:,:,t),...
-        xyphiarray(:,:,:,t-1),v,bc,L,segmentLength,reversalLogInd(:,t));
+    xyphiarray(:,:,:,t) = applyForces(xyphiarray(:,:,:,t-1),forceArray,bc,L,segmentLength,reversalLogInd(:,t));
 end
 end
 
