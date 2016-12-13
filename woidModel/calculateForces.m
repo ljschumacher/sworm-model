@@ -30,12 +30,14 @@ for objCtr = 1:N
     end
     movState = 1 - 2*reversals(objCtr,2); % =-1 if worm is reversing, 1 if not
     % calculate force contributions    
-    % motile
+    % motile force
     Fm = NaN(M,2);
+    % head motile force
     angle = wrapToPi(arrayPrev(objCtr,headInd,phi) ... % previous direction
     + diff(theta(objCtr,headInd,:)) ...% change in internal oscillator
     + pi*diff(reversals(objCtr,:))); % 180 degree turn when reversal starts or ends
     Fm(headInd,:) = [cos(angle), sin(angle)]; 
+    % body motile forcee
     for nodeCtr = bodyInd % WARNING this doesn't currently work for periodic boundaries, as the direction can point to the other side of the domain
         Fm(nodeCtr,:) = arrayPrev(objCtr,nodeCtr - 1*movState,[x y]) ...
             - arrayPrev(objCtr,nodeCtr,[x y]);% move towards previous node's position    

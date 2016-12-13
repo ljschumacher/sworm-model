@@ -1,4 +1,6 @@
 function [ F_excl ] = exclusionForce(distanceMatrixFull,distanceMatrix, objInd, nodeInd, cutoff)
+% -- DEPRECATED --
+
 % calculates repulsive exclusion force between agents separated by less
 % that cutoff distance
 % inputs:

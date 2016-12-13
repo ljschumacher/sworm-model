@@ -1,4 +1,6 @@
 function arrayOut = updateWoidPosition(arrayNow,arrayPrev,v,bc,L,segmentLength,reversals)
+% -- DEPRECATED --
+
 % update positions based on current directions
 
 % issues/to-do's:

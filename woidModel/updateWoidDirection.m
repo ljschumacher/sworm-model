@@ -1,4 +1,5 @@
 function arrayOut = updateWoidDirection(arrayNow,arrayPrev,rc,distanceMatrixXY,distanceMatrix,theta,reversals,segmentLength)
+% -- DEPRECATED --
 % updates object directions according to update rules
 
 % issues/to-do's:

@@ -9,11 +9,14 @@ function [ F_contact ] = resolveContacts(forceArray,distanceMatrixFull,distanceM
 % outpus:
 % F_contact will be column vector of dimension ndim
 
+% issues / to-dos:
+% - should woids have contact forces with themselves?
+
 N = size(distanceMatrixFull,1);
 M = size(distanceMatrixFull,2);
 ndim = size(distanceMatrixFull,3);
 collisionNbrs = distanceMatrix<=cutoff; % check distance too all other nodes of all other objects
-collisionNbrs(objInd,max(nodeInd-1,1):min(nodeInd+1,M)) = false; % no contact force with self or adjacent nodes
+collisionNbrs(objInd,:) = false; % no contact force with self or adjacent nodes, or max(nodeInd-1,1):min(nodeInd+1,M)
 % Nc = nnz(collisionNbrs);
 if any(collisionNbrs(:))
     % find unit vectors pointing from neighbours to node
