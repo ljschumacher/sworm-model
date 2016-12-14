@@ -38,10 +38,8 @@ for objCtr = 1:N
     + pi*diff(reversals(objCtr,:))); % 180 degree turn when reversal starts or ends
     Fm(headInd,:) = [cos(angle), sin(angle)]; 
     % body motile forcee
-    for nodeCtr = bodyInd % WARNING this doesn't currently work for periodic boundaries, as the direction can point to the other side of the domain
-        Fm(nodeCtr,:) = arrayPrev(objCtr,nodeCtr - 1*movState,[x y]) ...
-            - arrayPrev(objCtr,nodeCtr,[x y]);% move towards previous node's position    
-    end
+    Fm(bodyInd,:) = arrayPrev(objCtr,bodyInd - 1*movState,[x y]) ...
+        - arrayPrev(objCtr,bodyInd,[x y]);% direction towards previous node's position
     angles = atan2(Fm(bodyInd,y),Fm(bodyInd,x)) - diff(theta(objCtr,bodyInd,:),1,3)'; % undulations incl phase shift along worm
     Fm(bodyInd,:) = [cos(angles), sin(angles)];
     % fix magnitue of motile force to give target velocity
@@ -50,6 +48,8 @@ for objCtr = 1:N
     dl = squeeze(arrayPrev(objCtr,2:M,[x y]) - arrayPrev(objCtr,1:M-1,[x y])) ... % direction to next node
         .*repmat(diag(squeeze(distanceMatrix(objCtr,2:M,objCtr,1:M-1))) - segmentLength,1,2); % deviation from segmentLength
     Fl = k_l.*([dl; 0 0] - [0 0; dl]); % add forces to next and previous nodes shifted
+%     % bend constraints
+%     dPhi = diff(angles);
     % sum force contributions
     forceArray(objCtr,:,:) = Fm + Fl;
 end

@@ -17,7 +17,7 @@ phi =   3;
 arrayNow = arrayPrev;
 
 % update direction
-arrayNow(:,:,phi) = atan2(forceArray(:,:,y),forceArray(:,:,x));
+arrayNow(:,:,phi) = atan2(forceArray(:,:,y),forceArray(:,:,x)); % not sure if this is the right use of phi, which technically points along the connection btw nodes
 v = sqrt(sum(forceArray.^2,3));
 
 % update position

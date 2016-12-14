@@ -3,12 +3,12 @@
 %   add test cases for both square and unequal dimensions
 clear
 
-N = 40;
+N = 2;
 M = 18;
 L = 12;
 dT = 1.2/17/0.33/4;
 
-xyphiarray = runWoids(1500,N,M,L,'bc','noflux','dT',dT);
+xyphiarray = runWoids(500,N,M,L,'bc','noflux','dT',dT);
 animateWoidTrajectories(xyphiarray,'tests/test_noflux');
 
 % xyphiarray = runWoids(500,N,M,L,'bc','free','dT',dT);
