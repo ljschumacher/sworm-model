@@ -16,14 +16,16 @@ phi =   3;
 
 arrayNow = arrayPrev;
 
-% update direction
-arrayNow(:,:,phi) = atan2(forceArray(:,:,y),forceArray(:,:,x)); % not sure if this is the right use of phi, which technically points along the connection btw nodes
+forceAngles = atan2(forceArray(:,:,y),forceArray(:,:,x));
 v = sqrt(sum(forceArray.^2,3));
 
 % update position
 arrayNow(:,:,x) = arrayPrev(:,:,x) + ...
-    v.*cos(arrayNow(:,:,phi));
+    v.*cos(forceAngles);
 arrayNow(:,:,y) = arrayPrev(:,:,y) + ...
-    v.*sin(arrayNow(:,:,phi));
+    v.*sin(forceAngles);
+
+% update direction
+arrayNow(:,:,phi) = forceAngles; % not sure if this is the right use of phi, which technically points along the connection btw nodes
 
 arrayOut = checkWoidBoundaryConditions(arrayNow,bc,L);

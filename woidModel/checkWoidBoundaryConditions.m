@@ -79,7 +79,7 @@ else
                         xyphiarray(nodeIndsOverL)  = 2*L - xyphiarray(nodeIndsOverL);
                     end
                 end
-                if any(nodeIndsUnder0)|any(nodeIndsOverL)
+                if any(nodeIndsUnder0)||any(nodeIndsOverL)
                     % change direction of movement upon reflection
                     xyphiarray(union(nodeIndsUnder0,nodeIndsOverL) + N*M*(phi - dimCtr)) = ... % ugly use of indexing
                         reflectDirection2D(...

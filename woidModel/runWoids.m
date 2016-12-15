@@ -54,6 +54,7 @@ addOptional(iP,'rc',0.035,@isnumeric) % worm width is approx 50 to 90 mu = appro
 addOptional(iP,'segmentLength',1.2/(M - 1),@isnumeric) % worm length is approx 1.2 mm
 addOptional(iP,'bc','free',@checkBcs)
 addOptional(iP,'kl',4,@isnumeric) % stiffness of linear springs connecting nodes
+addOptional(iP,'k_theta',0.0001,@isnumeric) % stiffness of rotational springs at nodes
 % undulations
 addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation of movement direction, default 0.6 Hz
 addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement direction, default pi/4
@@ -73,6 +74,7 @@ rc = iP.Results.rc;
 bc = iP.Results.bc;
 segmentLength = iP.Results.segmentLength;
 kl = iP.Results.kl;
+k_theta = iP.Results.k_theta;
 deltaPhase = iP.Results.deltaPhase;
 omega_m = iP.Results.omega_m*dT;
 theta_0 = iP.Results.theta_0;
@@ -116,10 +118,10 @@ for t=2:T
     theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,omega,t,phaseOffset,reversalLogInd(:,t));     
     % calculate forces
     forceArray = calculateForces(xyphiarray(:,:,:,t-1),rc,distanceMatrixXY,...
-        distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,(t-1):t),segmentLength,v,kl);
+        distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,(t-1):t),segmentLength,v,kl,k_theta);
     % update position (with boundary conditions)
     xyphiarray(:,:,:,t) = applyForces(xyphiarray(:,:,:,t-1),forceArray,bc,L);
-    assert(~nnz(isnan(xyphiarray(:,:,:,t))|isinf(xyphiarray(:,:,:,t))),'Uh-oh, something has gone wrong... (try using a smaller time-step?)')
+    assert(~any(isinf(xyphiarray(:))),'Uh-oh, something has gone wrong... (try using a smaller time-step?)')
 end
 end
 
