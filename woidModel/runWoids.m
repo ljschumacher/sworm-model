@@ -5,7 +5,8 @@
 % T: simulation duration (number of time-steps)
 % N: number of objects
 % M: number of nodes in each object
-% L: size of region containing initial positions
+% L: size of region containing initial positions - scalar will give circle
+% of radius L, [Lx Ly] will give rectangular domain
 %
 % optional inputs
 % -- general parameters--

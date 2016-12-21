@@ -58,35 +58,46 @@ else
                     nodeIndsOverL = find(xyphiarray(:,:,dimCtr)>=L(dimCtr)) + N*M*(dimCtr - 1);
                     xyphiarray(nodeIndsOverL)  = xyphiarray(nodeIndsOverL) - L(dimCtr);
                 end
-            else % scalar domain size
+            else % scalar domain size WARNING: periodic boundaries do not yet work with circular boundary
                 nodeLogIndUnder0 = xyphiarray(:,:,[x y])<0;
                 xyphiarray(nodeLogIndUnder0)  = xyphiarray(nodeLogIndUnder0) + L;
                 nodeLogIndOverL = xyphiarray(:,:,[x y])>=L;
                 xyphiarray(nodeLogIndOverL)  = xyphiarray(nodeLogIndOverL) - L;
             end
         case 'noflux'
-            for dimCtr = [x y]
-                nodeIndsUnder0 = find(xyphiarray(:,:,dimCtr)<0) + N*M*(dimCtr - 1);
-                xyphiarray(nodeIndsUnder0)  = - xyphiarray(nodeIndsUnder0);
-                if numel(L)==ndim % vector domain size [L_x L_y]
+            
+            if numel(L)==ndim % vector domain size [L_x L_y]
+                for dimCtr = [x y]
+                    nodeIndsUnder0 = find(xyphiarray(:,:,dimCtr)<0) + N*M*(dimCtr - 1);
+                    xyphiarray(nodeIndsUnder0)  = - xyphiarray(nodeIndsUnder0);
                     nodeIndsOverL = find(xyphiarray(:,:,dimCtr)>=L(dimCtr)) + N*M*(dimCtr - 1);
                     if any(nodeIndsOverL)
                         xyphiarray(nodeIndsOverL)  = 2*L(dimCtr) - xyphiarray(nodeIndsOverL);
                     end
-                else % scalar domain size
-                    nodeIndsOverL = find(xyphiarray(:,:,dimCtr)>=L) + N*M*(dimCtr - 1);
-                    if any(nodeIndsOverL)
-                        xyphiarray(nodeIndsOverL)  = 2*L - xyphiarray(nodeIndsOverL);
+                    if any(nodeIndsUnder0)||any(nodeIndsOverL)
+                        % change direction of movement upon reflection
+                        xyphiarray(union(nodeIndsUnder0,nodeIndsOverL) + N*M*(phi - dimCtr)) = ... % ugly use of indexing
+                            reflectDirection2D(...
+                            xyphiarray(union(nodeIndsUnder0,nodeIndsOverL) + N*M*(phi - dimCtr))...
+                            ,dimCtr);
                     end
                 end
-                if any(nodeIndsUnder0)||any(nodeIndsOverL)
+            else % scalar domain size --> cicrular domain boundary
+                nodeIndsOverL = find(sqrt(sum(xyphiarray(:,:,[x y]).^2,3))>=L);
+                if any(nodeIndsOverL)
+                    angles = atan2(xyphiarray(nodeIndsOverL + N*M), ...%y coords
+                    xyphiarray(nodeIndsOverL)); %x coords
+                    radii = sqrt(xyphiarray(nodeIndsOverL + N*M).^2 + ...
+                        xyphiarray(nodeIndsOverL).^2);
+                    xyphiarray(nodeIndsOverL)  = (2*L - radii).*cos(angles);
+                    xyphiarray(nodeIndsOverL + N*M)  = (2*L - radii).*sin(angles);
                     % change direction of movement upon reflection
-                    xyphiarray(union(nodeIndsUnder0,nodeIndsOverL) + N*M*(phi - dimCtr)) = ... % ugly use of indexing
-                        reflectDirection2D(...
-                        xyphiarray(union(nodeIndsUnder0,nodeIndsOverL) + N*M*(phi - dimCtr))...
-                        ,dimCtr);
+                    xyphiarray(nodeIndsOverL + N*M*(phi - 1)) = ...
+                        reflectDirectionCircular(xyphiarray(nodeIndsOverL + N*M*(phi - 1)),...
+                    angles);
                 end
             end
+            
     end
 end
 

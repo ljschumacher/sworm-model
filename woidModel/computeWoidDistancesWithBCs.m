@@ -3,6 +3,7 @@ function distanceMatrix = computeWoidDistancesWithBCs(positionArray,L,bc)
 
 % issues / todo:
 %   - very slow for periodic boundary conditions
+%   - does not yet work with circular boundary
 ndim = size(positionArray,3);
 N = size(positionArray,1);
 M = size(positionArray,2);

@@ -8,7 +8,7 @@ close all
 % general model parameters for all test - unless set otherwise
 N = 40;
 M = 18;
-L = 12;
+L = 12/2;
 dT = 1.2/17/0.33/4;
 
 xyphiarray = runWoids(500,1,M,3,'bc','noflux','dT',dT);

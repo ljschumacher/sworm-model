@@ -24,8 +24,10 @@ disp('Initialising woid positions...')
 objCtr = 1;
 while objCtr <= N
     % initialise head node
-    % Position, should work for both scalar and vector L
-    inArray(objCtr,1,[x y],1) = L0 + (L - 2*L0).*rand(1,2); % initialise positions at least one woid length away from edge
+    % Position, within circle of radius L-L0
+    rndangle = pi*(2*rand(1) - 1);
+    rndradius = (L - L0).*rand(1);
+    inArray(objCtr,1,[x y],1) = rndradius.*[cos(rndangle) sin(rndangle)]; % initialise positions at least one woid length away from edge
     % Direction
     inArray(objCtr,:,phi,1) = wrapToPi(pi*(2*rand - 1) - theta(objCtr,:));   % random orientation between -pi and pi for each object plus undulations
     for nodeCtr = 2:M % initialise woid positions, node by node
