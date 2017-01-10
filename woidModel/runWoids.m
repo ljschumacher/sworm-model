@@ -122,6 +122,7 @@ for t=2:T
     % calculate forces
     forceArray = calculateForces(xyphiarray(:,:,:,t-1),rc,distanceMatrixXY,...
         distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,(t-1):t),segmentLength,v,kl,k_theta);
+    assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % update position (with boundary conditions)
     xyphiarray(:,:,:,t) = applyForces(xyphiarray(:,:,:,t-1),forceArray,bc,L);
     assert(~any(isinf(xyphiarray(:))),'Uh-oh, something has gone wrong... (try using a smaller time-step?)')

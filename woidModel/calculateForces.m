@@ -54,7 +54,7 @@ for objCtr = 1:N
     Fl = k_l.*([dl; 0 0] - [0 0; dl]); % add forces to next and previous nodes shifted
     % bend constraints - rotational springs with changing 'rest length' due
     % to active undulations
-    torques = k_theta.*(-wrapToPi(diff(bodyAngles)) + diff(targetAngles));
+    torques = k_theta.*(-wrapToPi(diff(bodyAngles)) + wrapToPi(diff(targetAngles)));
 %     - diff(theta(objCtr,bodyInd,end),1,2)');% deviation from target change in angle to previous node, length M-2
     e_phi = [-sin(bodyAngles) cos(bodyAngles)]; % unit vector in direction of phi, size M-1 by 2
     l = sqrt(sum(ds(bodyInd,:).^2,2)); % length between node and prev node, length M-1

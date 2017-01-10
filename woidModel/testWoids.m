@@ -7,7 +7,7 @@ close all
 N = 40;
 M = 18;
 L = 12/2;
-dT = 1.2/17/0.33/4/8;
+dT = 1.2/17/0.33/4;
 % single worm
 xyphiarray = runWoids(500,1,M,2,'bc','noflux','dT',dT);
 animateWoidTrajectories(xyphiarray,'tests/singleWorm_noflux');

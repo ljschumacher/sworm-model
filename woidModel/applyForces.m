@@ -18,6 +18,7 @@ arrayNow = arrayPrev;
 
 forceAngles = atan2(forceArray(:,:,y),forceArray(:,:,x));
 v = sqrt(sum(forceArray.^2,3));
+assert(~any(isinf(v(:))),'In this code we strive to respect the laws of physics...')
 
 % update position
 arrayNow(:,:,x) = arrayPrev(:,:,x) + ...
