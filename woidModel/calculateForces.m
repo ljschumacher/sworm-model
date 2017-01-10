@@ -52,9 +52,10 @@ for objCtr = 1:N
     dl = squeeze(arrayPrev(objCtr,2:M,[x y]) - arrayPrev(objCtr,1:M-1,[x y])) ... % direction to next node
         .*repmat(diag(squeeze(distanceMatrix(objCtr,2:M,objCtr,1:M-1))) - segmentLength,1,2); % deviation from segmentLength
     Fl = k_l.*([dl; 0 0] - [0 0; dl]); % add forces to next and previous nodes shifted
-    % bend constraints - REPLACE: diff(theta(objCtr,bodyInd,end),1,2) with
-    % diff(targetAngles)? they should be the same
-    torques = k_theta.*(-diff(bodyAngles) - diff(theta(objCtr,bodyInd,end),1,2)');% deviation from target change in angle to previous node, length M-2
+    % bend constraints - rotational springs with changing 'rest length' due
+    % to active undulations
+    torques = k_theta.*(-wrapToPi(diff(bodyAngles)) + diff(targetAngles));
+%     - diff(theta(objCtr,bodyInd,end),1,2)');% deviation from target change in angle to previous node, length M-2
     e_phi = [-sin(bodyAngles) cos(bodyAngles)]; % unit vector in direction of phi, size M-1 by 2
     l = sqrt(sum(ds(bodyInd,:).^2,2)); % length between node and prev node, length M-1
     F_theta = [repmat(torques.*l(1:end-1),1,2).*e_phi(2:end,:); 0 0; 0 0] ... % rotational force from node n+1 onto n

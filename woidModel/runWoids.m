@@ -18,6 +18,8 @@
 % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can
 %   be single number or 2 element array {'bcx','bcy'} for different
 %   bcs along different dimensions
+% kl: stiffness of linear springs connecting nodes
+% k_theta: stiffness of rotational springs at nodes
 % -- undulation parameters --
 % omega_m: angular frequency of undulations (default 0.6Hz)
 % theta_0: amplitude of undulations (default pi/4)
@@ -55,7 +57,7 @@ addOptional(iP,'rc',0.035,@isnumeric) % worm width is approx 50 to 90 mu = appro
 addOptional(iP,'segmentLength',1.2/(M - 1),@isnumeric) % worm length is approx 1.2 mm
 addOptional(iP,'bc','free',@checkBcs)
 addOptional(iP,'kl',4,@isnumeric) % stiffness of linear springs connecting nodes
-addOptional(iP,'k_theta',0.0001,@isnumeric) % stiffness of rotational springs at nodes
+addOptional(iP,'k_theta',0.05,@isnumeric) % stiffness of rotational springs at nodes
 % undulations
 addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation of movement direction, default 0.6 Hz
 addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement direction, default pi/4
@@ -90,7 +92,7 @@ assert(segmentLength>2*rc,...
     'Segment length must be bigger than node diameter (2*rc). Decrease segment number (M), rc, or increase segmentLength')
 assert(min(L)>segmentLength*(M - 1),...
     'Domain size (L) must be bigger than object length (segmentLength*M). Increase L.')
-
+assert(v0>=vs,'This implementation might not be stable for worms speeding up upon contact.')
 
 xyphiarray = NaN(N,M,3,T);
 % generate internal oscillators 
@@ -110,8 +112,8 @@ for t=2:T
     distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar
     % check if any woids are slowed down by neighbors
     slowLogInd = findWoidNeighbors(distanceMatrix,2*rs,slowingNodes);
-    v = vs*slowLogInd + v0*(~slowLogInd);
-    omega = omega_m*(~slowLogInd + vs/v0*slowLogInd);
+    v = vs*slowLogInd + v0*(~slowLogInd); % adjust speed for slowed worms
+    omega = omega_m*(~slowLogInd + vs/v0*slowLogInd); % adjust internal oscillator freq for slowed worms
     % check if any worms are reversing due to contacts
     reversalLogInd = generateReversals(reversalLogInd,t,distanceMatrix,...
     2*rs,1,M,revRate,revTime,revRate/10,revTime);
