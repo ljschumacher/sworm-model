@@ -53,11 +53,13 @@ exportOptions = struct('Format','eps2',...
     'FontMode','fixed',...
     'FontSize',10,...
     'LineWidth',2);
+
 set(velFig,'PaperUnits','centimeters')
 filename = ['parameterisationPlots/undulationStiffnessVel'];
 exportfig(velFig,[filename '.eps'],exportOptions);
 system(['epstopdf ' filename '.eps']);
 system(['rm ' filename '.eps']);
+
 set(accFig,'PaperUnits','centimeters')
 filename = ['parameterisationPlots/undulationStiffnessAcc'];
 exportfig(accFig,[filename '.eps'],exportOptions);

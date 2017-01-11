@@ -1,4 +1,4 @@
-function [ ] = animateWoidTrajectories(xyphiarray,filename,rc)
+function [ ] = animateWoidTrajectories(xyphiarray,filename,L,rc)
 % takes in an array of N by M by x y phi by T and makes a movie of the resulting
 % trajectories
 
@@ -9,7 +9,7 @@ x =     1;
 y =     2;
 % phi =   3;
 
-if nargin <=2
+if nargin <=3
     rc = 0.035;
     display(['Setting node radius to ' num2str(rc) ' for animations.'])
 end
@@ -35,6 +35,10 @@ for frameCtr=1:nFrames
         'Marker','.','Color','k');
     hold on
     ax = gca;
+        % plot circular domain boundaries, if given scalar domain size
+    if nargin>=3&&numel(L)==1
+            viscircles(ax,[0 0],L,'Color',[0.5 0.5 0.5],'LineWidth',2,'EnhanceVisibility',false);
+    end
     ax.XLim = xrange;
     ax.YLim = yrange;
     ax.DataAspectRatio = [1 1 1];

@@ -56,8 +56,8 @@ addOptional(iP,'dT',1/9,@isnumeric) % adjusts speed and undulataions, default 1/
 addOptional(iP,'rc',0.035,@isnumeric) % worm width is approx 50 to 90 mu = approx 0.07mm
 addOptional(iP,'segmentLength',1.2/(M - 1),@isnumeric) % worm length is approx 1.2 mm
 addOptional(iP,'bc','free',@checkBcs)
-addOptional(iP,'kl',4,@isnumeric) % stiffness of linear springs connecting nodes
-addOptional(iP,'k_theta',0.05,@isnumeric) % stiffness of rotational springs at nodes
+addOptional(iP,'kl',120,@isnumeric) % stiffness of linear springs connecting nodes
+addOptional(iP,'k_theta',1,@isnumeric) % stiffness of rotational springs at nodes
 % undulations
 addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation of movement direction, default 0.6 Hz
 addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement direction, default pi/4
@@ -76,8 +76,8 @@ v0 = iP.Results.v0*dT;
 rc = iP.Results.rc;
 bc = iP.Results.bc;
 segmentLength = iP.Results.segmentLength;
-kl = iP.Results.kl;
-k_theta = iP.Results.k_theta;
+kl = iP.Results.kl*dT; % scale with dT as F~v~dT
+k_theta = iP.Results.k_theta*dT; % scale with dT as F~v~dT
 deltaPhase = iP.Results.deltaPhase;
 omega_m = iP.Results.omega_m*dT;
 theta_0 = iP.Results.theta_0;
@@ -92,7 +92,7 @@ assert(segmentLength>2*rc,...
     'Segment length must be bigger than node diameter (2*rc). Decrease segment number (M), rc, or increase segmentLength')
 assert(min(L)>segmentLength*(M - 1),...
     'Domain size (L) must be bigger than object length (segmentLength*M). Increase L.')
-assert(v0>=vs,'This implementation might not be stable for worms speeding up upon contact.')
+assert(v0>=vs,'vs should be chosen smaller or equal to v0')
 
 xyphiarray = NaN(N,M,3,T);
 % generate internal oscillators 

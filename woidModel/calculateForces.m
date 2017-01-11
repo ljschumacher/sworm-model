@@ -7,9 +7,10 @@ function forceArray = calculateForces(arrayPrev,rc,distanceMatrixXY,distanceMatr
 % - calculate forces without loops?
 % - once we have the bending constraints, do we still need the undulations
 % at every node??
+% - refactor individual forces into their own functions
 
 % short-hand for indexing coordinates
-x =     1; 
+x =     1;
 y =     2;
 phi =   3;
 
@@ -31,20 +32,20 @@ for objCtr = 1:N
         bodyInd = (M-1):-1:1;
     end
     movState = 1 - 2*reversals(objCtr,2); % =-1 if worm is reversing, 1 if not
-    % calculate force contributions    
+    % calculate force contributions
     % motile force
     Fm = NaN(M,2);
     ds = NaN(M,2); %change in node positon
     % head motile force
     angle = wrapToPi(arrayPrev(objCtr,headInd,phi) ... % previous direction
-    + diff(theta(objCtr,headInd,:)) ...% change in internal oscillator
-    + pi*diff(reversals(objCtr,:))); % 180 degree turn when reversal starts or ends
-    Fm(headInd,:) = [cos(angle), sin(angle)]; 
+        + diff(theta(objCtr,headInd,:)) ...% change in internal oscillator
+        + pi*diff(reversals(objCtr,:))); % 180 degree turn when reversal starts or ends
+    Fm(headInd,:) = [cos(angle), sin(angle)];
     % body motile forcee
     ds(bodyInd,:) = arrayPrev(objCtr,bodyInd - 1*movState,[x y]) ...
         - arrayPrev(objCtr,bodyInd,[x y]);% direction towards previous node's position
     bodyAngles = atan2(ds(bodyInd,y),ds(bodyInd,x));
-    targetAngles = bodyAngles - diff(theta(objCtr,bodyInd,:),1,3)'; % undulations incl phase shift along worm
+    targetAngles = bodyAngles;% + diff(theta(objCtr,bodyInd,:),1,3)'; % undulations incl phase shift along worm
     Fm(bodyInd,:) = [cos(targetAngles), sin(targetAngles)];
     % fix magnitue of motile force to give target velocity
     Fm = v_target(objCtr).*Fm;
@@ -52,16 +53,23 @@ for objCtr = 1:N
     dl = squeeze(arrayPrev(objCtr,2:M,[x y]) - arrayPrev(objCtr,1:M-1,[x y])) ... % direction to next node
         .*repmat(diag(squeeze(distanceMatrix(objCtr,2:M,objCtr,1:M-1))) - segmentLength,1,2); % deviation from segmentLength
     Fl = k_l.*([dl; 0 0] - [0 0; dl]); % add forces to next and previous nodes shifted
-    % bend constraints - rotational springs with changing 'rest length' due
+    % bending constraints - rotational springs with changing 'rest length' due
     % to active undulations
-    torques = k_theta.*(-wrapToPi(diff(bodyAngles)) + wrapToPi(diff(targetAngles)));
-%     - diff(theta(objCtr,bodyInd,end),1,2)');% deviation from target change in angle to previous node, length M-2
+    torques = k_theta.*(wrapToPi(diff(bodyAngles)) - wrapToPi(diff(targetAngles)));
+    %     - diff(theta(objCtr,bodyInd,end),1,2)');% deviation from target change in angle to previous node, length M-2
     e_phi = [-sin(bodyAngles) cos(bodyAngles)]; % unit vector in direction of phi, size M-1 by 2
     l = sqrt(sum(ds(bodyInd,:).^2,2)); % length between node and prev node, length M-1
-    F_theta = [repmat(torques.*l(1:end-1),1,2).*e_phi(2:end,:); 0 0; 0 0] ... % rotational force from node n+1 onto n
-    + [0 0; 0 0; repmat(torques.*l(2:end),1,2).*e_phi(1:end-1,:)];% rotational force from node n-1 onto n
+    momentsfwd = repmat(torques.*l(1:end-1),1,2).*e_phi(1:end-1,:);
+    momentsbwd = repmat(torques.*l(2:end),1,2).*e_phi(2:end,:);
+    F_theta = NaN(M,2); % pre-allocate to index nodes in order depending on movement state
+    F_theta([headInd, bodyInd],:) = [momentsfwd; 0 0; 0 0] ... % rotational force from node n+1 onto n
+            + [0 0; 0 0; momentsbwd] ...% rotational force from node n-1 onto n
+            + [0 0; -(momentsfwd + momentsbwd); 0 0];% reactive force on node n (balancing forces exerted onto nodes n+1 and n -1
     % sum force contributions
     forceArray(objCtr,:,:) = Fm + Fl + F_theta;
+%     % uncomment for debugging...
+%     plot(squeeze(arrayPrev(objCtr,:,x)),squeeze(arrayPrev(objCtr,:,y)),'.-'), axis equal, hold on
+%     quiver(squeeze(arrayPrev(objCtr,:,x))',squeeze(arrayPrev(objCtr,:,y))',F_theta(:,1),F_theta(:,2),0)
 end
 % resolve contact forces
 Fc = NaN(N,M,2);

@@ -64,8 +64,7 @@ else
                 nodeLogIndOverL = xyphiarray(:,:,[x y])>=L;
                 xyphiarray(nodeLogIndOverL)  = xyphiarray(nodeLogIndOverL) - L;
             end
-        case 'noflux'
-            
+        case 'noflux'   
             if numel(L)==ndim % vector domain size [L_x L_y]
                 for dimCtr = [x y]
                     nodeIndsUnder0 = find(xyphiarray(:,:,dimCtr)<0) + N*M*(dimCtr - 1);
@@ -96,8 +95,7 @@ else
                         reflectDirectionCircular(xyphiarray(nodeIndsOverL + N*M*(phi - 1)),...
                     angles);
                 end
-            end
-            
+            end    
     end
 end
 
