@@ -41,17 +41,18 @@ for objCtr = 1:N
         + diff(theta(objCtr,headInd,:)) ...% change in internal oscillator
         + pi*diff(reversals(objCtr,:))); % 180 degree turn when reversal starts or ends
     Fm(headInd,:) = [cos(angle), sin(angle)];
-    % body motile forcee
+    % body motile force
     ds(bodyInd,:) = arrayPrev(objCtr,bodyInd - 1*movState,[x y]) ...
         - arrayPrev(objCtr,bodyInd,[x y]);% direction towards previous node's position
     bodyAngles = atan2(ds(bodyInd,y),ds(bodyInd,x));
-    targetAngles = bodyAngles;% + diff(theta(objCtr,bodyInd,:),1,3)'; % undulations incl phase shift along worm
+    targetAngles = bodyAngles + diff(theta(objCtr,bodyInd,:),1,3)'; % undulations incl phase shift along worm
     Fm(bodyInd,:) = [cos(targetAngles), sin(targetAngles)];
     % fix magnitue of motile force to give target velocity
     Fm = v_target(objCtr).*Fm;
     % length constraint
     dl = squeeze(arrayPrev(objCtr,2:M,[x y]) - arrayPrev(objCtr,1:M-1,[x y])) ... % direction to next node
-        .*repmat(diag(squeeze(distanceMatrix(objCtr,2:M,objCtr,1:M-1))) - segmentLength,1,2); % deviation from segmentLength
+        .*repmat((diag(squeeze(distanceMatrix(objCtr,2:M,objCtr,1:M-1))) - segmentLength) ...% deviation from segmentLength
+        ./sqrt(sum(squeeze(arrayPrev(objCtr,2:M,[x y]) - arrayPrev(objCtr,1:M-1,[x y])).^2,2)),1,2); % normalised for segment length
     Fl = k_l.*([dl; 0 0] - [0 0; dl]); % add forces to next and previous nodes shifted
     % bending constraints - rotational springs with changing 'rest length' due
     % to active undulations
@@ -63,13 +64,13 @@ for objCtr = 1:N
     momentsbwd = repmat(torques.*l(2:end),1,2).*e_phi(2:end,:);
     F_theta = NaN(M,2); % pre-allocate to index nodes in order depending on movement state
     F_theta([headInd, bodyInd],:) = [momentsfwd; 0 0; 0 0] ... % rotational force from node n+1 onto n
-            + [0 0; 0 0; momentsbwd] ...% rotational force from node n-1 onto n
-            + [0 0; -(momentsfwd + momentsbwd); 0 0];% reactive force on node n (balancing forces exerted onto nodes n+1 and n -1
+        + [0 0; 0 0; momentsbwd] ...% rotational force from node n-1 onto n
+        + [0 0; -(momentsfwd + momentsbwd); 0 0];% reactive force on node n (balancing forces exerted onto nodes n+1 and n -1
     % sum force contributions
     forceArray(objCtr,:,:) = Fm + Fl + F_theta;
-%     % uncomment for debugging...
-%     plot(squeeze(arrayPrev(objCtr,:,x)),squeeze(arrayPrev(objCtr,:,y)),'.-'), axis equal, hold on
-%     quiver(squeeze(arrayPrev(objCtr,:,x))',squeeze(arrayPrev(objCtr,:,y))',F_theta(:,1),F_theta(:,2),0)
+    %     % uncomment for debugging...
+    %     plot(squeeze(arrayPrev(objCtr,:,x)),squeeze(arrayPrev(objCtr,:,y)),'.-'), axis equal, hold on
+    %     quiver(squeeze(arrayPrev(objCtr,:,x))',squeeze(arrayPrev(objCtr,:,y))',Fm(:,1),Fm(:,2),0)
 end
 % resolve contact forces
 Fc = NaN(N,M,2);
