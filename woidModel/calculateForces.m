@@ -12,6 +12,8 @@ function forceArray = calculateForces(arrayPrev,rc,distanceMatrixXY,distanceMatr
 % towards point on curve
 % - should body angle be calculated from improved tangent estimate (like
 % motile force?)
+% - should the target angles for bending actually be
+% theta(objCtr,bodyInd,end)?
 
 % short-hand for indexing coordinates
 x =     1;
@@ -62,7 +64,6 @@ for objCtr = 1:N
     bodyAngles = atan2(ds(bodyInd,y),ds(bodyInd,x));
     targetAngles = bodyAngles + diff(theta(objCtr,bodyInd,:),1,3)'; % undulations incl phase shift along worm
     torques = k_theta.*(wrapToPi(diff(bodyAngles)) - wrapToPi(diff(targetAngles)));
-    %     - diff(theta(objCtr,bodyInd,end),1,2)');% deviation from target change in angle to previous node, length M-2
     e_phi = [-sin(bodyAngles) cos(bodyAngles)]; % unit vector in direction of phi, size M-1 by 2
     l = sqrt(sum(ds(bodyInd,:).^2,2)); % length between node and prev node, length M-1
     momentsfwd = repmat(torques.*l(1:end-1),1,2).*e_phi(1:end-1,:);
@@ -73,9 +74,9 @@ for objCtr = 1:N
         + [0 0; -(momentsfwd + momentsbwd); 0 0];% reactive force on node n (balancing forces exerted onto nodes n+1 and n -1
     % sum force contributions
     forceArray(objCtr,:,:) = Fm + Fl + F_theta;
-        % uncomment for debugging...
-        plot(squeeze(arrayPrev(objCtr,:,x)),squeeze(arrayPrev(objCtr,:,y)),'.-'), axis equal, hold on
-        quiver(squeeze(arrayPrev(objCtr,:,x))',squeeze(arrayPrev(objCtr,:,y))',F_theta(:,1),F_theta(:,2),0)
+%         % uncomment for debugging...
+%         plot(squeeze(arrayPrev(objCtr,:,x)),squeeze(arrayPrev(objCtr,:,y)),'.-'), axis equal, hold on
+%         quiver(squeeze(arrayPrev(objCtr,:,x))',squeeze(arrayPrev(objCtr,:,y))',F_theta(:,1),F_theta(:,2),0)
 end
 % resolve contact forces
 Fc = NaN(N,M,2);

@@ -1,5 +1,6 @@
 % test SPP model
 
+% - fix tests so that straight worm bends and bend worm straightens
 clear
 close all
 
@@ -31,10 +32,7 @@ xyphiarray = runWoids(500,1,M,L,'bc','noflux','dT',dT,...
     'theta_0',0,'omega_m',0,'deltaPhase',0);
 animateWoidTrajectories(xyphiarray,'tests/singleWorm_noflux_undulations0',L);
 
-xyphiarray = runWoids(500,1,M,L,'bc','noflux','dT',dT,'v0',1e-4,'vs',1e-4,'omega_m',1e-4);
-animateWoidTrajectories(xyphiarray,'tests/singleWorm_straighteningTest',L);
-
-xyphiarray = runWoids(500,1,M,L,'bc','noflux','dT',dT,'v0',1e-4,'vs',1e-4);
+xyphiarray = runWoids(500,1,M,L,'bc','noflux','dT',dT,'v0',1e-4,'vs',1e-4,'omega_m',0);
 animateWoidTrajectories(xyphiarray,'tests/singleWorm_targetcurvatureTest',L);
 
 % two worms

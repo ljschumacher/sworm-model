@@ -57,7 +57,7 @@ addOptional(iP,'rc',0.035,@isnumeric) % worm width is approx 50 to 90 mu = appro
 addOptional(iP,'segmentLength',1.2/(M - 1),@isnumeric) % worm length is approx 1.2 mm
 addOptional(iP,'bc','free',@checkBcs)
 addOptional(iP,'kl',8,@isnumeric) % stiffness of linear springs connecting nodes
-addOptional(iP,'k_theta',1,@isnumeric) % stiffness of rotational springs at nodes
+addOptional(iP,'k_theta',2,@isnumeric) % stiffness of rotational springs at nodes
 % undulations
 addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation of movement direction, default 0.6 Hz
 addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement direction, default pi/4
