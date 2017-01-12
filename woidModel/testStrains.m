@@ -1,13 +1,13 @@
 % test woid model for different strain parameterisations
 % to do:
-%   parameterise slow-down
+%   - save tracking results
 clear
 
-N = 100;
+N = 40;
 M = 18;
-L = 12;
+L = 8/2;
 dT = 1.2/17/0.33/4;
-T = 3000;
+T = 10000;
 
 xyphiarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
     'theta_0',pi*40/180);

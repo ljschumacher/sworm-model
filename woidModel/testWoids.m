@@ -56,23 +56,23 @@ xyphiarray = runWoids(500,2,M,L,'bc','noflux','dT',dT,...
 animateWoidTrajectories(xyphiarray,'tests/twoWorms_noflux_undulations0',L);
 
 % many worms
-L = 12/2;
-xyphiarray = runWoids(3000,N,M,L,'bc','noflux','dT',dT);
+L = 8/2;
+xyphiarray = runWoids(2000,N,M,L,'bc','noflux','dT',dT);
 animateWoidTrajectories(xyphiarray,'tests/40worms_noflux',L);
 
-xyphiarray = runWoids(3000,N,M,L,'bc','noflux','dT',dT,'k_theta',0);
+xyphiarray = runWoids(2000,N,M,L,'bc','noflux','dT',dT,'k_theta',0);
 animateWoidTrajectories(xyphiarray,'tests/40worms_noflux_ktheta0',L);
 
-xyphiarray = runWoids(3000,N,M,L,'bc','noflux','dT',dT,'revRate',0);
+xyphiarray = runWoids(2000,N,M,L,'bc','noflux','dT',dT,'revRate',0);
 animateWoidTrajectories(xyphiarray,'tests/40worms_noflux_revRate0',L);
 
-xyphiarray = runWoids(3000,N,M,L,'bc','noflux','dT',dT,'rs',0);
+xyphiarray = runWoids(2000,N,M,L,'bc','noflux','dT',dT,'rs',0);
 animateWoidTrajectories(xyphiarray,'tests/40worms_noflux_rslow0',L);
 
-xyphiarray = runWoids(3000,N,M,L,'bc','noflux','dT',dT,'slowingNodes',1:M);
+xyphiarray = runWoids(2000,N,M,L,'bc','noflux','dT',dT,'slowingNodes',1:M);
 animateWoidTrajectories(xyphiarray,'tests/40worms_noflux_slowingNodesAll',L);
 
-xyphiarray = runWoids(3000,N,M,L,'bc','noflux','dT',dT,...
+xyphiarray = runWoids(2000,N,M,L,'bc','noflux','dT',dT,...
     'theta_0',0,'omega_m',0,'deltaPhase',0);
 animateWoidTrajectories(xyphiarray,'tests/40worms_noflux_undulations0',L);
 
