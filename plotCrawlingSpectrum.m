@@ -1,10 +1,13 @@
 %% plot the orthogonal-to-CoM velocities for different worm segments from single worm data
+
+% issues / todo:
+% - the N2 spectra average each other out
 clear
 close all
-for strain = {'npr-1','CB4856','N2'}
+for strain = {'N2','npr-1','CB4856'}
     % find all files in the directory tree
     files = rdir(['../wormtracking/eigenworms/singleWorm/' strain{:} '/**/*.mat']);
-    numWorms = size(files,1);
+    numWorms = min(size(files,1),100);
     numSegments = 49;
     
     % prealloc cell arrays to store wormwise data

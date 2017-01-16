@@ -14,7 +14,11 @@ if nargin <=3
     display(['Setting node radius to ' num2str(rc) ' for animations.'])
 end
 
-vid = VideoWriter(filename,'MPEG-4');
+if ~ismac
+    vid = VideoWriter(filename,'Motion JPEG AVI');
+else
+    vid = VideoWriter(filename,'MPEG-4');
+end
 open(vid)
 nFrames = size(xyphiarray,4);
 N = size(xyphiarray,1);

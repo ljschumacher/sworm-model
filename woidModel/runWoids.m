@@ -56,12 +56,12 @@ addOptional(iP,'dT',1/9,@isnumeric) % adjusts speed and undulataions, default 1/
 addOptional(iP,'rc',0.035,@isnumeric) % worm width is approx 50 to 90 mu = approx 0.07mm
 addOptional(iP,'segmentLength',1.2/(M - 1),@isnumeric) % worm length is approx 1.2 mm
 addOptional(iP,'bc','free',@checkBcs)
-addOptional(iP,'kl',8,@isnumeric) % stiffness of linear springs connecting nodes
-addOptional(iP,'k_theta',2,@isnumeric) % stiffness of rotational springs at nodes
+addOptional(iP,'kl',10,@isnumeric) % stiffness of linear springs connecting nodes
+addOptional(iP,'k_theta',20,@isnumeric) % stiffness of rotational springs at nodes
 % undulations
 addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation of movement direction, default 0.6 Hz
 addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement direction, default pi/4
-addOptional(iP,'deltaPhase',2*pi/M*1.2/0.62,@isnumeric) % for phase shift in undulations and initial positions, default given by primary worm wavelength, 620 mu
+addOptional(iP,'deltaPhase',0.11,@isnumeric) % for phase shift in undulations and initial positions, default 0.11
 % reversals
 addOptional(iP,'revRate',1/13,@isnumeric) % rate for poisson-distributed reversals, default 1/13s
 addOptional(iP,'revTime',2,@isnumeric) % duration of reversal events, default 2s (will be rounded to integer number of time-steps)
@@ -88,8 +88,8 @@ vs = iP.Results.vs*dT;
 slowingNodes = iP.Results.slowingNodes;
 
 % check input relationships to each other
-assert(segmentLength>2*rc,...
-    'Segment length must be bigger than node diameter (2*rc). Decrease segment number (M), rc, or increase segmentLength')
+% assert(segmentLength>2*rc,...
+%     'Segment length must be bigger than node diameter (2*rc). Decrease segment number (M), rc, or increase segmentLength')
 assert(min(L)>segmentLength*(M - 1),...
     'Domain size (L) must be bigger than object length (segmentLength*M). Increase L.')
 assert(v0>=vs,'vs should be chosen smaller or equal to v0')

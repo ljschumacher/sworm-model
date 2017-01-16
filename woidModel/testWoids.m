@@ -6,8 +6,8 @@ close all
 
 % general model parameters for all test - unless set otherwise
 N = 40;
-M = 18;
-dT = 1.2/17/0.33/4;
+M = 50;
+dT = 1.2/17/0.33/4/2;
 % single worm
 L = 2;
 xyphiarray = runWoids(500,1,M,L,'bc','noflux','dT',dT);

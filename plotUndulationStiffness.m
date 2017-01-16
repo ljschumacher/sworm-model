@@ -5,7 +5,7 @@ clear
 for strain = {'N2','npr-1','CB4856'}
     % find all files in the directory tree
     files = rdir(['../wormtracking/eigenworms/singleWorm/' strain{:} '/**/*.mat']);
-    numWorms = size(files,1);
+    numWorms = min(size(files,1),100);
     framerate = 30;
     
     velFig = figure; hold on
@@ -17,23 +17,23 @@ for strain = {'N2','npr-1','CB4856'}
         [tangentAngles, ~] = makeAngleArrayV(worm.posture.skeleton.x',worm.posture.skeleton.y');
         % normalise for amplitude - divide by half the range
         tangentAngles = tangentAngles./repmat(range(tangentAngles)/2,size(tangentAngles,1),1);
-        curvature = diff(tangentAngles,1,2);
+        deltaAngles = diff(tangentAngles,1,2);
         % estimate change and acceleration in angle over time at 30Hz
-        dKdt = framerate*diff(curvature);
+        dKdt = framerate*diff(deltaAngles);
         d2Kdt2 = framerate*diff(dKdt);
         % calculate and plot group statistics
-        Kbins = quant(curvature(1:end-1,:),0.01);
+        Kbins = quant(deltaAngles(1:end-1,:),0.01);
         [v, sigv] = grpstats(dKdt(:),Kbins(:),{@nanmean,@nanstd});
         boundedline(unique(Kbins(~isnan(Kbins(:)))),v,[sigv, sigv],...
             'alpha','transparency',1/numWorms,'nan','fill',velFig.Children)
-        Kbins = quant(curvature(2:end-1,:),0.01);
+        Kbins = quant(deltaAngles(2:end-1,:),0.02);
         [a, siga] = grpstats(d2Kdt2(:),Kbins(:),{@mean,@std});
         boundedline(unique(Kbins(~isnan(Kbins(:)))),a,[siga, siga],...
             'alpha','transparency',1/numWorms,'nan','fill',accFig.Children)
     end
     
     %% edit plots
-    velFig.Children.XLabel.String = 'curvature (d\phi/ds)';
+    velFig.Children.XLabel.String = '\Delta\phi';
     velFig.Children.YLabel.String = 'tangent angle velocity (d\phi/dt)';
     velFig.Children.XLim = [-0.5 0.5];
     velFig.Children.YLim = [-20 20];
@@ -41,7 +41,7 @@ for strain = {'N2','npr-1','CB4856'}
     x = -0.5:0.1:0.5; plot(velFig.Children,x,-20*x,'k--')
     title(velFig.Children,strain{:},'FontWeight','normal')
     
-    accFig.Children.XLabel.String = 'curvature (d\phi/ds)';
+    accFig.Children.XLabel.String = '\Delta\phi';
     accFig.Children.YLabel.String = 'tangent angle acceleration (d^2\phi/dt^2)';
     accFig.Children.XLim = [-0.5 0.5];
     accFig.Children.YLim = [-1000 1000];

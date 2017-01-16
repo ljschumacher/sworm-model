@@ -5,8 +5,8 @@ clear
 for strain = {'npr-1','CB4856','N2'} 
     % find all files in the directory tree
     files = rdir(['../wormtracking/eigenworms/singleWorm/' strain{:} '/**/*.mat']);
-    numWorms = size(files,1);
-    
+    numWorms = min(size(files,1),100);
+    meanDeltaPhase = NaN(numWorms,1);
     % prealloc cell arrays to store wormwise data
     figure, hold on
     for wormCtr = 1:numWorms
@@ -15,17 +15,20 @@ for strain = {'npr-1','CB4856','N2'}
         load(strrep(files(wormCtr).name,'._',''))
         [tangentAngles, ~] = makeAngleArrayV(worm.posture.skeleton.x',worm.posture.skeleton.y');
         % normalise for amplitude and get phase
-        % dphase = 2asin(sqrt(2mean((deltaPhi/2/amplitude).^2)))
+        % dphase = 2asin(sqrt(2mean((deltaPhi/amplitude/2).^2)))
         deltaPhase = 2*asin(sqrt(2*diff(...
-            tangentAngles./repmat(range(tangentAngles)/2,size(tangentAngles,1),1)/2,...
+            tangentAngles./repmat(range(tangentAngles)/2,size(tangentAngles,1),1)/2,... % amplitude = range(tangentAngles)/2
             1,2).^2));
         plot(nanmean(deltaPhase))
+        meanDeltaPhase(wormCtr) = mean(nanmean(deltaPhase));
     end
     
     %% plot
+    plot([0, 50],mean(meanDeltaPhase)*[1, 1],'k--','LineWidth',2)
     xlabel('worm segment')
     ylabel('estimated phase difference btw segments')
     title(strain{:},'FontWeight','normal')
+    ylim([0 0.3])
     %% export figure
     exportOptions = struct('Format','eps2',...
         'Color','rgb',...

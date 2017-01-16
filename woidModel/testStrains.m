@@ -1,6 +1,6 @@
 % test woid model for different strain parameterisations
 % to do:
-%   - save tracking results
+%   - save simulation results
 clear
 
 N = 40;

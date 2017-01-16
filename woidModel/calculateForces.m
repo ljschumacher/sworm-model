@@ -44,7 +44,7 @@ for objCtr = 1:N
     ds = NaN(M,2); %change in node positon
     % head motile force
     angle = wrapToPi(arrayPrev(objCtr,headInd,phi) ... % previous direction
-        + diff(theta(objCtr,headInd,:)) ...% change in internal oscillator
+        + diff(theta(objCtr,headInd,:),1,3) ...% change in internal oscillator
         + pi*diff(reversals(objCtr,:))); % 180 degree turn when reversal starts or ends
     Fm(headInd,:) = [cos(angle), sin(angle)];
     % body motile force
