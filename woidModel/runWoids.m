@@ -56,7 +56,7 @@ addOptional(iP,'dT',1/9,@isnumeric) % adjusts speed and undulataions, default 1/
 addOptional(iP,'rc',0.035,@isnumeric) % worm width is approx 50 to 90 mu = approx 0.07mm
 addOptional(iP,'segmentLength',1.2/(M - 1),@isnumeric) % worm length is approx 1.2 mm
 addOptional(iP,'bc','free',@checkBcs)
-addOptional(iP,'kl',10,@isnumeric) % stiffness of linear springs connecting nodes
+addOptional(iP,'kl',20,@isnumeric) % stiffness of linear springs connecting nodes
 addOptional(iP,'k_theta',20,@isnumeric) % stiffness of rotational springs at nodes
 % undulations
 addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation of movement direction, default 0.6 Hz
@@ -64,11 +64,14 @@ addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement
 addOptional(iP,'deltaPhase',0.11,@isnumeric) % for phase shift in undulations and initial positions, default 0.11
 % reversals
 addOptional(iP,'revRate',1/13,@isnumeric) % rate for poisson-distributed reversals, default 1/13s
+addOptional(iP,'revRateCluster',1/130,@isnumeric) % reduced reversal rates, when worms are in cluster
 addOptional(iP,'revTime',2,@isnumeric) % duration of reversal events, default 2s (will be rounded to integer number of time-steps)
+addOptional(iP,'headNodes',1:max(round(M/10),1),checkInt) % which nodes count as head, default fron 10%
+addOptional(iP,'tailNodes',(M-max(round(M/10),1)+1):M,checkInt) % which nodes count as tail, default back 10%
 % slowing down
 addOptional(iP,'rs',0.035*2,@isnumeric) % radius at which worms slow down, default 2 rc
 addOptional(iP,'vs',0.33/3,@isnumeric) % speed when slowed down, default v0/3
-addOptional(iP,'slowingNodes',[1 M],checkInt) % which nodes sense proximity, default 1 and M
+addOptional(iP,'slowingNodes',[1:max(round(M/10),1) (M-max(round(M/10),1)+1):M],checkInt) % which nodes sense proximity, default head and tail
 
 parse(iP,T,N,M,L,varargin{:})
 dT = iP.Results.dT;
@@ -82,7 +85,10 @@ deltaPhase = iP.Results.deltaPhase;
 omega_m = iP.Results.omega_m*dT;
 theta_0 = iP.Results.theta_0;
 revRate = iP.Results.revRate*dT;
+revRateCluster = iP.Results.revRateCluster*dT;
 revTime = round(iP.Results.revTime/dT);
+headNodes = iP.Results.headNodes;
+tailNodes = iP.Results.tailNodes;
 rs = iP.Results.rs;
 vs = iP.Results.vs*dT;
 slowingNodes = iP.Results.slowingNodes;
@@ -116,7 +122,7 @@ for t=2:T
     omega = omega_m*(~slowLogInd + vs/v0*slowLogInd); % adjust internal oscillator freq for slowed worms
     % check if any worms are reversing due to contacts
     reversalLogInd = generateReversals(reversalLogInd,t,distanceMatrix,...
-    2*rs,1,M,revRate,revTime,revRate/10,revTime);
+    2*rs,headNodes,tailNodes,revRate,revTime,revRateCluster);
     % update internal oscillators
     theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,omega,t,phaseOffset,reversalLogInd(:,t));     
     % calculate forces
