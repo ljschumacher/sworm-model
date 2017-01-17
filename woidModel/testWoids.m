@@ -8,6 +8,7 @@ close all
 N = 40;
 M = 50;
 dT = 1.2/17/0.33/4/2;
+
 % single worm
 L = 2;
 xyphiarray = runWoids(500,1,M,L,'bc','noflux','dT',dT);
