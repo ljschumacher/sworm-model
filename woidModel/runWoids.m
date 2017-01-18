@@ -42,7 +42,7 @@
 % objects...
 % - is it still necessary to keep track of node orientation?
 
-function xyphiarray = runWoids(T,N,M,L,varargin)
+function xyarray = runWoids(T,N,M,L,varargin)
 
 % parse inputs (see matlab documentation)
 iP = inputParser;
@@ -100,7 +100,6 @@ assert(min(L)>segmentLength*(M - 1),...
     'Domain size (L) must be bigger than object length (segmentLength*M). Increase L.')
 assert(v0>=vs,'vs should be chosen smaller or equal to v0')
 
-xyphiarray = NaN(N,M,3,T);
 % generate internal oscillators 
 theta = NaN(N,M,T);
 phaseOffset = rand(N,1)*2*pi*ones(1,M) - ones(N,1)*deltaPhase*(1:M); % for each object with random phase offset plus phase shift for each node
@@ -110,11 +109,11 @@ reversalLogInd = false(N,T);
 
 % initialise worm positions and node directions - respecting volume
 % exclusion
-xyphiarray = initialiseWoids(xyphiarray,L,segmentLength,theta(:,:,1),rc,bc);
+xyarray = initialiseWoids(N,M,T,L,segmentLength,theta(:,:,1),rc,bc);
 disp('Running simulation...')
 for t=2:T
     % find distances between all pairs of objects
-    distanceMatrixXY = computeWoidDistancesWithBCs(xyphiarray(:,:,1:2,t-1),L,bc);
+    distanceMatrixXY = computeWoidDistancesWithBCs(xyarray(:,:,:,t-1),L,bc);
     distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar
     % check if any woids are slowed down by neighbors
     slowLogInd = findWoidNeighbors(distanceMatrix,2*rs,slowingNodes);
@@ -126,12 +125,12 @@ for t=2:T
     % update internal oscillators
     theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,omega,t,phaseOffset,reversalLogInd(:,t));     
     % calculate forces
-    forceArray = calculateForces(xyphiarray(:,:,:,t-1),rc,distanceMatrixXY,...
+    forceArray = calculateForces(xyarray(:,:,:,t-1),rc,distanceMatrixXY,...
         distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,(t-1):t),segmentLength,v,kl,k_theta);
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % update position (with boundary conditions)
-    xyphiarray(:,:,:,t) = applyForces(xyphiarray(:,:,:,t-1),forceArray,bc,L);
-    assert(~any(isinf(xyphiarray(:))),'Uh-oh, something has gone wrong... (try using a smaller time-step?)')
+    xyarray(:,:,:,t) = applyForces(xyarray(:,:,:,t-1),forceArray,bc,L);
+    assert(~any(isinf(xyarray(:))),'Uh-oh, something has gone wrong... (try using a smaller time-step?)')
 end
 end
 

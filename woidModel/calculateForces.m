@@ -1,4 +1,4 @@
-function forceArray = calculateForces(arrayPrev,rc,distanceMatrixXY,distanceMatrix,...
+function forceArray = calculateForces(posPrev,rc,distanceMatrixXY,distanceMatrix,...
     theta,reversals,segmentLength,v_target,k_l,k_theta)
 % updates object directions according to update rules
 
@@ -18,10 +18,9 @@ function forceArray = calculateForces(arrayPrev,rc,distanceMatrixXY,distanceMatr
 % short-hand for indexing coordinates
 x =     1;
 y =     2;
-phi =   3;
 
-N = size(arrayPrev,1);
-M = size(arrayPrev,2);
+N = size(posPrev,1);
+M = size(posPrev,2);
 
 distanceMatrixXY = permute(distanceMatrixXY,[3 4 5 1 2]); % this will make indexing later on faster without need for squeeze()
 % format of distanceMatrixXY is now N by M by [x y] by N by M
@@ -41,26 +40,29 @@ for objCtr = 1:N
     % calculate force contributions
     % motile force
     Fm = NaN(M,2);
-    ds = NaN(M,2); %change in node positon
+    ds = NaN(M,2); %change in node positon along worm
+    
     % head motile force
-    angle = wrapToPi(arrayPrev(objCtr,headInd,phi) ... % previous direction
-        + diff(theta(objCtr,headInd,:),1,3) ...% change in internal oscillator
+    ds(headInd,:) = posPrev(objCtr,headInd,[x y]) ...
+        - posPrev(objCtr,headInd + 1*movState,[x y]);% direction from next node's position
+    angle = wrapToPi(atan2(ds(headInd,y),ds(headInd,x)) ... % approx tangent dir at head
+        - diff(theta(objCtr,headInd,:),1,3) ...% change in internal oscillator
         + pi*diff(reversals(objCtr,:))); % 180 degree turn when reversal starts or ends
     Fm(headInd,:) = [cos(angle), sin(angle)];
     % body motile force
-    ds(bodyInd,:) = arrayPrev(objCtr,bodyInd - 1*movState,[x y]) ...
-        - arrayPrev(objCtr,bodyInd,[x y]);% direction towards previous node's position
+    ds(bodyInd,:) = posPrev(objCtr,bodyInd - 1*movState,[x y]) ...
+        - posPrev(objCtr,bodyInd,[x y]);% direction towards previous node's position
     bodyAngles = atan2(ds(bodyInd,y),ds(bodyInd,x));
     targetAngles = bodyAngles + diff(theta(objCtr,bodyInd,:),1,3)'; % undulations incl phase shift along worm
-    Fm(bodyInd,:) = [cos(bodyAngles), sin(bodyAngles)];
+    Fm(bodyInd,:) = [cos(targetAngles), sin(targetAngles)];
     % %     Fm(bodyInd(1:end-1),:) = (ds(bodyInd(1:end-1),:) + ds(bodyInd(2:end),:))/2; % estimate tangent direction by average of directions towards previous node and from next node
     % %     Fm(bodyInd(end),:) = ds(bodyInd(end),:); % tail node moves towards previous node
     % fix magnitue of motile force to give target velocity
     Fm = v_target(objCtr).*Fm;%%./repmat(sqrt(sum(Fm.^2,2)),1,2);
     % length constraint
-    dl = squeeze(arrayPrev(objCtr,2:M,[x y]) - arrayPrev(objCtr,1:M-1,[x y])) ... % direction to next node
+    dl = squeeze(posPrev(objCtr,2:M,[x y]) - posPrev(objCtr,1:M-1,[x y])) ... % direction to next node
         .*repmat((diag(squeeze(distanceMatrix(objCtr,2:M,objCtr,1:M-1))) - segmentLength) ...% deviation from segmentLength
-        ./sqrt(sum(squeeze(arrayPrev(objCtr,2:M,[x y]) - arrayPrev(objCtr,1:M-1,[x y])).^2,2)),1,2); % normalised for segment length
+        ./sqrt(sum(squeeze(posPrev(objCtr,2:M,[x y]) - posPrev(objCtr,1:M-1,[x y])).^2,2)),1,2); % normalised for segment length
     Fl = k_l.*([dl; 0 0] - [0 0; dl]); % add forces to next and previous nodes shifted
     % bending constraints - rotational springs with changing 'rest length' due
     % to active undulations
@@ -76,8 +78,8 @@ for objCtr = 1:N
     % sum force contributions
     forceArray(objCtr,:,:) = Fm + Fl + F_theta;
 %         % uncomment for debugging...
-%         plot(squeeze(arrayPrev(objCtr,:,x)),squeeze(arrayPrev(objCtr,:,y)),'.-'), axis equal, hold on
-%         quiver(squeeze(arrayPrev(objCtr,:,x))',squeeze(arrayPrev(objCtr,:,y))',F_theta(:,1),F_theta(:,2),0)
+%         plot(squeeze(posPrev(objCtr,:,x)),squeeze(posPrev(objCtr,:,y)),'.-'), axis equal, hold on
+%         quiver(squeeze(posPrev(objCtr,:,x))',squeeze(posPrev(objCtr,:,y))',Fm(:,1),Fm(:,2),0.125)
 end
 % resolve contact forces
 Fc = NaN(N,M,2);

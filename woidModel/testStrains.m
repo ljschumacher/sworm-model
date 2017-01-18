@@ -1,6 +1,6 @@
 % test woid model for different strain parameterisations
 % to do:
-%   - save simulation results
+
 clear
 
 N = 40;
@@ -11,8 +11,13 @@ T = 10000;
 
 xyphiarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
     'theta_0',pi*37/180);
-save('results/DA609_noflux','xyphiarray','L','dT')
-animateWoidTrajectories(xyphiarray,'tests/DA609_noflux');
+save('results/DA609_noflux')
+animateWoidTrajectories(xyphiarray,'tests/DA609_noflux',L);
+
+xyphiarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
+    'theta_0',pi*37/180,'slowingNodes',1:M);
+save('results/DA609_noflux_slowingNodesAll')
+animateWoidTrajectories(xyphiarray,'tests/DA609_noflux_slowingNodesAll',L);
 
 xyphiarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
     'v0',0.14,...
@@ -23,8 +28,8 @@ xyphiarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
     'revRateCluster',1/11,...
     'headNodes',[],...
     'tailNodes',[]);
-save('results/N2_noflux','xyphiarray','L','dT')
-animateWoidTrajectories(xyphiarray,'tests/N2_noflux');
+save('results/N2_noflux')
+animateWoidTrajectories(xyphiarray,'tests/N2_noflux',L);
 
 
 

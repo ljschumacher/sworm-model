@@ -9,7 +9,6 @@ function arrayOut = applyForces(arrayPrev,forceArray,bc,L)
 % short-hand for indexing coordinates
 x =     1;
 y =     2;
-phi =   3;
 
 % N = size(arrayPrev,1); % number of woids
 % M = size(arrayPrev,2); % number of nodes
@@ -24,8 +23,5 @@ arrayNow(:,:,x) = arrayPrev(:,:,x) + ...
     v.*cos(forceAngles);
 arrayNow(:,:,y) = arrayPrev(:,:,y) + ...
     v.*sin(forceAngles);
-
-% update direction
-arrayNow(:,:,phi) = forceAngles; % not sure if this is the right use of phi, which technically points along the connection btw nodes
 
 arrayOut = checkWoidBoundaryConditions(arrayNow,bc,L);
