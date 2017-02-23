@@ -24,7 +24,7 @@ nFrames = size(xyphiarray,4);
 N = size(xyphiarray,1);
 M = size(xyphiarray,2);
 plotColors = lines(N);
-angles = linspace(0,2*pi,8)'; % for plotting node size
+angles = linspace(0,2*pi,9)'; % for plotting node size
 nAngles = length(angles);
 
 % set overall axes limits
@@ -38,6 +38,10 @@ for frameCtr=1:nFrames
     plot(xyphiarray(:,:,x,frameCtr)',xyphiarray(:,:,y,frameCtr)','-',...
         'Marker','.','Color','k');
     hold on
+    if N==1 % plot racks for single worm
+        plot(squeeze(xyphiarray(:,:,x,1:frameCtr)),squeeze(xyphiarray(:,:,y,1:frameCtr)),'-',...
+            'Color',[0.5 0.5 0.5]);
+    end
     ax = gca;
         % plot circular domain boundaries, if given scalar domain size
     if nargin>=3&&numel(L)==1

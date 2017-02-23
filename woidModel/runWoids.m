@@ -56,12 +56,12 @@ addOptional(iP,'dT',1/9,@isnumeric) % adjusts speed and undulataions, default 1/
 addOptional(iP,'rc',0.035,@isnumeric) % worm width is approx 50 to 90 mu = approx 0.07mm
 addOptional(iP,'segmentLength',1.2/(M - 1),@isnumeric) % worm length is approx 1.2 mm
 addOptional(iP,'bc','free',@checkBcs)
-addOptional(iP,'kl',10,@isnumeric) % stiffness of linear springs connecting nodes
+addOptional(iP,'kl',20,@isnumeric) % stiffness of linear springs connecting nodes
 addOptional(iP,'k_theta',20,@isnumeric) % stiffness of rotational springs at nodes
 % undulations
 addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation of movement direction, default 0.6 Hz
 addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement direction, default pi/4
-addOptional(iP,'deltaPhase',0.11,@isnumeric) % for phase shift in undulations and initial positions, default 0.11
+addOptional(iP,'deltaPhase',0.24,@isnumeric) % for phase shift in undulations and initial positions, default 0.11
 % reversals
 addOptional(iP,'revRate',1/13,@isnumeric) % rate for poisson-distributed reversals, default 1/13s
 addOptional(iP,'revRateCluster',1/130,@isnumeric) % reduced reversal rates, when worms are in cluster
