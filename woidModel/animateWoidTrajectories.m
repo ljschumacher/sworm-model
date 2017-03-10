@@ -23,7 +23,7 @@ open(vid)
 nFrames = size(xyphiarray,4);
 N = size(xyphiarray,1);
 M = size(xyphiarray,2);
-plotColors = lines(N);
+% plotColors = lines(N);
 angles = linspace(0,2*pi,9)'; % for plotting node size
 nAngles = length(angles);
 
@@ -53,7 +53,7 @@ for frameCtr=1:nFrames
     for objCtr = 1:N
         patch(xyphiarray(objCtr*ones(nAngles,1),:,x,frameCtr) + rc*cos(angles(:,ones(M,1))),...
             xyphiarray(objCtr*ones(nAngles,1),:,y,frameCtr) + rc*sin(angles(:,ones(M,1))),...
-            plotColors(objCtr,:),'EdgeColor',plotColors(objCtr,:))
+            [0 0 0],'EdgeColor',[0 0 0])
         % patches seems to be faster than viscircles
         %         viscircles(squeeze(xyphiarray(objCtr,:,[x y],frameCtr)),rc*ones(M,1),...
         %             'Color',plotColors(objCtr,:),'EnhanceVisibility',false,...

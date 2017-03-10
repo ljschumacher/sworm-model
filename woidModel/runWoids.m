@@ -130,6 +130,8 @@ for t=2:T
     % update position (with boundary conditions)
     xyarray(:,:,:,t) = applyForces(xyarray(:,:,:,t-1),forceArray,bc,L);
     assert(~any(isinf(xyarray(:))),'Uh-oh, something has gone wrong... (try using a smaller time-step?)')
+    % correct heading if movement was constrained
+    theta(:,:,t) = correctHeading(xyarray(:,:,:,(t-1):t),theta(:,:,t),v);
 end
 end
 
