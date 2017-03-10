@@ -1,4 +1,4 @@
-function [positions] = initialiseWoids(N,M,T,L,segmentLength,theta,rc,bc)
+function [positions, anglesInitial] = initialiseWoids(N,M,T,L,segmentLength,phaseOffset,theta_0,rc,bc)
 % initialises object positions and directions
 % uniformly randomly distributed
 
@@ -8,7 +8,7 @@ function [positions] = initialiseWoids(N,M,T,L,segmentLength,theta,rc,bc)
 % - not tested for periodic boundaries
 
 positions = NaN(N,M,2,T);
-
+anglesInitial = NaN(N,M);
 % short-hand for indexing coordinates
 x =     1;
 y =     2;
@@ -27,11 +27,12 @@ while objCtr <= N
     rndradius = (L - L0).*rand(1);
     positions(objCtr,1,[x y],1) = rndradius.*[cos(rndangle) sin(rndangle)]; % initialise positions at least one woid length away from edge
     % Direction
-    anglesInitial = wrapToPi(pi*(2*rand - 1) + theta(objCtr,:));   % random orientation between -pi and pi for each object plus undulations
+    anglesInitial(objCtr,:) = wrapToPi(pi*(2*rand - 1) + ...
+        theta_0*sin(phaseOffset(objCtr,:)));   % random orientation between -pi and pi for each object plus undulations
     for nodeCtr = 2:M % initialise woid positions, node by node
         % initialise the next node in the right direction at segmentLength away
         positions(objCtr,nodeCtr,[x y],1) = squeeze(positions(objCtr,nodeCtr - 1,[x y],1))... % previous node's position
-            - segmentLength*[cos(anglesInitial(nodeCtr)); sin(anglesInitial(nodeCtr))];
+            - segmentLength*[cos(anglesInitial(objCtr,nodeCtr)); sin(anglesInitial(objCtr,nodeCtr))];
     end
     % check for any overlaps, and if so discard this woid's position
     distanceMatrix = sqrt(sum(computeWoidDistancesWithBCs(positions(1:objCtr,:,[x y],1),L,bc).^2,5));% scalar distance from current object to any other

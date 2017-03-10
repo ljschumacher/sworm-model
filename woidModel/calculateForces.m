@@ -45,9 +45,10 @@ for objCtr = 1:N
     % head motile force
     ds(headInd,:) = posPrev(objCtr,headInd,[x y]) ...
         - posPrev(objCtr,headInd + 1*movState,[x y]);% direction from next node's position
-    angle = wrapToPi(atan2(ds(headInd,y),ds(headInd,x)) ... % approx tangent dir at head
-        + diff(theta(objCtr,headInd,:),1,3) ...% change in internal oscillator
-        + pi*diff(reversals(objCtr,:))); % 180 degree turn when reversal starts or ends
+    angle = theta(objCtr,headInd,end);
+%     wrapToPi(atan2(ds(headInd,y),ds(headInd,x)) ... % approx tangent dir at head
+%         + diff(theta(objCtr,headInd,:),1,3) ...% change in internal oscillator
+%         + pi*diff(reversals(objCtr,:))); % 180 degree turn when reversal starts or ends
     Fm(headInd,:) = [cos(angle), sin(angle)];
     % body motile force
     ds(bodyInd,:) = posPrev(objCtr,bodyInd - 1*movState,[x y]) ...

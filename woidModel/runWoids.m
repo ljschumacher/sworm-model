@@ -100,16 +100,15 @@ assert(min(L)>segmentLength*(M - 1),...
     'Domain size (L) must be bigger than object length (segmentLength*M). Increase L.')
 assert(v0>=vs,'vs should be chosen smaller or equal to v0')
 
-% generate internal oscillators 
+% preallicate internal oscillators 
 theta = NaN(N,M,T);
-phaseOffset = rand(N,1)*2*pi*ones(1,M) - ones(N,1)*deltaPhase*(1:M); % for each object with random phase offset plus phase shift for each node
-theta(:,:,1) = theta_0*sin(omega_m*ones(N,M) + phaseOffset);
 % preallocate reversal states
 reversalLogInd = false(N,T);
-
+% random phase offset for each object plus phase shift for each node
+phaseOffset = rand(N,1)*2*pi*ones(1,M) - ones(N,1)*deltaPhase*(1:M);
 % initialise worm positions and node directions - respecting volume
 % exclusion
-xyarray = initialiseWoids(N,M,T,L,segmentLength,theta(:,:,1),rc,bc);
+[xyarray, theta(:,:,1)] = initialiseWoids(N,M,T,L,segmentLength,phaseOffset,theta_0,rc,bc);
 disp('Running simulation...')
 for t=2:T
     % find distances between all pairs of objects
