@@ -46,14 +46,14 @@ for objCtr = 1:N
     ds(headInd,:) = posPrev(objCtr,headInd,[x y]) ...
         - posPrev(objCtr,headInd + 1*movState,[x y]);% direction from next node's position
     angle = wrapToPi(atan2(ds(headInd,y),ds(headInd,x)) ... % approx tangent dir at head
-        - diff(theta(objCtr,headInd,:),1,3) ...% change in internal oscillator
+        + diff(theta(objCtr,headInd,:),1,3) ...% change in internal oscillator
         + pi*diff(reversals(objCtr,:))); % 180 degree turn when reversal starts or ends
     Fm(headInd,:) = [cos(angle), sin(angle)];
     % body motile force
     ds(bodyInd,:) = posPrev(objCtr,bodyInd - 1*movState,[x y]) ...
         - posPrev(objCtr,bodyInd,[x y]);% direction towards previous node's position
     bodyAngles = atan2(ds(bodyInd,y),ds(bodyInd,x));
-    targetAngles = bodyAngles + diff(theta(objCtr,bodyInd,:),1,3)'; % undulations incl phase shift along worm
+    targetAngles = bodyAngles;% + diff(theta(objCtr,bodyInd,:),1,3)'; % undulations incl phase shift along worm
     Fm(bodyInd,:) = [cos(targetAngles), sin(targetAngles)];
     % %     Fm(bodyInd(1:end-1),:) = (ds(bodyInd(1:end-1),:) + ds(bodyInd(2:end),:))/2; % estimate tangent direction by average of directions towards previous node and from next node
     % %     Fm(bodyInd(end),:) = ds(bodyInd(end),:); % tail node moves towards previous node
