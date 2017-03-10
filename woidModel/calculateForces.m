@@ -77,9 +77,9 @@ for objCtr = 1:N
         + [0 0; -(momentsfwd + momentsbwd); 0 0];% reactive force on node n (balancing forces exerted onto nodes n+1 and n -1
     % sum force contributions
     forceArray(objCtr,:,:) = Fm + Fl + F_theta;
-%         % uncomment for debugging...
-%         plot(squeeze(posPrev(objCtr,:,x)),squeeze(posPrev(objCtr,:,y)),'.-'), axis equal, hold on
-%         quiver(squeeze(posPrev(objCtr,:,x))',squeeze(posPrev(objCtr,:,y))',Fm(:,1),Fm(:,2),0.125)
+        % uncomment for debugging...
+        plot(squeeze(posPrev(objCtr,:,x)),squeeze(posPrev(objCtr,:,y)),'.-'), axis equal, hold on
+        quiver(squeeze(posPrev(objCtr,:,x))',squeeze(posPrev(objCtr,:,y))',Fm(:,1),Fm(:,2),0.125)
 end
 % resolve contact forces
 Fc = NaN(N,M,2);

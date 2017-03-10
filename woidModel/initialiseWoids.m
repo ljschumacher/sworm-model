@@ -27,7 +27,7 @@ while objCtr <= N
     rndradius = (L - L0).*rand(1);
     positions(objCtr,1,[x y],1) = rndradius.*[cos(rndangle) sin(rndangle)]; % initialise positions at least one woid length away from edge
     % Direction
-    anglesInitial = wrapToPi(pi*(2*rand - 1) - theta(objCtr,:));   % random orientation between -pi and pi for each object plus undulations
+    anglesInitial = wrapToPi(pi*(2*rand - 1) + theta(objCtr,:));   % random orientation between -pi and pi for each object plus undulations
     for nodeCtr = 2:M % initialise woid positions, node by node
         % initialise the next node in the right direction at segmentLength away
         positions(objCtr,nodeCtr,[x y],1) = squeeze(positions(objCtr,nodeCtr - 1,[x y],1))... % previous node's position
