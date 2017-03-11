@@ -121,11 +121,19 @@ for t=2:T
     % check if any worms are reversing due to contacts
     reversalLogInd = generateReversals(reversalLogInd,t,distanceMatrix,...
     2*rs,headNodes,tailNodes,revRate,revTime,revRateCluster);
-    % update internal oscillators
-    theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,omega,t,phaseOffset,reversalLogInd(:,t));     
+%     if any(reversalLogInd)
+%         subplot(2,1,1)
+%         plot(1:t,squeeze(theta(1,1,1:t))), hold on
+%         subplot(2,1,2)
+%         plot(1:t,squeeze(theta(1,end,1:t))), hold on
+%         1;
+%     end
+    % update internal oscillators / headings
+        theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,...
+            omega,t,phaseOffset,reversalLogInd(:,(t-1):t));
     % calculate forces
     forceArray = calculateForces(xyarray(:,:,:,t-1),rc,distanceMatrixXY,...
-        distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,(t-1):t),segmentLength,v,kl,k_theta);
+        distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,t),segmentLength,v,kl,k_theta);
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % update position (with boundary conditions)
     xyarray(:,:,:,t) = applyForces(xyarray(:,:,:,t-1),forceArray,bc,L);

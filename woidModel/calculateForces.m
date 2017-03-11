@@ -29,14 +29,14 @@ forceArray = zeros(N,M,2); % preallocate forces
 
 for objCtr = 1:N
     % check if worm is currently reversing
-    if ~reversals(objCtr,2)
+    if ~reversals(objCtr)
         headInd = 1;
         bodyInd = 2:M;
     else
         headInd = M;
         bodyInd = (M-1):-1:1;
     end
-    movState = 1 - 2*reversals(objCtr,2); % =-1 if worm is reversing, 1 if not
+    movState = 1 - 2*reversals(objCtr); % =-1 if worm is reversing, 1 if not
     % calculate force contributions
     % motile force
     Fm = NaN(M,2);
@@ -53,8 +53,8 @@ for objCtr = 1:N
     
     % head motile force
     headAngle = wrapToPi(theta(objCtr,headInd,1) ... % previous heading
-            + diff(theta(objCtr,headInd,:),1,3) ...% change in internal oscillator
-            + pi*diff(reversals(objCtr,:))); % 180 degree turn when reversal starts or ends
+        + diff(theta(objCtr,headInd,:),1,3));% change in internal oscillator
+    
     Fm(headInd,:) = [cos(headAngle), sin(headAngle)];
     % body motile force
     Fm(bodyInd,:) = ds(bodyInd,:);
@@ -68,10 +68,13 @@ for objCtr = 1:N
     Fl = k_l.*([dl; 0 0] - [0 0; dl]); % add forces to next and previous nodes shifted
     
     % bending constraints - rotational springs with changing 'rest length' due
-    % to active undulations
+    %     % to active undulations
     bodyAngles = atan2(ds(bodyInd,y),ds(bodyInd,x));
-    targetAngles = bodyAngles;% + diff(theta(objCtr,bodyInd,:),1,3)'; % undulations incl phase shift along worm
-    torques = k_theta.*(wrapToPi(diff(bodyAngles)) - wrapToPi(diff(targetAngles)));
+    %     targetAngles = bodyAngles + diff(theta(objCtr,bodyInd,:),1,3)'; % undulations incl phase shift along worm
+    %     torques = k_theta.*(wrapToPi(diff(bodyAngles)) - wrapToPi(diff(targetAngles)));
+    % compares change in heading from one segment to next - should be
+    % equivalent to the commented above
+    torques = -k_theta.*wrapToPi(diff(diff(theta(objCtr,bodyInd,:),1,3)'));
     e_phi = [-sin(bodyAngles) cos(bodyAngles)]; % unit vector in direction of phi, size M-1 by 2
     l = sqrt(sum(ds(bodyInd,:).^2,2)); % length between node and prev node, length M-1
     momentsfwd = repmat(torques.*l(1:end-1),1,2).*e_phi(1:end-1,:);
@@ -82,9 +85,10 @@ for objCtr = 1:N
         + [0 0; -(momentsfwd + momentsbwd); 0 0];% reactive force on node n (balancing forces exerted onto nodes n+1 and n -1
     % sum force contributions
     forceArray(objCtr,:,:) = Fm + Fl + F_theta;
-%     % uncomment for debugging...
-%     plot(squeeze(posPrev(objCtr,:,x)),squeeze(posPrev(objCtr,:,y)),'.-'), axis equal, hold on
-%     quiver(squeeze(posPrev(objCtr,:,x))',squeeze(posPrev(objCtr,:,y))',Fm(:,1),Fm(:,2),0.125)
+    % uncomment for debugging...
+%         plot(squeeze(posPrev(objCtr,:,x)),squeeze(posPrev(objCtr,:,y)),'.-'), axis equal, hold on
+%         quiver(squeeze(posPrev(objCtr,:,x))',squeeze(posPrev(objCtr,:,y))',Fm(:,1),Fm(:,2),0.125)
+%         1;
 end
 % resolve contact forces
 Fc = NaN(N,M,2);
