@@ -23,6 +23,12 @@ save('results/DA609_noflux_slowingNodesAll')
 animateWoidTrajectories(xyphiarray,'tests/DA609_noflux_slowingNodesAll',L);
 
 xyphiarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
+    'theta_0',pi*37/180,'r_LJcutoff',4*0.035,'eps_LJ',1e-7);
+xyphiarray = xyphiarray(:,:,:,1:saveevery:end);
+save('results/DA609_noflux_lennardjones1e-7')
+animateWoidTrajectories(xyphiarray,'tests/DA609_noflux_lennardjones',L);
+
+xyphiarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
     'v0',0.14,...
     'omega_m',2*pi*0.26,...
     'theta_0',pi*37/180,...
@@ -34,7 +40,3 @@ xyphiarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
 xyphiarray = xyphiarray(:,:,:,1:saveevery:end);
 save('results/N2_noflux')
 animateWoidTrajectories(xyphiarray,'tests/N2_noflux',L);
-
-
-
-

@@ -1,4 +1,4 @@
-function [ F_contact ] = resolveContacts(forceArray,distanceMatrixFull,distanceMatrix, objInd, nodeInd, cutoff)
+function [ F_contact ] = resolveContacts(forceArray,distanceMatrixFull,distanceMatrix, objInd, nodeInd, r_collision, r_LJcutoff, eps_LJ)
 % to resolve contact forces between overlapping nodes
 % inputs:
 % forceArray is N by M by ndim matrix of forces acting on every node
@@ -15,9 +15,18 @@ function [ F_contact ] = resolveContacts(forceArray,distanceMatrixFull,distanceM
 N = size(distanceMatrixFull,1);
 M = size(distanceMatrixFull,2);
 ndim = size(distanceMatrixFull,3);
-collisionNbrs = distanceMatrix<=cutoff; % check distance to all other nodes of all other objects
-collisionNbrs(objInd,:) = false; % no contact force with self or adjacent nodes, or max(nodeInd-1,1):min(nodeInd+1,M)
-% Nc = nnz(collisionNbrs);
+collisionNbrs = distanceMatrix<=r_collision; % check distance to all other nodes of all other objects
+collisionNbrs(objInd,:) = false; % no contact force with self or for adjacent nodes: max(nodeInd-1,1):min(nodeInd+1,M)
+if nargin < 7
+    r_LJcutoff = 0;
+    if nargin < 8
+        eps_LJ = 0;
+    end
+end
+attractionNbrs = distanceMatrix<=r_LJcutoff;
+attractionNbrs(collisionNbrs) = false;
+attractionNbrs(objInd,:) = false;
+
 if any(collisionNbrs(:))
     % find unit vectors pointing from neighbours to node
     if N>1
@@ -36,5 +45,19 @@ if any(collisionNbrs(:))
 else
     F_contact = [0; 0];
 end
+
+if any(attractionNbrs(:))&&N>1
+    e_nN = [distanceMatrixFull(attractionNbrs(:)) distanceMatrixFull(find(attractionNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
+        ./repmat(distanceMatrix(attractionNbrs(:)),1,ndim); % normalise for distance
+    f_LJ = 48*eps_LJ./distanceMatrix(attractionNbrs(:)).*((r_collision./distanceMatrix(attractionNbrs(:))).^12 ...
+        - 1/2*(r_collision./distanceMatrix(attractionNbrs(:))).^6);
+    F_LJ = sum(f_LJ.*e_nN,1); % contact force, summed over neighbours
+    if ~any(collisionNbrs(:))
+        F_contact = F_contact + F_LJ';
+    else
+        F_contact = F_contact + F_LJ;
+    end
+end
+
 end
 

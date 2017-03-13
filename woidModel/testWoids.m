@@ -1,6 +1,9 @@
 % test SPP model
 
+% issues/todo:
 % - fix tests so that straight worm bends and bend worm straightens
+% - always reseed random number generator before each simulation?
+
 clear
 close all
 
@@ -37,7 +40,7 @@ xyphiarray = runWoids(1000,1,M,L,'bc','noflux','dT',dT,'v0',1e-4,'vs',1e-4,'omeg
 animateWoidTrajectories(xyphiarray,'tests/singleWorm_targetcurvatureTest',L);
 
 % two worms
-xyphiarray = runWoids(1000*2,2,M,L,'bc','noflux','dT',dT/2,'kl',40);
+xyphiarray = runWoids(1000*2,2,M,L,'bc','noflux','dT',dT);
 animateWoidTrajectories(xyphiarray,'tests/twoWorms_noflux',L);
 
 % plot distribution of lengths to check length conservation
@@ -61,6 +64,9 @@ animateWoidTrajectories(xyphiarray,'tests/twoWorms_noflux_revUnresponsive',L);
 
 xyphiarray = runWoids(1000,2,M,L,'bc','noflux','dT',dT,'revRateCluster',1/13);
 animateWoidTrajectories(xyphiarray,'tests/twoWorms_noflux_revClusterUnreduced',L);
+
+xyphiarray = runWoids(1000,2,M,L,'bc','noflux','dT',dT,'rc',0);
+animateWoidTrajectories(xyphiarray,'tests/twoWorms_noflux_rc0',L);
 
 xyphiarray = runWoids(1000,2,M,L,'bc','noflux','dT',dT,'rs',0);
 animateWoidTrajectories(xyphiarray,'tests/twoWorms_noflux_rslow0',L);
@@ -98,6 +104,9 @@ animateWoidTrajectories(xyphiarray,'tests/40worms_noflux_revUnresponsive',L);
 
 xyphiarray = runWoids(4000,N,M,L,'bc','noflux','dT',dT,'revRateCluster',1/13);
 animateWoidTrajectories(xyphiarray,'tests/40worms_noflux_revClusterUnreduced',L);
+
+xyphiarray = runWoids(4000,N,M,L,'bc','noflux','dT',dT,'rc',0);
+animateWoidTrajectories(xyphiarray,'tests/40worms_noflux_rc0',L);
 
 xyphiarray = runWoids(4000,N,M,L,'bc','noflux','dT',dT,'rs',0);
 animateWoidTrajectories(xyphiarray,'tests/40worms_noflux_rslow0',L);

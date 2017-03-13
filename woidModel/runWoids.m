@@ -69,10 +69,13 @@ addOptional(iP,'revTime',2,@isnumeric) % duration of reversal events, default 2s
 addOptional(iP,'headNodes',1:max(round(M/10),1),checkInt) % which nodes count as head, default fron 10%
 addOptional(iP,'tailNodes',(M-max(round(M/10),1)+1):M,checkInt) % which nodes count as tail, default back 10%
 % slowing down
-addOptional(iP,'rs',0.035*2,@isnumeric) % radius at which worms slow down, default 2 rc
+addOptional(iP,'rs',0.035*3/2,@isnumeric) % radius at which worms slow down, default 3/2 rc
 addOptional(iP,'vs',0.33/3,@isnumeric) % speed when slowed down, default v0/3
 addOptional(iP,'slowingNodes',[1:max(round(M/10),1) (M-max(round(M/10),1)+1):M],checkInt) % which nodes sense proximity, default head and tail
-
+% Lennard-Jones
+addOptional(iP,'r_LJcutoff',0,@isnumeric) % cut-off above which lennard jones potential is not acting anymore
+addOptional(iP,'eps_LJ',1e-6,@isnumeric) % strength of LJ-potential
+ 
 parse(iP,T,N,M,L,varargin{:})
 dT = iP.Results.dT;
 v0 = iP.Results.v0*dT;
@@ -92,6 +95,8 @@ tailNodes = iP.Results.tailNodes;
 rs = iP.Results.rs;
 vs = iP.Results.vs*dT;
 slowingNodes = iP.Results.slowingNodes;
+r_LJcutoff = iP.Results.r_LJcutoff;
+eps_LJ = iP.Results.eps_LJ;
 
 % check input relationships to each other
 % assert(segmentLength>2*rc,...
@@ -133,7 +138,8 @@ for t=2:T
             omega,phaseOffset,deltaPhase,reversalLogInd(:,(t-1):t));
     % calculate forces
     forceArray = calculateForces(xyarray(:,:,:,t-1),rc,distanceMatrixXY,...
-        distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,t),segmentLength,v,kl,k_theta);
+        distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,t),segmentLength,...
+        v,kl,k_theta, r_LJcutoff, eps_LJ);
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % update position (with boundary conditions)
     xyarray(:,:,:,t) = applyForces(xyarray(:,:,:,t-1),forceArray,bc,L);

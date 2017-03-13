@@ -1,5 +1,5 @@
 function forceArray = calculateForces(posPrev,rc,distanceMatrixXY,distanceMatrix,...
-    theta,reversals,segmentLength,v_target,k_l,k_theta)
+    theta,reversals,segmentLength,v_target,k_l,k_theta, r_LJcutoff, eps_LJ)
 % updates object directions according to update rules
 
 % issues/to-do's:
@@ -67,8 +67,7 @@ for objCtr = 1:N
         ./sqrt(sum(squeeze(posPrev(objCtr,2:M,[x y]) - posPrev(objCtr,1:M-1,[x y])).^2,2)),1,2); % normalised for segment length
     Fl = k_l.*([dl; 0 0] - [0 0; dl]); % add forces to next and previous nodes shifted
     
-    % bending constraints - rotational springs with changing 'rest length' due
-    %     % to active undulations
+    % bending constraints - rotational springs with changing 'rest length' due to active undulations
     bodyAngles = atan2(ds(bodyInd,y),ds(bodyInd,x));
     %     targetAngles = bodyAngles + diff(theta(objCtr,bodyInd,:),1,3)'; % undulations incl phase shift along worm
     %     torques = k_theta.*(wrapToPi(diff(bodyAngles)) - wrapToPi(diff(targetAngles)));
@@ -95,7 +94,7 @@ Fc = NaN(N,M,2);
 for objCtr = 1:N
     for nodeCtr = 1:M
         Fc(objCtr,nodeCtr,:) = resolveContacts(forceArray,distanceMatrixXY(:,:,:,objCtr,nodeCtr),...
-            distanceMatrix(:,:,objCtr,nodeCtr),objCtr,nodeCtr,2*rc); % factor of two so that rc is node radius
+            distanceMatrix(:,:,objCtr,nodeCtr),objCtr,nodeCtr,2*rc,r_LJcutoff,eps_LJ); % factor of two so that rc is node radius
     end
 end
 forceArray = forceArray + Fc;
