@@ -105,7 +105,7 @@ theta = NaN(N,M,T);
 % preallocate reversal states
 reversalLogInd = false(N,T);
 % random phase offset for each object plus phase shift for each node
-phaseOffset = rand(N,1)*2*pi*ones(1,M) - ones(N,1)*deltaPhase*(1:M);
+phaseOffset = wrapTo2Pi(rand(N,1)*2*pi*ones(1,M) - ones(N,1)*deltaPhase*(1:M));
 % initialise worm positions and node directions - respecting volume
 % exclusion
 [xyarray, theta(:,:,1)] = initialiseWoids(N,M,T,L,segmentLength,phaseOffset,theta_0,rc,bc);
@@ -129,8 +129,8 @@ for t=2:T
 %         1;
 %     end
     % update internal oscillators / headings
-        theta(:,:,t) = updateWoidOscillators(theta(:,:,t-1),theta_0,...
-            omega,t,phaseOffset,reversalLogInd(:,(t-1):t));
+        [theta(:,:,t), phaseOffset] = updateWoidOscillators(theta(:,:,t-1),theta_0,...
+            omega,phaseOffset,deltaPhase,reversalLogInd(:,(t-1):t));
     % calculate forces
     forceArray = calculateForces(xyarray(:,:,:,t-1),rc,distanceMatrixXY,...
         distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,t),segmentLength,v,kl,k_theta);
