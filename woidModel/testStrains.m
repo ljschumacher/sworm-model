@@ -22,11 +22,11 @@ xyphiarray = xyphiarray(:,:,:,1:saveevery:end);
 save('results/DA609_noflux_slowingNodesAll')
 animateWoidTrajectories(xyphiarray,'tests/DA609_noflux_slowingNodesAll',L);
 
-xyphiarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
-    'theta_0',pi*37/180,'r_LJcutoff',4*0.035,'eps_LJ',1e-7);
-xyphiarray = xyphiarray(:,:,:,1:saveevery:end);
-save('results/DA609_noflux_lennardjones1e-7')
-animateWoidTrajectories(xyphiarray,'tests/DA609_noflux_lennardjones',L);
+xyphiarray = runWoids(4*T,N,M,L,'bc','noflux','dT',dT/4,...
+    'theta_0',pi*37/180,'r_LJcutoff',4*0.035,'eps_LJ',2e-6);
+xyphiarray = xyphiarray(:,:,:,1:saveevery*4:end);
+save('results/DA609_noflux_lennardjones2e-6')
+animateWoidTrajectories(xyphiarray,'tests/DA609_noflux_lennardjones2e-6',L);
 
 xyphiarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
     'v0',0.14,...

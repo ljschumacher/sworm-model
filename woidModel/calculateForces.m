@@ -1,5 +1,5 @@
 function forceArray = calculateForces(posPrev,rc,distanceMatrixXY,distanceMatrix,...
-    theta,reversals,segmentLength,v_target,k_l,k_theta, r_LJcutoff, eps_LJ)
+    theta,reversals,segmentLength,v_target,k_l,k_theta,thetadiff, r_LJcutoff, eps_LJ)
 % updates object directions according to update rules
 
 % issues/to-do's:
@@ -45,9 +45,13 @@ for objCtr = 1:N
     % head tangent: direction from next node's position
     ds(headInd,:) = posPrev(objCtr,headInd,[x y]) ...
         - posPrev(objCtr,headInd + 1*movState,[x y]);
-    % body tangents: estimate tangent direction by average of directions towards previous node and from next node
+    % calcualte direction towards previous node's position
     ds(bodyInd,:) = posPrev(objCtr,bodyInd - 1*movState,[x y]) ...
-        - posPrev(objCtr,bodyInd,[x y]);% direction towards previous node's position
+        - posPrev(objCtr,bodyInd,[x y]);
+    % before estimating tangents, calculate polar unit vectors
+    phi = atan2(ds(bodyInd,y),ds(bodyInd,x));
+    e_phi = [-sin(phi) cos(phi)]; % unit vector in direction of phi, size M-1 by 2
+    % body tangents: estimate tangent direction by average of directions towards previous node and from next node
     ds(bodyInd(1:end-1),:) = (ds(bodyInd(1:end-1),:) + ds(bodyInd(2:end),:))/2;
     % (tail tanget: towards previous node)
     
@@ -69,12 +73,10 @@ for objCtr = 1:N
     
     % bending constraints - rotational springs with changing 'rest length' due to active undulations
     bodyAngles = atan2(ds(bodyInd,y),ds(bodyInd,x));
-    %     targetAngles = bodyAngles + diff(theta(objCtr,bodyInd,:),1,3)'; % undulations incl phase shift along worm
-    %     torques = k_theta.*(wrapToPi(diff(bodyAngles)) - wrapToPi(diff(targetAngles)));
-    % compares change in heading from one segment to next - should be
-    % equivalent to the commented above
-    torques = -k_theta.*wrapToPi(diff(diff(theta(objCtr,bodyInd,:),1,3)'));
-    e_phi = [-sin(bodyAngles) cos(bodyAngles)]; % unit vector in direction of phi, size M-1 by 2
+%         targetAngles = thetadiff(objCtr,bodyInd)'; % undulations incl phase shift along worm
+        torques = k_theta.*wrapToPi( - diff(bodyAngles));
+% torques = k_theta.*wrapToPi(diff(bodyAngles)); % this straightens worms
+
     l = sqrt(sum(ds(bodyInd,:).^2,2)); % length between node and prev node, length M-1
     momentsfwd = repmat(torques.*l(1:end-1),1,2).*e_phi(1:end-1,:);
     momentsbwd = repmat(torques.*l(2:end),1,2).*e_phi(2:end,:);
@@ -84,9 +86,9 @@ for objCtr = 1:N
         + [0 0; -(momentsfwd + momentsbwd); 0 0];% reactive force on node n (balancing forces exerted onto nodes n+1 and n -1
     % sum force contributions
     forceArray(objCtr,:,:) = Fm + Fl + F_theta;
-    % uncomment for debugging...
+%     % uncomment for debugging...
 %         plot(squeeze(posPrev(objCtr,:,x)),squeeze(posPrev(objCtr,:,y)),'.-'), axis equal, hold on
-%         quiver(squeeze(posPrev(objCtr,:,x))',squeeze(posPrev(objCtr,:,y))',Fm(:,1),Fm(:,2),0.125)
+%         quiver(squeeze(posPrev(objCtr,:,x))',squeeze(posPrev(objCtr,:,y))',F_theta(:,1),F_theta(:,2),1)
 %         1;
 end
 % resolve contact forces
