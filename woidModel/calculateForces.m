@@ -1,5 +1,5 @@
 function forceArray = calculateForces(posPrev,rc,distanceMatrixXY,distanceMatrix,...
-    theta,reversals,segmentLength,v_target,k_l,k_theta,thetadiff, r_LJcutoff, eps_LJ)
+    theta,reversals,segmentLength,v_target,k_l,k_theta, r_LJcutoff, eps_LJ)
 % updates object directions according to update rules
 
 % issues/to-do's:
@@ -72,11 +72,13 @@ for objCtr = 1:N
     Fl = k_l.*([dl; 0 0] - [0 0; dl]); % add forces to next and previous nodes shifted
     
     % bending constraints - rotational springs with changing 'rest length' due to active undulations
+%     bodyAngles = unwrap(atan2(ds([headInd, bodyInd],y),ds([headInd, bodyInd],x)));
+%     dbodyAnglesds = diff(bodyAngles);
+%     dbodyAnglesds = -dbodyAnglesds(2:end) + dbodyAnglesds(1:end-1);
+%             torques = k_theta.*wrapToPi(dbodyAnglesds);
     bodyAngles = atan2(ds(bodyInd,y),ds(bodyInd,x));
-%         targetAngles = thetadiff(objCtr,bodyInd)'; % undulations incl phase shift along worm
-        torques = k_theta.*wrapToPi( - diff(bodyAngles));
-% torques = k_theta.*wrapToPi(diff(bodyAngles)); % this straightens worms
-
+    torques = k_theta.*wrapToPi(diff(unwrap(bodyAngles))); % this straightens worms
+    
     l = sqrt(sum(ds(bodyInd,:).^2,2)); % length between node and prev node, length M-1
     momentsfwd = repmat(torques.*l(1:end-1),1,2).*e_phi(1:end-1,:);
     momentsbwd = repmat(torques.*l(2:end),1,2).*e_phi(2:end,:);
@@ -86,10 +88,11 @@ for objCtr = 1:N
         + [0 0; -(momentsfwd + momentsbwd); 0 0];% reactive force on node n (balancing forces exerted onto nodes n+1 and n -1
     % sum force contributions
     forceArray(objCtr,:,:) = Fm + Fl + F_theta;
-%     % uncomment for debugging...
-%         plot(squeeze(posPrev(objCtr,:,x)),squeeze(posPrev(objCtr,:,y)),'.-'), axis equal, hold on
-%         quiver(squeeze(posPrev(objCtr,:,x))',squeeze(posPrev(objCtr,:,y))',F_theta(:,1),F_theta(:,2),1)
-%         1;
+        % uncomment for debugging...
+            plot(squeeze(posPrev(objCtr,:,x)),squeeze(posPrev(objCtr,:,y)),'.-'), axis equal, hold on
+            quiver(squeeze(posPrev(objCtr,:,x))',squeeze(posPrev(objCtr,:,y))',F_theta(:,1),F_theta(:,2),1)
+%     plot(diff(bodyAngles)), hold on
+            1;
 end
 % resolve contact forces
 Fc = NaN(N,M,2);

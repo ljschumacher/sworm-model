@@ -14,35 +14,35 @@ for strain = {'N2','npr-1','CB4856'}
         % load single worm data - somehow the filenames can have funny
         % characters in them from rdir which we need to remove
         load(strrep(files(wormCtr).name,'._',''))
-        [tangentAngles, ~] = makeAngleArrayV(worm.posture.skeleton.x',worm.posture.skeleton.y');
+        [segmentAngles, ~] = makeAngleArrayV(worm.posture.skeleton.x',worm.posture.skeleton.y');
         % normalise for amplitude - divide by half the range
-        tangentAngles = tangentAngles./repmat(range(tangentAngles)/2,size(tangentAngles,1),1);
-        deltaAngles = diff(tangentAngles,1,2);
+        segmentAngles = segmentAngles./repmat(range(segmentAngles)/2,size(segmentAngles,1),1);
+        deltaAngles = diff(segmentAngles,1,2);
         % estimate change and acceleration in angle over time at 30Hz
-        dKdt = framerate*diff(deltaAngles);
-        d2Kdt2 = framerate*diff(dKdt);
+        dKdt = framerate*gradient(deltaAngles);
+        dK2dt = framerate*gradient(gradient(deltaAngles));
         % calculate and plot group statistics
-        Kbins = quant(deltaAngles(1:end-1,:),0.01);
+        Kbins = quant(deltaAngles,0.01);
         [v, sigv] = grpstats(dKdt(:),Kbins(:),{@nanmean,@nanstd});
         boundedline(unique(Kbins(~isnan(Kbins(:)))),v,[sigv, sigv],...
             'alpha','transparency',1/numWorms,'nan','fill',velFig.Children)
-        Kbins = quant(deltaAngles(2:end-1,:),0.02);
-        [a, siga] = grpstats(d2Kdt2(:),Kbins(:),{@mean,@std});
+        Kbins = quant(deltaAngles,0.02);
+        [a, siga] = grpstats(dK2dt(:),Kbins(:),{@mean,@std});
         boundedline(unique(Kbins(~isnan(Kbins(:)))),a,[siga, siga],...
             'alpha','transparency',1/numWorms,'nan','fill',accFig.Children)
     end
     
     %% edit plots
-    velFig.Children.XLabel.String = '\Delta\phi';
-    velFig.Children.YLabel.String = 'tangent angle velocity (d\phi/dt)';
+    velFig.Children.XLabel.String = '\Delta\theta';
+    velFig.Children.YLabel.String = 'intersegment angle change (d\theta/dt)';
     velFig.Children.XLim = [-0.5 0.5];
     velFig.Children.YLim = [-20 20];
     % guide to the eye
     x = -0.5:0.1:0.5; plot(velFig.Children,x,-20*x,'k--')
     title(velFig.Children,strain{:},'FontWeight','normal')
     
-    accFig.Children.XLabel.String = '\Delta\phi';
-    accFig.Children.YLabel.String = 'tangent angle acceleration (d^2\phi/dt^2)';
+    accFig.Children.XLabel.String = '\Delta\theta';
+    accFig.Children.YLabel.String = 'intersegment angle gradient change (d/dt(d\theta/ds))';
     accFig.Children.XLim = [-0.5 0.5];
     accFig.Children.YLim = [-1000 1000];
     % guide to the eye

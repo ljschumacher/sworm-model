@@ -9,6 +9,6 @@ actualDisplacement = diff(xyarray,1,4);
 targetDisplacement = v.*cat(3,cos(theta),sin(theta));
 combined = actualDisplacement + targetDisplacement;
 thetaCorrected = atan2(combined(:,:,2),combined(:,:,1));
-thetadiff = theta - thetaCorrected;
+% thetadiff = thetaCorrected - theta;
 end
 
