@@ -19,14 +19,14 @@ for strain = {'N2','npr-1','CB4856'}
         segmentAngles = segmentAngles./repmat(range(segmentAngles)/2,size(segmentAngles,1),1);
         deltaAngles = diff(segmentAngles,1,2);
         % estimate change and acceleration in angle over time at 30Hz
-        dKdt = framerate*gradient(deltaAngles);
-        dK2dt = framerate*gradient(gradient(deltaAngles));
+        dKdt = framerate*diff(deltaAngles);
+        dK2dt = framerate*diff(diff(deltaAngles,1,2));
         % calculate and plot group statistics
-        Kbins = quant(deltaAngles,0.01);
+        Kbins = quant(deltaAngles(1:end-1,:),0.01);
         [v, sigv] = grpstats(dKdt(:),Kbins(:),{@nanmean,@nanstd});
         boundedline(unique(Kbins(~isnan(Kbins(:)))),v,[sigv, sigv],...
             'alpha','transparency',1/numWorms,'nan','fill',velFig.Children)
-        Kbins = quant(deltaAngles,0.02);
+        Kbins = quant(deltaAngles(1:end-1,1:end-1),0.02);
         [a, siga] = grpstats(dK2dt(:),Kbins(:),{@mean,@std});
         boundedline(unique(Kbins(~isnan(Kbins(:)))),a,[siga, siga],...
             'alpha','transparency',1/numWorms,'nan','fill',accFig.Children)
@@ -44,9 +44,9 @@ for strain = {'N2','npr-1','CB4856'}
     accFig.Children.XLabel.String = '\Delta\theta';
     accFig.Children.YLabel.String = 'intersegment angle gradient change (d/dt(d\theta/ds))';
     accFig.Children.XLim = [-0.5 0.5];
-    accFig.Children.YLim = [-1000 1000];
+    accFig.Children.YLim = [-20 20];
     % guide to the eye
-    plot(accFig.Children,x,-1200*x,'k--')
+    plot(accFig.Children,x,33*x,'k--')
     title(accFig.Children,strain{:},'FontWeight','normal')
     %% export figure
     exportOptions = struct('Format','eps2',...
@@ -64,8 +64,9 @@ for strain = {'N2','npr-1','CB4856'}
     system(['rm ' filename '.eps']);
     
     set(accFig,'PaperUnits','centimeters')
-    filename = ['parameterisationPlots/undulationStiffnessAcc' strain{:}];
+    filename = ['parameterisationPlots/undulationCurvatureVel' strain{:}];
     exportfig(accFig,[filename '.eps'],exportOptions);
     system(['epstopdf ' filename '.eps']);
     system(['rm ' filename '.eps']);
 end
+tilefigs
