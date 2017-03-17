@@ -56,8 +56,8 @@ addOptional(iP,'dT',1/9,@isnumeric) % adjusts speed and undulataions, default 1/
 addOptional(iP,'rc',0.035,@isnumeric) % worm width is approx 50 to 90 mu = approx 0.07mm
 addOptional(iP,'segmentLength',1.2/(M - 1),@isnumeric) % worm length is approx 1.2 mm
 addOptional(iP,'bc','free',@checkBcs)
-addOptional(iP,'kl',20,@isnumeric) % stiffness of linear springs connecting nodes
-addOptional(iP,'k_theta',20,@isnumeric) % stiffness of rotational springs at nodes
+addOptional(iP,'kl',40,@isnumeric) % stiffness of linear springs connecting nodes
+addOptional(iP,'k_theta',40,@isnumeric) % stiffness of rotational springs at nodes
 % undulations
 addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation of movement direction, default 0.6 Hz
 addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement direction, default pi/4
@@ -130,9 +130,15 @@ for t=2:T
         [theta(:,:,t), phaseOffset] = updateWoidOscillators(theta(:,:,t-1),theta_0,...
             omega,phaseOffset,deltaPhase,reversalLogInd(:,(t-1):t));
     % calculate forces
-    forceArray = calculateForces(xyarray(:,:,:,t-1),rc,distanceMatrixXY,...
+    if t>2
+    forceArray = calculateForces(xyarray(:,:,:,t-1),xyarray(:,:,:,t-2),rc,distanceMatrixXY,...
         distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,t),segmentLength,...
         v,kl,k_theta, r_LJcutoff, eps_LJ);
+    else
+     forceArray = calculateForces(xyarray(:,:,:,t-1),xyarray(:,:,:,t-1),rc,distanceMatrixXY,...
+        distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,t),segmentLength,...
+        v,kl,k_theta, r_LJcutoff, eps_LJ);   
+    end
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % update position (with boundary conditions)
     xyarray(:,:,:,t) = applyForces(xyarray(:,:,:,t-1),forceArray,bc,L);

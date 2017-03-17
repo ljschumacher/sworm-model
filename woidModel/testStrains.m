@@ -4,31 +4,31 @@
 clear
 
 N = 40;
-M = 50;
+M = 49;
 L = 8/2;
-dT = 1.2/M/0.33/4;
+dT = 1.2/M/0.33/8/2;
 T = 10000;
-saveevery = 16;
+saveevery = 24;
 
-xyphiarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
+xyarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
     'theta_0',pi*37/180);
-xyphiarray = xyphiarray(:,:,:,1:saveevery:end);
+xyarray = xyarray(:,:,:,1:saveevery:end);
 save('results/DA609_noflux')
-animateWoidTrajectories(xyphiarray,'tests/DA609_noflux',L);
+animateWoidTrajectories(xyarray,'tests/DA609_noflux',L);
 
-xyphiarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
+xyarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
     'theta_0',pi*37/180,'slowingNodes',1:M);
-xyphiarray = xyphiarray(:,:,:,1:saveevery:end);
+xyarray = xyarray(:,:,:,1:saveevery:end);
 save('results/DA609_noflux_slowingNodesAll')
-animateWoidTrajectories(xyphiarray,'tests/DA609_noflux_slowingNodesAll',L);
+animateWoidTrajectories(xyarray,'tests/DA609_noflux_slowingNodesAll',L);
 
-xyphiarray = runWoids(4*T,N,M,L,'bc','noflux','dT',dT/4,...
+xyarray = runWoids(4*T,N,M,L,'bc','noflux','dT',dT/4,...
     'theta_0',pi*37/180,'r_LJcutoff',4*0.035,'eps_LJ',2e-6);
-xyphiarray = xyphiarray(:,:,:,1:saveevery*4:end);
+xyarray = xyarray(:,:,:,1:saveevery*4:end);
 save('results/DA609_noflux_lennardjones2e-6')
-animateWoidTrajectories(xyphiarray,'tests/DA609_noflux_lennardjones2e-6',L);
+animateWoidTrajectories(xyarray,'tests/DA609_noflux_lennardjones2e-6',L);
 
-xyphiarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
+xyarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
     'v0',0.14,...
     'omega_m',2*pi*0.26,...
     'theta_0',pi*37/180,...
@@ -37,6 +37,6 @@ xyphiarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
     'revRateCluster',1/11,...
     'headNodes',[],...
     'tailNodes',[]);
-xyphiarray = xyphiarray(:,:,:,1:saveevery:end);
+xyarray = xyarray(:,:,:,1:saveevery:end);
 save('results/N2_noflux')
-animateWoidTrajectories(xyphiarray,'tests/N2_noflux',L);
+animateWoidTrajectories(xyarray,'tests/N2_noflux',L);

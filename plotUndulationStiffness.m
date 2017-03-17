@@ -16,7 +16,7 @@ for strain = {'N2','npr-1','CB4856'}
         load(strrep(files(wormCtr).name,'._',''))
         [segmentAngles, ~] = makeAngleArrayV(worm.posture.skeleton.x',worm.posture.skeleton.y');
         % normalise for amplitude - divide by half the range
-        segmentAngles = segmentAngles./repmat(range(segmentAngles)/2,size(segmentAngles,1),1);
+        segmentAngles = segmentAngles./(range(segmentAngles)/2);
         deltaAngles = diff(segmentAngles,1,2);
         % estimate change and acceleration in angle over time at 30Hz
         dKdt = framerate*diff(deltaAngles);

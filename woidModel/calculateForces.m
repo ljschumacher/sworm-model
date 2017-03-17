@@ -1,4 +1,4 @@
-function forceArray = calculateForces(posPrev,rc,distanceMatrixXY,distanceMatrix,...
+function forceArray = calculateForces(posPrev,posPrevPrev,rc,distanceMatrixXY,distanceMatrix,...
     theta,reversals,segmentLength,v_target,k_l,k_theta, r_LJcutoff, eps_LJ)
 % updates object directions according to update rules
 
@@ -45,7 +45,7 @@ for objCtr = 1:N
     % head tangent: direction from next node's position
     ds(headInd,:) = posPrev(objCtr,headInd,[x y]) ...
         - posPrev(objCtr,headInd + 1*movState,[x y]);
-    % calcualte direction towards previous node's position
+    % calculate direction towards previous node's position
     ds(bodyInd,:) = posPrev(objCtr,bodyInd - 1*movState,[x y]) ...
         - posPrev(objCtr,bodyInd,[x y]);
     % before estimating tangents, calculate polar unit vectors
@@ -53,7 +53,7 @@ for objCtr = 1:N
     e_phi = [-sin(phi) cos(phi)]; % unit vector in direction of phi, size M-1 by 2
     % body tangents: estimate tangent direction by average of directions towards previous node and from next node
     ds(bodyInd(1:end-1),:) = (ds(bodyInd(1:end-1),:) + ds(bodyInd(2:end),:))/2;
-    % (tail tanget: towards previous node)
+    % (tail tangent: towards previous node)
     
     % head motile force
     headAngle = wrapToPi(theta(objCtr,headInd,1) ... % previous heading
@@ -72,13 +72,19 @@ for objCtr = 1:N
     Fl = k_l.*([dl; 0 0] - [0 0; dl]); % add forces to next and previous nodes shifted
     
     % bending constraints - rotational springs with changing 'rest length' due to active undulations
-    bodyAngles = atan2(ds(bodyInd,y),ds(bodyInd,x));
-    %     bodyAngles = unwrap(atan2(ds([headInd, bodyInd],y),ds([headInd, bodyInd],x)));
-    %     dbodyAnglesds = diff(bodyAngles);
-    %     dbodyAnglesds = -dbodyAnglesds(2:end) + dbodyAnglesds(1:end-1);
-    %             torques = k_theta.*wrapToPi(dbodyAnglesds);
-    torques = k_theta.*wrapToPi(diff(unwrap(bodyAngles)) - diff(unwrap(theta(objCtr,bodyInd,1)')));
-    %     torques = k_theta.*wrapToPi(diff(unwrap(bodyAngles))); % this straightens worms
+    bodyAngles = unwrap(atan2(ds([headInd, bodyInd],y),ds([headInd, bodyInd],x)));
+    % previous bodyAngles
+    dsPrev(headInd,:) = posPrevPrev(objCtr,headInd,[x y]) ...
+        - posPrevPrev(objCtr,headInd + 1*movState,[x y]);
+    dsPrev(bodyInd,:) = posPrevPrev(objCtr,bodyInd - 1*movState,[x y]) ...
+        - posPrevPrev(objCtr,bodyInd,[x y]);
+    dsPrev(bodyInd(1:end-1),:) = (dsPrev(bodyInd(1:end-1),:) + dsPrev(bodyInd(2:end),:))/2;
+    bodyAnglesPrev = unwrap(atan2(dsPrev([headInd, bodyInd],y),dsPrev([headInd, bodyInd],x)));
+    torques = k_theta.*wrapToPi(gradient(bodyAngles) - gradient(bodyAnglesPrev));
+%     torques = k_theta.*wrapToPi(gradient(bodyAngles) - gradient(unwrap(theta(objCtr,[headInd, bodyInd],1)')));
+    torques = torques(2:end-1); % no rotational springs at head and tail node
+%         bodyAngles = atan2(ds(bodyInd,y),ds(bodyInd,x));
+%         torques = k_theta.*wrapToPi(diff(unwrap(bodyAngles))); % this straightens worms
     
     l = sqrt(sum(ds(bodyInd,:).^2,2)); % length between node and prev node, length M-1
     momentsfwd = torques.*l(1:end-1).*e_phi(1:end-1,:);
@@ -89,11 +95,9 @@ for objCtr = 1:N
         + [0 0; -(momentsfwd + momentsbwd); 0 0];% reactive force on node n (balancing forces exerted onto nodes n+1 and n -1
     % sum force contributions
     forceArray(objCtr,:,:) = Fm + Fl + F_theta;
-    % uncomment for debugging...
+%     % uncomment for debugging...
 %     plot(squeeze(posPrev(objCtr,:,x)),squeeze(posPrev(objCtr,:,y)),'.-'), axis equal, hold on
 %     quiver(squeeze(posPrev(objCtr,:,x))',squeeze(posPrev(objCtr,:,y))',F_theta(:,1),F_theta(:,2),1)
-% %         plot(diff(unwrap(bodyAngles)) - diff(unwrap(theta(objCtr,bodyInd,1)'))), hold on
-% %         plot(wrapToPi(diff(unwrap(bodyAngles)) - diff(unwrap(theta(objCtr,bodyInd,1)'))))
 %     1;
 end
 % resolve contact forces
