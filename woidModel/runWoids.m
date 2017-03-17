@@ -110,7 +110,7 @@ theta = NaN(N,M,T);
 % preallocate reversal states
 reversalLogInd = false(N,T);
 % random phase offset for each object plus phase shift for each node
-phaseOffset = wrapTo2Pi(rand(N,1)*2*pi*ones(1,M) - ones(N,1)*deltaPhase*(1:M));
+phaseOffset = wrapTo2Pi(rand(N,1)*2*pi - deltaPhase*(1:M));
 % initialise worm positions and node directions - respecting volume
 % exclusion
 [xyarray, theta(:,:,1)] = initialiseWoids(N,M,T,L,segmentLength,phaseOffset,theta_0,rc,bc);
@@ -142,7 +142,7 @@ for t=2:T
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % update position (with boundary conditions)
     xyarray(:,:,:,t) = applyForces(xyarray(:,:,:,t-1),forceArray,bc,L);
-    assert(~any(isinf(xyarray(:)))&&~any(diff(xyarray(:,:,:,(t-1):t),1,4)>2*segmentLength),...
+    assert(~any(isinf(xyarray(:)))&&~any(any(diff(xyarray(:,:,:,(t-1):t),1,4)>2*segmentLength)),...
         'Uh-oh, something has gone wrong... (try using a smaller time-step?)')
     % correct heading if movement has been constrained
     theta(:,:,t) = correctHeading(xyarray(:,:,:,(t-1):t),theta(:,:,t),v);
