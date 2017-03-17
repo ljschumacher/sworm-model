@@ -142,7 +142,7 @@ for t=2:T
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % update position (with boundary conditions)
     xyarray(:,:,:,t) = applyForces(xyarray(:,:,:,t-1),forceArray,bc,L);
-    assert(~any(isinf(xyarray(:)))&&~any(any(diff(xyarray(:,:,:,(t-1):t),1,4)>2*segmentLength)),...
+    assert(~any(isinf(xyarray(:)))&&~any(any(any(diff(xyarray(:,:,:,(t-1):t),1,4)>2*segmentLength))),...
         'Uh-oh, something has gone wrong... (try using a smaller time-step?)')
     % correct heading if movement has been constrained
     theta(:,:,t) = correctHeading(xyarray(:,:,:,(t-1):t),theta(:,:,t),v);

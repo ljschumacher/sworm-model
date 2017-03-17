@@ -81,8 +81,8 @@ animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_un
 
 % many worms
 L = 8/2;
-dT = 1.2/M/0.33/8/2;
-saveevery = 24;
+dT = 1.2/M/0.33/8/4;
+saveevery = 12*4;
 xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux',L);
 
