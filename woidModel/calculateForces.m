@@ -69,7 +69,8 @@ for objCtr = 1:N
     dl = squeeze(posPrev(objCtr,2:M,[x y]) - posPrev(objCtr,1:M-1,[x y])) ... % direction to next node
         .*(diag(squeeze(distanceMatrix(objCtr,2:M,objCtr,1:M-1))) - segmentLength) ...% deviation from segmentLength
         ./sqrt(sum(squeeze(posPrev(objCtr,2:M,[x y]) - posPrev(objCtr,1:M-1,[x y])).^2,2)); % normalised for segment length
-    Fl = k_l.*([dl; 0 0] - [0 0; dl]); % add forces to next and previous nodes shifted
+    nl = 1./(1 - sum(dl.^2,2)/segmentLength.^2); % non-linear part of spring
+    Fl = k_l.*([dl.*nl; 0 0] - [0 0; dl.*nl]); % add forces to next and previous nodes shifted
     
     % bending constraints - rotational springs with changing 'rest length' due to active undulations
     bodyAngles = unwrap(atan2(ds([headInd, bodyInd],y),ds([headInd, bodyInd],x)));

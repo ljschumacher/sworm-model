@@ -41,6 +41,9 @@ xyarray = runWoids(2000,1,M,L,'bc','noflux','dT',dT,'v0',1e-4,'vs',1e-4,'omega_m
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_targetcurvatureTest',L,0.01);
 
 % two worms
+dT = 1.2/M/0.33/8/2;
+saveevery = 12*2;
+
 xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux',L);
 
@@ -81,8 +84,8 @@ animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_un
 
 % many worms
 L = 8/2;
-dT = 1.2/M/0.33/8/4;
-saveevery = 12*4;
+dT = 1.2/M/0.33/8/5;
+saveevery = 12*5;
 xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux',L);
 

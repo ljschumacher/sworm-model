@@ -24,8 +24,12 @@ if any(reversalChanges ~=0)
     phaseFromShape = wrapTo2Pi(atan2(thetaNormalised,dThetadsNormalised)); % phase is given by atan(theta,dTheta/ds*l/deltaPhase)
     headIndcs = ~reversals(reversalChanges ~=0,end) + M*reversals(reversalChanges ~=0,end);
     allIndcsOrdered = ~reversals(reversalChanges ~=0,end)*(1:M) + reversals(reversalChanges ~=0,end)*(M:-1:1);
+    try
     phaseOffset(reversalChanges ~=0,:) = wrapTo2Pi(phaseFromShape(reversalChanges ~=0,headIndcs)...
        - deltaPhase*(allIndcsOrdered - 1));
+    catch
+        error('phase reset went wrong')
+    end
 end
 % 2nd order Runge-Kutta method with step-size h=1 (using gradient at
 % midpoint to update)
