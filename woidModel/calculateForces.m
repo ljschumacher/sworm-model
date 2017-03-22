@@ -81,8 +81,8 @@ for objCtr = 1:N
         - posPrevPrev(objCtr,bodyInd,[x y]);
     dsPrev(bodyInd(1:end-1),:) = (dsPrev(bodyInd(1:end-1),:) + dsPrev(bodyInd(2:end),:))/2;
     bodyAnglesPrev = unwrap(atan2(dsPrev([headInd, bodyInd],y),dsPrev([headInd, bodyInd],x)));
-    torques = k_theta.*wrapToPi(gradient(bodyAngles) - gradient(bodyAnglesPrev));
-%     torques = k_theta.*wrapToPi(gradient(bodyAngles) - gradient(unwrap(theta(objCtr,[headInd, bodyInd],1)')));
+    dK = wrapToPi(gradient(bodyAngles) - gradient(bodyAnglesPrev));
+    torques = k_theta.*dK./(1 - dK.^2/pi^2);
     torques = torques(2:end-1); % no rotational springs at head and tail node
 %         bodyAngles = atan2(ds(bodyInd,y),ds(bodyInd,x));
 %         torques = k_theta.*wrapToPi(diff(unwrap(bodyAngles))); % this straightens worms
