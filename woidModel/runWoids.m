@@ -57,7 +57,7 @@ addOptional(iP,'rc',0.035,@isnumeric) % worm width is approx 50 to 90 mu = appro
 addOptional(iP,'segmentLength',1.2/(M - 1),@isnumeric) % worm length is approx 1.2 mm
 addOptional(iP,'bc','free',@checkBcs)
 addOptional(iP,'kl',40,@isnumeric) % stiffness of linear springs connecting nodes
-addOptional(iP,'k_theta',40,@isnumeric) % stiffness of rotational springs at nodes
+addOptional(iP,'k_theta',20,@isnumeric) % stiffness of rotational springs at nodes
 % undulations
 addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation of movement direction, default 0.6 Hz
 addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement direction, default pi/4
@@ -75,7 +75,7 @@ addOptional(iP,'slowingNodes',[1:max(round(M/10),1) (M-max(round(M/10),1)+1):M],
 % Lennard-Jones
 addOptional(iP,'r_LJcutoff',0,@isnumeric) % cut-off above which lennard jones potential is not acting anymore
 addOptional(iP,'eps_LJ',1e-6,@isnumeric) % strength of LJ-potential
- 
+
 parse(iP,T,N,M,L,varargin{:})
 dT = iP.Results.dT;
 v0 = iP.Results.v0*dT;
@@ -105,7 +105,7 @@ assert(min(L)>segmentLength*(M - 1),...
     'Domain size (L) must be bigger than object length (segmentLength*M). Increase L.')
 assert(v0>=vs,'vs should be chosen smaller or equal to v0')
 
-% preallicate internal oscillators 
+% preallicate internal oscillators
 theta = NaN(N,M,T);
 % preallocate reversal states
 reversalLogInd = false(N,T);
@@ -125,25 +125,28 @@ for t=2:T
     omega = omega_m*(~slowLogInd + vs/v0*slowLogInd); % adjust internal oscillator freq for slowed worms
     % check if any worms are reversing due to contacts
     reversalLogInd = generateReversals(reversalLogInd,t,distanceMatrix,...
-    2*rs,headNodes,tailNodes,revRate,revTime,revRateCluster);
+        2*rs,headNodes,tailNodes,revRate,revTime,revRateCluster);
     % update internal oscillators / headings
-        [theta(:,:,t), phaseOffset] = updateWoidOscillators(theta(:,:,t-1),theta_0,...
-            omega,phaseOffset,deltaPhase,reversalLogInd(:,(t-1):t));
+    [theta(:,:,t), phaseOffset] = updateWoidOscillators(theta(:,:,t-1),theta_0,...
+        omega,phaseOffset,deltaPhase,reversalLogInd(:,(t-1):t));
     % calculate forces
     if t>2
-    forceArray = calculateForces(xyarray(:,:,:,t-1),xyarray(:,:,:,t-2),rc,distanceMatrixXY,...
-        distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,t),segmentLength,...
-        v,kl,k_theta, r_LJcutoff, eps_LJ);
+        forceArray = calculateForces(xyarray(:,:,:,t-1),xyarray(:,:,:,t-2),rc,distanceMatrixXY,...
+            distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,t),segmentLength,...
+            v,kl,k_theta, r_LJcutoff, eps_LJ);
     else
-     forceArray = calculateForces(xyarray(:,:,:,t-1),xyarray(:,:,:,t-1),rc,distanceMatrixXY,...
-        distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,t),segmentLength,...
-        v,kl,k_theta, r_LJcutoff, eps_LJ);   
+        forceArray = calculateForces(xyarray(:,:,:,t-1),xyarray(:,:,:,t-1),rc,distanceMatrixXY,...
+            distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,t),segmentLength,...
+            v,kl,k_theta, r_LJcutoff, eps_LJ);
     end
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % update position (with boundary conditions)
     xyarray(:,:,:,t) = applyForces(xyarray(:,:,:,t-1),forceArray,bc,L);
-    assert(~any(isinf(xyarray(:)))&&~any(any(any(diff(xyarray(:,:,:,(t-1):t),1,4)>2*segmentLength))),...
-        'Uh-oh, something has gone wrong... (try using a smaller time-step?)')
+    assert(~any(isinf(xyarray(:))),'Uh-oh, something has gone wrong... (infinite forces)')
+    if any(any(any(diff(xyarray(:,:,:,(t-1):t),1,4)>2*segmentLength)))
+        assert(~any(any(any(diff(xyarray(:,:,:,(t-1):t),1,4)>(M-1)*segmentLength/2))),...
+            'Uh-oh, something has gone wrong... (large displacements)')
+    end
     % correct heading if movement has been constrained
     theta(:,:,t) = correctHeading(xyarray(:,:,:,(t-1):t),theta(:,:,t),v);
 end

@@ -98,7 +98,7 @@ for objCtr = 1:N
     forceArray(objCtr,:,:) = Fm + Fl + F_theta;
 %     % uncomment for debugging...
 %     plot(squeeze(posPrev(objCtr,:,x)),squeeze(posPrev(objCtr,:,y)),'.-'), axis equal, hold on
-%     quiver(squeeze(posPrev(objCtr,:,x))',squeeze(posPrev(objCtr,:,y))',F_theta(:,1),F_theta(:,2),1)
+%     quiver(squeeze(posPrev(objCtr,:,x))',squeeze(posPrev(objCtr,:,y))',F_theta(:,1),F_theta(:,2),0)
 %     1;
 end
 % resolve contact forces
