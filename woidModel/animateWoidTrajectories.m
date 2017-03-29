@@ -7,7 +7,6 @@ function [ ] = animateWoidTrajectories(xyarray,filename,L,rc)
 % short-hand for indexing coordinates
 x =     1;
 y =     2;
-%  =   3;
 
 if nargin <=3
     rc = 0.035;
@@ -23,9 +22,8 @@ open(vid)
 nFrames = size(xyarray,4);
 N = size(xyarray,1);
 M = size(xyarray,2);
-% plotColors = lines(N);
-angles = linspace(0,2*pi,9)'; % for plotting node size
-nAngles = length(angles);
+plotColors = lines(N);
+angles = linspace(0,2*pi,10)'; % for plotting node size
 
 % set overall axes limits
 xrange = minmax(reshape(xyarray(:,:,x,:),1,nnz(xyarray(:,:,x,:))));
@@ -43,17 +41,20 @@ for frameCtr=1:nFrames
             'Color',[0.5 0.5 0.5]);
     end
     ax = gca;
-        % plot circular domain boundaries, if given scalar domain size
+    % plot circular domain boundaries, if given scalar domain size
     if nargin>=3&&numel(L)==1
-            viscircles(ax,[0 0],L,'Color',[0.5 0.5 0.5],'LineWidth',2,'EnhanceVisibility',false);
+        viscircles(ax,[0 0],L,'Color',[0.5 0.5 0.5],'LineWidth',2,'EnhanceVisibility',false);
+        ax.XLim = [-L L];
+        ax.YLim = [-L L];
+    else
+        ax.XLim = xrange;
+        ax.YLim = yrange;
     end
-    ax.XLim = xrange;
-    ax.YLim = yrange;
     ax.DataAspectRatio = [1 1 1];
     for objCtr = 1:N
         patch(xyarray(objCtr,:,x,frameCtr) + rc*cos(angles),...
             xyarray(objCtr,:,y,frameCtr) + rc*sin(angles),...
-            [0 0 0],'EdgeColor',[0 0 0])
+            plotColors(objCtr,:),'EdgeColor',plotColors(objCtr,:))
         % patches seems to be faster than viscircles
         %         viscircles(squeeze(xyarray(objCtr,:,[x y],frameCtr)),rc*ones(M,1),...
         %             'Color',plotColors(objCtr,:),'EnhanceVisibility',false,...
