@@ -5,9 +5,9 @@ clear
 
 N = 40;
 M = 49;
-L = 8/2;
-dT = 1.2/M/0.33/8/8;
-saveevery = 12*8;
+L = 8.5/2;
+dT = 1/90/4;
+saveevery = 40;
 T = 40000;
 
 xyarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
@@ -22,11 +22,12 @@ xyarray = xyarray(:,:,:,1:saveevery:end);
 save('results/DA609_noflux_slowingNodesAll')
 animateWoidTrajectories(xyarray,'tests/DA609_noflux_slowingNodesAll',L);
 
+eps_LJ = 5e-7;
 xyarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
-    'theta_0',pi*37/180,'r_LJcutoff',4*0.035,'eps_LJ',5e-7);
+    'theta_0',pi*37/180,'r_LJcutoff',4*0.035,'eps_LJ',eps_LJ);
 xyarray = xyarray(:,:,:,1:saveevery*4:end);
-save('results/DA609_noflux_lennardjones2e-6')
-animateWoidTrajectories(xyarray,'tests/DA609_noflux_lennardjones2e-6',L);
+save(['results/DA609_noflux_lennardjones' num2str(eps_LJ)])
+animateWoidTrajectories(xyarray,['tests/DA609_noflux_lennardjones' num2str(eps_LJ)],L);
 
 xyarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
     'v0',0.14,...

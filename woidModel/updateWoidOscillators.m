@@ -10,6 +10,7 @@ function [thetaNow, phaseOffset] = updateWoidOscillators(thetaPrev, theta_0, ...
 % reverals - N by 1 logical index of which worms are reversing
 
 M = size(thetaPrev,2);
+N = size(thetaPrev,1);
 movState = 1 - 2*reversals(:,end); % =-1 if worm is reversing, 1 if not
 Omega = (omega.*movState)*ones(1,M); % signed angular velocities for each worm and its nodes
 reversalChanges = diff(reversals,1,2);
@@ -25,8 +26,8 @@ if any(reversalChanges ~=0)
     headIndcs = ~reversals(reversalChanges ~=0,end) + M*reversals(reversalChanges ~=0,end);
     allIndcsOrdered = ~reversals(reversalChanges ~=0,end)*(1:M) + reversals(reversalChanges ~=0,end)*(M:-1:1);
     try
-    phaseOffset(reversalChanges ~=0,:) = wrapTo2Pi(phaseFromShape(reversalChanges ~=0,headIndcs)...
-       - deltaPhase*(allIndcsOrdered - 1));
+        phaseOffset(reversalChanges~=0,:) = wrapTo2Pi(phaseFromShape(find(reversalChanges~=0)+(headIndcs-1)*N)...
+            - deltaPhase*(allIndcsOrdered - 1));
     catch
         error('phase reset went wrong')
     end

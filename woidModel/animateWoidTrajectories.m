@@ -51,6 +51,8 @@ for frameCtr=1:nFrames
         ax.YLim = yrange;
     end
     ax.DataAspectRatio = [1 1 1];
+    ax.XTick = [];
+    ax.YTick = [];
     for objCtr = 1:N
         patch(xyarray(objCtr,:,x,frameCtr) + rc*cos(angles),...
             xyarray(objCtr,:,y,frameCtr) + rc*sin(angles),...

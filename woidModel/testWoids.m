@@ -10,8 +10,8 @@ close all
 % general model parameters for all test - unless set otherwise
 N = 40;
 M = 49;
-dT = 1.2/M/0.33/8;
-saveevery = 12;
+dT = 1/90;
+saveevery = 10;
 
 % single worm
 L = 2;
@@ -41,8 +41,8 @@ xyarray = runWoids(2000,1,M,L,'bc','noflux','dT',dT,'v0',1e-4,'vs',1e-4,'omega_m
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_targetcurvatureTest',L,0.01);
 
 % two worms
-dT = 1.2/M/0.33/8/2;
-saveevery = 12*2;
+dT = 1/90;
+saveevery = 10;
 
 xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux',L);
@@ -83,9 +83,9 @@ xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT,...
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_undulations0',L);
 
 % many worms
-L = 8/2;
-dT = 1.2/M/0.33/8/8;
-saveevery = 12*8;
+L = 8.5/2;
+dT = 1/90/4;
+saveevery = 40;
 xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux',L);
 
@@ -105,6 +105,9 @@ animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_kth
 xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'revRate',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_revRate0',L);
 
+xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'tailNodes',[]);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_revHeadOnly',L);
+
 xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'headNodes',[],'tailNodes',[]);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_revUnresponsive',L);
 
@@ -123,6 +126,3 @@ animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_slo
 xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,...
     'theta_0',0,'omega_m',0,'deltaPhase',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_undulations0',L);
-
-
-
