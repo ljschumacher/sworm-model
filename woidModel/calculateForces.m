@@ -5,15 +5,9 @@ function forceArray = calculateForces(posPrev,posPrevPrev,rc,distanceMatrixXY,di
 % issues/to-do's:
 % - mixed periodic boundary conditions can be quite slow
 % - calculate forces without loops?
-% - once we have the bending constraints, do we still need the undulations
-% at every node??
 % - refactor individual forces into their own functions
-% - could improve tangent estimate for motile force by estimating direction
-% towards point on curve
 % - should body angle be calculated from improved tangent estimate (like
 % motile force?)
-% - should the target angles for bending actually be
-% theta(objCtr,bodyInd,end)?
 
 % short-hand for indexing coordinates
 x =     1;
@@ -27,7 +21,7 @@ distanceMatrixXY = permute(distanceMatrixXY,[3 4 5 1 2]); % this will make index
 
 forceArray = zeros(N,M,2); % preallocate forces
 
-for objCtr = 1:N
+parfor objCtr = 1:N
     % check if worm is currently reversing
     if ~reversals(objCtr)
         headInd = 1;
@@ -75,6 +69,7 @@ for objCtr = 1:N
     % bending constraints - rotational springs with changing 'rest length' due to active undulations
     bodyAngles = unwrap(atan2(ds([headInd, bodyInd],y),ds([headInd, bodyInd],x)));
     % previous bodyAngles
+    dsPrev = NaN(size(ds));
     dsPrev(headInd,:) = posPrevPrev(objCtr,headInd,[x y]) ...
         - posPrevPrev(objCtr,headInd + 1*movState,[x y]);
     dsPrev(bodyInd,:) = posPrevPrev(objCtr,bodyInd - 1*movState,[x y]) ...
