@@ -9,10 +9,12 @@ function [thetaNow, phaseOffset] = updateWoidOscillators(thetaPrev, theta_0, ...
 % phaseOffset - scalar phase difference between adjacent nodes
 % reverals - N by 1 logical index of which worms are reversing
 
+% issues/to-do
+% - phase reset might be better done based on shape, rather than heading
 M = size(thetaPrev,2);
 N = size(thetaPrev,1);
 movState = 1 - 2*reversals(:,end); % =-1 if worm is reversing, 1 if not
-Omega = (omega.*movState)*ones(1,M); % signed angular velocities for each worm and its nodes
+omegaSigned = (omega.*movState)*ones(1,M); % signed angular velocities for each worm and its nodes
 reversalChanges = diff(reversals,1,2);
 % if a reversal starts or ends, reset the phase based on current slope of
 % shape at head
@@ -27,16 +29,16 @@ if any(reversalChanges ~=0)
     allIndcsOrdered = ~reversals(reversalChanges ~=0,end)*(1:M) + reversals(reversalChanges ~=0,end)*(M:-1:1);
     try
         phaseOffset(reversalChanges~=0,:) = wrapTo2Pi(phaseFromShape(find(reversalChanges~=0)+(headIndcs-1)*N)...
-            - deltaPhase*(allIndcsOrdered - 1));
+            - movState*deltaPhase*(allIndcsOrdered - 1));
     catch
         error('phase reset went wrong')
     end
 end
 % 2nd order Runge-Kutta method with step-size h=1 (using gradient at
 % midpoint to update)
-thetaNow = wrapToPi(thetaPrev + theta_0*Omega.*cos(Omega*1/2 + phaseOffset)...
+thetaNow = wrapToPi(thetaPrev + theta_0*omegaSigned.*cos(omegaSigned*1/2 + phaseOffset)...
             + pi*reversalChanges); % 180 degree turn when reversal starts or ends
-phaseOffset = wrapTo2Pi(phaseOffset + Omega*1); % update internal oscillator time by one time-step
+phaseOffset = wrapTo2Pi(phaseOffset + omegaSigned*1); % update internal oscillator time by one time-step
 
 end
 

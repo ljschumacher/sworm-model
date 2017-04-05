@@ -120,9 +120,7 @@ for t=2:T
     distanceMatrixXY = computeWoidDistancesWithBCs(xyarray(:,:,:,t-1),L,bc);
     distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar
     % check if any woids are slowed down by neighbors
-    slowLogInd = findWoidNeighbors(distanceMatrix,2*rs,slowingNodes);
-    v = vs*slowLogInd + v0*(~slowLogInd); % adjust speed for slowed worms
-    omega = omega_m*(~slowLogInd + vs/v0*slowLogInd); % adjust internal oscillator freq for slowed worms
+    [ v, omega ] = slowWorms(distanceMatrix,rs,slowingNodes,vs,v0,omega_m);
     % check if any worms are reversing due to contacts
     reversalLogInd = generateReversals(reversalLogInd,t,distanceMatrix,...
         2*rs,headNodes,tailNodes,revRate,revTime,revRateCluster);
@@ -130,15 +128,9 @@ for t=2:T
     [theta(:,:,t), phaseOffset] = updateWoidOscillators(theta(:,:,t-1),theta_0,...
         omega,phaseOffset,deltaPhase,reversalLogInd(:,(t-1):t));
     % calculate forces
-    if t>2
-        forceArray = calculateForces(xyarray(:,:,:,t-1),xyarray(:,:,:,t-2),rc,distanceMatrixXY,...
-            distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,t),segmentLength,...
-            v,kl,k_theta, r_LJcutoff, eps_LJ);
-    else
-        forceArray = calculateForces(xyarray(:,:,:,t-1),xyarray(:,:,:,t-1),rc,distanceMatrixXY,...
-            distanceMatrix,theta(:,:,(t-1):t),reversalLogInd(:,t),segmentLength,...
-            v,kl,k_theta, r_LJcutoff, eps_LJ);
-    end
+    forceArray = calculateForces(xyarray(:,:,:,t-1),rc,distanceMatrixXY,...
+        distanceMatrix,theta(:,:,t),reversalLogInd(:,t),segmentLength,...
+        v,kl,k_theta*v./v0,phaseOffset,r_LJcutoff, eps_LJ);
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % update position (with boundary conditions)
     xyarray(:,:,:,t) = applyForces(xyarray(:,:,:,t-1),forceArray,bc,L);

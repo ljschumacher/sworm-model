@@ -37,12 +37,12 @@ xyarray = runWoids(2000,1,M,L,'bc','noflux','dT',dT,...
     'theta_0',0,'omega_m',0,'deltaPhase',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_noflux_undulations0',L);
 
-xyarray = runWoids(2000,1,M,L,'bc','noflux','dT',dT,'v0',1e-4,'vs',1e-4,'omega_m',0);
+xyarray = runWoids(2000,1,M,L,'bc','noflux','dT',dT,'v0',1e-4,'vs',1e-4,'omega_m',0,'revRate',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_targetcurvatureTest',L,0.01);
 
 % two worms
-dT = 1/90;
-saveevery = 10;
+dT = 1/90/2;
+saveevery = 20;
 
 xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux',L);
@@ -72,8 +72,8 @@ animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_re
 xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT,'rc',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_rc0',L);
 
-xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT,'rs',0);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_rslow0',L);
+xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT,'slowingNodes',[]);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_slowingNodesNone',L);
 
 xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT,'slowingNodes',1:M);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_slowingNodesAll',L);
@@ -84,8 +84,8 @@ animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_un
 
 % many worms
 L = 8.5/2;
-dT = 1/90/4;
-saveevery = 40;
+dT = 1/90/6;
+saveevery = 60;
 xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux',L);
 
@@ -117,8 +117,8 @@ animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_rev
 xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'rc',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_rc0',L);
 
-xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'rs',0);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_rslow0',L);
+xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'slowingNodes',[]);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_slowingNodesNone',L);
 
 xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'slowingNodes',1:M);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_slowingNodesAll',L);
