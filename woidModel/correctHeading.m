@@ -6,7 +6,7 @@ function [thetaCorrected, thetadiff] = correctHeading(xyarray,theta,v)
 % other forces), the heading is retrospectively corrected
 
 % issues/to-do:
-% - creates wrong headings at very slow speeds
+% - creates noisy headings at very slow speeds
 
 actualDisplacement = diff(xyarray,1,4);
 targetDisplacement = v.*cat(3,cos(theta),sin(theta)); 

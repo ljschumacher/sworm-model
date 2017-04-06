@@ -13,7 +13,7 @@
 % v0: speed (default 0.05)
 % dT: time step, scales other parameters such as velocities and rates
 % (default 1/9s)
-% rc: core repulsion radius (default 0.07 microns)
+% rc: core repulsion radius (default 0.07/2 mm)
 % segmentLength: length of a segment between nodes (default 1.2mm/(M-1))
 % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can
 %   be single number or 2 element array {'bcx','bcy'} for different
@@ -26,11 +26,17 @@
 % deltaPhase: phase shift in undulations from node to node
 % -- reversal parameters --
 % revRate: rate for poisson-distributed reversals (default 1/13s)
+% revRateCluster: rate for reversals when in a cluster (default 1/130s)
 % revTime: duration of reversal events (default 2s, rounded to integer number of time-steps)
+% headNodes: which nodes count as head for defining cluster status, default front 10%
+% tailNodes: which nodes count as tail for defining cluster status, default back 10%
+% ri: radius at which worms register contact (default 3/2 rc)
 % -- slow-down parameters --
-% rs: radius at which worms register contact (default 2 rc)
 % vs: speed when slowed down (default v0/3)
 % slowingNodes: which nodes register contact (default [1 M], ie head and tail)
+% -- Lennard-Jones parameters --
+% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
+% eps_LJ: strength of LJ-potential
 %
 % OUTPUTS
 % xyphiarray: Array containing the position, and movement direction for
@@ -66,10 +72,10 @@ addOptional(iP,'deltaPhase',0.24,@isnumeric) % for phase shift in undulations an
 addOptional(iP,'revRate',1/13,@isnumeric) % rate for poisson-distributed reversals, default 1/13s
 addOptional(iP,'revRateCluster',1/130,@isnumeric) % reduced reversal rates, when worms are in cluster
 addOptional(iP,'revTime',2,@isnumeric) % duration of reversal events, default 2s (will be rounded to integer number of time-steps)
-addOptional(iP,'headNodes',1:max(round(M/10),1),checkInt) % which nodes count as head, default fron 10%
+addOptional(iP,'headNodes',1:max(round(M/10),1),checkInt) % which nodes count as head, default front 10%
 addOptional(iP,'tailNodes',(M-max(round(M/10),1)+1):M,checkInt) % which nodes count as tail, default back 10%
+addOptional(iP,'ri',0.035*3/2,@isnumeric) % radius at which worms register contact down, default 3/2 rc
 % slowing down
-addOptional(iP,'rs',0.035*3/2,@isnumeric) % radius at which worms slow down, default 3/2 rc
 addOptional(iP,'vs',0.33/3,@isnumeric) % speed when slowed down, default v0/3
 addOptional(iP,'slowingNodes',[1:max(round(M/10),1) (M-max(round(M/10),1)+1):M],checkInt) % which nodes sense proximity, default head and tail
 % Lennard-Jones
@@ -92,7 +98,7 @@ revRateCluster = iP.Results.revRateCluster*dT;
 revTime = round(iP.Results.revTime/dT);
 headNodes = iP.Results.headNodes;
 tailNodes = iP.Results.tailNodes;
-rs = iP.Results.rs;
+ri = iP.Results.ri;
 vs = iP.Results.vs*dT;
 slowingNodes = iP.Results.slowingNodes;
 r_LJcutoff = iP.Results.r_LJcutoff;
@@ -120,10 +126,10 @@ for t=2:T
     distanceMatrixXY = computeWoidDistancesWithBCs(xyarray(:,:,:,t-1),L,bc);
     distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar
     % check if any woids are slowed down by neighbors
-    [ v, omega ] = slowWorms(distanceMatrix,rs,slowingNodes,vs,v0,omega_m);
+    [ v, omega ] = slowWorms(distanceMatrix,ri,slowingNodes,vs,v0,omega_m);
     % check if any worms are reversing due to contacts
     reversalLogInd = generateReversals(reversalLogInd,t,distanceMatrix,...
-        2*rs,headNodes,tailNodes,revRate,revTime,revRateCluster);
+        ri,headNodes,tailNodes,revRate,revTime,revRateCluster);
     % update internal oscillators / headings
     [theta(:,:,t), phaseOffset] = updateWoidOscillators(theta(:,:,t-1),theta_0,...
         omega,phaseOffset,deltaPhase,reversalLogInd(:,(t-1):t));

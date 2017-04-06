@@ -15,7 +15,7 @@ y =     2;
 
 N = size(xyiarray,1); % number of objects
 M = size(xyiarray,2); % number of nodes
-ndim = size(xyiarray,2); % number of dims (x,y)
+ndim = size(xyiarray,3); % number of dims (x,y)
 
 if iscell(bc)&&numel(bc)==ndim
     for dimCtr = [x y]
@@ -81,7 +81,7 @@ else
 %                             ,dimCtr);
 %                     end
                 end
-            else % scalar domain size --> cicrular domain boundary
+            else % scalar domain size --> circular domain boundary
                 nodeIndsOverL = find(sqrt(sum(xyiarray(:,:,[x y]).^2,3))>=L);
                 if any(nodeIndsOverL)
                     angles = atan2(xyiarray(nodeIndsOverL + N*M), ...%y coords

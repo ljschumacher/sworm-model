@@ -11,6 +11,7 @@ function [thetaNow, phaseOffset] = updateWoidOscillators(thetaPrev, theta_0, ...
 
 % issues/to-do
 % - phase reset might be better done based on shape, rather than heading
+
 M = size(thetaPrev,2);
 N = size(thetaPrev,1);
 movState = 1 - 2*reversals(:,end); % =-1 if worm is reversing, 1 if not
@@ -29,7 +30,7 @@ if any(reversalChanges ~=0)
     allIndcsOrdered = ~reversals(reversalChanges ~=0,end)*(1:M) + reversals(reversalChanges ~=0,end)*(M:-1:1);
     try
         phaseOffset(reversalChanges~=0,:) = wrapTo2Pi(phaseFromShape(find(reversalChanges~=0)+(headIndcs-1)*N)...
-            - movState*deltaPhase*(allIndcsOrdered - 1));
+            - movState(reversalChanges~=0).*deltaPhase.*(allIndcsOrdered - 1));
     catch
         error('phase reset went wrong')
     end
