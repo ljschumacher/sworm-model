@@ -33,8 +33,12 @@ yrange = [floor(yrange(1)) ceil(yrange(2))];
 
 figure
 for frameCtr=1:nFrames
-    plot(xyarray(:,:,x,frameCtr)',xyarray(:,:,y,frameCtr)','-',...
-        'Marker','.','Color','k');
+    if M>1
+        plot(xyarray(:,:,x,frameCtr)',xyarray(:,:,y,frameCtr)','-',...
+            'Marker','.','Color','k');
+    else
+        plot(xyarray(:,:,x,frameCtr)',xyarray(:,:,y,frameCtr)','.','Color','k');
+    end
     hold on
     if N==1 % plot tracks for single worm
         plot(squeeze(xyarray(:,:,x,1:frameCtr)),squeeze(xyarray(:,:,y,1:frameCtr)),'-',...

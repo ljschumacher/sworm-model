@@ -6,6 +6,7 @@ function [positions, anglesInitial] = initialiseWoids(N,M,T,L,segmentLength,phas
 % - needlessy re-computing distances between all successfully initialised
 % agents when checking for overlaps
 % - not tested for periodic boundaries
+% - currently only works for circular boundary
 
 positions = NaN(N,M,2,T);
 anglesInitial = NaN(N,M);

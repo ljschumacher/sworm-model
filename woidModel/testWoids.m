@@ -123,6 +123,8 @@ animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_slo
 xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'slowingNodes',1:M);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_slowingNodesAll',L);
 
+dT = 1/90/7;
+saveevery = 70;
 xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,...
     'theta_0',0,'omega_m',0,'deltaPhase',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_undulations0',L);

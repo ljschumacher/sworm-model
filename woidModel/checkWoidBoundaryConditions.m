@@ -1,4 +1,4 @@
-function [ xyiarray ] = checkWoidBoundaryConditions( xyiarray, bc, L)
+function [ xyiarray ] = checkWoidBoundaryConditions(xyiarray, bc, L)
 % check boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can
 %   be single number or 2 element array {'bcx','bcy'} for different
 %   bcs along different dimensions
@@ -73,13 +73,13 @@ else
                     if any(nodeIndsOverL)
                         xyiarray(nodeIndsOverL)  = 2*L(dimCtr) - xyiarray(nodeIndsOverL);
                     end
-%                     if any(nodeIndsUnder0)||any(nodeIndsOverL)
+                    if any(nodeIndsUnder0)||any(nodeIndsOverL)
 %                         % change direction of movement upon reflection
 %                         xyiarray(union(nodeIndsUnder0,nodeIndsOverL) + N*M*(phi - dimCtr)) = ... % ugly use of indexing
 %                             reflectDirection2D(...
 %                             xyiarray(union(nodeIndsUnder0,nodeIndsOverL) + N*M*(phi - dimCtr))...
 %                             ,dimCtr);
-%                     end
+                    end
                 end
             else % scalar domain size --> circular domain boundary
                 nodeIndsOverL = find(sqrt(sum(xyiarray(:,:,[x y]).^2,3))>=L);

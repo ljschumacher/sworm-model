@@ -87,7 +87,11 @@ dT = iP.Results.dT;
 v0 = iP.Results.v0*dT;
 rc = iP.Results.rc;
 bc = iP.Results.bc;
-segmentLength = iP.Results.segmentLength;
+if M>1
+    segmentLength = iP.Results.segmentLength;
+else
+    segmentLength = 0;
+end
 kl = iP.Results.kl*dT; % scale with dT as F~v~dT
 k_theta = iP.Results.k_theta*dT; % scale with dT as F~v~dT
 deltaPhase = iP.Results.deltaPhase;
@@ -141,8 +145,8 @@ for t=2:T
     % update position (with boundary conditions)
     xyarray(:,:,:,t) = applyForces(xyarray(:,:,:,t-1),forceArray,bc,L);
     assert(~any(isinf(xyarray(:))),'Uh-oh, something has gone wrong... (infinite forces)')
-    if any(any(any(diff(xyarray(:,:,:,(t-1):t),1,4)>2*segmentLength)))
-        assert(~any(any(any(diff(xyarray(:,:,:,(t-1):t),1,4)>(M-1)*segmentLength/2))),...
+    if M>1&&any(any(any(abs(diff(xyarray(:,:,:,(t-1):t),1,4))>(M-1)*segmentLength/2)))
+        assert(~any(any(any(abs(diff(xyarray(:,:,:,(t-1):t),1,4))>(M-1)*segmentLength/2))),...
             'Uh-oh, something has gone wrong... (large displacements)')
     end
     % correct heading if movement has been constrained
