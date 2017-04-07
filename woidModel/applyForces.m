@@ -24,4 +24,7 @@ arrayNow(:,:,x) = arrayPrev(:,:,x) + ...
 arrayNow(:,:,y) = arrayPrev(:,:,y) + ...
     v.*sin(forceAngles);
 
+% correct heading (e.g. if movement has been constrained)
+theta = correctHeading(forceArray,theta,bc,L);
+    
 [xyOut, thetaOut] = checkWoidBoundaryConditions(arrayNow,theta,bc,L);

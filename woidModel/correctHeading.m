@@ -1,4 +1,4 @@
-function thetaCorrected = correctHeading(xyarray,theta,v,bc,L)
+function thetaCorrected = correctHeading(forcearray,theta,bc,L)
 % corrects the heading of the worm based on how the worm actually moved
 % if the actual displacement was in the same direction as the previous
 % heading, the heading is not corrected
@@ -10,16 +10,21 @@ function thetaCorrected = correctHeading(xyarray,theta,v,bc,L)
 % - does not work with mixed boundary conditions
 % - could be implemented in calculateForces instead, as effect of forces on
 % orientation
-
-actualDisplacement = diff(xyarray,1,4);
-if strcmp(bc,'periodic')
-    for dimCtr = 1:length(L)
-        actualDisplacement(:,:,dimCtr) = mod(actualDisplacement(:,:,dimCtr),L(dimCtr));
-    end
-end
-targetDisplacement = v.*cat(3,cos(theta),sin(theta));
-combined = actualDisplacement + targetDisplacement;
-thetaCorrected = atan2(combined(:,:,2),combined(:,:,1));
-
+% N = size(xyarray,1);
+% M = size(xyarray,2);
+% 
+% actualDisplacement = diff(xyarray,1,4);
+% if strcmp(bc,'periodic')
+%     for dimCtr = 1:length(L)
+%         overIndcs = find(actualDisplacement(:,:,dimCtr)>=L(dimCtr)/2) + N*M*(dimCtr - 1);
+%         actualDisplacement(overIndcs) = actualDisplacement(overIndcs) - L(dimCtr);
+%         underIndcs = find(actualDisplacement(:,:,dimCtr)<=-L(dimCtr)/2) + N*M*(dimCtr - 1);
+%         actualDisplacement(underIndcs) = actualDisplacement(underIndcs) + L(dimCtr);
+%     end
+% end
+% targetDisplacement = v.*cat(3,cos(theta),sin(theta));
+% combined = actualDisplacement;% + targetDisplacement;
+% thetaCorrected = atan2(combined(:,:,2),combined(:,:,1));
+thetaCorrected = atan2(forcearray(:,:,2),forcearray(:,:,1));
 end
 

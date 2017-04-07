@@ -84,10 +84,10 @@ else
                         xyarray(nodeIndsOverL).^2);
                     xyarray(nodeIndsOverL)  = (2*L - radii).*cos(angles);
                     xyarray(nodeIndsOverL + N*M)  = (2*L - radii).*sin(angles);
-                    %                     % change direction of movement upon reflection
-                    %                     xyiarray(nodeIndsOverL + N*M*(phi - 1)) = ...
-                    %                         alignWithBoundaryCircular(xyiarray(nodeIndsOverL + N*M*(phi - 1)),...
-                    %                     angles);
+%                     % change direction of movement upon reflection
+%                     theta(nodeIndsOverL) = ...
+%                         alignWithBoundaryCircular(theta(nodeIndsOverL),...
+%                         angles);
                 end
             end
     end

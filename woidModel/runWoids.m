@@ -128,7 +128,7 @@ disp('Running simulation...')
 for t=2:T
     % find distances between all pairs of objects
     distanceMatrixXY = computeWoidDistancesWithBCs(xyarray(:,:,:,t-1),L,bc);
-    distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar
+    distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar distances
     % check if any woids are slowed down by neighbors
     [ v, omega ] = slowWorms(distanceMatrix,ri,slowingNodes,vs,v0,omega_m);
     % check if any worms are reversing due to contacts
@@ -149,8 +149,6 @@ for t=2:T
         assert(~any(any(any(abs(diff(xyarray(:,:,:,(t-1):t),1,4))>(M-1)*segmentLength/2))),...
             'Uh-oh, something has gone wrong... (large displacements)')
     end
-    % correct heading if movement has been constrained
-    theta(:,:,t) = correctHeading(xyarray(:,:,:,(t-1):t),theta(:,:,t),v,bc,L);
 end
 end
 

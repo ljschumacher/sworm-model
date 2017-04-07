@@ -14,15 +14,15 @@ for dimCtr = 1:ndim
         - positionArrayStacked(:,dimCtr*ones(1,N*M))';
     % reset some distances if boundaries are periodic
     if (~iscell(bc)&&strcmp(bc,'periodic'))||(iscell(bc)&&strcmp(bc{dimCtr},'periodic'))
-        if numel(L)==2 % vector domain size [L_x L_y] ie non-square domain
-            [mirrorIndxRow, mirrorIndxCol] = find(abs(distanceMatrix(:,:,dimCtr))>=L(dimCtr)/2);
-            distanceMatrix(mirrorIndxRow, mirrorIndxCol,dimCtr) = L(dimCtr) - ...
-                distanceMatrix(mirrorIndxRow, mirrorIndxCol,dimCtr);
+        if numel(L)==ndim % vector domain size [L_x L_y] ie non-square domain
+            Ldim = L(dimCtr);
         else
-            [mirrorIndxRow, mirrorIndxCol] = find(abs(distanceMatrix(:,:,dimCtr))>=L/2);
-            distanceMatrix(mirrorIndxRow, mirrorIndxCol,dimCtr) = L - ...
-                distanceMatrix(mirrorIndxRow, mirrorIndxCol,dimCtr);
+            Ldim = L;
         end
+        overIndcs = find(distanceMatrix(:,:,dimCtr)>=Ldim/2) + N^2*M^2*(dimCtr - 1);
+        distanceMatrix(overIndcs) = distanceMatrix(overIndcs) - Ldim;
+        underIndcs = find(distanceMatrix(:,:,dimCtr)<=-Ldim/2) + N^2*M^2*(dimCtr - 1);
+        distanceMatrix(underIndcs) = distanceMatrix(underIndcs) + Ldim;
     end
 end
 distanceMatrix = reshape(distanceMatrix,N,M,N,M,ndim);
