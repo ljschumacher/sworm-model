@@ -1,4 +1,4 @@
-function arrayOut = applyForces(arrayPrev,forceArray,bc,L)
+function [xyOut, thetaOut] = applyForces(arrayPrev,forceArray,theta,bc,L)
 % update positions based on current directions, respecting boundary
 % conditions
 
@@ -24,4 +24,4 @@ arrayNow(:,:,x) = arrayPrev(:,:,x) + ...
 arrayNow(:,:,y) = arrayPrev(:,:,y) + ...
     v.*sin(forceAngles);
 
-arrayOut = checkWoidBoundaryConditions(arrayNow,bc,L);
+[xyOut, thetaOut] = checkWoidBoundaryConditions(arrayNow,theta,bc,L);

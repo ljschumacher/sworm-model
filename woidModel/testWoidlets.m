@@ -38,4 +38,14 @@ param.r_LJcutoff = param.ri;% r_LJcutoff: cut-off above which LJ-force is not ac
 param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
 
 xyarray = runWoids(T,N,M,L,param);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlets/test',L,param.rc);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlets/test_noflux_circular',L,param.rc);
+
+L = [20, 20];
+N = 40;
+xyarray = runWoids(T,N,M,L,param);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlets/test_noflux_square',L,param.rc);
+
+param.bc = 'periodic';
+N = 20;
+xyarray = runWoids(T,N,M,L,param);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlets/test_periodic_square',L,param.rc);

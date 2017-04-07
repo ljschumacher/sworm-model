@@ -143,14 +143,14 @@ for t=2:T
         v,kl,k_theta*v./v0,phaseOffset,r_LJcutoff, eps_LJ);
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % update position (with boundary conditions)
-    xyarray(:,:,:,t) = applyForces(xyarray(:,:,:,t-1),forceArray,bc,L);
+    [xyarray(:,:,:,t), theta(:,:,t)] = applyForces(xyarray(:,:,:,t-1),forceArray,theta(:,:,t),bc,L);
     assert(~any(isinf(xyarray(:))),'Uh-oh, something has gone wrong... (infinite forces)')
     if M>1&&any(any(any(abs(diff(xyarray(:,:,:,(t-1):t),1,4))>(M-1)*segmentLength/2)))
         assert(~any(any(any(abs(diff(xyarray(:,:,:,(t-1):t),1,4))>(M-1)*segmentLength/2))),...
             'Uh-oh, something has gone wrong... (large displacements)')
     end
     % correct heading if movement has been constrained
-    theta(:,:,t) = correctHeading(xyarray(:,:,:,(t-1):t),theta(:,:,t),v);
+    theta(:,:,t) = correctHeading(xyarray(:,:,:,(t-1):t),theta(:,:,t),v,bc,L);
 end
 end
 

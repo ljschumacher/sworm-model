@@ -23,10 +23,15 @@ disp('Initialising woid positions...')
 objCtr = 1;
 while objCtr <= N
     % initialise head node
-    % Position, within circle of radius L-L0
-    rndangle = pi*(2*rand(1) - 1);
-    rndradius = (L - L0).*rand(1);
-    positions(objCtr,1,[x y],1) = rndradius.*[cos(rndangle) sin(rndangle)]; % initialise positions at least one woid length away from edge
+    if numel(L)==1
+        % Position, within circle of radius L-L0
+        rndangle = pi*(2*rand(1) - 1);
+        rndradius = (L - L0).*rand(1);
+        positions(objCtr,1,[x y],1) = rndradius.*[cos(rndangle) sin(rndangle)]; % initialise positions at least one woid length away from edge
+    else
+        % Position within rectangle of [Lx, Ly]
+        positions(objCtr,1,[x y],1) = (L - L0).*rand(size(L));
+    end
     % Direction
     anglesInitial(objCtr,:) = wrapToPi(pi*(2*rand - 1) + ...
         theta_0*sin(phaseOffset(objCtr,:)));   % random orientation between -pi and pi for each object plus undulations
@@ -39,7 +44,7 @@ while objCtr <= N
     distanceMatrix = sqrt(sum(computeWoidDistancesWithBCs(positions(1:objCtr,:,[x y],1),L,bc).^2,5));% scalar distance from current object to any other
     collisionNbrs = squeeze(any(any(2*rc>=distanceMatrix(objCtr,:,:,:),4),2));
     collisionNbrs(objCtr) = false; % don't volume-exclude self
-    if ~any(collisionNbrs) 
+    if ~any(collisionNbrs)
         objCtr = objCtr + 1;
     end
 end
