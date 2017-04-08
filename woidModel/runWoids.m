@@ -74,7 +74,7 @@ addOptional(iP,'revRateCluster',1/130,@isnumeric) % reduced reversal rates, when
 addOptional(iP,'revTime',2,@isnumeric) % duration of reversal events, default 2s (will be rounded to integer number of time-steps)
 addOptional(iP,'headNodes',1:max(round(M/10),1),checkInt) % which nodes count as head, default front 10%
 addOptional(iP,'tailNodes',(M-max(round(M/10),1)+1):M,checkInt) % which nodes count as tail, default back 10%
-addOptional(iP,'ri',0.035*3/2,@isnumeric) % radius at which worms register contact down, default 3/2 rc
+addOptional(iP,'ri',0.035*3,@isnumeric) % radius at which worms register contact, default 3 rc
 % slowing down
 addOptional(iP,'vs',0.33/3,@isnumeric) % speed when slowed down, default v0/3
 addOptional(iP,'slowingNodes',[1:max(round(M/10),1) (M-max(round(M/10),1)+1):M],checkInt) % which nodes sense proximity, default head and tail
@@ -133,7 +133,7 @@ for t=2:T
     [ v, omega ] = slowWorms(distanceMatrix,ri,slowingNodes,vs,v0,omega_m);
     % check if any worms are reversing due to contacts
     reversalLogInd = generateReversals(reversalLogInd,t,distanceMatrix,...
-        ri,headNodes,tailNodes,revRate,revTime,revRateCluster);
+        2*ri,headNodes,tailNodes,revRate,revTime,revRateCluster);
     % update internal oscillators / headings
     [theta(:,:,t), phaseOffset] = updateWoidOscillators(theta(:,:,t-1),theta_0,...
         omega,phaseOffset,deltaPhase,reversalLogInd(:,(t-1):t));
@@ -142,6 +142,14 @@ for t=2:T
         distanceMatrix,theta(:,:,t),reversalLogInd(:,t),segmentLength,...
         v,kl,k_theta*v./v0,phaseOffset,r_LJcutoff, eps_LJ);
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
+    %%% HERE COULD MAKE TIME STEP ADAPTIVE SUCH THAT IT SCALES INVERSILY
+    %%% WITH THE MAX FORCE, E.G.
+    %%% dT = dT0*v0/max(max(sqrt(sum(forceArray.^2,3))))
+    %%% where dT0 is a sensibly chosen starting time-step, e.g. rc/v0/4
+    %%% so that if motile forces are acting with magnitude v0, dT = dT0
+    %%% (this could also be done inside applyForces.m
+    %%% REQUIRES SAVING xyarray AT CERTAIN dTsave>=dT0
+    
     % update position (with boundary conditions)
     [xyarray(:,:,:,t), theta(:,:,t)] = applyForces(xyarray(:,:,:,t-1),forceArray,theta(:,:,t),bc,L);
     assert(~any(isinf(xyarray(:))),'Uh-oh, something has gone wrong... (infinite forces)')

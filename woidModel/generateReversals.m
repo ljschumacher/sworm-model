@@ -1,8 +1,8 @@
 function reversalLogInd = generateReversals(reversalLogInd,t,distanceMatrix,...
-    contactRadius,headInd,tailInd,revRate,revTime,revRateReduced)
+    interactionRadius,headInd,tailInd,revRate,revTime,revRateReduced)
 % find which worms are in or out of clusters    
-tailContacts = findWoidNeighbors(distanceMatrix,2*contactRadius,tailInd);
-headContacts = findWoidNeighbors(distanceMatrix,2*contactRadius,headInd);
+tailContacts = findWoidNeighbors(distanceMatrix,interactionRadius,tailInd);
+headContacts = findWoidNeighbors(distanceMatrix,interactionRadius,headInd);
 % generates reversal states
 % find worms currently in reversal state
 currentReversals = reversalLogInd(:,t);
