@@ -13,11 +13,11 @@ L = 10;%[20, 20]; % L: size of region containing initial positions - scalar will
 param.v0 = 1; % v0: speed (default 0.05)
 param.rc = 0.5; % rc: core repulsion radius (default 0.07 mm)
 % param.segmentLength = 0;
-param.dT = param.rc/param.v0/4; % dT: time step, scales other parameters such as velocities and rates
-T = 100/param.dT; % T: simulation duration (number of time-steps)
+param.dT = param.rc/param.v0/4; % dT: time step, gets adapted in simulation
+T = 100; % T: simulation duration (number of time-steps)
 saveevery = round(1/2/param.dT);
 param.bc = 'noflux'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
-param.kl = 0; % stiffness of linear springs connecting nodes
+param.k_l = 0; % stiffness of linear springs connecting nodes
 % undulations
 param.k_theta = 0; % stiffness of rotational springs at nodes
 param.omega_m = 0; % angular frequency of oscillation of movement direction, default 0.6 Hz

@@ -59,8 +59,9 @@ for nodesCtr = 1:length(trackedNodesList)
                 frame = framesAnalyzed(frameCtr);
                 dxcorr(:,frameCtr) = vectorCrossCorrelation2D(u(:,frame),v(:,frame),true); % directional correlation
                 pairdist(:,frameCtr) = pdist([x(:,frame) y(:,frame)]); % distance between all pairs, in micrometer
-                gr(:,frameCtr) = histcounts(pairdist(:,frameCtr),distBins,'Normalization','pdf'); % radial distribution function
-                gr(:,frameCtr) = gr(:,frameCtr)'.*L^2./(2*distBins(2:end)*distBinwidth); % normalization
+                gr(:,frameCtr) = histcounts(pairdist(:,frameCtr),distBins,'Normalization','count'); % radial distribution function
+                gr(:,frameCtr) = gr(:,frameCtr)'.*L^2./(2*distBins(2:end)*distBinwidth)...
+                    /N/(N-1); % normalisation
                 D = squareform(pairdist(:,frameCtr)); % distance of every worm to every other
                 mindist(:,frameCtr) = min(D + max(max(D))*eye(size(D)));
             end

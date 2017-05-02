@@ -1,4 +1,4 @@
-function [xyOut, thetaOut] = applyForces(arrayPrev,forceArray,theta,bc,L)
+function [xyOut, thetaOut] = applyForces(arrayPrev,forceArray,dT,theta,bc,L)
 % update positions based on current directions, respecting boundary
 % conditions
 
@@ -20,9 +20,9 @@ v = sqrt(sum(forceArray.^2,3));
 
 % update position
 arrayNow(:,:,x) = arrayPrev(:,:,x) + ...
-    v.*cos(forceAngles);
+    v.*cos(forceAngles)*dT;
 arrayNow(:,:,y) = arrayPrev(:,:,y) + ...
-    v.*sin(forceAngles);
+    v.*sin(forceAngles)*dT;
 
 % correct heading (e.g. if movement has been constrained)
 theta = correctHeading(forceArray,theta,bc,L);

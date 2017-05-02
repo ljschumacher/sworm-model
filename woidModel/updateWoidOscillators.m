@@ -1,5 +1,5 @@
 function [thetaNow, phaseOffset] = updateWoidOscillators(thetaPrev, theta_0, ...
-    omega, phaseOffset, deltaPhase, reversals)
+    omega, dT, phaseOffset, deltaPhase, reversals)
 % updates the internal osciallators of woids
 % INPUTS:
 % thetaPrev - N by M matrix of internal oscillators at previous time step
@@ -37,9 +37,9 @@ if any(reversalChanges ~=0)
 end
 % 2nd order Runge-Kutta method with step-size h=1 (using gradient at
 % midpoint to update)
-thetaNow = wrapToPi(thetaPrev + theta_0*omegaSigned.*cos(omegaSigned*1/2 + phaseOffset)...
+thetaNow = wrapToPi(thetaPrev + theta_0*omegaSigned*dT.*cos(omegaSigned*1/2 + phaseOffset)...
             + pi*reversalChanges); % 180 degree turn when reversal starts or ends
-phaseOffset = wrapTo2Pi(phaseOffset + omegaSigned*1); % update internal oscillator time by one time-step
+phaseOffset = wrapTo2Pi(phaseOffset + omegaSigned*dT); % update internal oscillator time
 
 end
 

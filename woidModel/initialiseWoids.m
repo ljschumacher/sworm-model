@@ -1,4 +1,4 @@
-function [positions, anglesInitial] = initialiseWoids(N,M,T,L,segmentLength,phaseOffset,theta_0,rc,bc)
+function [positions, anglesInitial] = initialiseWoids(N,M,numTimepoints,L,segmentLength,phaseOffset,theta_0,rc,bc)
 % initialises object positions and directions
 % uniformly randomly distributed
 
@@ -8,7 +8,7 @@ function [positions, anglesInitial] = initialiseWoids(N,M,T,L,segmentLength,phas
 % - not tested for periodic boundaries
 % - currently only works for circular boundary
 
-positions = NaN(N,M,2,T);
+positions = NaN(N,M,2,numTimepoints);
 anglesInitial = NaN(N,M);
 % short-hand for indexing coordinates
 x =     1;

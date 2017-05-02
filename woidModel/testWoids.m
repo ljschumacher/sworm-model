@@ -10,12 +10,12 @@ close all
 % general model parameters for all test - unless set otherwise
 N = 40;
 M = 49;
-dT = 1/90;
-saveevery = 10;
+dT = 0.025; % baseline timestep, eg rc/v0/4
+saveevery = 4;
 
 % single worm
 L = 2;
-xyarray = runWoids(1000,1,M,L,'bc','noflux','dT',dT);
+xyarray = runWoids(10,1,M,L,'bc','noflux','dT',dT);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_noflux',L);
 % plot distribution of lengths to check length conservation
 histogram(squeeze(sum(sqrt(sum(diff(xyarray(:,:,1:2,:),1,2).^2,3)),2)),...
@@ -27,24 +27,21 @@ exportfig(gcf,[filename '.eps']);
 system(['epstopdf ' filename '.eps']);
 system(['rm ' filename '.eps']);
 
-xyarray = runWoids(2000,1,M,L,'bc','noflux','dT',dT,'k_theta',0);
+xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'k_theta',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_noflux_ktheta0',L);
 
-xyarray = runWoids(2000,1,M,L,'bc','noflux','dT',dT,'revRate',0);
+xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'revRate',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_noflux_revRate0',L);
 
-xyarray = runWoids(2000,1,M,L,'bc','noflux','dT',dT,...
+xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,...
     'theta_0',0,'omega_m',0,'deltaPhase',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_noflux_undulations0',L);
 
-xyarray = runWoids(2000,1,M,L,'bc','noflux','dT',dT,'v0',1e-4,'vs',1e-4,'omega_m',0,'revRate',0);
+xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'v0',1e-4,'vs',1e-4,'omega_m',0,'revRate',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_targetcurvatureTest',L,0.01);
 
 % two worms
-dT = 1/90/2;
-saveevery = 20;
-
-xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT);
+xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux',L);
 
 % plot distribution of lengths to check length conservation
@@ -57,36 +54,35 @@ exportfig(gcf,[filename '.eps']);
 system(['epstopdf ' filename '.eps']);
 system(['rm ' filename '.eps']);
 
-xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT,'k_theta',0);
+xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'k_theta',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_ktheta0',L);
 
-xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT,'revRate',0);
+xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'revRate',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_revRate0',L);
 
-xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT,'headNodes',[],'tailNodes',[]);
+xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'headNodes',[],'tailNodes',[]);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_revUnresponsive',L);
 
-xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT,'revRateCluster',1/13);
+xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'revRateCluster',1/13);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_revClusterUnreduced',L);
 
-xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT,'rc',0);
+xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'rc',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_rc0',L);
 
-xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT,'slowingNodes',[]);
+xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'slowingNodes',[]);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_slowingNodesNone',L);
 
-xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT,'slowingNodes',1:M);
+xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'slowingNodes',1:M);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_slowingNodesAll',L);
 
-xyarray = runWoids(2000,2,M,L,'bc','noflux','dT',dT,...
+xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,...
     'theta_0',0,'omega_m',0,'deltaPhase',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_undulations0',L);
 
 % many worms
 L = 8.5/2;
-dT = 1/90/6;
-saveevery = 60;
-xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT);
+
+xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux',L);
 
 % plot distribution of lengths to check length conservation
@@ -99,32 +95,32 @@ exportfig(gcf,[filename '.eps']);
 system(['epstopdf ' filename '.eps']);
 system(['rm ' filename '.eps']);
 
-xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'k_theta',0);
+xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'k_theta',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_ktheta0',L);
 
-xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'revRate',0);
+xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'revRate',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_revRate0',L);
 
-xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'tailNodes',[]);
+xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'tailNodes',[]);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_revHeadOnly',L);
 
-xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'headNodes',[],'tailNodes',[]);
+xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'headNodes',[],'tailNodes',[]);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_revUnresponsive',L);
 
-xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'revRateCluster',1/13);
+xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'revRateCluster',1/13);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_revClusterUnreduced',L);
 
-xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'rc',0);
+xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'rc',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_rc0',L);
 
-xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'slowingNodes',[]);
+xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'slowingNodes',[]);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_slowingNodesNone',L);
 
-xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,'slowingNodes',1:M);
+xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'slowingNodes',1:M);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_slowingNodesAll',L);
 
 dT = 1/90/8;
 saveevery = 80;
-xyarray = runWoids(8000,N,M,L,'bc','noflux','dT',dT,...
+xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,...
     'theta_0',0,'omega_m',0,'deltaPhase',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_undulations0',L);

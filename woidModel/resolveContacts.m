@@ -1,4 +1,4 @@
-function [ F_contact ] = resolveContacts(forceArray,distanceMatrixFull,distanceMatrix, objInd, nodeInd, r_collision, r_LJcutoff, eps_LJ)
+function [ F_contact ] = resolveContacts(forceArray,distanceMatrixFull,distanceMatrix, objInd, nodeInd, r_collision, sigma_LJ, r_LJcutoff, eps_LJ)
 % to resolve contact forces between overlapping nodes
 % inputs:
 % forceArray is N by M by ndim matrix of forces acting on every node
@@ -44,8 +44,8 @@ end
 if any(attractionNbrs(:))&&N>1
     e_nN = [distanceMatrixFull(attractionNbrs(:)) distanceMatrixFull(find(attractionNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
         ./distanceMatrix(attractionNbrs(:)); % normalise for distance
-    f_LJ = 48*eps_LJ./distanceMatrix(attractionNbrs(:)).*((r_collision./distanceMatrix(attractionNbrs(:))).^12 ...
-        - 1/2*(r_collision./distanceMatrix(attractionNbrs(:))).^6);
+    f_LJ = 48*eps_LJ./distanceMatrix(attractionNbrs(:)).*((sigma_LJ./distanceMatrix(attractionNbrs(:))).^12 ...
+        - 1/2*(sigma_LJ./distanceMatrix(attractionNbrs(:))).^6);
     F_LJ = sum(f_LJ.*e_nN,1); % adhesion force, summed over neighbours
     if ~any(collisionNbrs(:))
         F_contact = F_contact + F_LJ';

@@ -11,14 +11,13 @@
 % optional inputs
 % -- general parameters--
 % v0: speed (default 0.05)
-% dT: time step, scales other parameters such as velocities and rates
-% (default 1/9s)
+% dT: time step, scaled adaptively when forces are large (default 1/9s)
 % rc: core repulsion radius (default 0.07/2 mm)
 % segmentLength: length of a segment between nodes (default 1.2mm/(M-1))
 % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can
 %   be single number or 2 element array {'bcx','bcy'} for different
 %   bcs along different dimensions
-% kl: stiffness of linear springs connecting nodes
+% k_l: stiffness of linear springs connecting nodes
 % k_theta: stiffness of rotational springs at nodes
 % -- undulation parameters --
 % omega_m: angular frequency of undulations (default 0.6Hz)
@@ -58,11 +57,11 @@ addRequired(iP,'N',checkInt);
 addRequired(iP,'M',checkInt);
 addRequired(iP,'L',@checkL);
 addOptional(iP,'v0',0.33,@isnumeric) % worm forward speed is approx 330mu/s
-addOptional(iP,'dT',1/9,@isnumeric) % adjusts speed and undulataions, default 1/9 seconds
+addOptional(iP,'dT',1/9,@isnumeric) % timestep, default 1/9 seconds
 addOptional(iP,'rc',0.035,@isnumeric) % worm width is approx 50 to 90 mu = approx 0.07mm
 addOptional(iP,'segmentLength',1.2/(M - 1),@isnumeric) % worm length is approx 1.2 mm
 addOptional(iP,'bc','free',@checkBcs)
-addOptional(iP,'kl',40,@isnumeric) % stiffness of linear springs connecting nodes
+addOptional(iP,'k_l',40,@isnumeric) % stiffness of linear springs connecting nodes
 addOptional(iP,'k_theta',20,@isnumeric) % stiffness of rotational springs at nodes
 % undulations
 addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation of movement direction, default 0.6 Hz
@@ -81,10 +80,13 @@ addOptional(iP,'slowingNodes',[1:max(round(M/10),1) (M-max(round(M/10),1)+1):M],
 % Lennard-Jones
 addOptional(iP,'r_LJcutoff',0,@isnumeric) % cut-off above which lennard jones potential is not acting anymore
 addOptional(iP,'eps_LJ',1e-6,@isnumeric) % strength of LJ-potential
+addOptional(iP,'sigma_LJ',0,@isnumeric) % particle size for Lennard-Jones force
 
 parse(iP,T,N,M,L,varargin{:})
-dT = iP.Results.dT;
-v0 = iP.Results.v0*dT;
+dT0 = iP.Results.dT;
+dT = dT0; % set initial time-step (will be adapted during simulation)
+numTimepoints = floor(T/dT0);
+v0 = iP.Results.v0;
 rc = iP.Results.rc;
 bc = iP.Results.bc;
 if M>1
@@ -92,21 +94,22 @@ if M>1
 else
     segmentLength = 0;
 end
-kl = iP.Results.kl*dT; % scale with dT as F~v~dT
-k_theta = iP.Results.k_theta*dT; % scale with dT as F~v~dT
+k_l = iP.Results.k_l;
+k_theta = iP.Results.k_theta; % scale with dT as F~v~dT
 deltaPhase = iP.Results.deltaPhase;
-omega_m = iP.Results.omega_m*dT;
+omega_m = iP.Results.omega_m;
 theta_0 = iP.Results.theta_0;
-revRate = iP.Results.revRate*dT;
-revRateCluster = iP.Results.revRateCluster*dT;
-revTime = round(iP.Results.revTime/dT);
+revRate = iP.Results.revRate;
+revRateCluster = iP.Results.revRateCluster;
+revTime = round(iP.Results.revTime/dT0); % convert to unit of timesteps
 headNodes = iP.Results.headNodes;
 tailNodes = iP.Results.tailNodes;
 ri = iP.Results.ri;
-vs = iP.Results.vs*dT;
+vs = iP.Results.vs;
 slowingNodes = iP.Results.slowingNodes;
 r_LJcutoff = iP.Results.r_LJcutoff;
 eps_LJ = iP.Results.eps_LJ;
+sigma_LJ = iP.Results.sigma_LJ;
 
 % check input relationships to each other
 % assert(segmentLength>2*rc,...
@@ -115,47 +118,55 @@ assert(min(L)>segmentLength*(M - 1),...
     'Domain size (L) must be bigger than object length (segmentLength*M). Increase L.')
 assert(v0>=vs,'vs should be chosen smaller or equal to v0')
 
-% preallicate internal oscillators
-theta = NaN(N,M,T);
+% preallocate internal oscillators
+theta = NaN(N,M,numTimepoints);
 % preallocate reversal states
-reversalLogInd = false(N,T);
+reversalLogInd = false(N,numTimepoints);
 % random phase offset for each object plus phase shift for each node
 phaseOffset = wrapTo2Pi(rand(N,1)*2*pi - deltaPhase*(1:M));
 % initialise worm positions and node directions - respecting volume
 % exclusion
-[xyarray, theta(:,:,1)] = initialiseWoids(N,M,T,L,segmentLength,phaseOffset,theta_0,rc,bc);
+[xyarray, theta(:,:,1)] = initialiseWoids(N,M,numTimepoints,L,segmentLength,phaseOffset,theta_0,rc,bc);
+positions = xyarray(:,:,:,1);
+orientations = theta(:,:,1);
+% initialise time
+t = 0;
+timeCtr = 1;
 disp('Running simulation...')
-for t=2:T
+while t<T
     % find distances between all pairs of objects
-    distanceMatrixXY = computeWoidDistancesWithBCs(xyarray(:,:,:,t-1),L,bc);
+    distanceMatrixXY = computeWoidDistancesWithBCs(positions,L,bc);
     distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar distances
     % check if any woids are slowed down by neighbors
     [ v, omega ] = slowWorms(distanceMatrix,ri,slowingNodes,vs,v0,omega_m);
     % check if any worms are reversing due to contacts
-    reversalLogInd = generateReversals(reversalLogInd,t,distanceMatrix,...
-        2*ri,headNodes,tailNodes,revRate,revTime,revRateCluster);
+    reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
+        2*ri,headNodes,tailNodes,dT,revRate,revTime,revRateCluster);
     % update internal oscillators / headings
-    [theta(:,:,t), phaseOffset] = updateWoidOscillators(theta(:,:,t-1),theta_0,...
-        omega,phaseOffset,deltaPhase,reversalLogInd(:,(t-1):t));
+    [orientations, phaseOffset] = updateWoidOscillators(orientations,theta_0,...
+        omega,dT,phaseOffset,deltaPhase,reversalLogInd(:,[max(timeCtr-1,1) timeCtr]));
     % calculate forces
-    forceArray = calculateForces(xyarray(:,:,:,t-1),rc,distanceMatrixXY,...
-        distanceMatrix,theta(:,:,t),reversalLogInd(:,t),segmentLength,...
-        v,kl,k_theta*v./v0,phaseOffset,r_LJcutoff, eps_LJ);
+    forceArray = calculateForces(positions,rc,distanceMatrixXY,...
+        distanceMatrix,orientations,reversalLogInd(:,timeCtr),segmentLength,...
+        v,k_l,k_theta*v./v0,phaseOffset,sigma_LJ,r_LJcutoff, eps_LJ);
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
-    %%% HERE COULD MAKE TIME STEP ADAPTIVE SUCH THAT IT SCALES INVERSILY
-    %%% WITH THE MAX FORCE, E.G.
-    %%% dT = dT0*v0/max(max(sqrt(sum(forceArray.^2,3))))
-    %%% where dT0 is a sensibly chosen starting time-step, e.g. rc/v0/4
-    %%% so that if motile forces are acting with magnitude v0, dT = dT0
-    %%% (this could also be done inside applyForces.m
-    %%% REQUIRES SAVING xyarray AT CERTAIN dTsave>=dT0
-    
+    % adapt time-step such that it scales inversily with the max force
+    dT = adaptTimeStep(dT0,v0,forceArray);
     % update position (with boundary conditions)
-    [xyarray(:,:,:,t), theta(:,:,t)] = applyForces(xyarray(:,:,:,t-1),forceArray,theta(:,:,t),bc,L);
-    assert(~any(isinf(xyarray(:))),'Uh-oh, something has gone wrong... (infinite forces)')
-    if M>1&&any(any(any(abs(diff(xyarray(:,:,:,(t-1):t),1,4))>(M-1)*segmentLength/2)))
-        assert(~any(any(any(abs(diff(xyarray(:,:,:,(t-1):t),1,4))>(M-1)*segmentLength/2))),...
-            'Uh-oh, something has gone wrong... (large displacements)')
+    [positions, orientations] = applyForces(positions,forceArray,...
+        dT,orientations,bc,L);
+    assert(~any(isinf(positions(:))),'Uh-oh, something has gone wrong... (infinite positions)')
+    % update time
+    t = t + dT;
+    % output positions and orientations
+    if t>=timeCtr*dT0
+        timeCtr = timeCtr + 1;
+        xyarray(:,:,:,timeCtr) = positions;
+        theta(:,:,timeCtr) = orientations;
+        if M>1&&any(any(any(abs(diff(xyarray(:,:,:,(timeCtr-1):timeCtr),1,4))>(M-1)*segmentLength/2)))
+            assert(~any(any(any(abs(diff(xyarray(:,:,:,(timeCtr-1):timeCtr),1,4))>(M-1)*segmentLength/2))),...
+                'Uh-oh, something has gone wrong... (large displacements)')
+        end
     end
 end
 end
