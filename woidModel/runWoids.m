@@ -140,11 +140,12 @@ while t<T
     % check if any woids are slowed down by neighbors
     [ v, omega ] = slowWorms(distanceMatrix,ri,slowingNodes,vs,v0,omega_m);
     % check if any worms are reversing due to contacts
+    reversalLogIndPrev = reversalLogInd(:,timeCtr);
     reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
         2*ri,headNodes,tailNodes,dT,revRate,revTime,revRateCluster);
     % update internal oscillators / headings
     [orientations, phaseOffset] = updateWoidOscillators(orientations,theta_0,...
-        omega,dT,phaseOffset,deltaPhase,reversalLogInd(:,[max(timeCtr-1,1) timeCtr]));
+        omega,dT,phaseOffset,deltaPhase,[reversalLogIndPrev, reversalLogInd(:, timeCtr)]);
     % calculate forces
     forceArray = calculateForces(positions,rc,distanceMatrixXY,...
         distanceMatrix,orientations,reversalLogInd(:,timeCtr),segmentLength,...

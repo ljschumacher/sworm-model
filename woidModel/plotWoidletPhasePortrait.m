@@ -13,7 +13,7 @@ exportOptions = struct('Format','eps2',...
 
 radius = 0.5;
 plotColor = [0.5, 0.5, 0.5];
-for revRate = [0, 0.1]
+for revRate = [0, 0.1, 1]
     phasePortraitFig = figure;
     plotCtr = 1;
     phasePortraitFig.Name = ['reversal rate = ' num2str(revRate)];
@@ -30,8 +30,8 @@ for revRate = [0, 0.1]
                 title(['v=' num2str(speed) ', \epsilon =' num2str(attractionStrength,'%1.0e')],...
                     'FontWeight','normal')
                 ax.Position = ax.Position.*[1 1 1.23 1.23] - [0.05 0.05 0 0]; % stretch panel
-                plotCtr = plotCtr + 1;
             end
+            plotCtr = plotCtr + 1;
         end
     end
     %% export figure
