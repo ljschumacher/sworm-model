@@ -29,7 +29,7 @@ param.revRateCluster = 0;% revRateCluster: rate for reversals when in a cluster 
 param.revTime = 0; % revTime: duration of reversal events (default 2s, rounded to integer number of time-steps)
 param.headNodes = 1;% headNodes: which nodes count as head for defining cluster status, default front 10%
 param.tailNodes = [];% tailNodes: which nodes count as tail for defining cluster status, default back 10%
-param.ri = 2.5*param.rc;% ri: radius at which worms register contact (default 3/2 rc)
+param.ri = 3*param.rc;% ri: radius at which worms register contact (default 3 rc)
 % -- slow-down parameters --
 param.vs = param.v0;% vs: speed when slowed down (default v0/3)
 param.slowingNodes = [];% slowingNodes: which nodes register contact (default [1 M], ie head and tail)

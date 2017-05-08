@@ -8,9 +8,9 @@ function [ ] = animateWoidTrajectories(xyarray,filename,L,rc)
 x =     1;
 y =     2;
 
-if nargin <=3
+if nargin <4
     rc = 0.035;
-    display(['Setting node radius to ' num2str(rc) ' for animations.'])
+    disp(['Setting node radius to ' num2str(rc) ' for animations.'])
 end
 
 if ~ismac
