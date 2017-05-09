@@ -13,19 +13,23 @@ exportOptions = struct('Format','eps2',...
 
 radius = 0.5;
 plotColor = [0.5, 0.5, 0.5];
-for revRate = [0, 0.1, 1]
+
+revRates = [0, 0.1, 1];
+speeds = [0.1, 0.5, 1];
+attractionStrengths = [1e-5, 1e-4, 5e-4];
+for revRate = revRates
     phasePortraitFig = figure;
     plotCtr = 1;
     phasePortraitFig.Name = ['reversal rate = ' num2str(revRate)];
-    for speed = [0.1, 0.5, 1]
-        for attractionStrength = [1e-5, 1e-4, 5e-4, 1e-3]
+    for speed = speeds
+        for attractionStrength = attractionStrengths
             filename = ['results/woidlets/wl_v0_' num2str(speed,'%1.0e') ...
                 '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
                 '_revRate_' num2str(revRate,'%1.0e') '_noContactForces.mat'];
             if exist(filename,'file')
                 load(filename)
                 positions2plot = xyarray(:,:,:,end);
-                subplot(3,4,plotCtr)
+                subplot(length(speeds),length(attractionStrengths),plotCtr)
                 ax = plotWoidTrajectoriesSingleFrame(positions2plot,L,radius,plotColor);
                 title(['v=' num2str(speed) ', \epsilon =' num2str(attractionStrength,'%1.0e')],...
                     'FontWeight','normal')

@@ -27,7 +27,7 @@ param.deltaPhase = 0; % for phase shift in undulations and initial positions, de
 % -- reversal parameters --
 param.revRate = 0.1; % revRate: rate for poisson-distributed reversals (default 1/13s)
 param.revRateCluster = 0.1;% revRateCluster: rate for reversals when in a cluster (default 1/130s)
-param.revTime = 2; % revTime: duration of reversal events (default 2s, rounded to integer number of time-steps)
+param.revTime = 5; % revTime: duration of reversal events (default 2s, rounded to integer number of time-steps)
 param.headNodes = 1;% headNodes: which nodes count as head for defining cluster status, default front 10%
 param.tailNodes = [];% tailNodes: which nodes count as tail for defining cluster status, default back 10%
 param.ri = 3*rc;% ri: radius at which worms register contact (default 3 rc)
@@ -40,7 +40,7 @@ param.r_LJcutoff = 5*rc;% r_LJcutoff: cut-off above which LJ-force is not acting
 param.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 
 param.rc = 0; % turn off contact-forces
-for revRate = [0, 0.1, 1, 10]
+for revRate = [0, 0.1, 1]
     param.revRate = revRate;
     param.revRateCluster = revRate;
     for speed = [0.1, 0.5, 1]
@@ -48,7 +48,7 @@ for revRate = [0, 0.1, 1, 10]
         param.dT = min(1/2,rc/param.v0/4); % dT: time step, scales other parameters such as velocities and rates
         T = 1000; % T: simulation duration
         saveevery = round(1/2/param.dT);
-        for attractionStrength = [1e-5, 1e-4]
+        for attractionStrength = [1e-5, 1e-4, 5e-4]
             param.eps_LJ = attractionStrength;
             filename = ['wl_v0_' num2str(param.v0,'%1.0e') '_epsLJ_' num2str(attractionStrength,'%1.0e')...
                 '_revRate_' num2str(param.revRate,'%1.0e') '_noContactForces'];
