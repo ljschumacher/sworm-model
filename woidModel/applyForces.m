@@ -1,4 +1,4 @@
-function [xyOut, thetaOut] = applyForces(arrayPrev,forceArray,dT,theta,bc,L)
+function [xyOut, thetaOut] = applyForces(arrayPrev,forceArray,dT,theta,bc,L,v0)
 % update positions based on current directions, respecting boundary
 % conditions
 
@@ -23,6 +23,10 @@ arrayNow(:,:,x) = arrayPrev(:,:,x) + ...
     v.*cos(forceAngles)*dT;
 arrayNow(:,:,y) = arrayPrev(:,:,y) + ...
     v.*sin(forceAngles)*dT;
+
+% assert no large displacements
+assert(~any(abs(arrayPrev(:) - arrayNow(:))>4*v0*dT),...
+    'Uh-oh, something has gone wrong... (large displacements)')
 
 % correct heading (e.g. if movement has been constrained)
 theta = correctHeading(forceArray,theta,bc,L);

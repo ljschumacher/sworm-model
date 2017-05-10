@@ -155,7 +155,7 @@ while t<T
     dT = adaptTimeStep(dT0,v0,forceArray);
     % update position (with boundary conditions)
     [positions, orientations] = applyForces(positions,forceArray,...
-        dT,orientations,bc,L);
+        dT,orientations,bc,L,v0);
     assert(~any(isinf(positions(:))),'Uh-oh, something has gone wrong... (infinite positions)')
     % update time
     t = t + dT;
@@ -164,10 +164,6 @@ while t<T
         timeCtr = timeCtr + 1;
         xyarray(:,:,:,timeCtr) = positions;
         theta(:,:,timeCtr) = orientations;
-        if M>1&&any(any(any(abs(diff(xyarray(:,:,:,(timeCtr-1):timeCtr),1,4))>(M-1)*segmentLength/2)))
-            assert(~any(any(any(abs(diff(xyarray(:,:,:,(timeCtr-1):timeCtr),1,4))>(M-1)*segmentLength/2))),...
-                'Uh-oh, something has gone wrong... (large displacements)')
-        end
     end
 end
 end

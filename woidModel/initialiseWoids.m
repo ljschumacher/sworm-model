@@ -6,7 +6,6 @@ function [positions, anglesInitial] = initialiseWoids(N,M,numTimepoints,L,segmen
 % - needlessy re-computing distances between all successfully initialised
 % agents when checking for overlaps
 % - not tested for periodic boundaries
-% - currently only works for circular boundary
 
 positions = NaN(N,M,2,numTimepoints);
 anglesInitial = NaN(N,M);
@@ -30,7 +29,7 @@ while objCtr <= N
         positions(objCtr,1,[x y],1) = rndradius.*[cos(rndangle) sin(rndangle)]; % initialise positions at least one woid length away from edge
     else
         % Position within rectangle of [Lx, Ly]
-        positions(objCtr,1,[x y],1) = (L - L0).*rand(size(L));
+        positions(objCtr,1,[x y],1) = L0 + (L - 2*L0).*rand(size(L));
     end
     % Direction
     anglesInitial(objCtr,:) = wrapToPi(pi*(2*rand - 1) + ...
