@@ -157,7 +157,7 @@ while t<T
     dT = adaptTimeStep(dT0,v0,forceArray);
     % update position (with boundary conditions)
     [positions, orientations] = applyForces(positions,forceArray,...
-        dT,orientations,bc,L,v0);
+        dT,orientations,bc,L);
     assert(~any(isinf(positions(:))),'Uh-oh, something has gone wrong... (infinite positions)')
     % update time
     t = t + dT;
