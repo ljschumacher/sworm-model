@@ -1,4 +1,4 @@
-function [positions, anglesInitial] = initialiseWoids(N,M,numTimepoints,L,segmentLength,phaseOffset,theta_0,rc,bc)
+function [positions, anglesInitial] = initialiseWoids(N,M,numTimepoints,L,segmentLength,phaseOffset,theta_0,exclusionRadius,bc)
 % initialises object positions and directions
 % uniformly randomly distributed
 
@@ -41,7 +41,7 @@ while objCtr <= N
     end
     % check for any overlaps, and if so discard this woid's position
     distanceMatrix = sqrt(sum(computeWoidDistancesWithBCs(positions(1:objCtr,:,[x y],1),L,bc).^2,5));% scalar distance from current object to any other
-    collisionNbrs = squeeze(any(any(2*rc>=distanceMatrix(objCtr,:,:,:),4),2));
+    collisionNbrs = squeeze(any(any(2*exclusionRadius>=distanceMatrix(objCtr,:,:,:),4),2));
     collisionNbrs(objCtr) = false; % don't volume-exclude self
     if ~any(collisionNbrs)
         objCtr = objCtr + 1;

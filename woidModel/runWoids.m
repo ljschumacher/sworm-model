@@ -126,7 +126,9 @@ reversalLogInd = false(N,numTimepoints);
 phaseOffset = wrapTo2Pi(rand(N,1)*2*pi - deltaPhase*(1:M));
 % initialise worm positions and node directions - respecting volume
 % exclusion
-[xyarray, theta(:,:,1)] = initialiseWoids(N,M,numTimepoints,L,segmentLength,phaseOffset,theta_0,rc,bc);
+initialExclusionRadius = max(rc,sigma_LJ/2); % so that we don't get too overlapping initial positions, even when rc = 0
+[xyarray, theta(:,:,1)] = initialiseWoids(N,M,numTimepoints,L,segmentLength,...
+    phaseOffset,theta_0,initialExclusionRadius,bc);
 positions = xyarray(:,:,:,1);
 orientations = theta(:,:,1);
 % initialise time

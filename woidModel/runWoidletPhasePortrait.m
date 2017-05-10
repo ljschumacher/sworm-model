@@ -50,13 +50,14 @@ for revRate = [0, 0.1, 1]
         saveevery = round(1/2/param.dT);
         for attractionStrength = [1e-5, 1e-4, 5e-4]
             param.eps_LJ = attractionStrength;
-            filename = ['wl_v0_' num2str(param.v0,'%1.0e') '_epsLJ_' num2str(attractionStrength,'%1.0e')...
+            filename = ['wl_v0_' num2str(param.v0,'%1.0e') '_epsLJ_'...
+                num2str(attractionStrength,'%1.0e')...
                 '_revRate_' num2str(param.revRate,'%1.0e') '_noContactForces'];
             if ~exist(['results/woidlets/' filename '.mat'],'file')
                 xyarray = runWoids(T,N,M,L,param);
                 xyarray = xyarray(:,:,:,1:saveevery:end);
                 save(['results/woidlets/' filename])
-                animateWoidTrajectories(xyarray,['tests/woidlets/' filename],L,rc);
+%                 animateWoidTrajectories(xyarray,['tests/woidlets/' filename],L,rc);
             end
         end
     end
