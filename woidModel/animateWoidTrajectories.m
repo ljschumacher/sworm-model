@@ -33,8 +33,11 @@ yrange = [floor(yrange(1)) ceil(yrange(2))];
 
 figure
 for frameCtr=1:nFrames
-    if M>1
-        plot(xyarray(:,:,x,frameCtr)',xyarray(:,:,y,frameCtr)','-',...
+    if M>1% plot connecting lines btw nodes
+        % don't plot connecting lines for objects that span across a
+        % periodic boundary
+        excludedObjects = any(abs(diff(xyarray(:,:,:,frameCtr),1,3))>L/2,2);
+        plot(xyarray(~excludedObjects,:,x,frameCtr)',xyarray(~excludedObjects,:,y,frameCtr)','-',...
             'Marker','.','Color','k');
     else
         plot(xyarray(:,:,x,frameCtr)',xyarray(:,:,y,frameCtr)','.','Color','k');
