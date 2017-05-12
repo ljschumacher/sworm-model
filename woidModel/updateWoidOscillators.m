@@ -17,7 +17,7 @@ N = size(thetaPrev,1);
 movState = 1 - 2*reversals(:,end); % =-1 if worm is reversing, 1 if not
 omegaSigned = (omega.*movState)*ones(1,M); % signed angular velocities for each worm and its nodes
 reversalChanges = diff(reversals,1,2);
-if M>1
+if M>2
     % if a reversal starts or ends, reset the phase based on current slope of
     % shape at head
     if any(reversalChanges ~=0)
