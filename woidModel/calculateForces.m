@@ -6,12 +6,6 @@ function forceArray = calculateForces(distanceMatrixXY,distanceMatrix,rc,...
 % - mixed periodic boundary conditions can be quite slow
 % - calculate forces without loops?
 % - refactor individual forces into their own functions
-% - M>1 forces need fixing for periodic boundaries - vectorial directions
-% aren't corrected (could be fixed by calculating from distanceMatrixXY?
-% Which may also enable vectorization
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%
-%%%
 
 % short-hand for indexing coordinates
 x =     1;
@@ -44,7 +38,9 @@ for objCtr = 1:N
         % head tangent: direction from next node's position
         ds(1,:) = distanceMatrixXY(objCtr,2,[x y],objCtr,1);
         % calculate direction towards previous node's position
-        ds(2:M,:) = distanceMatrixXY(objCtr,2:M,[x y],objCtr,1:M-1);
+        for nodeCtr = 2:M
+            ds(nodeCtr,:) = distanceMatrixXY(objCtr,nodeCtr,[x y],objCtr,nodeCtr-1);
+        end
         % before estimating tangents, calculate polar unit vectors
         phi = atan2(ds(2:M,y),ds(2:M,x));
         e_phi = [-sin(phi) cos(phi)]; % unit vector in direction of phi, size M-1 by 2
@@ -65,10 +61,13 @@ for objCtr = 1:N
     
     % length constraint
     if k_l>0&&M>1
-        dl = distanceMatrixXY(objCtr,1:M-1,[x y],objCtr,2:M)./l' ... % direction to next node, normalised for segment length
-            .*(l' - segmentLength);% deviation from segmentLength
+        dl = NaN(M-1,2);
+        for nodeCtr = 1:M-1
+            dl(nodeCtr,:) = distanceMatrixXY(objCtr,nodeCtr,[x y],objCtr,nodeCtr+1); % direction to next node
+        end
+        dl = dl./l.*(l - segmentLength);% normalised for segment length and deviation from segmentLength
         nl = 1./(1 - sum(dl.^2,3)/segmentLength.^2); % non-linear part of spring
-        Fl = k_l.*squeeze(cat(2,dl.*nl,zeros(1,1,2)) - cat(2,zeros(1,1,2),dl.*nl)); % add forces to next and previous nodes shifted
+        Fl = k_l.*(cat(1,dl.*nl,zeros(1,2)) - cat(1,zeros(1,2),dl.*nl)); % add forces to next and previous nodes shifted
     else
         Fl = zeros(size(Fm));
     end
