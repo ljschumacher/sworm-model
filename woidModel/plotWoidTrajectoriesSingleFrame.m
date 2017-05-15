@@ -29,8 +29,11 @@ yrange = minmax(reshape(xyarray(:,:,y,:),1,numel(xyarray(:,:,y,:))));
 xrange = [floor(xrange(1)) ceil(xrange(2))];
 yrange = [floor(yrange(1)) ceil(yrange(2))];
 
-if M>1
-    plot(xyarray(:,:,x)',xyarray(:,:,y)','-',...
+if M>1% plot connecting lines btw nodes
+    % don't plot connecting lines for objects that span across a
+    % periodic boundary
+    excludedObjects = any(any(abs(diff(xyarray,1,2))>min(L./2),3),2);
+    plot(xyarray(~excludedObjects,:,x)',xyarray(~excludedObjects,:,y)','-',...
         'Marker','.','Color','k');
 else
     plot(xyarray(:,:,x)',xyarray(:,:,y)','.','Color','k');

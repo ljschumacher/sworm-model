@@ -19,16 +19,16 @@ exportOptions = struct('Format','eps2',...
 mad1 = @(x) mad(x,1); % median absolute deviation
 % alternatively could use boxplot-style confidence intervals on the mean,
 % which are 1.57*iqr/sqrt(n)
-distBinwidth = 0.02; % in units of mm
+distBinwidth = 0.01; % in units of mm
 simulations = {'DA609_noflux','N2_noflux','DA609_noflux_slowingNodesAll',...
-    'DA609_noflux_lennardjones1e-7'};
+    'DA609_noflux_lennardjones1e-04'};
 nSims = length(simulations);
 plotColors = lines(nSims);
 trackedNodesList = {1:5; 1:49}; % which nodes to calculate the tracking stats from, to compare eg with pharynx labeled expmntal data
 trackedNodesNames = {'head','body'};
 for nodesCtr = 1:length(trackedNodesList)
     trackedNodes = trackedNodesList{nodesCtr};
-    for simCtr = 1:nSims
+    parfor simCtr = 1:nSims
         filenames = {[simulations{simCtr}]};
         speedFig = figure; hold on
         dircorrFig = figure; hold on
@@ -37,22 +37,22 @@ for nodesCtr = 1:length(trackedNodesList)
         numFiles = length(filenames);
         for fileCtr = 1:numFiles
             filename = ['../results/' filenames{fileCtr} '.mat'];
-            load(filename);
-            maxNumFrames = size(xyarray,4);
+            this = load(filename);
+            maxNumFrames = size(this.xyarray,4);
             burnIn = round(0.1*maxNumFrames);
-            numFrames = maxNumFrames-burnIn; %round(maxNumFrames*dT/saveevery/5);
+            numFrames = maxNumFrames-burnIn; %round(maxNumFrames*this.dT/this.saveevery/5);
             framesAnalyzed = burnIn + randperm(maxNumFrames - burnIn,numFrames); % randomly sample frames without replacement
             
             %% calculate stats
-            x = squeeze(mean(xyarray(:,trackedNodes,1,:),2)); % centroid of worm head
-            y = squeeze(mean(xyarray(:,trackedNodes,2,:),2)); % centroid of worm head
-            u = gradient(x,dT*saveevery);
-            v = gradient(y,dT*saveevery);
+            x = squeeze(mean(this.xyarray(:,trackedNodes,1,:),2)); % centroid of worm head
+            y = squeeze(mean(this.xyarray(:,trackedNodes,2,:),2)); % centroid of worm head
+            u = gradient(x,this.dT*this.saveevery);
+            v = gradient(y,this.dT*this.saveevery);
             speed = sqrt(u(:,framesAnalyzed).^2 + v(:,framesAnalyzed).^2);
-            N = size(x,1);
+            N = this.N;
             pairdist = NaN(N*(N-1)/2,numFrames);
             dxcorr = NaN(size(pairdist));
-            distBins = 0:distBinwidth:L;
+            distBins = 0:distBinwidth:this.L;
             gr = NaN(length(distBins) - 1,numFrames);
             mindist = NaN(N,numFrames);
             for frameCtr = 1:numFrames
@@ -60,7 +60,7 @@ for nodesCtr = 1:length(trackedNodesList)
                 dxcorr(:,frameCtr) = vectorCrossCorrelation2D(u(:,frame),v(:,frame),true); % directional correlation
                 pairdist(:,frameCtr) = pdist([x(:,frame) y(:,frame)]); % distance between all pairs, in micrometer
                 gr(:,frameCtr) = histcounts(pairdist(:,frameCtr),distBins,'Normalization','count'); % radial distribution function
-                gr(:,frameCtr) = gr(:,frameCtr)'.*L^2./(2*distBins(2:end)*distBinwidth)...
+                gr(:,frameCtr) = gr(:,frameCtr)'.*this.L^2./(2*distBins(2:end)*distBinwidth)...
                     /N/(N-1); % normalisation
                 D = squareform(pairdist(:,frameCtr)); % distance of every worm to every other
                 mindist(:,frameCtr) = min(D + max(max(D))*eye(size(D)));
@@ -87,32 +87,27 @@ for nodesCtr = 1:length(trackedNodesList)
             set(figHandle,'PaperUnits','centimeters')
         end
         %
-%         speedFig.Children.YLim = [0 0.4];
         speedFig.Children.XLim = [0 2];
-%         speedFig.Color = 'none';
         ylabel(speedFig.Children,'speed (mm/s)')
         xlabel(speedFig.Children,'distance to nearest neighbour (mm)')
-        figurename = [simulations{simCtr} '_' trackedNodesNames{nodesCtr} '_speedvsneighbourdistance'];
+        figurename = ['speedvsneighbourdistance_' simulations{simCtr} '_' trackedNodesNames{nodesCtr}];
         exportfig(speedFig,[figurename '.eps'],exportOptions)
         system(['epstopdf ' figurename '.eps']);
         system(['rm ' figurename '.eps']);
         %
-%         dircorrFig.Children.YLim = [-1 1];
-        dircorrFig.Children.XLim = [0 2];
-%         dircorrFig.Color = 'none';
+        dircorrFig.Children.YLim = [-1 1];
+        dircorrFig.Children.XLim = [0 1];
         ylabel(dircorrFig.Children,'directional cross-correlation')
         xlabel(dircorrFig.Children,'distance between pair (mm)')
-        figurename = [simulations{simCtr} '_' trackedNodesNames{nodesCtr} '_dircrosscorr'];
+        figurename = ['dircrosscorr' simulations{simCtr} '_' trackedNodesNames{nodesCtr}];
         exportfig(dircorrFig,[figurename '.eps'],exportOptions)
         system(['epstopdf ' figurename '.eps']);
         system(['rm ' figurename '.eps']);
         %
-%         poscorrFig.Children.YLim = [0 7];
         poscorrFig.Children.XLim = [0 2];
-%         poscorrFig.Color = 'none';
         ylabel(poscorrFig.Children,'radial distribution function g(r)')
         xlabel(poscorrFig.Children,'distance r (mm)')
-        figurename = [simulations{simCtr} '_' trackedNodesNames{nodesCtr} '_radialdistributionfunction'];
+        figurename = ['radialdistributionfunction_' simulations{simCtr} '_' trackedNodesNames{nodesCtr}];
         exportfig(poscorrFig,[figurename '.eps'],exportOptions)
         system(['epstopdf ' figurename '.eps']);
         system(['rm ' figurename '.eps']);
