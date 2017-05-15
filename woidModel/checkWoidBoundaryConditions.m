@@ -1,4 +1,4 @@
-function [ xyarray, theta ] = checkWoidBoundaryConditions(xyarray, theta, bc, L)
+function [ xyarray, headings ] = checkWoidBoundaryConditions(xyarray, headings, bc, L)
 % check boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can
 %   be single number or 2 element array {'bcx','bcy'} for different
 %   bcs along different dimensions
@@ -41,8 +41,8 @@ if iscell(bc)&&numel(bc)==ndim
                     xyarray(nodeIndsOverL)  = 2*L - xyarray(nodeIndsOverL);
                 end
                 % change direction of movement upon reflection
-                theta(union(nodeIndsUnder0,nodeIndsOverL) - N*M*(dimCtr - 1)) = ... % ugly use of indexing
-                    reflectDirection2D(theta(union(nodeIndsUnder0,nodeIndsOverL) - N*M*(dimCtr - 1)),dimCtr);
+                headings(union(nodeIndsUnder0,nodeIndsOverL) - N*M*(dimCtr - 1)) = ... % ugly use of indexing
+                    reflectDirection2D(headings(union(nodeIndsUnder0,nodeIndsOverL) - N*M*(dimCtr - 1)),dimCtr);
         end
     end
 else
@@ -71,8 +71,8 @@ else
                     end
                     if any(nodeIndsUnder0)||any(nodeIndsOverL)
                         % change direction of movement upon reflection
-                        theta(union(nodeIndsUnder0,nodeIndsOverL) - N*M*(dimCtr - 1)) = ... % ugly use of indexing
-                            reflectDirection2D(theta(union(nodeIndsUnder0,nodeIndsOverL) - N*M*(dimCtr - 1)),dimCtr);
+                        headings(union(nodeIndsUnder0,nodeIndsOverL) - N*M*(dimCtr - 1)) = ... % ugly use of indexing
+                            reflectDirection2D(headings(union(nodeIndsUnder0,nodeIndsOverL) - N*M*(dimCtr - 1)),dimCtr);
                     end
                 end
             else % scalar domain size --> circular domain boundary
@@ -85,8 +85,8 @@ else
                     xyarray(nodeIndsOverL)  = (2*L - radii).*cos(angles);
                     xyarray(nodeIndsOverL + N*M)  = (2*L - radii).*sin(angles);
 %                     % change direction of movement upon reflection
-%                     theta(nodeIndsOverL) = ...
-%                         alignWithBoundaryCircular(theta(nodeIndsOverL),...
+%                     headings(nodeIndsOverL) = ...
+%                         alignWithBoundaryCircular(headings(nodeIndsOverL),...
 %                         angles);
                 end
             end

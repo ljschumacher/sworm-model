@@ -1,4 +1,4 @@
-function [xyOut, thetaOut] = applyForces(arrayPrev,forceArray,dT,theta,bc,L)
+function [xyOut, headingsOut] = applyForces(arrayPrev,forceArray,dT,headings,bc,L)
 % update positions based on current directions, respecting boundary
 % conditions
 
@@ -29,6 +29,6 @@ assert(~any(abs(arrayPrev(:) - arrayNow(:))>4*max(v(:))*dT),...
     'Uh-oh, something has gone wrong... (large displacements)')
 
 % correct heading (e.g. if movement has been constrained)
-theta = correctHeading(forceArray,theta,bc,L);
+headings = correctHeading(forceArray,headings,bc,L);
     
-[xyOut, thetaOut] = checkWoidBoundaryConditions(arrayNow,theta,bc,L);
+[xyOut, headingsOut] = checkWoidBoundaryConditions(arrayNow,headings,bc,L);

@@ -1,8 +1,8 @@
-function [thetaNow, phaseOffset] = updateWoidOscillators(thetaPrev, theta_0, ...
+function [headingsNow, phaseOffset] = updateWoidOscillators(headingsPrev, theta_0, ...
     omega, dT, phaseOffset, deltaPhase, reversals)
 % updates the internal osciallators of woids
 % INPUTS:
-% thetaPrev - N by M matrix of internal oscillators at previous time step
+% headingsPrev - N by M matrix of internal oscillators at previous time step
 % theta_0 - amplitude of oscillations
 % omega_m - scalar or N by 1 vector of angular velocities
 % t - scalar time point
@@ -12,8 +12,8 @@ function [thetaNow, phaseOffset] = updateWoidOscillators(thetaPrev, theta_0, ...
 % issues/to-do
 % - phase reset might be better done based on shape, rather than heading
 
-M = size(thetaPrev,2);
-N = size(thetaPrev,1);
+M = size(headingsPrev,2);
+N = size(headingsPrev,1);
 movState = 1 - 2*reversals(:,end); % =-1 if worm is reversing, 1 if not
 omegaSigned = (omega.*movState)*ones(1,M); % signed angular velocities for each worm and its nodes
 reversalChanges = diff(reversals,1,2);
@@ -21,7 +21,7 @@ if M>2
     % if a reversal starts or ends, reset the phase based on current slope of
     % shape at head
     if any(reversalChanges ~=0)
-        thetaNormalised = unwrap(thetaPrev,[],2) - mean(unwrap(thetaPrev,[],2),2); % subtract overall orientation
+        thetaNormalised = unwrap(headingsPrev,[],2) - mean(unwrap(headingsPrev,[],2),2); % subtract overall orientation
         dThetads = gradient(thetaNormalised,-1); % implicitly using |ds| = 1
         dThetadsNormalised = dThetads - mean(dThetads,2); % center on 0
         dThetadsNormalised = dThetadsNormalised./max(abs(dThetadsNormalised),[],2); % normalise range
@@ -39,7 +39,7 @@ if M>2
 end
 % 2nd order Runge-Kutta method with step-size h=1 (using gradient at
 % midpoint to update)
-thetaNow = wrapToPi(thetaPrev + theta_0*omegaSigned*dT.*cos(omegaSigned*1/2 + phaseOffset)...
+headingsNow = wrapToPi(headingsPrev + theta_0*omegaSigned*dT.*cos(omegaSigned*1/2 + phaseOffset)...
     + pi*reversalChanges); % 180 degree turn when reversal starts or ends
 phaseOffset = wrapTo2Pi(phaseOffset + omegaSigned*dT); % update internal oscillator time
 

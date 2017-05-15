@@ -1,4 +1,4 @@
-function thetaCorrected = correctHeading(forcearray,theta,bc,L)
+function headingsCorrected = correctHeading(forcearray,headings,bc,L)
 % corrects the heading of the worm based on how the worm actually moved
 % if the actual displacement was in the same direction as the previous
 % heading, the heading is not corrected
@@ -22,9 +22,9 @@ function thetaCorrected = correctHeading(forcearray,theta,bc,L)
 %         actualDisplacement(underIndcs) = actualDisplacement(underIndcs) + L(dimCtr);
 %     end
 % end
-% targetDisplacement = v.*cat(3,cos(theta),sin(theta));
+% targetDisplacement = v.*cat(3,cos(headings),sin(headings));
 % combined = actualDisplacement;% + targetDisplacement;
-% thetaCorrected = atan2(combined(:,:,2),combined(:,:,1));
-thetaCorrected = atan2(forcearray(:,:,2),forcearray(:,:,1));
+% headingsCorrected = atan2(combined(:,:,2),combined(:,:,1));
+headingsCorrected = atan2(forcearray(:,:,2),forcearray(:,:,1));
 end
 

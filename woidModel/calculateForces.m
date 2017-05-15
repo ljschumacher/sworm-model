@@ -1,5 +1,5 @@
 function forceArray = calculateForces(distanceMatrixXY,distanceMatrix,rc,...
-    theta,reversals,segmentLength,v_target,k_l,k_theta,phaseOffset,sigma_LJ,r_LJcutoff, eps_LJ)
+    headings,reversals,segmentLength,v_target,k_l,k_theta,phaseOffset,sigma_LJ,r_LJcutoff, eps_LJ)
 % updates object directions according to update rules
 
 % issues/to-do's:
@@ -55,7 +55,7 @@ for objCtr = 1:N
     end
     
     % head motile force
-    headAngle = theta(objCtr,headInd);
+    headAngle = headings(objCtr,headInd);
     
     Fm(headInd,:) = [cos(headAngle), sin(headAngle)];
     % body motile force

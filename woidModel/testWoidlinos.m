@@ -35,7 +35,7 @@ param.ri = 3*rc;% ri: radius at which worms register contact (default 3 rc)
 param.vs = param.v0;% vs: speed when slowed down (default v0/3)
 param.slowingNodes = [];% slowingNodes: which nodes register contact (default [1 M], ie head and tail)
 % -- Lennard-Jones parameters --
-param.r_LJcutoff = 0;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
+param.r_LJcutoff = param.ri;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
 
 N = 20;

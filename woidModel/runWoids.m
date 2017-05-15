@@ -38,8 +38,8 @@
 % eps_LJ: strength of LJ-potential
 %
 % OUTPUTS
-% xyphiarray: Array containing the position, and movement direction for
-% every object and time-point. Format is N by M by [x,y,phi] by T.
+% xyarray: Array containing the position, and movement direction for
+% every object and time-point. Format is N by M by [x,y] by T.
 
 % issues/to-do's:
 % - is there a more efficient way of storing the coords than 4-d array?

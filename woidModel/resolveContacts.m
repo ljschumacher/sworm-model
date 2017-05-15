@@ -23,9 +23,9 @@ if nargin < 8
         r_LJcutoff = 0;
     end
 end
-attractionNbrs = distanceMatrix<=r_LJcutoff;
-attractionNbrs(collisionNbrs) = false;
-attractionNbrs(objInd,:) = false;
+lennardjonesNbrs = distanceMatrix<=r_LJcutoff;
+lennardjonesNbrs(collisionNbrs) = false;
+lennardjonesNbrs(objInd,:) = false;
 % contact forces
 if any(collisionNbrs(:))
     % find unit vectors pointing from neighbours to node
@@ -41,11 +41,11 @@ else
     F_contact = [0; 0];
 end
 % adhesion forces
-if any(attractionNbrs(:))&&N>1
-    e_nN = [distanceMatrixFull(attractionNbrs(:)) distanceMatrixFull(find(attractionNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
-        ./distanceMatrix(attractionNbrs(:)); % normalise for distance
-    f_LJ = 48*eps_LJ./distanceMatrix(attractionNbrs(:)).*((sigma_LJ./distanceMatrix(attractionNbrs(:))).^12 ...
-        - 1/2*(sigma_LJ./distanceMatrix(attractionNbrs(:))).^6);
+if any(lennardjonesNbrs(:))&&N>1
+    e_nN = [distanceMatrixFull(lennardjonesNbrs(:)) distanceMatrixFull(find(lennardjonesNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
+        ./distanceMatrix(lennardjonesNbrs(:)); % normalise for distance
+    f_LJ = 48*eps_LJ./distanceMatrix(lennardjonesNbrs(:)).*((sigma_LJ./distanceMatrix(lennardjonesNbrs(:))).^12 ...
+        - 1/2*(sigma_LJ./distanceMatrix(lennardjonesNbrs(:))).^6);
     F_LJ = sum(f_LJ.*e_nN,1); % adhesion force, summed over neighbours
     if ~any(collisionNbrs(:))
         F_contact = F_contact + F_LJ';
