@@ -37,8 +37,7 @@ for frameCtr=1:nFrames
         % don't plot connecting lines for objects that span across a
         % periodic boundary
         excludedObjects = any(any(abs(diff(xyarray(:,:,:,frameCtr),1,2))>min(L./2),3),2);
-        plot(xyarray(~excludedObjects,:,x,frameCtr)',xyarray(~excludedObjects,:,y,frameCtr)','-',...
-            'Marker','.','Color','k');
+        plot(xyarray(~excludedObjects,:,x,frameCtr)',xyarray(~excludedObjects,:,y,frameCtr)','k-');
     else
         plot(xyarray(:,:,x,frameCtr)',xyarray(:,:,y,frameCtr)','.','Color','k');
     end

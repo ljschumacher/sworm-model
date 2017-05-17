@@ -1,5 +1,5 @@
 function forceArray = calculateForces(distanceMatrixXY,distanceMatrix,rc,...
-    headings,reversals,segmentLength,v_target,k_l,k_theta,phaseOffset,sigma_LJ,r_LJcutoff, eps_LJ)
+    headings,reversals,segmentLength,v_target,k_l,k_theta,theta_0,phaseOffset,sigma_LJ,r_LJcutoff, eps_LJ)
 % updates object directions according to update rules
 
 % issues/to-do's:
@@ -41,10 +41,12 @@ for objCtr = 1:N
         for nodeCtr = 2:M
             ds(nodeCtr,:) = distanceMatrixXY(objCtr,nodeCtr,[x y],objCtr,nodeCtr-1);
         end
-        % before estimating tangents, calculate polar unit vectors
+        % before estimating tangent vectors, calculate polar unit vectors and
+        % bending angles
         phi = atan2(ds(2:M,y),ds(2:M,x));
         e_phi = [-sin(phi) cos(phi)]; % unit vector in direction of phi, size M-1 by 2
         l = sqrt(sum(ds(2:M,:).^2,2)); % length between node and prev node, length M-1
+        bendingAngles = unwrap(atan2(ds(:,y),ds(:,x)));
         % body tangents: estimate tangent direction by average of directions towards previous node and from next node
         ds(2:M-1,:) = (ds(2:M-1,:) + ds(3:M,:))/2;
         % (tail tangent: towards previous node)
@@ -74,12 +76,17 @@ for objCtr = 1:N
     
     % bending constraints - rotational springs with changing rest angle due to active undulations
     if k_theta(objCtr)>0&&M>2
-        bodyAngles = unwrap(atan2(ds(:,y),ds(:,x)));
-        dK = (gradient(bodyAngles) - gradient(sin(phaseOffset(objCtr,:))'));
+        if theta_0>0
+            dK = (diff(bendingAngles) - diff(sin(phaseOffset(objCtr,:))'));
+            torques = k_theta(objCtr).*dK./(1 - dK.^2/pi^2);
+            torques = torques(2:end); % no rotational springs at head and tail node
+        else
+            dK = diff(bendingAngles);
+            torques = k_theta(objCtr).*dK./(1 - dK.^2/pi^2);
+            torques = torques(2:end); % no rotational springs at head and tail node
+        end
         %         %     % uncomment for debugging...
         %     plot(gradient(bodyAngles)), hold on, plot(gradient(sin(phaseOffset(objCtr,:))'))
-        torques = k_theta(objCtr).*dK;%./(1 - dK.^2/pi^2);
-        torques = torques(2:end-1); % no rotational springs at head and tail node
         
         momentsfwd = torques.*l(1:end-1).*e_phi(1:end-1,:);
         momentsbwd = torques.*l(2:end).*e_phi(2:end,:);

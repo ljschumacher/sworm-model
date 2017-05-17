@@ -10,8 +10,8 @@ close all
 % general model parameters for all test - unless set otherwise
 N = 40;
 M = 49;
-dT = 0.025; % baseline timestep, eg rc/v0/4
-saveevery = 4;
+dT = 0.035/0.33/8; % baseline timestep, eg rc/v0/8 when bending
+saveevery = 8;
 
 % single worm
 L = 2;
@@ -38,7 +38,10 @@ xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,...
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_noflux_undulations0',L);
 
 xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'v0',1e-4,'vs',1e-4,'omega_m',0,'revRate',0);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_targetcurvatureTest',L,0.01);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_targetcurvatureTest',L,0);
+
+xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'v0',1e-4,'vs',1e-4,'theta_0',0,'omega_m',0,'deltaPhase',0,'revRate',0);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_straighteningTest',L,0);
 
 % two worms
 xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT);
