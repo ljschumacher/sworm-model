@@ -36,8 +36,8 @@ for frameCtr=1:nFrames
     if M>1% plot connecting lines btw nodes
         % don't plot connecting lines for objects that span across a
         % periodic boundary
-            excludedObjects = any(any(abs(diff(xyarray(:,:,:,frameCtr),1,2))>min(L./2),3),2);
-            plot(xyarray(~excludedObjects,:,x,frameCtr)',xyarray(~excludedObjects,:,y,frameCtr)','-',...
+        excludedObjects = any(any(abs(diff(xyarray(:,:,:,frameCtr),1,2))>min(L./2),3),2);
+        plot(xyarray(~excludedObjects,:,x,frameCtr)',xyarray(~excludedObjects,:,y,frameCtr)','-',...
             'Marker','.','Color','k');
     else
         plot(xyarray(:,:,x,frameCtr)',xyarray(:,:,y,frameCtr)','.','Color','k');
@@ -60,14 +60,16 @@ for frameCtr=1:nFrames
     ax.DataAspectRatio = [1 1 1];
     ax.XTick = [];
     ax.YTick = [];
-    for objCtr = 1:N
-        patch(xyarray(objCtr,:,x,frameCtr) + rc*cos(angles),...
-            xyarray(objCtr,:,y,frameCtr) + rc*sin(angles),...
-            plotColors(objCtr,:),'EdgeColor',plotColors(objCtr,:))
-        % patches seems to be faster than viscircles
-        %         viscircles(squeeze(xyarray(objCtr,:,[x y],frameCtr)),rc*ones(M,1),...
-        %             'Color',plotColors(objCtr,:),'EnhanceVisibility',false,...
-        %             'LineWidth',1);
+    if rc>0
+        for objCtr = 1:N
+            patch(xyarray(objCtr,:,x,frameCtr) + rc*cos(angles),...
+                xyarray(objCtr,:,y,frameCtr) + rc*sin(angles),...
+                plotColors(objCtr,:),'EdgeColor',plotColors(objCtr,:))
+            % patches seems to be faster than viscircles
+            %         viscircles(squeeze(xyarray(objCtr,:,[x y],frameCtr)),rc*ones(M,1),...
+            %             'Color',plotColors(objCtr,:),'EnhanceVisibility',false,...
+            %             'LineWidth',1);
+        end
     end
     writeVideo(vid,getframe)
     hold off

@@ -26,6 +26,7 @@
 % -- reversal parameters --
 % revRate: rate for poisson-distributed reversals (default 1/13s)
 % revRateCluster: rate for reversals when in a cluster (default 1/130s)
+% revRateClusterEdge: increased reversal rates, when worms are poking out of a cluster with their head or tail (default 1/13s no increase)
 % revTime: duration of reversal events (default 2s, rounded to integer number of time-steps)
 % headNodes: which nodes count as head for defining cluster status, default front 10%
 % tailNodes: which nodes count as tail for defining cluster status, default back 10%
@@ -70,6 +71,7 @@ addOptional(iP,'deltaPhase',0.24,@isnumeric) % for phase shift in undulations an
 % reversals
 addOptional(iP,'revRate',1/13,@isnumeric) % rate for poisson-distributed reversals, default 1/13s
 addOptional(iP,'revRateCluster',1/130,@isnumeric) % reduced reversal rates, when worms are in cluster
+addOptional(iP,'revRateClusterEdge',1/13,@isnumeric) % increased reversal rates, when worms are poking out of a cluster with their head or tail, default 1/13s (no increase)
 addOptional(iP,'revTime',2,@isnumeric) % duration of reversal events, default 2s (will be rounded to integer number of time-steps)
 addOptional(iP,'headNodes',1:max(round(M/10),1),checkInt) % which nodes count as head, default front 10%
 addOptional(iP,'tailNodes',(M-max(round(M/10),1)+1):M,checkInt) % which nodes count as tail, default back 10%
@@ -101,6 +103,7 @@ omega_m = iP.Results.omega_m;
 theta_0 = iP.Results.theta_0;
 revRate = iP.Results.revRate;
 revRateCluster = iP.Results.revRateCluster;
+revRateClusterEdge = iP.Results.revRateClusterEdge;
 revTime = round(iP.Results.revTime/dT0); % convert to unit of timesteps
 headNodes = iP.Results.headNodes;
 tailNodes = iP.Results.tailNodes;
@@ -144,7 +147,7 @@ while t<T
     % check if any worms are reversing due to contacts
     reversalLogIndPrev = reversalLogInd(:,timeCtr);
     reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
-        2*ri,headNodes,tailNodes,dT,revRate,revTime,revRateCluster);
+        2*ri,headNodes,tailNodes,dT,revRate,revTime,revRateCluster,revRateClusterEdge);
     % update internal oscillators / headings
     [orientations, phaseOffset] = updateWoidOscillators(orientations,theta_0,...
         omega,dT,phaseOffset,deltaPhase,[reversalLogIndPrev, reversalLogInd(:, timeCtr)]);
