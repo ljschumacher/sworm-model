@@ -23,7 +23,7 @@ nFrames = size(xyarray,4);
 N = size(xyarray,1);
 M = size(xyarray,2);
 plotColors = lines(N);
-angles = linspace(0,2*pi,10)'; % for plotting node size
+angles = linspace(0,2*pi,20)'; % for plotting node size
 
 % set overall axes limits
 xrange = minmax(reshape(xyarray(:,:,x,:),1,numel(xyarray(:,:,x,:))));
@@ -31,6 +31,7 @@ yrange = minmax(reshape(xyarray(:,:,y,:),1,numel(xyarray(:,:,y,:))));
 xrange = [floor(xrange(1)) ceil(xrange(2))];
 yrange = [floor(yrange(1)) ceil(yrange(2))];
 
+% calculate markerSize to plot (in points) from
 figure
 for frameCtr=1:nFrames
     if M>1% plot connecting lines btw nodes
@@ -38,7 +39,7 @@ for frameCtr=1:nFrames
         % periodic boundary
         excludedObjects = any(any(abs(diff(xyarray(:,:,:,frameCtr),1,2))>min(L./2),3),2);
         plot(xyarray(~excludedObjects,:,x,frameCtr)',xyarray(~excludedObjects,:,y,frameCtr)','k-');
-    else
+    elseif rc==0
         plot(xyarray(:,:,x,frameCtr)',xyarray(:,:,y,frameCtr)','.','Color','k');
     end
     hold on

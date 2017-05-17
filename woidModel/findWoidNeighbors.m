@@ -1,6 +1,6 @@
 function [ nbrLogInd ] = findWoidNeighbors(distanceMatrix,r,nodeIndcs)
 % computes which object have neighbors at r_ij<r
-% distance matrix should have the form N by M by N by M with scaler
+% distance matrix should have the form N by M by N by M with scalar
 % distance values
 if nargin<3
     nodeIndcs = 1:size(distanceMatrix,2);

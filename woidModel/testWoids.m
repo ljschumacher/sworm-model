@@ -16,7 +16,9 @@ saveevery = 8;
 % single worm
 L = 2;
 xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT);
+tic
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_noflux',L);
+toc
 % plot distribution of lengths to check length conservation
 histogram(squeeze(sum(sqrt(sum(diff(xyarray(:,:,1:2,:),1,2).^2,3)),2)),...
     'Normalization','Probability','EdgeColor','none')
@@ -69,6 +71,9 @@ animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_re
 xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'revRateCluster',1/13);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_revClusterUnreduced',L);
 
+xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'revRateClusterEdge',10/13);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_revClusterEdgeIncreased',L);
+
 xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'rc',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_rc0',L);
 
@@ -112,6 +117,9 @@ animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_rev
 
 xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'revRateCluster',1/13);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_revClusterUnreduced',L);
+
+xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'revRateClusterEdge',10/13);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/twoWorms_noflux_revClusterEdgeIncreased',L);
 
 xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'rc',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_noflux_rc0',L);
