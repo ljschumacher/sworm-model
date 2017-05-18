@@ -15,9 +15,9 @@ M = 2;
 radius = 0.35;
 plotColor = [0.5, 0.5, 0.5];
 
-revRates = [0, 0.1];
+revRates = [0, 0.1, 0.2];
 speeds = [0.1, 0.5, 1];
-attractionStrengths = [1e-5, 1e-4];
+attractionStrengths = [1e-5, 1e-4, 5e-4];
 for revRate = revRates
     phasePortraitFig = figure;
     plotCtr = 1;

@@ -38,21 +38,34 @@ param.slowingNodes = [];% slowingNodes: which nodes register contact (default [1
 param.r_LJcutoff = param.ri;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
 
-N = 20;
-xyarray = runWoids(T,N,M,L,param);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_noflux_circular',L,rc);
+% N = 20;
+% xyarray = runWoids(T,N,M,L,param);
+% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_noflux_circular',L,rc);
 
 L = [20, 20];
 N = 100;
-xyarray = runWoids(T,N,M,L,param);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_noflux_square',L,rc);
+% xyarray = runWoids(T,N,M,L,param);
+% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_noflux_square',L,rc);
 
 param.bc = 'periodic';
-xyarray = runWoids(T,N,M,L,param);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square',L,rc);
+% xyarray = runWoids(T,N,M,L,param);
+% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square',L,rc);
 
-param.revRate = 0.1;
-param.revTime = 10;
-N = 1;
+param.r_LJcutoff = 2*rc;
+param.eps_LJ = 1e-2;
+param.sigma_LJ = 2*rc;
+rng(1)
 xyarray = runWoids(T,N,M,L,param);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_reversals',L,rc);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_repulsionOnly',L,rc);
+
+% param.r_LJcutoff = rc;
+% param.rc = rc;
+% rng(1)
+% xyarray = runWoids(T,N,M,L,param);
+% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_contactForces',L,rc);
+
+% param.revRate = 0.1;
+% param.revTime = 10;
+% N = 1;
+% xyarray = runWoids(T,N,M,L,param);
+% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_reversals',L,rc);

@@ -6,8 +6,8 @@ clear
 N = 40;
 M = 49;
 L = 8.5/2;
-dT = 0.025; % baseline timestep, eg rc/v0/4
-saveevery = 4;
+dT = 0.035/0.33/8; % baseline timestep, eg rc/v0/8 when bending
+saveevery = 8;
 T = 400;
 
 xyarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
