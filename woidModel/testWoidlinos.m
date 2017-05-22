@@ -16,8 +16,8 @@ param.segmentLength = 2*rc;
 param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
 T = 50; % T: simulation duration (number of time-steps)
 saveevery = round(1/2/param.dT);
-param.bc = 'noflux'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 param.k_l = 1/param.segmentLength; % stiffness of linear springs connecting nodes
+param.bc = 'noflux'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 % undulations
 param.k_theta = 0; % stiffness of rotational springs at nodes
 param.omega_m = 0; % angular frequency of oscillation of movement direction, default 0.6 Hz

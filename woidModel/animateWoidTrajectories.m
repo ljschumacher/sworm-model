@@ -39,18 +39,21 @@ for frameCtr=1:nFrames
         % periodic boundary
         excludedObjects = any(any(abs(diff(xyarray(:,:,:,frameCtr),1,2))>min(L./2),3),2);
         plot(xyarray(~excludedObjects,:,x,frameCtr)',xyarray(~excludedObjects,:,y,frameCtr)','k-');
+        if any(~excludedObjects), hold on, end
     elseif rc==0
         plot(xyarray(:,:,x,frameCtr)',xyarray(:,:,y,frameCtr)','.','Color','k');
+        hold on
     end
-    hold on
     if N==1 % plot tracks for single worm
         plot(squeeze(xyarray(:,:,x,1:frameCtr)),squeeze(xyarray(:,:,y,1:frameCtr)),'-',...
             'Color',[0.5 0.5 0.5]);
+        hold on
     end
     ax = gca;
     % plot circular domain boundaries, if given scalar domain size
     if nargin>=3&&numel(L)==1
         viscircles(ax,[0 0],L,'Color',[0.5 0.5 0.5],'LineWidth',2,'EnhanceVisibility',false);
+        hold on
         ax.XLim = [-L L];
         ax.YLim = [-L L];
     else
@@ -65,6 +68,9 @@ for frameCtr=1:nFrames
             patch(xyarray(objCtr,:,x,frameCtr) + rc*cos(angles),...
                 xyarray(objCtr,:,y,frameCtr) + rc*sin(angles),...
                 plotColors(objCtr,:),'EdgeColor',plotColors(objCtr,:))
+            if objCtr==1
+                hold on
+            end
             % patches seems to be faster than viscircles
             %         viscircles(squeeze(xyarray(objCtr,:,[x y],frameCtr)),rc*ones(M,1),...
             %             'Color',plotColors(objCtr,:),'EnhanceVisibility',false,...
