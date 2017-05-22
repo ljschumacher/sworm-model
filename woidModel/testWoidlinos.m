@@ -10,7 +10,7 @@ close all
 N = 100; % N: number of objects
 M = 2; % M: number of nodes in each object
 L = 10;%[20, 20]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
-param.v0 = 1; % v0: speed (default 0.05)
+param.v0 = 0.5; % v0: speed (default 0.05)
 rc = 0.35;
 param.rc = -1; % rc: core repulsion radius (default 0.07 mm)
 param.segmentLength = 2*rc;
