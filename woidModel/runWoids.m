@@ -125,6 +125,7 @@ assert(v0>=vs,'vs should be chosen smaller or equal to v0')
 theta = NaN(N,M,numTimepoints);
 % preallocate reversal states
 reversalLogInd = false(N,numTimepoints);
+reversalLogIndPrev = reversalLogInd(:,1);
 % random phase offset for each object plus phase shift for each node
 phaseOffset = wrapTo2Pi(rand(N,1)*2*pi - deltaPhase*(1:M));
 % initialise worm positions and node directions - respecting volume
@@ -145,7 +146,7 @@ while t<T
     % check if any woids are slowed down by neighbors
     [ v, omega ] = slowWorms(distanceMatrix,ri,slowingNodes,vs,v0,omega_m);
     % check if any worms are reversing due to contacts
-    reversalLogIndPrev = reversalLogInd(:,timeCtr);
+    reversalLogIndPrev(reversalLogInd(:,timeCtr)) = true; % only update events that happen between timeCtr updates, ie reversal starts
     reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
         ri,headNodes,tailNodes,dT,revRate,revTime,revRateCluster,revRateClusterEdge);
     % update internal oscillators / headings
@@ -166,6 +167,7 @@ while t<T
     t = t + dT;
     % output positions and orientations
     if t>=timeCtr*dT0
+        reversalLogIndPrev = reversalLogInd(:,timeCtr); % keep this so that we detect end of (fixed-duration) reversals
         timeCtr = timeCtr + 1;
         xyarray(:,:,:,timeCtr) = positions;
         theta(:,:,timeCtr) = orientations;
