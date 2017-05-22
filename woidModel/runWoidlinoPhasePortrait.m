@@ -15,10 +15,10 @@ L = [20, 20]; % L: size of region containing initial positions - scalar will giv
 rc = 0.35; % rc: core repulsion radius (default 0.07 mm)
 param.rc = 0; % rc: core repulsion radius (default 0.07 mm)
 param.segmentLength = 2*rc;
-% param.dT = param.rc/param.v0/4; % dT: time step, scales other parameters such as velocities and rates
+% param.dT = param.rc/param.v0/8; % dT: time step, scales other parameters such as velocities and rates
 % saveevery = round(1/2/param.dT);
 param.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
-param.k_l = 10; % stiffness of linear springs connecting nodes
+param.k_l = 1/param.segmentLength; % stiffness of linear springs connecting nodes
 % undulations
 param.k_theta = 0; % stiffness of rotational springs at nodes
 param.omega_m = 0; % angular frequency of oscillation of movement direction, default 0.6 Hz
@@ -44,14 +44,14 @@ for revRateClusterEdge = [0, 0.2, 0.4, 0.6, 0.8]
     param.revRateClusterEdge = revRateClusterEdge;
     for speed = [0.15, 0.3]
         param.v0 = speed;
-        param.dT = min(1/2,rc/param.v0/4); % dT: time step, scales other parameters such as velocities and rates
+        param.dT = min(1/2,rc/param.v0/8); % dT: time step, scales other parameters such as velocities and rates
         T = 1000; % T: simulation duration
         saveevery = round(1/2/param.dT);
         for attractionStrength = [1e-5, 1e-4]
             param.eps_LJ = attractionStrength;
             filename = ['wlM' num2str(M) '_v0_' num2str(param.v0,'%1.0e') '_epsLJ_'...
                 num2str(attractionStrength,'%1.0e')...
-                '_revRateClusterEdge_' num2str(param.revRate,'%1.0e') '_noContactForces'];
+                '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e') '_noContactForces'];
             if ~exist(['results/woidlinos/' filename '.mat'],'file')
                 xyarray = runWoids(T,N,M,L,param);
                 xyarray = xyarray(:,:,:,1:saveevery:end);

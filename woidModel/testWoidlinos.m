@@ -7,18 +7,17 @@ clear
 close all
 
 % general model parameters for all test - unless set otherwise
-N = 100; % N: number of objects
 M = 2; % M: number of nodes in each object
 L = 10;%[20, 20]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 param.v0 = 0.5; % v0: speed (default 0.05)
 rc = 0.35;
 param.rc = -1; % rc: core repulsion radius (default 0.07 mm)
 param.segmentLength = 2*rc;
-param.dT = rc/param.v0/4; % dT: time step, gets adapted in simulation
-T = 40; % T: simulation duration (number of time-steps)
+param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
+T = 50; % T: simulation duration (number of time-steps)
 saveevery = round(1/2/param.dT);
 param.bc = 'noflux'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
-param.k_l = 10; % stiffness of linear springs connecting nodes
+param.k_l = 1/param.segmentLength; % stiffness of linear springs connecting nodes
 % undulations
 param.k_theta = 0; % stiffness of rotational springs at nodes
 param.omega_m = 0; % angular frequency of oscillation of movement direction, default 0.6 Hz
@@ -38,44 +37,44 @@ param.slowingNodes = [];% slowingNodes: which nodes register contact (default [1
 param.r_LJcutoff = param.ri;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
 
-% N = 20;
-% xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_noflux_circular',L,rc);
+N = 20;
+xyarray = runWoids(T,N,M,L,param);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_noflux_circular',L,rc);
 
 L = [20, 20];
-N = 100;
-% xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_noflux_square',L,rc);
+N = 50;
+xyarray = runWoids(T,N,M,L,param);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_noflux_square',L,rc);
 
 param.bc = 'periodic';
-% xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square',L,rc);
+xyarray = runWoids(T,N,M,L,param);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square',L,rc);
 
-% param.r_LJcutoff = 2*rc;
-% param.eps_LJ = 1e-2;
-% param.sigma_LJ = 2*rc;
-% rng(1)
-% xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_repulsionOnly',L,rc);
-% param.eps_LJ = 0;
+param.r_LJcutoff = 2*rc;
+param.eps_LJ = 1e-2;
+param.sigma_LJ = 2*rc;
+rng(1)
+xyarray = runWoids(T,N,M,L,param);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_repulsionOnly',L,rc);
+param.eps_LJ = 0;
 
-% param.r_LJcutoff = rc;
-% param.rc = rc;
-% rng(1)
-% xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_contactForces',L,rc);
+param.r_LJcutoff = rc;
+param.rc = rc;
+rng(1)
+xyarray = runWoids(T,N,M,L,param);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_contactForces',L,rc);
 
-% param.revRate = 0.1;
-% param.revTime = 10;
-% N = 1;
-% xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_reversals',L,rc);
+param.revRate = 0.1;
+param.revTime = 10;
+N = 1;
+xyarray = runWoids(T,N,M,L,param);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_reversals',L,rc);
 
 param.revRate = 0;
 param.revRateClusterEdge = 1;
 param.revTime = 5;
 param.headNodes = 1;
 param.tailNodes = 2;
-N = 100;
+N = 50;
 xyarray = runWoids(T,N,M,L,param);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_reversalsClusterEdge',L,rc);

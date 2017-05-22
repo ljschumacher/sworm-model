@@ -71,6 +71,8 @@ for frameCtr=1:nFrames
             %             'LineWidth',1);
         end
     end
+    % plot heads
+    plot(xyarray(:,1,x,frameCtr)',xyarray(:,1,y,frameCtr)','.','Color','k');
     writeVideo(vid,getframe)
     hold off
 end

@@ -39,6 +39,9 @@ if M>2
 end
 % 2nd order Runge-Kutta method with step-size h=1 (using gradient at
 % midpoint to update)
+if any(reversalChanges ~=0)
+    1;
+end
 headingsNow = wrapToPi(headingsPrev + theta_0*omegaSigned*dT.*cos(omegaSigned*1/2 + phaseOffset)...
     + pi*reversalChanges); % 180 degree turn when reversal starts or ends
 phaseOffset = wrapTo2Pi(phaseOffset + omegaSigned*dT); % update internal oscillator time
