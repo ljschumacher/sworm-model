@@ -51,12 +51,13 @@ param.bc = 'periodic';
 % xyarray = runWoids(T,N,M,L,param);
 % animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square',L,rc);
 
-param.r_LJcutoff = 2*rc;
-param.eps_LJ = 1e-2;
-param.sigma_LJ = 2*rc;
-rng(1)
-xyarray = runWoids(T,N,M,L,param);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_repulsionOnly',L,rc);
+% param.r_LJcutoff = 2*rc;
+% param.eps_LJ = 1e-2;
+% param.sigma_LJ = 2*rc;
+% rng(1)
+% xyarray = runWoids(T,N,M,L,param);
+% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_repulsionOnly',L,rc);
+% param.eps_LJ = 0;
 
 % param.r_LJcutoff = rc;
 % param.rc = rc;
@@ -69,3 +70,12 @@ animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_per
 % N = 1;
 % xyarray = runWoids(T,N,M,L,param);
 % animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_reversals',L,rc);
+
+param.revRate = 0;
+param.revRateClusterEdge = 1;
+param.revTime = 5;
+param.headNodes = 1;
+param.tailNodes = 2;
+N = 100;
+xyarray = runWoids(T,N,M,L,param);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_reversalsClusterEdge',L,rc);

@@ -147,7 +147,7 @@ while t<T
     % check if any worms are reversing due to contacts
     reversalLogIndPrev = reversalLogInd(:,timeCtr);
     reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
-        2*ri,headNodes,tailNodes,dT,revRate,revTime,revRateCluster,revRateClusterEdge);
+        ri,headNodes,tailNodes,dT,revRate,revTime,revRateCluster,revRateClusterEdge);
     % update internal oscillators / headings
     [orientations, phaseOffset] = updateWoidOscillators(orientations,theta_0,...
         omega,dT,phaseOffset,deltaPhase,[reversalLogIndPrev, reversalLogInd(:, timeCtr)]);
