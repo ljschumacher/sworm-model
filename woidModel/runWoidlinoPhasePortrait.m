@@ -42,7 +42,7 @@ paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 paramAll.rc = 0; % turn off contact-forces
 revRatesClusterEdge = [0, 0.2, 0.4, 0.6, 0.8];
 speeds = [0.15, 0.3];
-attractionStrengths = [1e-3, 1e-5, 1e-4];
+attractionStrengths = [0, 1e-6, 1e-5, 1e-4, 1e-3];
 paramCombis = combvec(revRatesClusterEdge,speeds,attractionStrengths);
 nParamCombis = size(paramCombis,2);
 parfor paramCtr = 1:nParamCombis
@@ -61,7 +61,8 @@ parfor paramCtr = 1:nParamCombis
     if ~exist(['results/woidlinos/' filename '.mat'],'file')
         xyarray = runWoids(T,N,M,L,param);
         xyarray = xyarray(:,:,:,1:saveevery:end);
-        saveResults(['results/woidlinos/' filename],xyarray,saveevery,T,N,M,L,param)
+        saveResults(['results/woidlinos/' filename],...
+        struct('xyarray',xyarray,'saveevery',saveevery,'T',T,'N',N,'M',M,'L',L,'param',param))
 %         animateWoidTrajectories(xyarray,['tests/woidlinos/' filename],L,rc);
     end
 end
