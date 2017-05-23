@@ -15,7 +15,7 @@ L = [20, 20]; % L: size of region containing initial positions - scalar will giv
 rc = 0.35; % rc: core repulsion radius (default 0.07 mm)
 param.rc = 0; % rc: core repulsion radius (default 0.07 mm)
 param.segmentLength = 2*rc;
-% param.dT = param.rc/param.v0/8; % dT: time step, scales other parameters such as velocities and rates
+T = 1000; % T: simulation duration
 % saveevery = round(1/2/param.dT);
 param.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 param.k_l = 1/param.segmentLength; % stiffness of linear springs connecting nodes
@@ -40,24 +40,27 @@ param.r_LJcutoff = 5*rc;% r_LJcutoff: cut-off above which LJ-force is not acting
 param.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 
 param.rc = 0; % turn off contact-forces
-for revRateClusterEdge = [0, 0.2, 0.4, 0.6, 0.8]
+revRatesClusterEdge = [0, 0.2, 0.4, 0.6, 0.8];
+speeds = [0.15, 0.3];
+attractionStrengths = [1e-3, 1e-5, 1e-4];
+paramCombis = combvec(revRatesClusterEdge,speeds,attractionStrengths);
+nParamCombis = size(paramCombis,2);
+parfor paramCtr = 1:nParamCombis
+    revRateClusterEdge = paramCombis(1,paramCtr);
     param.revRateClusterEdge = revRateClusterEdge;
-    for speed = [0.15, 0.3]
-        param.v0 = speed;
-        param.dT = min(1/2,rc/param.v0/8); % dT: time step, scales other parameters such as velocities and rates
-        T = 1000; % T: simulation duration
-        saveevery = round(1/2/param.dT);
-        for attractionStrength = [1e-5, 1e-4]
-            param.eps_LJ = attractionStrength;
-            filename = ['wlM' num2str(M) '_v0_' num2str(param.v0,'%1.0e') '_epsLJ_'...
-                num2str(attractionStrength,'%1.0e')...
-                '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e') '_noContactForces'];
-            if ~exist(['results/woidlinos/' filename '.mat'],'file')
-                xyarray = runWoids(T,N,M,L,param);
-                xyarray = xyarray(:,:,:,1:saveevery:end);
-                save(['results/woidlinos/' filename])
-                animateWoidTrajectories(xyarray,['tests/woidlinos/' filename],L,rc);
-            end
-        end
+    speed = paramCombis(2,paramCtr);
+    param.v0 = speed;
+    param.dT = min(1/2,rc/param.v0/8); % dT: time step, scales other parameters such as velocities and rates
+    saveevery = round(1/2/param.dT);
+    attractionStrength = paramCombis(3,paramCtr);
+    param.eps_LJ = attractionStrength;
+    filename = ['wlM' num2str(M) '_v0_' num2str(param.v0,'%1.0e') '_epsLJ_'...
+        num2str(attractionStrength,'%1.0e')...
+        '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e') '_noContactForces'];
+    if ~exist(['results/woidlinos/' filename '.mat'],'file')
+        xyarray = runWoids(T,N,M,L,param);
+        xyarray = xyarray(:,:,:,1:saveevery:end);
+        saveResults(['results/woidlinos/' filename],xyarray,saveevery,T,N,M,L,param)
+%         animateWoidTrajectories(xyarray,['tests/woidlinos/' filename],L,rc);
     end
 end

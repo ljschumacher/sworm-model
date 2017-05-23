@@ -28,8 +28,8 @@ angles = linspace(0,2*pi,20)'; % for plotting node size
 % set overall axes limits
 xrange = minmax(reshape(xyarray(:,:,x,:),1,numel(xyarray(:,:,x,:))));
 yrange = minmax(reshape(xyarray(:,:,y,:),1,numel(xyarray(:,:,y,:))));
-xrange = [floor(xrange(1)) ceil(xrange(2))];
-yrange = [floor(yrange(1)) ceil(yrange(2))];
+% xrange = [floor(xrange(1)) ceil(xrange(2))];
+% yrange = [floor(yrange(1)) ceil(yrange(2))];
 
 % calculate markerSize to plot (in points) from
 figure

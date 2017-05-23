@@ -11,6 +11,7 @@ close all
 N = 40;
 M = 49;
 dT = 0.035/0.33/8; % baseline timestep, eg rc/v0/8 when bending
+% set this to  rc/v0/16 to get better reversal accuracy
 saveevery = 8;
 
 % single worm
@@ -33,7 +34,7 @@ animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_noflux_
 xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'revRate',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_noflux_revRate0',L);
 
-xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,...
+xyarray = runWoids(10,1,M,L,'bc','periodic','revRate',1,'dT',dT,...
     'theta_0',0,'omega_m',0,'deltaPhase',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_noflux_undulations0',L);
 
