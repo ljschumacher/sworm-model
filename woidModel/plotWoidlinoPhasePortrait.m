@@ -5,11 +5,11 @@ clear
 
 exportOptions = struct('Format','eps2',...
     'Color','rgb',...
-    'Width',14,...
+    'Width',17,...
     'Resolution',300,...
     'FontMode','fixed',...
-    'FontSize',9,...
-    'LineWidth',2);
+    'FontSize',6,...
+    'LineWidth',1);
 
 M = 2;
 radius = 0.35;
@@ -17,7 +17,7 @@ plotColor = [0.5, 0.5, 0.5];
 
 revRatesClusterEdge = [0, 0.2, 0.4, 0.6, 0.8];
 speeds = [0.15, 0.3];
-attractionStrengths = [1e-4, 1e-5];
+attractionStrengths = [1e-3, 1e-4, 1e-5, 1e-6,0];
 for speed = speeds
     phasePortraitFig = figure;
     plotCtr = 1;
@@ -34,7 +34,7 @@ for speed = speeds
                 ax = plotWoidTrajectoriesSingleFrame(positions2plot,L,radius,plotColor);
                 title(['r=' num2str(revRateClusterEdge) ', \epsilon =' num2str(attractionStrength,'%1.0e')],...
                     'FontWeight','normal')
-                ax.Position = ax.Position.*[1 1 1.23 1.23] - [0.05 0.05 0 0]; % stretch panel
+                ax.Position = ax.Position.*[1 1 1.2 1.2] - [0.0 0.0 0 0]; % stretch panel
                 ax.DataAspectRatio = [1 1 1];
             end
             plotCtr = plotCtr + 1;

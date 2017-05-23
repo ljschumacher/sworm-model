@@ -67,7 +67,7 @@ for frameCtr=1:nFrames
         for objCtr = 1:N
             patch(xyarray(objCtr,:,x,frameCtr) + rc*cos(angles),...
                 xyarray(objCtr,:,y,frameCtr) + rc*sin(angles),...
-                plotColors(objCtr,:),'EdgeColor',plotColors(objCtr,:))
+                plotColors(objCtr,:),'EdgeColor','none')
             if objCtr==1
                 hold on
             end
