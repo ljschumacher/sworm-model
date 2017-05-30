@@ -23,7 +23,7 @@ paramAll.r_LJcutoff = 5*rc;% r_LJcutoff: cut-off above which LJ-force is not act
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 
 revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];
-speeds = [0.14, 0.33];
+speeds = [0.33, 0.14];
 attractionStrengths = [0, 1e-5, 5e-5, 1e-4];
 paramCombis = combvec(revRatesClusterEdge,speeds,attractionStrengths);
 nParamCombis = size(paramCombis,2);
@@ -32,18 +32,19 @@ parfor paramCtr = 1:nParamCombis
     revRateClusterEdge = paramCombis(1,paramCtr);
     param.revRateClusterEdge = revRateClusterEdge;
     speed = paramCombis(2,paramCtr);
+    param.omega_m = 2*pi*0.6/0.33*speed;
     param.v0 = speed;
     param.dT = min(1/2,rc/param.v0/8); % dT: time step, scales other parameters such as velocities and rates
-    saveevery = round(1/2/param.dT);
+    saveevery = round(1/4/param.dT);
     attractionStrength = paramCombis(3,paramCtr);
     param.eps_LJ = attractionStrength;
-    filename = ['wlM' num2str(M) '_v0_' num2str(param.v0,'%1.0e') '_epsLJ_'...
+    filename = ['woids_v0_' num2str(param.v0,'%1.0e') '_epsLJ_'...
         num2str(attractionStrength,'%1.0e')...
-        '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e') '_noContactForces'];
-    if ~exist(['results/woidlinos/' filename '.mat'],'file')
+        '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')];
+    if ~exist(['results/woids/' filename '.mat'],'file')
         xyarray = runWoids(T,N,M,L,param);
         xyarray = xyarray(:,:,:,1:saveevery:end);
-        saveResults(['results/woidlinos/' filename],...
+        saveResults(['results/woids/' filename],...
         struct('xyarray',xyarray,'saveevery',saveevery,'T',T,'N',N,'M',M,'L',L,'param',param))
 %         animateWoidTrajectories(xyarray,['tests/woidlinos/' filename],L,rc);
     end
