@@ -23,7 +23,7 @@ paramAll.r_LJcutoff = 5*rc;% r_LJcutoff: cut-off above which LJ-force is not act
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 
 revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];
-speeds = [0.33, 0.14];
+speeds = [0.14, 0.33];
 attractionStrengths = [0, 1e-5, 5e-5, 1e-4];
 paramCombis = combvec(revRatesClusterEdge,speeds,attractionStrengths);
 nParamCombis = size(paramCombis,2);
