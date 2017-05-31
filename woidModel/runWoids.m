@@ -169,6 +169,7 @@ while t<T
     if t>=timeCtr*dT0
         reversalLogIndPrev = reversalLogInd(:,timeCtr); % keep this so that we detect end of (fixed-duration) reversals
         timeCtr = timeCtr + 1;
+        disp(['time = ' num2str(timeCtr) ' out of ' num2str(T)])
         xyarray(:,:,:,timeCtr) = positions;
         theta(:,:,timeCtr) = orientations;
     end
