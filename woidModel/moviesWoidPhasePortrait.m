@@ -7,9 +7,9 @@ close all
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 rc = 0.035;
 
-revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];
+revRatesClusterEdge = fliplr([0, 0.1, 0.2, 0.4, 0.8]);
 speeds = [0.33, 0.14];
-attractionStrengths = [0, 1e-5, 5e-5, 1e-4];
+attractionStrengths = fliplr([0, 1e-5, 5e-5, 1e-4]);
 paramCombis = combvec(revRatesClusterEdge,speeds,attractionStrengths);
 nParamCombis = size(paramCombis,2);
 for paramCtr = 1:nParamCombis % can be parfor
@@ -22,6 +22,8 @@ for paramCtr = 1:nParamCombis % can be parfor
     if exist(['results/woids/' filename '.mat'],'file')%...
 %             &&~exist(['movies/woids/' filename '.mp4'],'file')
         out = load(['results/woids/' filename '.mat']);
+        if out.saveevery<38&&speed==0.33
         animateWoidTrajectories(out.xyarray,['movies/woids/' filename],L,rc);
+        end
     end
 end

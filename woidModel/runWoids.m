@@ -70,7 +70,7 @@ addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement
 addOptional(iP,'deltaPhase',0.24,@isnumeric) % for phase shift in undulations and initial positions, default 0.11
 % reversals
 addOptional(iP,'revRate',1/13,@isnumeric) % rate for poisson-distributed reversals, default 1/13s
-addOptional(iP,'revRateCluster',1/130,@isnumeric) % reduced reversal rates, when worms are in cluster
+addOptional(iP,'revRateCluster',1/13,@isnumeric) % reduced reversal rates, when worms are in cluster
 addOptional(iP,'revRateClusterEdge',1/13,@isnumeric) % increased reversal rates, when worms are poking out of a cluster with their head or tail, default 1/13s (no increase)
 addOptional(iP,'revTime',2,@isnumeric) % duration of reversal events, default 2s (will be rounded to integer number of time-steps)
 addOptional(iP,'headNodes',1:max(round(M/10),1),checkInt) % which nodes count as head, default front 10%

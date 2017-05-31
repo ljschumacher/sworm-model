@@ -46,6 +46,5 @@ parfor paramCtr = 1:nParamCombis
         xyarray = xyarray(:,:,:,1:saveevery:end);
         saveResults(['results/woids/' filename],...
         struct('xyarray',xyarray,'saveevery',saveevery,'T',T,'N',N,'M',M,'L',L,'param',param))
-%         animateWoidTrajectories(xyarray,['tests/woidlinos/' filename],L,rc);
     end
 end

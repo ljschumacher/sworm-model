@@ -16,7 +16,7 @@ plotColor = [0.25, 0.25, 0.25];
 
 revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];
 speeds = [0.33, 0.14];
-attractionStrengths = [0, 1e-5, 5e-5, 1e-4];
+attractionStrengths = fliplr([0, 1e-5, 5e-5, 1e-4]);
 for speed = speeds
     phasePortraitFig = figure;
     plotCtr = 1;
@@ -30,7 +30,7 @@ for speed = speeds
                 load(filename)
                 positions2plot = xyarray(:,:,:,end);
                 subplot(length(attractionStrengths),length(revRatesClusterEdge),plotCtr)
-                ax = plotWoidTrajectoriesSingleFrame(positions2plot,L,radius);%,plotColor);
+                ax = plotWoidTrajectoriesSingleFrame(positions2plot,L,radius,plotColor);
                 title(['r=' num2str(revRateClusterEdge) ', \epsilon =' num2str(attractionStrength,'%1.0e')],...
                     'FontWeight','normal')
                 ax.Position = ax.Position.*[1 1 1.2 1.2] - [0.0 0.0 0 0]; % stretch panel
