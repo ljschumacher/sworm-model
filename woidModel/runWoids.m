@@ -159,6 +159,10 @@ while t<T
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % adapt time-step such that it scales inversily with the max force
     dT = adaptTimeStep(dT0,v0,forceArray);
+    if dT<=eps(t)
+       warning(['Minimum time-step of ' num2str(eps(t)) ' reached at time ' num2str(t)])
+       dT = eps(t);
+    end
     % update position (with boundary conditions)
     [positions, orientations] = applyForces(positions,forceArray,...
         dT,orientations,bc,L);
