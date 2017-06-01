@@ -159,9 +159,9 @@ while t<T
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % adapt time-step such that it scales inversily with the max force
     dT = adaptTimeStep(dT0,v0,forceArray);
-    if dT<=eps(t)
-       warning(['Minimum time-step of ' num2str(eps(t)) ' reached at time ' num2str(t)])
-       dT = eps(t);
+    if dT<=eps(t)*100
+       warning(['Minimum time-step of ' num2str(eps(t)*100) ' reached at time ' num2str(t)])
+       dT = eps(t)*100;
     end
     % update position (with boundary conditions)
     [positions, orientations] = applyForces(positions,forceArray,...
@@ -173,7 +173,7 @@ while t<T
     if t>=timeCtr*dT0
         reversalLogIndPrev = reversalLogInd(:,timeCtr); % keep this so that we detect end of (fixed-duration) reversals
         timeCtr = timeCtr + 1;
-        disp(['time = ' num2str(timeCtr) ' out of ' num2str(T)])
+        disp(['time = ' num2str(t) ' out of ' num2str(T)])
         xyarray(:,:,:,timeCtr) = positions;
         theta(:,:,timeCtr) = orientations;
     end
