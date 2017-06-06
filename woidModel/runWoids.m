@@ -90,6 +90,7 @@ dT = dT0; % set initial time-step (will be adapted during simulation)
 displayOutputEvery = round(1/dT0);
 numTimepoints = floor(T/dT0);
 v0 = iP.Results.v0;
+dTmin = dT0/10/N*v0; % set a mininum timestep below which dT won't be adapted
 rc = iP.Results.rc;
 bc = iP.Results.bc;
 if M>1
@@ -160,9 +161,9 @@ while t<T
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % adapt time-step such that it scales inversily with the max force
     dT = adaptTimeStep(dT0,v0,forceArray);
-    if dT<=dT0*1e-6
-       warning(['Minimum time-step of ' num2str(dT0*1e-6) ' reached at time ' num2str(t)])
-       dT = dT0*1e-6;
+    if dT<=dTmin
+       warning(['Minimum time-step of ' num2str(dTmin) ' reached at time ' num2str(t)])
+       dT = dTmin;
     end
     % update position (with boundary conditions)
     [positions, orientations] = applyForces(positions,forceArray,...

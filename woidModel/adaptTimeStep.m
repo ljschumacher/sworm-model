@@ -4,7 +4,10 @@ function [ dT ] = adaptTimeStep( dT0,v0,forceArray )
 %   v0 is target speed, and magnitude of motile forces, so that dT = dT0 if
 %       motile forces are acting with intended magnitude
 
-dT = dT0*v0/max(max(sqrt(sum(forceArray.^2,3))));
+Fmax = max(max(sqrt(sum(forceArray.^2,3))));
+if Fmax~=0&&v0>0
+    dT = dT0*v0/Fmax;
+end
 
 end
 

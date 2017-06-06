@@ -6,9 +6,15 @@ function [ v, omega ] = slowWorms(distanceMatrix,ri,slowingNodes,vs,v0,omega_m)
 
 % slow worms proportional to how many nodes are in contact with other nodes
 m_nbr_max = numel(slowingNodes);
-m_nbr = countWoidNeighbors(distanceMatrix,ri,slowingNodes); % number of nodes in contact with neighbours
-v = v0*(1 - m_nbr/m_nbr_max) + vs*(m_nbr/m_nbr_max);
-assert(~any(v>v0))
-omega = omega_m*v/v0; % adjust internal oscillator freq for slowed worms
+if m_nbr_max > 0
+    m_nbr = countWoidNeighbors(distanceMatrix,ri,slowingNodes); % number of nodes in contact with neighbours
+    v = v0*(1 - m_nbr/m_nbr_max) + vs*(m_nbr/m_nbr_max);
+    assert(~any(v>v0))
+    omega = omega_m*v/v0; % adjust internal oscillator freq for slowed worms
+else
+    N = size(distanceMatrix,1);
+    v = v0*ones(N,1);
+    omega = omega_m;
+end
 end
 
