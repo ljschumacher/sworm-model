@@ -39,12 +39,18 @@ parfor paramCtr = 1:nParamCombis
     saveevery = round(1/4/param.dT);
     param.vs = paramCombis(3,paramCtr);
     attractionStrength = paramCombis(4,paramCtr);
+    if attractionStrength>0
+        param.r_LJcutoff = 5*rc;
+    else
+        param.r_LJcutoff = -1; % don't need to compute attraction if it's zero
+    end
     param.eps_LJ = attractionStrength;
     filename = ['woids_v0_' num2str(param.v0,'%1.0e') ...
         '_vs_' num2str(param.vs,'%1.0e') ...
         '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
         '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')];
     if ~exist(['results/woids/' filename '.mat'],'file')
+        rng(1) % set random seed to be the same for each simulation
         xyarray = runWoids(T,N,M,L,param);
         xyarray = xyarray(:,:,:,1:saveevery:end);
         saveResults(['results/woids/' filename],...

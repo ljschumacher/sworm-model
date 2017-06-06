@@ -2,7 +2,7 @@
 % LJ Schumacher November 2016
 %
 % INPUTS
-% T: simulation duration (number of time-steps)
+% T: simulation duration (in seconds)
 % N: number of objects
 % M: number of nodes in each object
 % L: size of region containing initial positions - scalar will give circle
@@ -159,9 +159,9 @@ while t<T
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % adapt time-step such that it scales inversily with the max force
     dT = adaptTimeStep(dT0,v0,forceArray);
-    if dT<=eps(t)*100
-       warning(['Minimum time-step of ' num2str(eps(t)*100) ' reached at time ' num2str(t)])
-       dT = eps(t)*100;
+    if dT<=dT0*1e-6
+       warning(['Minimum time-step of ' num2str(dT0*1e-6) ' reached at time ' num2str(t)])
+       dT = dT0*1e-6;
     end
     % update position (with boundary conditions)
     [positions, orientations] = applyForces(positions,forceArray,...
