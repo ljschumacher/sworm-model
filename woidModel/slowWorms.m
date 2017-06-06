@@ -9,7 +9,7 @@ m_nbr_max = numel(slowingNodes);
 if m_nbr_max > 0
     m_nbr = countWoidNeighbors(distanceMatrix,ri,slowingNodes); % number of nodes in contact with neighbours
     v = v0*(1 - m_nbr/m_nbr_max) + vs*(m_nbr/m_nbr_max);
-    assert(~any(v>v0))
+    assert(~any(v>v0+eps(v0)))
     omega = omega_m*v/v0; % adjust internal oscillator freq for slowed worms
 else
     N = size(distanceMatrix,1);
