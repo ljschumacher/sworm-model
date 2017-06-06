@@ -160,7 +160,7 @@ while t<T
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % adapt time-step such that it scales inversily with the max force
     dT = adaptTimeStep(dT0,v0,forceArray);
-    if dT<=dT0*1e-1
+    if dT<=dT0*1e-6
        warning(['Minimum time-step of ' num2str(dT0*1e-6) ' reached at time ' num2str(t)])
        dT = dT0*1e-6;
     end

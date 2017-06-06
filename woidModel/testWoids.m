@@ -34,7 +34,7 @@ animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_noflux_
 xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'revRate',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_noflux_revRate0',L);
 
-xyarray = runWoids(10,1,M,L,'bc','periodic','revRate',1,'dT',dT,...
+xyarray = runWoids(10,1,M,L,'bc','noflux','dT',dT,...
     'theta_0',0,'omega_m',0,'deltaPhase',0);
 animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/singleWorm_noflux_undulations0',L);
 
