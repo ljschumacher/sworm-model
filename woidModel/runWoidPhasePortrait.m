@@ -17,7 +17,7 @@ rc = 0.035;
 paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 % -- slow-down parameters --
 paramAll.vs = 0;% vs: speed when slowed down (default v0/3)
-paramAll.slowingNodes = [1:max(round(M/10),1) (M-max(round(M/10),1)+1):M];% slowingNodes: which nodes register contact (default head and tail)
+paramAll.slowingNodes = [1:M];% slowingNodes: which nodes register contact (default head and tail)
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 5*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
