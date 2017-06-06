@@ -87,6 +87,7 @@ addOptional(iP,'sigma_LJ',0,@isnumeric) % particle size for Lennard-Jones force
 parse(iP,T,N,M,L,varargin{:})
 dT0 = iP.Results.dT;
 dT = dT0; % set initial time-step (will be adapted during simulation)
+displayOutputEvery = round(1/dT0);
 numTimepoints = floor(T/dT0);
 v0 = iP.Results.v0;
 rc = iP.Results.rc;
@@ -159,7 +160,7 @@ while t<T
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % adapt time-step such that it scales inversily with the max force
     dT = adaptTimeStep(dT0,v0,forceArray);
-    if dT<=dT0*1e-6
+    if dT<=dT0*1e-1
        warning(['Minimum time-step of ' num2str(dT0*1e-6) ' reached at time ' num2str(t)])
        dT = dT0*1e-6;
     end
@@ -173,7 +174,9 @@ while t<T
     if t>=timeCtr*dT0
         reversalLogIndPrev = reversalLogInd(:,timeCtr); % keep this so that we detect end of (fixed-duration) reversals
         timeCtr = timeCtr + 1;
-        disp(['time = ' num2str(t) ' out of ' num2str(T)])
+        if mod(timeCtr,displayOutputEvery)==0
+            disp(['time = ' num2str(t) ' out of ' num2str(T)])
+        end
         xyarray(:,:,:,timeCtr) = positions;
         theta(:,:,timeCtr) = orientations;
     end
