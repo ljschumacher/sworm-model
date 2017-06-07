@@ -24,11 +24,11 @@ paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 
 revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];
 speeds = [0.33];
-slowspeeds = [0.33, 0.1, 0.05, 0.025];
+slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025]);
 attractionStrengths = [0];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths);
 nParamCombis = size(paramCombis,2);
-for paramCtr = 1:nParamCombis
+parfor paramCtr = 1:nParamCombis
     param = paramAll;
     revRateClusterEdge = paramCombis(1,paramCtr);
     param.revRateClusterEdge = revRateClusterEdge;
