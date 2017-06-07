@@ -1,0 +1,4 @@
+*.dropbox.attr
+*.DS_Store
+*~
+*.fig
