@@ -47,6 +47,11 @@ if nargin>=3&&numel(L)==1
     hold on
     ax.XLim = [-L L];
     ax.YLim = [-L L];
+elseif numel(L)==2
+    ax.XLim(1) = min(xrange(1),0);
+    ax.XLim(2) = max(xrange(2),L(1));
+    ax.YLim(1) = min(yrange(1),0);
+    ax.YLim(2) = max(yrange(2),L(2));
 else
     ax.XLim = xrange;
     ax.YLim = yrange;
