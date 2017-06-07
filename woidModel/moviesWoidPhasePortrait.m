@@ -9,7 +9,7 @@ rc = 0.035;
 
 revRatesClusterEdge = fliplr([0, 0.1, 0.2, 0.4, 0.8]);
 speeds = [0.33];
-slowspeeds = [0.33, 0.2, 0.1, 0.05];
+slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025]);
 attractionStrengths = [0];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths);
 nParamCombis = size(paramCombis,2);
@@ -19,7 +19,7 @@ for paramCtr = 1:nParamCombis % can be parfor
     slowspeed = paramCombis(3,paramCtr);
     attractionStrength = paramCombis(4,paramCtr);
     filename = ['woids_v0_' num2str(speed,'%1.0e') ...
-        '_vs_' num2str(slowspeed,'%1.0e') ...
+        '_vs_' num2str(slowspeed,'%1.0e') '_gradualSlowDown_'...
         '_epsLJ_' num2str(attractionStrength,'%1.0e')...
         '_revRateClusterEdge_' num2str(revRateClusterEdge,'%1.0e')];
     if exist(['results/woids/' filename '.mat'],'file')...
