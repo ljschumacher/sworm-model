@@ -16,7 +16,7 @@ plotColor = [0.25, 0.25, 0.25];
 
 revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];
 speeds = [0.33];
-slowspeeds = fliplr([0.33, 0.2, 0.1, 0.05]);
+slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025]);
 attractionStrength = [0];
 for speed = speeds
     phasePortraitFig = figure;
@@ -25,7 +25,8 @@ for speed = speeds
     for slowspeed = slowspeeds
         for revRateClusterEdge = revRatesClusterEdge
             filename = ['results/woids/woids_v0_' num2str(speed,'%1.0e') ...
-                '_vs_' num2str(slowspeed,'%1.0e') '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
+                '_vs_' num2str(slowspeed,'%1.0e') '_gradualSlowDown_' ...
+                '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
                 '_revRateClusterEdge_' num2str(revRateClusterEdge,'%1.0e') '.mat'];
             if exist(filename,'file')
                 load(filename)
@@ -44,7 +45,7 @@ for speed = speeds
     %% export figure
     phasePortraitFig.PaperUnits = 'centimeters';
     filename = ['figures/woids/woidPhasePortrait_speed_'...
-        num2str(speed,'%1.0e') '_slowing.eps'];
+        num2str(speed,'%1.0e') '_slowing_gradual.eps'];
     exportfig(phasePortraitFig,filename, exportOptions)
     system(['epstopdf ' filename]);
     system(['rm ' filename]);
