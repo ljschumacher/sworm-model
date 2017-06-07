@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="3224832149" file="/end/home/lschumac/clusterCode/sworm-model/woidModel/resolveContacts.prj" location="/end/home/lschumac/clusterCode/sworm-model/woidModel" name="resolveContacts" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="1201772870" file="/end/home/lschumac/clusterCode/sworm-model/woidModel/resolveContacts.prj" location="/end/home/lschumac/clusterCode/sworm-model/woidModel" name="resolveContacts" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -721,7 +721,7 @@
     <param.DefaultImportExportVariable>config</param.DefaultImportExportVariable>
     <param.RowMajor>false</param.RowMajor>
     <param.UseGlobals>option.UseGlobals.No</param.UseGlobals>
-    <param.outputfile>${PROJECT_ROOT}/resolveContacts_mex.mexa64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/resolveContactsLoop_mex.mexa64</param.outputfile>
     <param.version>R2012a</param.version>
     <param.HasECoderFeatures>true</param.HasECoderFeatures>
     <param.mex.mainhtml />
@@ -734,29 +734,29 @@
     <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
     <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
     <param.EnableScreener>true</param.EnableScreener>
-    <param.AnnotationChecksum>3181379724</param.AnnotationChecksum>
+    <param.AnnotationChecksum>1446345537</param.AnnotationChecksum>
     <var.LegacyTarget />
     <var.MirrorOnOpen>false</var.MirrorOnOpen>
     <param.FixedPointEnabled>false</param.FixedPointEnabled>
     <var.redirectedInputTypeData />
     <var.DismissScreener>true</var.DismissScreener>
     <param.unifiedParamStorage />
-    <var.gc.lastOutputRoot>codegen/mex/resolveContacts</var.gc.lastOutputRoot>
+    <var.gc.lastOutputRoot>codegen/mex/resolveContactsLoop</var.gc.lastOutputRoot>
     <var.gc.lastOutputType>MEX_FILE</var.gc.lastOutputType>
-    <var.gc.preBuildChecksum>3224832149</var.gc.preBuildChecksum>
-    <var.cfi.lastOutputRoot>codegen/mex/resolveContacts</var.cfi.lastOutputRoot>
-    <var.cfi.preBuildChecksum>1120218445</var.cfi.preBuildChecksum>
+    <var.gc.preBuildChecksum>1201772870</var.gc.preBuildChecksum>
+    <var.cfi.lastOutputRoot>codegen/mex/resolveContactsLoop</var.cfi.lastOutputRoot>
+    <var.cfi.preBuildChecksum>3424954418</var.cfi.preBuildChecksum>
     <var.lastCfiTestSnippet>xyarray = runWoids(1,40,49,[7.5, 7.5],'bc','periodic','dT',0.035/0.33/16);</var.lastCfiTestSnippet>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
-    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/end/home/lschumac/clusterCode/sworm-model/woidModel/resolveContacts.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;4041343856&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
-    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/end/home/lschumac/clusterCode/sworm-model/woidModel/resolveContacts.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
+    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/end/home/lschumac/clusterCode/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;1292020930&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
+    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/end/home/lschumac/clusterCode/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
     <param.forceMexBuild>false</param.forceMexBuild>
     <param.configImportActive>false</param.configImportActive>
     <var.boundToGui>true</var.boundToGui>
-    <param.mex.outputfile>resolveContacts_mex</param.mex.outputfile>
-    <param.grt.outputfile>resolveContacts</param.grt.outputfile>
+    <param.mex.outputfile>resolveContactsLoop_mex</param.mex.outputfile>
+    <param.grt.outputfile>resolveContactsLoop</param.grt.outputfile>
     <param.artifact>option.target.artifact.mex</param.artifact>
-    <param.outputfile>${PROJECT_ROOT}/resolveContacts_mex.mexa64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/resolveContactsLoop_mex.mexa64</param.outputfile>
     <param.EnableAutoExtrinsicCalls>true</param.EnableAutoExtrinsicCalls>
     <param.UsePreconditions>false</param.UsePreconditions>
     <param.FeatureFlags />
@@ -877,23 +877,21 @@
       <param.FixedPointUseDesignRanges />
     </unset>
     <fileset.entrypoints>
-      <file custom-data-expanded="false" value="${PROJECT_ROOT}/resolveContacts.m">
-        <Marker>1496834429572</Marker>
+      <file custom-data-expanded="false" value="${PROJECT_ROOT}/resolveContactsLoop.m">
+        <Marker>1496841947809</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench />
     <fileset.inputtypes>
-      <file custom-data-expanded="false" value="${PROJECT_ROOT}/resolveContacts.m">
-        <Inputs fileName="resolveContacts.m" functionName="resolveContacts">
+      <file custom-data-expanded="false" value="${PROJECT_ROOT}/resolveContactsLoop.m">
+        <Inputs fileName="resolveContactsLoop.m" functionName="resolveContactsLoop">
           <Input Name="forceArray" typeId="0" />
-          <Input Name="distanceMatrixFull" typeId="0" />
-          <Input Name="distanceMatrix" typeId="1" />
-          <Input Name="objInd" typeId="2" />
-          <Input Name="nodeInd" typeId="2" />
-          <Input Name="r_collision" typeId="2" />
-          <Input Name="sigma_LJ" typeId="2" />
-          <Input Name="r_LJcutoff" typeId="2" />
-          <Input Name="eps_LJ" typeId="2" />
+          <Input Name="distanceMatrixFull" typeId="1" />
+          <Input Name="distanceMatrix" typeId="2" />
+          <Input Name="r_collision" typeId="3" />
+          <Input Name="sigma_LJ" typeId="3" />
+          <Input Name="r_LJcutoff" typeId="3" />
+          <Input Name="eps_LJ" typeId="3" />
           <idpTable>
             <type typeId="0">
               <Class>double</Class>
@@ -905,13 +903,21 @@
             </type>
             <type typeId="1">
               <Class>double</Class>
-              <Size>40 x 49</Size>
+              <Size>40 x 49 x 2 x 40 x 49</Size>
               <Value />
               <InitialValue />
               <UserDefined>false</UserDefined>
               <Complex>false</Complex>
             </type>
             <type typeId="2">
+              <Class>double</Class>
+              <Size>40 x 49 x 40 x 49</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>false</UserDefined>
+              <Complex>false</Complex>
+            </type>
+            <type typeId="3">
               <Class>double</Class>
               <Size>1 x 1</Size>
               <Value />
@@ -924,7 +930,7 @@
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="/end/home/lschumac/clusterCode/sworm-model/woidModel" name="resolveContacts_mex.mexa64" optional="false">/end/home/lschumac/clusterCode/sworm-model/woidModel/resolveContacts_mex.mexa64</file>
+      <file location="/end/home/lschumac/clusterCode/sworm-model/woidModel" name="resolveContactsLoop_mex.mexa64" optional="false">/end/home/lschumac/clusterCode/sworm-model/woidModel/resolveContactsLoop_mex.mexa64</file>
     </build-deliverables>
     <workflow />
     <matlab>

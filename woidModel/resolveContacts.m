@@ -2,7 +2,7 @@ function [ F_contact ] = resolveContacts(forceArray,distanceMatrixFull,distanceM
 % to resolve contact forces between overlapping nodes
 % inputs:
 % forceArray is N by M by ndim matrix of forces acting on every node
-% distance matrix should have dimensions of N objects by M nodes by dimension
+% distance matrix should have dimensions of N objects by M nodes
 % objIdx is the scalar index of the agent upon which the force is to be
 % calculated
 % cutoff is the scalar radius below which volume exclusion is enforced
@@ -14,15 +14,15 @@ function [ F_contact ] = resolveContacts(forceArray,distanceMatrixFull,distanceM
 
 N = size(distanceMatrixFull,1);
 M = size(distanceMatrixFull,2);
-ndim = size(distanceMatrixFull,3);
-collisionNbrs = distanceMatrix<r_collision; % check distance to all other nodes of all other objects
-collisionNbrs(objInd,:) = false; % no contact force with self or for adjacent nodes: max(nodeInd-1,1):min(nodeInd+1,M)
+% ndim = size(distanceMatrixFull,3);
 if nargin < 8
     eps_LJ = 0;
     if nargin < 7
         r_LJcutoff = 0;
     end
 end
+collisionNbrs = distanceMatrix<r_collision; % check distance to all other nodes of all other objects
+collisionNbrs(objInd,:) = false; % no contact force with self or for adjacent nodes: max(nodeInd-1,1):min(nodeInd+1,M)
 lennardjonesNbrs = distanceMatrix<=r_LJcutoff;
 lennardjonesNbrs(collisionNbrs) = false;
 lennardjonesNbrs(objInd,:) = false;
