@@ -29,24 +29,28 @@ lennardjonesNbrs(objInd,:) = false;
 % contact forces
 if any(collisionNbrs(:))
     % find unit vectors pointing from neighbours to node
-    e_nN = [distanceMatrixFull(collisionNbrs(:)) distanceMatrixFull(find(collisionNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
-        ./distanceMatrix(collisionNbrs(:)); % normalise for distance
+    e_nN = bsxfun(@rdivide,[distanceMatrixFull(collisionNbrs(:)) distanceMatrixFull(find(collisionNbrs(:)) + N*M)],...
+        distanceMatrix(collisionNbrs(:))); % bsxfun has similar performace to implicit expansion (below) but is mex-file compatible
+%     e_nN = [distanceMatrixFull(collisionNbrs(:)) distanceMatrixFull(find(collisionNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
+%         ./distanceMatrix(collisionNbrs(:)); % normalise for distance
     F_neighbours = diag([forceArray(collisionNbrs(:)) forceArray(find(collisionNbrs(:)) + N*M)]... % force acting on nodes in contact
         *e_nN'); % force of neighbour projected onto connecting vector: |fij*eij|
     % only resolve contact forces if force on neighbour is pointing towards
     % node in question
     F_neighbours(F_neighbours<0) = 0;
-    F_contact = sum(F_neighbours.*e_nN,1); % contact force, summed over neighbours
+    F_contact = sum(bsxfun(@times,F_neighbours,e_nN),1); % contact force, summed over neighbours
 else
     F_contact = [0; 0];
 end
 % adhesion forces
 if any(lennardjonesNbrs(:))&&N>1
-    e_nN = [distanceMatrixFull(lennardjonesNbrs(:)) distanceMatrixFull(find(lennardjonesNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
-        ./distanceMatrix(lennardjonesNbrs(:)); % normalise for distance
+    e_nN = bsxfun(@rdivide,[distanceMatrixFull(lennardjonesNbrs(:)) distanceMatrixFull(find(lennardjonesNbrs(:)) + N*M)],...
+        distanceMatrix(lennardjonesNbrs(:))); % bsxfun has similar performace to implicit expansion (below) but is mex-file compatible    
+%   e_nN = [distanceMatrixFull(lennardjonesNbrs(:)) distanceMatrixFull(find(lennardjonesNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
+%         ./distanceMatrix(lennardjonesNbrs(:)); % normalise for distance
     f_LJ = 48*eps_LJ./distanceMatrix(lennardjonesNbrs(:)).*((sigma_LJ./distanceMatrix(lennardjonesNbrs(:))).^12 ...
         - 1/2*(sigma_LJ./distanceMatrix(lennardjonesNbrs(:))).^6);
-    F_LJ = sum(f_LJ.*e_nN,1); % adhesion force, summed over neighbours
+    F_LJ = sum(bsxfun(@times,f_LJ,e_nN),1); % adhesion force, summed over neighbours
     if ~any(collisionNbrs(:))
         F_contact = F_contact + F_LJ';
     else

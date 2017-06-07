@@ -143,7 +143,11 @@ timeCtr = 1;
 disp('Running simulation...')
 while t<T
     % find distances between all pairs of objects
-    distanceMatrixXY = computeWoidDistancesWithBCs(positions,L,bc);
+    if N==40&&M==49&&numel(L)==2&&~iscell(bc) % check if we can use compiled mex function
+        distanceMatrixXY = computeWoidDistancesWithBCs_mex(positions,L,bc);
+    else
+        distanceMatrixXY = computeWoidDistancesWithBCs(positions,L,bc);
+    end
     distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar distances
     % check if any woids are slowed down by neighbors
     [ v, omega ] = slowWorms(distanceMatrix,ri,slowingNodes,vs,v0,omega_m);
@@ -162,8 +166,8 @@ while t<T
     % adapt time-step such that it scales inversily with the max force
     dT = adaptTimeStep(dT0,v0,forceArray);
     if dT<=dTmin
-       warning(['Minimum time-step of ' num2str(dTmin) ' reached at time ' num2str(t)])
-       dT = dTmin;
+        warning(['Minimum time-step of ' num2str(dTmin) ' reached at time ' num2str(t)])
+        dT = dTmin;
     end
     % update position (with boundary conditions)
     [positions, orientations] = applyForces(positions,forceArray,...

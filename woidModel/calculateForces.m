@@ -104,12 +104,17 @@ for objCtr = 1:N
     %         quiver(squeeze(posPrev(objCtr,:,x))',squeeze(posPrev(objCtr,:,y))',Fm(:,1),Fm(:,2),0)
     %         1;
 end
-% resolve contact forces
+% resolve contact forces -- move this loop into function?
 Fc = NaN(N,M,2);
 for objCtr = 1:N
     for nodeCtr = 1:M
-        Fc(objCtr,nodeCtr,:) = resolveContacts(forceArray,distanceMatrixXY(:,:,:,objCtr,nodeCtr),...
-            distanceMatrix(:,:,objCtr,nodeCtr),objCtr,nodeCtr,2*rc,sigma_LJ,r_LJcutoff,eps_LJ); % factor of two so that rc is node radius
+%         if N==40&&M==49 % check if we can use compiled mex function
+%             Fc(objCtr,nodeCtr,:) = resolveContacts_mex(forceArray,distanceMatrixXY(:,:,:,objCtr,nodeCtr),...
+%                 distanceMatrix(:,:,objCtr,nodeCtr),objCtr,nodeCtr,2*rc,sigma_LJ,r_LJcutoff,eps_LJ); % factor of two so that rc is node radius
+%         else
+            Fc(objCtr,nodeCtr,:) = resolveContacts(forceArray,distanceMatrixXY(:,:,:,objCtr,nodeCtr),...
+                distanceMatrix(:,:,objCtr,nodeCtr),objCtr,nodeCtr,2*rc,sigma_LJ,r_LJcutoff,eps_LJ); % factor of two so that rc is node radius
+%         end
     end
 end
 forceArray = forceArray + Fc;
