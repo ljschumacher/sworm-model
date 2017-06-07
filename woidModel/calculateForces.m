@@ -104,7 +104,7 @@ for objCtr = 1:N
     %         quiver(squeeze(posPrev(objCtr,:,x))',squeeze(posPrev(objCtr,:,y))',Fm(:,1),Fm(:,2),0)
     %         1;
 end
-resolve contact forces -- move this loop into function?
+% resolve contact forces
 if N==40&&M==49 % check if we can use compiled mex function
     Fc = resolveContactsLoop_mex(forceArray,distanceMatrixXY,...
         distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ);
