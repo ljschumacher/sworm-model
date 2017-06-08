@@ -13,7 +13,7 @@ slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025]);
 attractionStrengths = [0];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths);
 nParamCombis = size(paramCombis,2);
-for paramCtr = 1:nParamCombis % can be parfor
+for paramCtr = 1:nParamCombis % can be parfor but might impair movie quality
     revRateClusterEdge = paramCombis(1,paramCtr);
     speed = paramCombis(2,paramCtr);
     slowspeed = paramCombis(3,paramCtr);
@@ -26,5 +26,7 @@ for paramCtr = 1:nParamCombis % can be parfor
             &&~exist(['movies/woids/' filename '.mp4'],'file')
         out = load(['results/woids/' filename '.mat']);
         animateWoidTrajectories(out.xyarray,['movies/woids/' filename],L,rc);
+    elseif ~exist(['results/woids/' filename '.mat'],'file')
+        disp(['no results for ' filename])
     end
 end
