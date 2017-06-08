@@ -68,7 +68,10 @@ for objCtr = 1:N
             dl(nodeCtr,:) = distanceMatrixXY(objCtr,nodeCtr,[x y],objCtr,nodeCtr+1); % direction to next node
         end
         dl = dl./l.*(l - segmentLength);% normalised for segment length and deviation from segmentLength
-        nl = 1./(1 - sum(dl.^2,3)/segmentLength.^2); % non-linear part of spring
+        dl_max = segmentLength;
+        dl_nl = min(abs(l - segmentLength),0.99*dl_max);% non-linear contribution saturates to avoid force decrease for
+        % l - segL > segLmax, which could happen for finite timestep
+        nl = 1./abs(1 - (dl_nl/dl_max).^2); % non-linear part of spring
         Fl = k_l.*(cat(1,dl.*nl,zeros(1,2)) - cat(1,zeros(1,2),dl.*nl)); % add forces to next and previous nodes shifted
     else
         Fl = zeros(size(Fm));
@@ -76,16 +79,17 @@ for objCtr = 1:N
     
     % bending constraints - rotational springs with changing rest angle due to active undulations
     if k_theta(objCtr)>0&&M>2
+        dK_max = pi;
         if theta_0>0
             dK = (diff(bendingAngles) - diff(sin(phaseOffset(objCtr,:))'));
-            torques = k_theta(objCtr).*dK./(1 - dK.^2/pi^2);
-            torques = torques(2:end); % no rotational springs at head and tail node
         else
             dK = diff(bendingAngles);
-            torques = k_theta(objCtr).*dK./(1 - dK.^2/pi^2);
-            torques = torques(2:end); % no rotational springs at head and tail node
         end
-        %         %     % uncomment for debugging...
+        dK_nl = min(abs(dK),0.99*dK_max);% non-linear contribution saturates to avoid force decrease for
+        % dK > dK_max, which could happen for finite timestep
+        torques = k_theta(objCtr).*dK./(1 - dK_nl.^2/dK_max^2);
+        torques = torques(2:end); % no rotational springs at head and tail node
+        %     % uncomment for debugging...
         %     plot(gradient(bodyAngles)), hold on, plot(gradient(sin(phaseOffset(objCtr,:))'))
         
         momentsfwd = torques.*l(1:end-1).*e_phi(1:end-1,:);
@@ -99,10 +103,6 @@ for objCtr = 1:N
     end
     % sum force contributions
     forceArray(objCtr,:,:) = Fm + Fl + F_theta;
-    %     % uncomment for debugging...
-    %         plot(squeeze(posPrev(objCtr,:,x)),squeeze(posPrev(objCtr,:,y)),'.-'), axis equal, hold on
-    %         quiver(squeeze(posPrev(objCtr,:,x))',squeeze(posPrev(objCtr,:,y))',Fm(:,1),Fm(:,2),0)
-    %         1;
 end
 % resolve contact forces
 if N==40&&M==49 % check if we can use compiled mex function
