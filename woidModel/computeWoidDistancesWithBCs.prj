@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="1185798121" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="3796128997" file="/end/home/lschumac/clusterCode/sworm-model/woidModel/computeWoidDistancesWithBCs.prj" location="/end/home/lschumac/clusterCode/sworm-model/woidModel" name="computeWoidDistancesWithBCs" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -243,7 +243,7 @@
       <param.InitFltsAndDblsToZero>true</param.InitFltsAndDblsToZero>
       <param.PassStructByReference />
       <param.CustomLAPACKCallback />
-      <param.UseECoderFeatures>true</param.UseECoderFeatures>
+      <param.UseECoderFeatures />
       <unset>
         <param.grt.GenCodeOnly />
         <param.WorkingFolder />
@@ -716,13 +716,14 @@
     <param.objective>option.objective.c</param.objective>
     <param.WorkflowStep>workflowSummary</param.WorkflowStep>
     <param.TestSnippets>
+      <item>computeWoidDistancesWithBCs(rand(60,49,2),[7.5 7.5],'periodic');</item>
       <item>computeWoidDistancesWithBCs(rand(40,49,2),[7.5 7.5],'periodic');</item>
       <item>computeWoidDistancesWithBCs(rand(40,49,2),[7.5 7.5],'periodic')</item>
     </param.TestSnippets>
     <param.DefaultImportExportVariable>config</param.DefaultImportExportVariable>
     <param.RowMajor>false</param.RowMajor>
     <param.UseGlobals>option.UseGlobals.No</param.UseGlobals>
-    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N60_mex.mexa64</param.outputfile>
     <param.version>R2012a</param.version>
     <param.HasECoderFeatures>true</param.HasECoderFeatures>
     <param.mex.mainhtml />
@@ -735,7 +736,7 @@
     <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
     <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
     <param.EnableScreener>true</param.EnableScreener>
-    <param.AnnotationChecksum>2146998988</param.AnnotationChecksum>
+    <param.AnnotationChecksum>1552612057</param.AnnotationChecksum>
     <var.LegacyTarget />
     <var.MirrorOnOpen>false</var.MirrorOnOpen>
     <param.FixedPointEnabled>false</param.FixedPointEnabled>
@@ -744,20 +745,20 @@
     <param.unifiedParamStorage />
     <var.gc.lastOutputRoot>codegen/mex/computeWoidDistancesWithBCs</var.gc.lastOutputRoot>
     <var.gc.lastOutputType>MEX_FILE</var.gc.lastOutputType>
-    <var.gc.preBuildChecksum>1185798121</var.gc.preBuildChecksum>
+    <var.gc.preBuildChecksum>3790065647</var.gc.preBuildChecksum>
     <var.cfi.lastOutputRoot>codegen/mex/computeWoidDistancesWithBCs</var.cfi.lastOutputRoot>
     <var.cfi.preBuildChecksum>1767052210</var.cfi.preBuildChecksum>
     <var.lastCfiTestSnippet>computeWoidDistancesWithBCs(rand(40,49,2),[7.5 7.5],'periodic');</var.lastCfiTestSnippet>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
-    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;3904989744&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
-    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
+    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/end/home/lschumac/clusterCode/sworm-model/woidModel/computeWoidDistancesWithBCs.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;3157262944&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
+    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/end/home/lschumac/clusterCode/sworm-model/woidModel/computeWoidDistancesWithBCs.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
     <param.forceMexBuild>false</param.forceMexBuild>
     <param.configImportActive>false</param.configImportActive>
     <var.boundToGui>true</var.boundToGui>
-    <param.mex.outputfile>computeWoidDistancesWithBCs_mex</param.mex.outputfile>
+    <param.mex.outputfile>computeWoidDistancesWithBCs_N60_mex</param.mex.outputfile>
     <param.grt.outputfile>computeWoidDistancesWithBCs</param.grt.outputfile>
     <param.artifact>option.target.artifact.mex</param.artifact>
-    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N60_mex.mexa64</param.outputfile>
     <param.EnableAutoExtrinsicCalls>true</param.EnableAutoExtrinsicCalls>
     <param.UsePreconditions>false</param.UsePreconditions>
     <param.FeatureFlags />
@@ -829,7 +830,6 @@
       <var.outdatedOnRestore />
       <param.forceMexBuild />
       <param.configImportActive />
-      <param.mex.outputfile />
       <param.grt.outputfile />
       <param.artifact />
       <param.EnableAutoExtrinsicCalls />
@@ -879,7 +879,7 @@
     </unset>
     <fileset.entrypoints>
       <file custom-data-expanded="false" value="${PROJECT_ROOT}/computeWoidDistancesWithBCs.m">
-        <Marker>1496832363502</Marker>
+        <Marker>1497025041857</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench />
@@ -892,7 +892,7 @@
           <idpTable>
             <type typeId="0">
               <Class>double</Class>
-              <Size>40 x 49 x 2</Size>
+              <Size>:60 x 49 x 2</Size>
               <Value />
               <InitialValue />
               <UserDefined>false</UserDefined>
@@ -918,14 +918,15 @@
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs_mex.mexmaci64" optional="false">/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs_mex.mexmaci64</file>
+      <file location="/end/home/lschumac/clusterCode/sworm-model/woidModel" name="computeWoidDistancesWithBCs_N60_mex.mexa64" optional="false">/end/home/lschumac/clusterCode/sworm-model/woidModel/computeWoidDistancesWithBCs_N60_mex.mexa64</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/Applications/MATLAB_R2016b.app</root>
+      <root>/data2/local/MATLAB/R2016b</root>
       <toolboxes>
         <toolbox name="fixedpoint" />
         <toolbox name="matlabcoder" />
+        <toolbox name="matlabhdlcoder" />
         <toolbox name="embeddedcoder" />
       </toolboxes>
       <toolbox>
@@ -939,6 +940,11 @@
         </matlabcoder>
       </toolbox>
       <toolbox>
+        <matlabhdlcoder>
+          <enabled>true</enabled>
+        </matlabhdlcoder>
+      </toolbox>
+      <toolbox>
         <embeddedcoder>
           <enabled>true</enabled>
         </embeddedcoder>
@@ -946,17 +952,17 @@
     </matlab>
     <platform>
       <unix>true</unix>
-      <mac>true</mac>
+      <mac>false</mac>
       <windows>false</windows>
       <win2k>false</win2k>
       <winxp>false</winxp>
       <vista>false</vista>
-      <linux>false</linux>
+      <linux>true</linux>
       <solaris>false</solaris>
-      <osver>10.12.5</osver>
+      <osver>2.6.32-504.el6.x86_64</osver>
       <os32>false</os32>
       <os64>true</os64>
-      <arch>maci64</arch>
+      <arch>glnxa64</arch>
       <matlab>true</matlab>
     </platform>
   </configuration>
