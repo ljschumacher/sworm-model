@@ -8,7 +8,7 @@ clear
 close all
 
 % general model parameters for all test - unless set otherwise
-N = 40; % N: number of objects
+N = 60; % N: number of objects
 M = 49; % M: number of nodes in each object
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 T = 500; % T: simulation duration
@@ -24,7 +24,7 @@ paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 
 revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];
 speeds = [0.33];
-slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025]);
+slowspeeds = [0.33, 0.1, 0.05, 0.025];
 attractionStrengths = [0];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths);
 nParamCombis = size(paramCombis,2);
@@ -45,9 +45,9 @@ parfor paramCtr = 1:nParamCombis
         param.r_LJcutoff = -1; % don't need to compute attraction if it's zero
     end
     param.eps_LJ = attractionStrength;
-    filename = ['woids_v0_' num2str(param.v0,'%1.0e') ...
-        '_vs_' num2str(param.vs,'%1.0e') ...
-        '_gradualSlowDown_' ...
+    filename = ['woids_N_' num2str(N) '_L_' num2str(L(1)) ... 
+        '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
+        '_gradualSlowDown' ...
         '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
         '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')];
     if ~exist(['results/woids/' filename '.mat'],'file')
