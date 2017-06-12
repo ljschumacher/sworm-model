@@ -54,7 +54,7 @@ parfor paramCtr = 1:nParamCombis
         rng(1) % set random seed to be the same for each simulation
         xyarray = runWoids(T,N,M,L,param);
         xyarray = xyarray(:,:,:,1:saveevery:end);
-        saveResults(['results/woids/' filename],...
+        saveResults(['results/woids/' filename '.mat'],...
         struct('xyarray',xyarray,'saveevery',saveevery,'T',T,'N',N,'M',M,'L',L,'param',param))
     end
 end
