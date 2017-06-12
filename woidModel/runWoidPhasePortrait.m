@@ -10,7 +10,7 @@ close all
 % general model parameters for all test - unless set otherwise
 N = 60; % N: number of objects
 M = 49; % M: number of nodes in each object
-L = [9.2, 9.2]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
+L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 T = 500; % T: simulation duration
 rc = 0.035;
 % saveevery = round(1/2/param.dT);
@@ -54,7 +54,7 @@ parfor paramCtr = 1:nParamCombis
         rng(1) % set random seed to be the same for each simulation
         xyarray = runWoids(T,N,M,L,param);
         xyarray = xyarray(:,:,:,1:saveevery:end);
-        saveResults(['results/woids/' filename],...
+        saveResults(['results/woids/' filename '.mat'],...
         struct('xyarray',xyarray,'saveevery',saveevery,'T',T,'N',N,'M',M,'L',L,'param',param))
     end
 end
