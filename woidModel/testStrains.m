@@ -22,32 +22,11 @@ xyarray = xyarray(:,:,:,1:saveevery:end);
 save('results/DA609_noflux_slowingNodesAll')
 animateWoidTrajectories(xyarray,'tests/DA609_noflux_slowingNodesAll',L);
 
-eps_LJ = 1e-5;
-xyarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
-    'theta_0',pi*37/180,'r_LJcutoff',5*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035);
-xyarray = xyarray(:,:,:,1:saveevery:end);
-save(['results/DA609_noflux_lennardjones' num2str(eps_LJ,'%1.0e')])
-animateWoidTrajectories(xyarray,['tests/DA609_noflux_lennardjones' num2str(eps_LJ,'%1.0e')],L);
-
-eps_LJ = 5e-5;
-xyarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
-    'theta_0',pi*37/180,'r_LJcutoff',5*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035);
-xyarray = xyarray(:,:,:,1:saveevery:end);
-save(['results/DA609_noflux_lennardjones' num2str(eps_LJ,'%1.0e')])
-animateWoidTrajectories(xyarray,['tests/DA609_noflux_lennardjones' num2str(eps_LJ,'%1.0e')],L);
-
 eps_LJ = 1e-4;
 xyarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
     'theta_0',pi*37/180,'r_LJcutoff',5*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035);
 xyarray = xyarray(:,:,:,1:saveevery:end);
 save(['results/DA609_noflux_lennardjones' num2str(eps_LJ,'%1.0e')])
-animateWoidTrajectories(xyarray,['tests/DA609_noflux_lennardjones' num2str(eps_LJ,'%1.0e')],L);
-
-eps_LJ = 1.5e-4;
-xyarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...
-    'theta_0',pi*37/180,'r_LJcutoff',5*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035);
-xyarray = xyarray(:,:,:,1:saveevery:end);
-save(['results/DA609_noflux_lennardjones' num2str(eps_LJ,'%1.1e')])
 animateWoidTrajectories(xyarray,['tests/DA609_noflux_lennardjones' num2str(eps_LJ,'%1.0e')],L);
 
 xyarray = runWoids(T,N,M,L,'bc','noflux','dT',dT,...

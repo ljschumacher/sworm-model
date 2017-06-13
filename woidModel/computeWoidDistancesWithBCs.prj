@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="933093315" file="/end/home/lschumac/clusterCode/sworm-model/woidModel/computeWoidDistancesWithBCs.prj" location="/end/home/lschumac/clusterCode/sworm-model/woidModel" name="computeWoidDistancesWithBCs" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="3439414032" file="/end/home/lschumac/clusterCode/sworm-model/woidModel/computeWoidDistancesWithBCs.prj" location="/end/home/lschumac/clusterCode/sworm-model/woidModel" name="computeWoidDistancesWithBCs" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -243,7 +243,7 @@
       <param.InitFltsAndDblsToZero>true</param.InitFltsAndDblsToZero>
       <param.PassStructByReference />
       <param.CustomLAPACKCallback />
-      <param.UseECoderFeatures>true</param.UseECoderFeatures>
+      <param.UseECoderFeatures />
       <unset>
         <param.grt.GenCodeOnly />
         <param.WorkingFolder />
@@ -714,7 +714,7 @@
       </unset>
     </profile>
     <param.objective>option.objective.c</param.objective>
-    <param.WorkflowStep>generateCode</param.WorkflowStep>
+    <param.WorkflowStep>workflowSummary</param.WorkflowStep>
     <param.TestSnippets>
       <item>computeWoidDistancesWithBCs(rand(60,49,2),[7.5 7.5],'periodic');</item>
       <item>computeWoidDistancesWithBCs(rand(40,49,2),[7.5 7.5],'periodic');</item>
@@ -723,7 +723,7 @@
     <param.DefaultImportExportVariable>config</param.DefaultImportExportVariable>
     <param.RowMajor>false</param.RowMajor>
     <param.UseGlobals>option.UseGlobals.No</param.UseGlobals>
-    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N60_mex.mexa64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N80_mex.mexa64</param.outputfile>
     <param.version>R2012a</param.version>
     <param.HasECoderFeatures>true</param.HasECoderFeatures>
     <param.mex.mainhtml />
@@ -736,7 +736,7 @@
     <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
     <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
     <param.EnableScreener>true</param.EnableScreener>
-    <param.AnnotationChecksum>1847767509</param.AnnotationChecksum>
+    <param.AnnotationChecksum>1639161580</param.AnnotationChecksum>
     <var.LegacyTarget />
     <var.MirrorOnOpen>false</var.MirrorOnOpen>
     <param.FixedPointEnabled>false</param.FixedPointEnabled>
@@ -745,7 +745,7 @@
     <param.unifiedParamStorage />
     <var.gc.lastOutputRoot>codegen/mex/computeWoidDistancesWithBCs</var.gc.lastOutputRoot>
     <var.gc.lastOutputType>MEX_FILE</var.gc.lastOutputType>
-    <var.gc.preBuildChecksum>933093315</var.gc.preBuildChecksum>
+    <var.gc.preBuildChecksum>3321470091</var.gc.preBuildChecksum>
     <var.cfi.lastOutputRoot>codegen/mex/computeWoidDistancesWithBCs</var.cfi.lastOutputRoot>
     <var.cfi.preBuildChecksum>1767052210</var.cfi.preBuildChecksum>
     <var.lastCfiTestSnippet>computeWoidDistancesWithBCs(rand(40,49,2),[7.5 7.5],'periodic');</var.lastCfiTestSnippet>
@@ -755,10 +755,10 @@
     <param.forceMexBuild>false</param.forceMexBuild>
     <param.configImportActive>false</param.configImportActive>
     <var.boundToGui>true</var.boundToGui>
-    <param.mex.outputfile>computeWoidDistancesWithBCs_N60_mex</param.mex.outputfile>
+    <param.mex.outputfile>computeWoidDistancesWithBCs_N80_mex</param.mex.outputfile>
     <param.grt.outputfile>computeWoidDistancesWithBCs</param.grt.outputfile>
     <param.artifact>option.target.artifact.mex</param.artifact>
-    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N60_mex.mexa64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N80_mex.mexa64</param.outputfile>
     <param.EnableAutoExtrinsicCalls>true</param.EnableAutoExtrinsicCalls>
     <param.UsePreconditions>false</param.UsePreconditions>
     <param.FeatureFlags />
@@ -879,7 +879,7 @@
     </unset>
     <fileset.entrypoints>
       <file custom-data-expanded="false" value="${PROJECT_ROOT}/computeWoidDistancesWithBCs.m">
-        <Marker>1497266246072</Marker>
+        <Marker>1497349073887</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench />
@@ -892,7 +892,7 @@
           <idpTable>
             <type typeId="0">
               <Class>double</Class>
-              <Size>60 x 49 x 2</Size>
+              <Size>80 x 49 x 2</Size>
               <Value />
               <InitialValue />
               <UserDefined>true</UserDefined>
@@ -918,7 +918,7 @@
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="/end/home/lschumac/clusterCode/sworm-model/woidModel" name="computeWoidDistancesWithBCs_N60_mex.mexa64" optional="false">/end/home/lschumac/clusterCode/sworm-model/woidModel/computeWoidDistancesWithBCs_N60_mex.mexa64</file>
+      <file location="/end/home/lschumac/clusterCode/sworm-model/woidModel" name="computeWoidDistancesWithBCs_N80_mex.mexa64" optional="false">/end/home/lschumac/clusterCode/sworm-model/woidModel/computeWoidDistancesWithBCs_N80_mex.mexa64</file>
     </build-deliverables>
     <workflow />
     <matlab>
