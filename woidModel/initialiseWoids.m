@@ -44,6 +44,7 @@ while objCtr <= N
     collisionNbrs = squeeze(any(any(2*exclusionRadius>=distanceMatrix(objCtr,:,:,:),4),2));
     collisionNbrs(objCtr) = false; % don't volume-exclude self
     if ~any(collisionNbrs)
+%         disp(['initialised ' num2str(objCtr) ' out of ' num2str(N) ' worms'])
         objCtr = objCtr + 1;
     end
 end
