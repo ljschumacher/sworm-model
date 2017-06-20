@@ -51,10 +51,11 @@ parfor paramCtr = 1:nParamCombis
         '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
         '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')];
     if ~exist(['results/woids/' filename '.mat'],'file')
-        rng(1) % set random seed to be the same for each simulation
-        xyarray = runWoids(T,N,M,L,param);
-        xyarray = xyarray(:,:,:,1:saveevery:end);
-        saveResults(['results/woids/' filename '.mat'],...
-        struct('xyarray',xyarray,'saveevery',saveevery,'T',T,'N',N,'M',M,'L',L,'param',param))
+        disp(['running ' filename])
+%         rng(1) % set random seed to be the same for each simulation
+%         xyarray = runWoids(T,N,M,L,param);
+%         xyarray = xyarray(:,:,:,1:saveevery:end);
+%         saveResults(['results/woids/' filename '.mat'],...
+%         struct('xyarray',xyarray,'saveevery',saveevery,'T',T,'N',N,'M',M,'L',L,'param',param))
     end
 end
