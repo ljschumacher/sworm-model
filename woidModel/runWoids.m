@@ -195,6 +195,9 @@ while t<T
         theta(:,:,timeCtr) = orientations;
     end
 end
+if any(isnan(xyarray(:)))
+    warning('some positions remained NaN. this could happen if the adaptive timestep was allowed to increase beyond the default. saving only non-NaNs')
+    xyarray = xyarray(~isnan(xyarray(:)));
 end
 
 function LCheck = checkL(x)

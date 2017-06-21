@@ -19,11 +19,15 @@ mad1 = @(x) mad(x,1); % median absolute deviation
 % alternatively could use boxplot-style confidence intervals on the mean,
 % which are 1.57*iqr/sqrt(n)
 distBinwidth = 0.01; % in units of mm
-simulations = {'DA609_noflux','N2_noflux','DA609_noflux_slowingNodesAll',...
-    'DA609_noflux_lennardjones1e-04'};
+% simulations = {'DA609_noflux','N2_noflux','DA609_noflux_slowingNodesAll',...
+%     'DA609_noflux_lennardjones1e-04'};
+resultsfiles = rdir('../results/woids/*.mat');
+for ii = 1:length(resultsfiles)
+    simulations{ii} = strrep(strrep(resultsfiles(ii).name,'../results/woids/woids_',''),'.mat','');
+end
 nSims = length(simulations);
 plotColors = lines(nSims);
-trackedNodesNames = {'head','body'};
+trackedNodesNames = {'head'};%,'body'};
 trackedNodesDict = containers.Map({'head','body'},{1:5; 1:49});% which nodes to calculate the tracking stats from, to compare eg with pharynx labeled expmntal data
 for trackedNodesName = trackedNodesNames
     trackedNodes = trackedNodesDict(trackedNodesName{1});
@@ -36,13 +40,14 @@ for trackedNodesName = trackedNodesNames
         %% load data
         numFiles = length(filenames);
         for fileCtr = 1:numFiles
-            filename = ['../results/' filenames{fileCtr} '.mat'];
+% %             filename = ['../results/' filenames{fileCtr} '.mat'];
+            filename = ['../results/woids/woids_' filenames{fileCtr} '.mat'];
             thisFile = load(filename);
             maxNumFrames = size(thisFile.xyarray,4);
             burnIn = round(0.1*maxNumFrames);
             numFrames = maxNumFrames-burnIn; %round(maxNumFrames*this.dT/this.saveevery/5);
-            framesAnalyzed = burnIn + randperm(maxNumFrames - burnIn,numFrames); % randomly sample frames without replacement
-            
+%             framesAnalyzed = burnIn + randperm(maxNumFrames - burnIn,numFrames); % randomly sample frames without replacement
+            framesAnalyzed = burnIn+1:maxNumFrames;
             %% calculate stats
             [s_med,s_mad, corr_o_med,corr_o_mad, corr_v_med,corr_v_mad, gr,distBins] = ...
     correlationanalysisSimulations(thisFile,trackedNodes,distBinwidth,framesAnalyzed);
@@ -61,7 +66,7 @@ for trackedNodesName = trackedNodesNames
         end
         %% format and export figures
         for figHandle = [speedFig, dircorrFig, velcorrFig, poscorrFig] % common formating for both figures
-            title(figHandle.Children,[simulations{simCtr} ' simulation, ' trackedNodesName{1} ' tracked'],...
+            title(figHandle.Children,{simulations{simCtr} ; [trackedNodesName{1} ' tracked']},...
                 'FontWeight','normal','Interpreter','none');
             set(figHandle,'PaperUnits','centimeters')
         end
@@ -71,7 +76,7 @@ for trackedNodesName = trackedNodesNames
         xlabel(speedFig.Children,'distance to nearest neighbour (mm)')
         speedFig.Children.Box = 'on';
         speedFig.Children.XDir = 'reverse';
-        figurename = ['speedvsneighbourdistance_' simulations{simCtr} '_' trackedNodesName{1}];
+        figurename = ['figures/speedvdistance/speedvsneighbourdistance_' simulations{simCtr} '_' trackedNodesName{1}];
         exportfig(speedFig,[figurename '.eps'],exportOptions)
         system(['epstopdf ' figurename '.eps']);
         system(['rm ' figurename '.eps']);
@@ -80,7 +85,7 @@ for trackedNodesName = trackedNodesNames
         dircorrFig.Children.XLim = [0 1];
         ylabel(dircorrFig.Children,'directional correlation')
         xlabel(dircorrFig.Children,'distance r (mm)')
-        figurename = ['dircrosscorr' simulations{simCtr} '_' trackedNodesName{1}];
+        figurename = ['figures/dircrosscorr/dircrosscorr' simulations{simCtr} '_' trackedNodesName{1}];
         exportfig(dircorrFig,[figurename '.eps'],exportOptions)
         system(['epstopdf ' figurename '.eps']);
         system(['rm ' figurename '.eps']);
@@ -89,7 +94,7 @@ for trackedNodesName = trackedNodesNames
         velcorrFig.Children.XLim = [0 1];
         ylabel(velcorrFig.Children,'velocity correlation')
         xlabel(velcorrFig.Children,'distance r (mm)')
-        figurename = ['velcrosscorr' simulations{simCtr} '_' trackedNodesName{1}];
+        figurename = ['figures/velcrosscorr/velcrosscorr' simulations{simCtr} '_' trackedNodesName{1}];
         exportfig(velcorrFig,[figurename '.eps'],exportOptions)
         system(['epstopdf ' figurename '.eps']);
         system(['rm ' figurename '.eps']);
@@ -97,9 +102,11 @@ for trackedNodesName = trackedNodesNames
         poscorrFig.Children.XLim = [0 2];
         ylabel(poscorrFig.Children,'positional correlation g(r)')
         xlabel(poscorrFig.Children,'distance r (mm)')
-        figurename = ['radialdistributionfunction_' simulations{simCtr} '_' trackedNodesName{1}];
+        figurename = ['figures/radialdistribution/radialdistributionfunction_' simulations{simCtr} '_' trackedNodesName{1}];
         exportfig(poscorrFig,[figurename '.eps'],exportOptions)
         system(['epstopdf ' figurename '.eps']);
         system(['rm ' figurename '.eps']);
+        %%
+        close all
     end
 end
