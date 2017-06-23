@@ -23,11 +23,11 @@ for paramCtr = 1:nParamCombis % can be parfor but might impair movie quality
                 '_vs_' num2str(slowspeed,'%1.0e') '_gradualSlowDown' ...
                 '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
                 '_revRateClusterEdge_' num2str(revRateClusterEdge,'%1.0e')];
-    if exist(['results/woids/' filename '.mat'],'file')...
-            &&~exist(['movies/woids/' filename '.mp4'],'file')
-        out = load(['results/woids/' filename '.mat']);
+    if exist(['../results/woids/' filename '.mat'],'file')...
+            &&~exist(['../movies/woids/' filename '.mp4'],'file')
+        out = load(['../results/woids/' filename '.mat']);
         animateWoidTrajectories(out.xyarray,['movies/woids/' filename],L,rc);
-    elseif ~exist(['results/woids/' filename '.mat'],'file')
+    elseif ~exist(['../results/woids/' filename '.mat'],'file')
         disp(['no results for ' filename])
     end
 end

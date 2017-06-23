@@ -23,7 +23,7 @@ for revRate = revRates
     phasePortraitFig.Name = ['reversal rate = ' num2str(revRate)];
     for speed = speeds
         for attractionStrength = attractionStrengths
-            filename = ['results/woidlets/wl_v0_' num2str(speed,'%1.0e') ...
+            filename = ['../results/woidlets/wl_v0_' num2str(speed,'%1.0e') ...
                 '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
                 '_revRate_' num2str(revRate,'%1.0e') '_noContactForces.mat'];
             if exist(filename,'file')
@@ -40,7 +40,7 @@ for revRate = revRates
     end
     %% export figure
     phasePortraitFig.PaperUnits = 'centimeters';
-    filename = ['figures/woidlets/woidletPhasePortrait_noContactForces_revRate_'...
+    filename = ['../figures/woidlets/woidletPhasePortrait_noContactForces_revRate_'...
         num2str(revRate,'%1.0e') '.eps'];
     exportfig(phasePortraitFig,filename, exportOptions)
     system(['epstopdf ' filename]);
