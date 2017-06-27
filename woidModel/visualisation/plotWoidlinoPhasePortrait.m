@@ -19,7 +19,7 @@ plotColor = [0.5, 0.5, 0.5];
 
 revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];
 speeds = [0.33];
-slowspeeds = [0.33, 0.1, 0.05, 0.025];
+slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025]);
 attractionStrengths = [0];
 for speed = speeds
     phasePortraitFig = figure;
@@ -44,6 +44,8 @@ for speed = speeds
                     ax.Position = ax.Position.*[1 1 1.2 1.2] - [0.0 0.0 0 0]; % stretch panel
                     ax.DataAspectRatio = [1 1 1];
                     ax.Box = 'on';
+                else
+                    warning([filename ' does not exist'])
                 end
                 plotCtr = plotCtr + 1;
             end
@@ -51,7 +53,8 @@ for speed = speeds
     end
     %% export figure
     phasePortraitFig.PaperUnits = 'centimeters';
-    filename = ['../figures/woidlinos/woidlinoPhasePortrait_N_' num2str(N) '_L_' num2str(L(1))...
+    filename = ['../figures/woidlinos/woidlinoPhasePortrait_N_' num2str(N) ...
+        '_M_' num2str(17) '_L_' num2str(L(1))...
         '_speed_' num2str(speed,'%1.0e') '_slowing' '_gradual' ...
         '.eps'];
     exportfig(phasePortraitFig,filename, exportOptions)

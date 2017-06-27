@@ -1,4 +1,4 @@
-function [s_med,s_mad, corr_o_med,corr_o_mad, corr_v_med,corr_v_mad, gr,distBins] = ...
+function [s_med,s_ci, corr_o_med,corr_o_ci, corr_v_med,corr_v_ci, gr,distBins] = ...
     correlationanalysisSimulations(simfile,trackedNodes,distBinWidth,framesAnalyzed)
 % calculate directional & velocity correlation, and
 % radial distribution functions
@@ -10,13 +10,17 @@ function [s_med,s_mad, corr_o_med,corr_o_mad, corr_v_med,corr_v_mad, gr,distBins
 % define functions for grpstats
 mad1 = @(x) mad(x,1); % median absolute deviation
 % alternatively could use boxplot-style confidence intervals on the mean,
-% which are 1.57*iqr/sqrt(n)
+% which are 1.57*iqr/sqrt(n) - unclear how justified this is
+iqrci = @(x) 1.57*iqr(x)/sqrt(numel(x));
+% or one could use a bootstrapped confidence interval
+bootserr = @(x) bootci(1e2,{@nanmedian,x},'alpha',0.05,'Options',struct('UseParallel',true));
+
 M = size(simfile.xyarray,2);
 if nargin<2||isempty(trackedNodes)
     trackedNodes = 1:M;
 end
 if nargin<3||isempty(distBinWidth)
-    distBinWidth = 0.01; % in units of mm
+    distBinWidth = 0.05; % in units of mm
 end
 if nargin<4||isempty(framesAnalyzed)
     framesAnalyzed = 1:size(simfile.xyarray,4);
@@ -29,9 +33,6 @@ if strcmp(simfile.param.bc,'periodic')
 else
     x = squeeze(mean(simfile.xyarray(:,trackedNodes,1,:),2)); % centroid of tracked obj
     y = squeeze(mean(simfile.xyarray(:,trackedNodes,2,:),2)); % centroid of tracked obj
-end
-if any(isnan(x(:)))
-    1;
 end
 dxdt = diff(x,1,2);
 dydt = diff(y,1,2);
@@ -59,7 +60,7 @@ N = simfile.N;
 pairdist = NaN(N*(N-1)/2,numFrames);
 dxcorr = NaN(size(pairdist));
 vxcorr = NaN(size(pairdist));
-distBins = 0:distBinWidth:min(simfile.L)/sqrt(2);
+distBins = 0:distBinWidth:min(simfile.L)/2;
 gr = NaN(length(distBins) - 1,numFrames);
 nearestNbrDist = NaN(N,numFrames);
 if numel(simfile.L)==1
@@ -83,12 +84,12 @@ for frameCtr = 1:numFrames
     nearestNbrDist(:,frameCtr) = min(distanceMatrix + max(max(distanceMatrix))*eye(size(distanceMatrix)));
 end
 
-[s_med,s_mad] = grpstats(speed(:),quant(nearestNbrDist(:),distBinWidth),...
-    {@median,mad1});
-[corr_o_med,corr_o_mad] = grpstats(dxcorr(:),quant(pairdist(:),distBinWidth),...
-    {@median,mad1});
-[corr_v_med,corr_v_mad] = grpstats(vxcorr(:),quant(pairdist(:),distBinWidth),...
-    {@median,mad1});
+[s_med,s_ci] = grpstats(speed(:),quant(nearestNbrDist(:),distBinWidth),...
+    {@median,bootserr});
+[corr_o_med,corr_o_ci] = grpstats(dxcorr(:),quant(pairdist(:),distBinWidth),...
+    {@median,bootserr});
+[corr_v_med,corr_v_ci] = grpstats(vxcorr(:),quant(pairdist(:),distBinWidth),...
+    {@median,bootserr});
 end
 
 function w = correctForPeriodicBoundary(v,L)

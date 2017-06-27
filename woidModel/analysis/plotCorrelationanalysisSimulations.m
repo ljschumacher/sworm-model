@@ -18,7 +18,7 @@ exportOptions = struct('Format','eps2',...
 mad1 = @(x) mad(x,1); % median absolute deviation
 % alternatively could use boxplot-style confidence intervals on the mean,
 % which are 1.57*iqr/sqrt(n)
-distBinwidth = 0.01; % in units of mm
+distBinwidth = 0.035; % in units of mm, sensibly to be chosen similar worm width or radius
 % simulations = {'DA609_noflux','N2_noflux','DA609_noflux_slowingNodesAll',...
 %     'DA609_noflux_lennardjones1e-04'};
 resultsfiles = rdir('../results/woids/*.mat');
@@ -45,21 +45,25 @@ for trackedNodesName = trackedNodesNames
             thisFile = load(filename);
             maxNumFrames = size(thisFile.xyarray,4);
             burnIn = round(0.1*maxNumFrames);
-            numFrames = maxNumFrames-burnIn; %round(maxNumFrames*this.dT/this.saveevery/5);
+            numFrames =  min(round((maxNumFrames - burnIn)*thisFile.param.dT*thisFile.saveevery),maxNumFrames - burnIn); %maxNumFrames-burnIn;
 %             framesAnalyzed = burnIn + randperm(maxNumFrames - burnIn,numFrames); % randomly sample frames without replacement
-            framesAnalyzed = burnIn+1:maxNumFrames;
+            framesAnalyzed = round(linspace(burnIn,maxNumFrames,numFrames));
+%             framesAnalyzed = burnIn+1:maxNumFrames;
             %% calculate stats
             [s_med,s_mad, corr_o_med,corr_o_mad, corr_v_med,corr_v_mad, gr,distBins] = ...
     correlationanalysisSimulations(thisFile,trackedNodes,distBinwidth,framesAnalyzed);
             %% plot data
-            bins = (0:numel(s_med)-1).*distBinwidth;
-            boundedline(bins,s_med,[s_mad, s_mad],...
-                'alpha',speedFig.Children,'cmap',plotColors(simCtr,:))
-            bins = (0:numel(corr_o_med)-1).*distBinwidth;
-            boundedline(bins,corr_o_med,[corr_o_mad, corr_o_mad],...
-                'alpha',dircorrFig.Children,'cmap',plotColors(simCtr,:))
-            boundedline(bins,corr_v_med,[corr_v_mad, corr_v_mad],...
-                'alpha',velcorrFig.Children,'cmap',plotColors(simCtr,:))
+% %             % speed v distance
+% %             bins = (0:numel(s_med)-1).*distBinwidth;
+% %             boundedline(bins,s_med,[s_mad, s_mad],...
+% %                 'alpha',speedFig.Children,'cmap',plotColors(simCtr,:))
+% %             % directional and velocity cross-correlation
+% %             bins = (0:numel(corr_o_med)-1).*distBinwidth;
+% %             boundedline(bins,corr_o_med,[corr_o_mad, corr_o_mad],...
+% %                 'alpha',dircorrFig.Children,'cmap',plotColors(simCtr,:))
+% %             boundedline(bins,corr_v_med,[corr_v_mad, corr_v_mad],...
+% %                 'alpha',velcorrFig.Children,'cmap',plotColors(simCtr,:))
+            % radial distribution / pair correlation
             boundedline(distBins(2:end)-distBinwidth/2,mean(gr,2),...
                 [nanstd(gr,0,2) nanstd(gr,0,2)]./sqrt(numFrames),...
                 'alpha',poscorrFig.Children,'cmap',plotColors(simCtr,:))
@@ -70,7 +74,7 @@ for trackedNodesName = trackedNodesNames
                 'FontWeight','normal','Interpreter','none');
             set(figHandle,'PaperUnits','centimeters')
         end
-        %
+        % speed v distance
         speedFig.Children.XLim = [0 2];
         ylabel(speedFig.Children,'speed (mm/s)')
         xlabel(speedFig.Children,'distance to nearest neighbour (mm)')
@@ -80,7 +84,7 @@ for trackedNodesName = trackedNodesNames
         exportfig(speedFig,[figurename '.eps'],exportOptions)
         system(['epstopdf ' figurename '.eps']);
         system(['rm ' figurename '.eps']);
-        %
+        % directional and velocity cross-correlation
         dircorrFig.Children.YLim = [-1 1];
         dircorrFig.Children.XLim = [0 1];
         ylabel(dircorrFig.Children,'directional correlation')
@@ -98,7 +102,7 @@ for trackedNodesName = trackedNodesNames
         exportfig(velcorrFig,[figurename '.eps'],exportOptions)
         system(['epstopdf ' figurename '.eps']);
         system(['rm ' figurename '.eps']);
-        %
+        % radial distribution / pair correlation
         poscorrFig.Children.XLim = [0 2];
         ylabel(poscorrFig.Children,'positional correlation g(r)')
         xlabel(poscorrFig.Children,'distance r (mm)')

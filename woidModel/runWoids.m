@@ -197,7 +197,7 @@ while t<T
 end
 if any(isnan(xyarray(:)))
     warning('some positions remained NaN. this could happen if the adaptive timestep was allowed to increase beyond the default. saving only non-NaNs')
-    xyarray = xyarray(~isnan(xyarray(:)));
+    xyarray = reshape(xyarray(~isnan(xyarray(:))),N,M,2,[]);
 end
 
 function LCheck = checkL(x)
