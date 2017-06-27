@@ -189,7 +189,7 @@ while t<T
         reversalLogIndPrev = reversalLogInd(:,timeCtr); % keep this so that we detect end of (fixed-duration) reversals
         timeCtr = timeCtr + 1;
         if mod(timeCtr,displayOutputEvery)==0
-            disp(['time = ' num2str(t) ' out of ' num2str(T) 'at ' datestr(now)])
+            disp(['time = ' num2str(t) ' out of ' num2str(T) ' at ' datestr(now)])
         end
         xyarray(:,:,:,timeCtr) = positions;
         theta(:,:,timeCtr) = orientations;
@@ -198,6 +198,7 @@ end
 if any(isnan(xyarray(:)))
     warning('some positions remained NaN. this could happen if the adaptive timestep was allowed to increase beyond the default. saving only non-NaNs')
     xyarray = xyarray(~isnan(xyarray(:)));
+end
 end
 
 function LCheck = checkL(x)
