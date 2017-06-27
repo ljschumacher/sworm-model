@@ -8,18 +8,20 @@ close all
 
 % general model parameters for all test - unless set otherwise
 N = 40; % N: number of objects
-M = 17; % M: number of nodes in each object
+M = 2; % M: number of nodes in each object
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 
 T = 500;
-rc = 0.035; % rc: core repulsion radius (default 0.07 mm)
+rc = 0.1; % rc: core repulsion radius (default 0.07 mm)
 % saveevery = round(1/2/param.dT);
 paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
-paramAll.segmentLength = 1.2/(M - 1);
-paramAll.k_l = 1/paramAll.segmentLength; % stiffness of linear springs connecting nodes
+paramAll.segmentLength = 2*rc + 1e-3;%1.2/(M - 1);
+paramAll.k_l = 0;%1/paramAll.segmentLength; % stiffness of linear springs connecting nodes
 % -- slow-down parameters --
 paramAll.vs = 0;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = [1:M];% slowingNodes: which nodes register contact (default head and tail)
+paramAll.headNodes = 1;
+paramAll.tailNodes = 2;
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 5*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
