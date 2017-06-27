@@ -200,7 +200,6 @@ if any(isnan(xyarray(:)))
     xyarray = reshape(xyarray(~isnan(xyarray(:))),N,M,2,[]);
 end
 end
-end
 
 function LCheck = checkL(x)
 LCheck = false;
