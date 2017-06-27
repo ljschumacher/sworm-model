@@ -28,7 +28,7 @@ slowspeeds = [0.33, 0.1, 0.05, 0.025];
 attractionStrengths = [0];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths);
 nParamCombis = size(paramCombis,2);
-parfor paramCtr = 1:nParamCombis
+for paramCtr = 1:nParamCombis
     param = paramAll;
     revRateClusterEdge = paramCombis(1,paramCtr);
     param.revRateClusterEdge = revRateClusterEdge;
@@ -45,17 +45,22 @@ parfor paramCtr = 1:nParamCombis
         param.r_LJcutoff = -1; % don't need to compute attraction if it's zero
     end
     param.eps_LJ = attractionStrength;
-    filename = ['woids_N_' num2str(N) '_L_' num2str(L(1)) ... 
+    filename = ['woids_N_' num2str(N) '_L_' num2str(L(1)) ...
         '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
         '_gradualSlowDown' ...
         '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
         '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')];
-    if ~exist(['results/woids/' filename '.mat'],'file')
+    if ~exist(['results/woids/' filename '.mat'],'file')&&isempty(dir(['results/woids/' filename '_running_on_*.mat']))
         disp(['running ' filename])
-%         rng(1) % set random seed to be the same for each simulation
-%         xyarray = runWoids(T,N,M,L,param);
-%         xyarray = xyarray(:,:,:,1:saveevery:end);
-%         saveResults(['results/woids/' filename '.mat'],...
-%         struct('xyarray',xyarray,'saveevery',saveevery,'T',T,'N',N,'M',M,'L',L,'param',param))
+        % make a dummy file to mark that this sim is running on this computer
+        [~, hostname] = system('hostname -s'); hostname = strrep(hostname,sprintf('\n'),'');
+        tmp_filename = ['results/woids/' filename '_running_on_' hostname '.mat'];
+        save(tmp_filename,'N','M','L','param')
+        rng(1) % set random seed to be the same for each simulation
+        xyarray = runWoids(T,N,M,L,param);
+        xyarray = xyarray(:,:,:,1:saveevery:end);
+        saveResults(['results/woids/' filename '.mat'],...
+            struct('xyarray',xyarray,'saveevery',saveevery,'T',T,'N',N,'M',M,'L',L,'param',param))
+        delete(tmp_filename)
     end
 end
