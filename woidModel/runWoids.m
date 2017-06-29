@@ -83,12 +83,16 @@ addOptional(iP,'slowingNodes',[1:max(round(M/10),1) (M-max(round(M/10),1)+1):M],
 addOptional(iP,'r_LJcutoff',0,@isnumeric) % cut-off above which lennard jones potential is not acting anymore
 addOptional(iP,'eps_LJ',1e-6,@isnumeric) % strength of LJ-potential
 addOptional(iP,'sigma_LJ',0,@isnumeric) % particle size for Lennard-Jones force
+% simulation parameters
+addOptional(iP,'saveEvery',1,checkInt);
 
 parse(iP,T,N,M,L,varargin{:})
 dT0 = iP.Results.dT;
 dT = dT0; % set initial time-step (will be adapted during simulation)
 displayOutputEvery = round(1/dT0);
-numTimepoints = floor(T/dT0);
+saveEvery = iP.Results.saveEvery;
+numSavepoints = floor(T/dT0/saveEvery);
+
 v0 = iP.Results.v0;
 dTmin = dT0/10/N*v0; % set a mininum timestep below which dT won't be adapted
 rc = iP.Results.rc;
@@ -124,16 +128,16 @@ assert(min(L)>segmentLength*(M - 1),...
 assert(v0>=vs,'vs should be chosen smaller or equal to v0')
 
 % preallocate internal oscillators
-theta = NaN(N,M,numTimepoints);
+theta = NaN(N,M,numSavepoints);
 % preallocate reversal states
-reversalLogInd = false(N,numTimepoints);
+reversalLogInd = false(N,numSavepoints);
 reversalLogIndPrev = reversalLogInd(:,1);
 % random phase offset for each object plus phase shift for each node
 phaseOffset = wrapTo2Pi(rand(N,1)*2*pi - deltaPhase*(1:M));
 % initialise worm positions and node directions - respecting volume
 % exclusion
 initialExclusionRadius = max(rc,sigma_LJ/2); % so that we don't get too overlapping initial positions, even when rc = 0
-[xyarray, theta(:,:,1)] = initialiseWoids(N,M,numTimepoints,L,segmentLength,...
+[xyarray, theta(:,:,1)] = initialiseWoids(N,M,numSavepoints,L,segmentLength,...
     phaseOffset,theta_0,initialExclusionRadius,bc);
 positions = xyarray(:,:,:,1);
 orientations = theta(:,:,1);
@@ -185,7 +189,7 @@ while t<T
     % update time
     t = t + dT;
     % output positions and orientations
-    if t>=timeCtr*dT0
+    if t>=timeCtr*dT0*saveEvery
         reversalLogIndPrev = reversalLogInd(:,timeCtr); % keep this so that we detect end of (fixed-duration) reversals
         timeCtr = timeCtr + 1;
         if mod(timeCtr,displayOutputEvery)==0

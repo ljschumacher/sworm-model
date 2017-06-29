@@ -36,7 +36,7 @@ for paramCtr = 1:nParamCombis
     param.omega_m = 2*pi*0.6/0.33*speed;
     param.v0 = speed;
     param.dT = min(1/2,rc/param.v0/16); % dT: time step, scales other parameters such as velocities and rates
-    saveevery = round(1/4/param.dT);
+    param.saveEvery = round(1/4/param.dT);
     param.vs = paramCombis(3,paramCtr);
     attractionStrength = paramCombis(4,paramCtr);
     if attractionStrength>0
@@ -58,9 +58,8 @@ for paramCtr = 1:nParamCombis
         save(tmp_filename,'N','M','L','param')
         rng(1) % set random seed to be the same for each simulation
         xyarray = runWoids(T,N,M,L,param);
-        xyarray = xyarray(:,:,:,1:saveevery:end);
         saveResults(['results/woids/' filename '.mat'],...
-            struct('xyarray',xyarray,'saveevery',saveevery,'T',T,'N',N,'M',M,'L',L,'param',param))
+            struct('xyarray',xyarray,'T',T,'N',N,'M',M,'L',L,'param',param))
         delete(tmp_filename)
     end
 end
