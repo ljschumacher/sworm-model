@@ -89,8 +89,8 @@ addOptional(iP,'saveEvery',1,checkInt);
 parse(iP,T,N,M,L,varargin{:})
 dT0 = iP.Results.dT;
 dT = dT0; % set initial time-step (will be adapted during simulation)
-displayOutputEvery = round(1/dT0);
 saveEvery = iP.Results.saveEvery;
+displayOutputEvery = round(1/dT0/saveEvery);
 numSavepoints = floor(T/dT0/saveEvery);
 
 v0 = iP.Results.v0;
