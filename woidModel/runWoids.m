@@ -90,7 +90,8 @@ parse(iP,T,N,M,L,varargin{:})
 dT0 = iP.Results.dT;
 dT = dT0; % set initial time-step (will be adapted during simulation)
 saveEvery = iP.Results.saveEvery;
-displayOutputEvery = round(1/dT0/saveEvery);
+displayOutputEvery = round(1/dT0);
+numTimepoints = floor(T/dT0);
 numSavepoints = floor(T/dT0/saveEvery);
 
 v0 = iP.Results.v0;
@@ -130,7 +131,7 @@ assert(v0>=vs,'vs should be chosen smaller or equal to v0')
 % preallocate internal oscillators
 theta = NaN(N,M,numSavepoints);
 % preallocate reversal states
-reversalLogInd = false(N,numSavepoints);
+reversalLogInd = false(N,numTimepoints);
 reversalLogIndPrev = reversalLogInd(:,1);
 % random phase offset for each object plus phase shift for each node
 phaseOffset = wrapTo2Pi(rand(N,1)*2*pi - deltaPhase*(1:M));
@@ -144,6 +145,7 @@ orientations = theta(:,:,1);
 % initialise time
 t = 0;
 timeCtr = 1;
+saveCtr = 1;
 disp('Running simulation...')
 while t<T
     % find distances between all pairs of objects
@@ -170,11 +172,11 @@ while t<T
     forceArray = calculateForces(distanceMatrixXY,distanceMatrix,...
         rc,orientations,reversalLogInd(:,timeCtr),segmentLength,...
         v,k_l,k_theta*v./v0,theta_0,phaseOffset,sigma_LJ,r_LJcutoff, eps_LJ);
-%     % uncomment for debugging...
-%     plot(squeeze(positions(objCtr,:,1)),squeeze(positions(objCtr,:,2)),'.-'), axis equal, hold on
-%     quiver(squeeze(positions(objCtr,:,1)),squeeze(positions(objCtr,:,2)),...
-%         squeeze(forceArray(objCtr,:,1)),squeeze(forceArray(objCtr,:,2)),1)
-%     1;
+    %     % uncomment for debugging...
+    %     plot(squeeze(positions(objCtr,:,1)),squeeze(positions(objCtr,:,2)),'.-'), axis equal, hold on
+    %     quiver(squeeze(positions(objCtr,:,1)),squeeze(positions(objCtr,:,2)),...
+    %         squeeze(forceArray(objCtr,:,1)),squeeze(forceArray(objCtr,:,2)),1)
+    %     1;
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % adapt time-step such that it scales inversily with the max force
     dT = adaptTimeStep(dT0,v0,forceArray);
@@ -189,14 +191,17 @@ while t<T
     % update time
     t = t + dT;
     % output positions and orientations
-    if t>=timeCtr*dT0*saveEvery
+    if t>=timeCtr*dT0
         reversalLogIndPrev = reversalLogInd(:,timeCtr); % keep this so that we detect end of (fixed-duration) reversals
+        if t>=saveCtr*dT0*saveEvery
+            saveCtr = saveCtr+1;
+            xyarray(:,:,:,saveCtr) = positions;
+            theta(:,:,saveCtr) = orientations;
+        end
         timeCtr = timeCtr + 1;
         if mod(timeCtr,displayOutputEvery)==0
             disp(['time = ' num2str(t) ' out of ' num2str(T) ' at ' datestr(now)])
         end
-        xyarray(:,:,:,timeCtr) = positions;
-        theta(:,:,timeCtr) = orientations;
     end
 end
 if any(isnan(xyarray(:)))
