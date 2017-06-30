@@ -12,16 +12,17 @@ M = 2; % M: number of nodes in each object
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 
 T = 500;
-rc = 0.1; % rc: core repulsion radius (default 0.07 mm)
+rc = 0.105; % rc: core repulsion radius (default 0.035 mm)
+paramAll.rc = rc;
 % saveevery = round(1/2/param.dT);
 paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
-paramAll.segmentLength = 2*rc + 1e-3;%1.2/(M - 1);
-paramAll.k_l = 0;%1/paramAll.segmentLength; % stiffness of linear springs connecting nodes
+paramAll.segmentLength = 2*rc;%1.2/(M - 1);
+paramAll.k_l = 1/paramAll.segmentLength; % stiffness of linear springs connecting nodes
 % -- slow-down parameters --
 paramAll.vs = 0;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = [1:M];% slowingNodes: which nodes register contact (default head and tail)
 paramAll.headNodes = 1;
-paramAll.tailNodes = 2;
+paramAll.tailNodes = M;
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 5*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
@@ -43,7 +44,7 @@ for paramCtr = 1:nParamCombis
     speed = paramCombis(2,paramCtr);
     param.v0 = speed;
     param.dT = min(1/2,rc/param.v0/16); % dT: time step, scales other parameters such as velocities and rates
-    saveevery = round(1/4/param.dT);
+    param.saveEvery = round(1/4/param.dT);
     param.vs = paramCombis(3,paramCtr);
     attractionStrength = paramCombis(4,paramCtr);
     if attractionStrength>0
@@ -65,9 +66,8 @@ for paramCtr = 1:nParamCombis
         save(tmp_filename,'N','M','L','param')
         rng(1) % set random seed to be the same for each simulation
         xyarray = runWoids(T,N,M,L,param);
-        xyarray = xyarray(:,:,:,1:saveevery:end);
         saveResults(['results/woidlinos/' filename '.mat'],...
-            struct('xyarray',xyarray,'saveevery',saveevery,'T',T,'N',N,'M',M,'L',L,'param',param))
+            struct('xyarray',xyarray,'T',T,'N',N,'M',M,'L',L,'param',param))
         delete(tmp_filename)
     end
 end
