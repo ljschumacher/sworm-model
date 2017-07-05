@@ -128,5 +128,5 @@ xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,...
 animateWoidTrajectories(xyarray,'tests/40worms_noflux_undulations0',L);
 
 L = [7.5, 7.5];
-xyarray = runWoids(80,N,M,L,'bc','periodic','dT',dT);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/40worms_periodic',L);
+xyarray = runWoids(80,N,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);
+animateWoidTrajectories(xyarray,'tests/40worms_periodic',L);

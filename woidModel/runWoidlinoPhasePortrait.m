@@ -14,6 +14,7 @@ L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will g
 T = 500;
 rc = 0.105; % rc: core repulsion radius (default 0.035 mm)
 paramAll.rc = rc;
+paramAll.ri = 3*rc;
 % saveevery = round(1/2/param.dT);
 paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 paramAll.segmentLength = 2*rc;%1.2/(M - 1);

@@ -12,7 +12,7 @@ exportOptions = struct('Format','eps2',...
     'LineWidth',1,...
     'Renderer','painters');
 
-M = 18;
+M = 2;
 L = [7.5 7.5];
 N = 40;
 plotColor = [0.5, 0.5, 0.5];

@@ -6,7 +6,7 @@ close all
 % general model parameters for all test - unless set otherwise
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 rc = 0.035;
-Nval = 60;
+Nval = 80;
 revRatesClusterEdge = fliplr([0, 0.1, 0.2, 0.4, 0.8]);
 speeds = [0.33];
 slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025]);
@@ -26,7 +26,7 @@ for paramCtr = 1:nParamCombis % can be parfor but might impair movie quality
     if exist(['../results/woids/' filename '.mat'],'file')...
             &&~exist(['../movies/woids/' filename '.mp4'],'file')
         out = load(['../results/woids/' filename '.mat']);
-        animateWoidTrajectories(out.xyarray,['movies/woids/' filename],L,rc);
+        animateWoidTrajectories(out.xyarray,['../movies/woids/' filename],L,rc);
     elseif ~exist(['../results/woids/' filename '.mat'],'file')
         disp(['no results for ' filename])
     end
