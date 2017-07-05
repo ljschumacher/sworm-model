@@ -8,11 +8,11 @@ close all
 
 % general model parameters for all test - unless set otherwise
 N = 40; % N: number of objects
-M = 18; % M: number of nodes in each object
+M = 2; % M: number of nodes in each object
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 
 T = 500;
-rc = 0.035; % rc: core repulsion radius (default 0.035 mm)
+rc = 0.105; % rc: core repulsion radius (default 0.035 mm)
 paramAll.rc = rc;
 paramAll.ri = 3*rc;
 % saveevery = round(1/2/param.dT);
