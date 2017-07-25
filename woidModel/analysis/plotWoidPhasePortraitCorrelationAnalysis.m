@@ -1,5 +1,10 @@
 % plot woidlet phase portrait
 % shows plots of correlation analysis
+
+% issues/to-do:
+% - for too few frames sampled, empty bins can cause problems with
+% bootstrap error bars, (alternatively exclude those bins)
+
 close all
 clear
 
@@ -14,19 +19,17 @@ exportOptions = struct('Format','eps2',...
 
 radius = 0.035;
 plotColor = [0.25, 0.25, 0.25];
-Nval = 80;
-Lval = 10.6;
+Nval = 40;
+Lval = 7.5;
 revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];
 speeds = [0.33];
 slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025]);
 % slowspeeds = fliplr([0.33, 0.2, 0.1, 0.05]);
 attractionStrength = [0];
 trackedNodes = 1:5;
-distBinwidth = 0.035; % in units of mm, sensibly to be chosen similar worm width or radius
-% define functions for grpstats
-mad1 = @(x) mad(x,1); % median absolute deviation
-% alternatively could use boxplot-style confidence intervals on the mean,
-% which are 1.57*iqr/sqrt(n)
+distBinwidth = 0.05; % in units of mm, sensibly to be chosen similar worm width or radius
+maxDist = 2;
+
 for speed = speeds
     poscorrFig = figure;
     speedFig = figure;
@@ -46,13 +49,18 @@ for speed = speeds
                 thisFile = load(filename);
                 maxNumFrames = size(thisFile.xyarray,4);
                 burnIn = round(0.1*maxNumFrames);
-                numFrames =  min(round((maxNumFrames - burnIn)*thisFile.param.dT*thisFile.saveevery),maxNumFrames - burnIn); %maxNumFrames-burnIn;
-                %             framesAnalyzed = burnIn + randperm(maxNumFrames - burnIn,numFrames); % randomly sample frames without replacement
-                framesAnalyzed = round(linspace(burnIn,maxNumFrames,numFrames));
-                %             framesAnalyzed = burnIn+1:maxNumFrames;
+                if isfield(thisFile.param,'saveEvery')
+                    saveEvery = thisFile.param.saveEvery;
+                else
+                    saveEvery = thisFile.saveevery;
+                end
+                numFrames =  min(round((maxNumFrames - burnIn)*thisFile.param.dT*saveEvery*3),maxNumFrames - burnIn); %maxNumFrames-burnIn;
+%                 framesAnalyzed = burnIn + randperm(maxNumFrames - burnIn,numFrames); % randomly sample frames without replacement
+%                 framesAnalyzed = round(linspace(burnIn,maxNumFrames,numFrames));
+                            framesAnalyzed = burnIn+1:maxNumFrames;
                 %% calculate stats
                 [s_med,s_ci, corr_o_med,corr_o_ci, corr_v_med,corr_v_ci, gr,distBins] = ...
-                    correlationanalysisSimulations(thisFile,trackedNodes,distBinwidth,framesAnalyzed);
+                    correlationanalysisSimulations(thisFile,trackedNodes,distBinwidth,framesAnalyzed,maxDist);
                 %% plot data
                 % radial distribution / pair correlation
                 set(0,'CurrentFigure',poscorrFig)

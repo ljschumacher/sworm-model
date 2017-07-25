@@ -14,14 +14,11 @@ exportOptions = struct('Format','eps2',...
     'LineWidth',1,...
     'Renderer','opengl');
 
-% define functions for grpstats
-mad1 = @(x) mad(x,1); % median absolute deviation
-% alternatively could use boxplot-style confidence intervals on the mean,
-% which are 1.57*iqr/sqrt(n)
-distBinwidth = 0.035; % in units of mm, sensibly to be chosen similar worm width or radius
+distBinwidth = 0.05; % in units of mm, sensibly to be chosen similar worm width or radius
+maxDist = 2;
 % simulations = {'DA609_noflux','N2_noflux','DA609_noflux_slowingNodesAll',...
 %     'DA609_noflux_lennardjones1e-04'};
-resultsfiles = rdir('../results/woids/*.mat');
+resultsfiles = rdir('../results/woids/*N_40_L_7.5_v0*.mat');
 for ii = 1:length(resultsfiles)
     simulations{ii} = strrep(strrep(resultsfiles(ii).name,'../results/woids/woids_',''),'.mat','');
 end
@@ -29,6 +26,7 @@ nSims = length(simulations);
 plotColors = lines(nSims);
 trackedNodesNames = {'head'};%,'body'};
 trackedNodesDict = containers.Map({'head','body'},{1:5; 1:49});% which nodes to calculate the tracking stats from, to compare eg with pharynx labeled expmntal data
+
 for trackedNodesName = trackedNodesNames
     trackedNodes = trackedNodesDict(trackedNodesName{1});
     for simCtr = 1:nSims % can be parfor
@@ -47,22 +45,22 @@ for trackedNodesName = trackedNodesNames
             burnIn = round(0.1*maxNumFrames);
             numFrames =  min(round((maxNumFrames - burnIn)*thisFile.param.dT*thisFile.saveevery),maxNumFrames - burnIn); %maxNumFrames-burnIn;
 %             framesAnalyzed = burnIn + randperm(maxNumFrames - burnIn,numFrames); % randomly sample frames without replacement
-            framesAnalyzed = round(linspace(burnIn,maxNumFrames,numFrames));
-%             framesAnalyzed = burnIn+1:maxNumFrames;
+%             framesAnalyzed = round(linspace(burnIn,maxNumFrames,numFrames));
+            framesAnalyzed = burnIn+1:maxNumFrames;
             %% calculate stats
-            [s_med,s_mad, corr_o_med,corr_o_mad, corr_v_med,corr_v_mad, gr,distBins] = ...
-    correlationanalysisSimulations(thisFile,trackedNodes,distBinwidth,framesAnalyzed);
+            [s_med,s_ci, corr_o_med,corr_o_ci, corr_v_med,corr_v_ci, gr,distBins] = ...
+    correlationanalysisSimulations(thisFile,trackedNodes,distBinwidth,framesAnalyzed,maxDist);
             %% plot data
-% %             % speed v distance
-% %             bins = (0:numel(s_med)-1).*distBinwidth;
-% %             boundedline(bins,s_med,[s_mad, s_mad],...
-% %                 'alpha',speedFig.Children,'cmap',plotColors(simCtr,:))
-% %             % directional and velocity cross-correlation
-% %             bins = (0:numel(corr_o_med)-1).*distBinwidth;
-% %             boundedline(bins,corr_o_med,[corr_o_mad, corr_o_mad],...
-% %                 'alpha',dircorrFig.Children,'cmap',plotColors(simCtr,:))
-% %             boundedline(bins,corr_v_med,[corr_v_mad, corr_v_mad],...
-% %                 'alpha',velcorrFig.Children,'cmap',plotColors(simCtr,:))
+            % speed v distance
+            bins = (0:numel(s_med)-1).*distBinwidth;
+            boundedline(bins,s_med,[s_med - s_ci(:,1), s_ci(:,2) - s_med],...
+                'alpha',speedFig.Children,'cmap',plotColors(simCtr,:))
+            % directional and velocity cross-correlation
+            bins = (0:numel(corr_o_med)-1).*distBinwidth;
+            boundedline(bins,corr_o_med,[corr_o_med - corr_o_ci(:,1), corr_o_ci(:,2) - corr_o_med],...
+                'alpha',dircorrFig.Children,'cmap',plotColors(simCtr,:))
+            boundedline(bins,corr_v_med,[corr_v_med - corr_v_ci(:,1), corr_v_ci(:,2) - corr_v_med],...
+                'alpha',velcorrFig.Children,'cmap',plotColors(simCtr,:))
             % radial distribution / pair correlation
             boundedline(distBins(2:end)-distBinwidth/2,mean(gr,2),...
                 [nanstd(gr,0,2) nanstd(gr,0,2)]./sqrt(numFrames),...

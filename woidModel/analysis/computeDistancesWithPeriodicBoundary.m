@@ -1,7 +1,7 @@
 function distances = computeDistancesWithPeriodicBoundary(positionArray,L)
 % find distances between all pairs of objects, correcting for periodic
 % boundaries
-% positionArrahy should have form [x, y], where x,y are column vectors
+% positionArray should have form [x, y], where x,y are column vectors
 
 % issues / todo:
 
