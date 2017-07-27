@@ -1,3 +1,4 @@
+function [] = plotWoidPhasePortraitCorrelationAnalysis(Nvalue,Lvalue)
 % plot woidlet phase portrait
 % shows plots of correlation analysis
 
@@ -6,7 +7,6 @@
 % bootstrap error bars, (alternatively exclude those bins)
 
 close all
-clear
 
 exportOptions = struct('Format','eps2',...
     'Color','rgb',...
@@ -17,10 +17,8 @@ exportOptions = struct('Format','eps2',...
     'LineWidth',1,...
     'Renderer','opengl');
 
-radius = 0.035;
-plotColor = [0.25, 0.25, 0.25];
-Nval = 40;
-Lval = 7.5;
+% Nval = 60;
+% Lval = 7.5;
 revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];
 speeds = [0.33];
 slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025]);
@@ -40,7 +38,7 @@ for speed = speeds
     speedFig.Name = ['v_0 = ' num2str(speed)];
     for slowspeed = slowspeeds
         for revRateClusterEdge = revRatesClusterEdge
-            filename = ['../results/woids/woids' '_N_' num2str(Nval) '_L_' num2str(Lval) ...%'_noUndulations'...
+            filename = ['../results/woids/woids' '_N_' num2str(Nvalue) '_L_' num2str(Lvalue) ... %'_noUndulations'...
                 '_v0_' num2str(speed,'%1.0e') ...
                 '_vs_' num2str(slowspeed,'%1.0e') '_gradualSlowDown' ...
                 '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
@@ -54,12 +52,12 @@ for speed = speeds
                 else
                     saveEvery = thisFile.saveevery;
                 end
-                numFrames =  min(round((maxNumFrames - burnIn)*thisFile.param.dT*saveEvery*3),maxNumFrames - burnIn); %maxNumFrames-burnIn;
-%                 framesAnalyzed = burnIn + randperm(maxNumFrames - burnIn,numFrames); % randomly sample frames without replacement
+                numFrames =  min(round((maxNumFrames - burnIn)*thisFile.param.dT*saveEvery),maxNumFrames - burnIn); %maxNumFrames-burnIn;
+                framesAnalyzed = burnIn + randperm(maxNumFrames - burnIn,numFrames); % randomly sample frames without replacement
 %                 framesAnalyzed = round(linspace(burnIn,maxNumFrames,numFrames));
-                            framesAnalyzed = burnIn+1:maxNumFrames;
+%                             framesAnalyzed = burnIn+1:maxNumFrames;
                 %% calculate stats
-                [s_med,s_ci, corr_o_med,corr_o_ci, corr_v_med,corr_v_ci, gr,distBins] = ...
+                [s_med,s_ci, corr_o_med,corr_o_ci, corr_v_med,corr_v_ci, gr,distBins,nearestDistBins,pairDistBins] = ...
                     correlationanalysisSimulations(thisFile,trackedNodes,distBinwidth,framesAnalyzed,maxDist);
                 %% plot data
                 % radial distribution / pair correlation
@@ -68,29 +66,27 @@ for speed = speeds
                 boundedline(distBins(2:end)-distBinwidth/2,mean(gr,2),...
                     [nanstd(gr,0,2) nanstd(gr,0,2)]./sqrt(numFrames))
                 ax = formatAxes(revRateClusterEdge,slowspeed);
-                ax.YTick = 0:4;
-                ax.YLim = [0 4];
+                ax.YTick = 0:6;
+                ax.YLim = [0 6];
                 % speed v distance
                 set(0,'CurrentFigure',speedFig)
-                bins = (0:numel(s_med)-1).*distBinwidth;
                 subplot(length(slowspeeds),length(revRatesClusterEdge),plotCtr)
-                boundedline(bins,s_med,[s_med - s_ci(:,1), s_ci(:,2) - s_med])
+                boundedline(nearestDistBins,s_med,[s_med - s_ci(:,1), s_ci(:,2) - s_med])
                 ax = formatAxes(revRateClusterEdge,slowspeed);
                 ax.YLim = [0 0.5];
                 ax.YTick = 0:0.1:0.5;
                 ax.XDir = 'reverse';
                 % directional and velocity cross-correlation
-                bins = (0:numel(corr_o_med)-1).*distBinwidth;
                 set(0,'CurrentFigure',dircorrFig)
                 subplot(length(slowspeeds),length(revRatesClusterEdge),plotCtr)
-                boundedline(bins,corr_o_med,[corr_o_med - corr_o_ci(:,1),...
+                boundedline(pairDistBins,corr_o_med,[corr_o_med - corr_o_ci(:,1),...
                     corr_o_ci(:,2) - corr_o_med])
                 ax = formatAxes(revRateClusterEdge,slowspeed);
                 ax.YLim = [-1 1];
                 ax.YTick = [-1 0 1];
                 set(0,'CurrentFigure',velcorrFig)
                 subplot(length(slowspeeds),length(revRatesClusterEdge),plotCtr)
-                boundedline(bins,corr_v_med,[corr_v_med - corr_v_ci(:,1),...
+                boundedline(pairDistBins,corr_v_med,[corr_v_med - corr_v_ci(:,1),...
                     corr_v_ci(:,2) - corr_v_med])
                 ax = formatAxes(revRateClusterEdge,slowspeed);
                 ax.YLim = [-1 1];
@@ -132,6 +128,7 @@ for speed = speeds
     exportfig(velcorrFig,filename, exportOptions)
     system(['epstopdf ' filename]);
     system(['rm ' filename]);
+end
 end
 
 function ax = formatAxes(revRateClusterEdge,slowspeed)

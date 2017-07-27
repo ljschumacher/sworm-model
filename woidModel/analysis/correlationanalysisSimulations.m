@@ -1,4 +1,4 @@
-function [s_med,s_ci, corr_o_med,corr_o_ci, corr_v_med,corr_v_ci, gr,distBins] = ...
+function [s_med,s_ci, corr_o_med,corr_o_ci, corr_v_med,corr_v_ci, gr,distBins,nNbrDistBins,pairDistBins] = ...
     correlationanalysisSimulations(simfile,trackedNodes,distBinWidth,framesAnalyzed,maxDist)
 % calculate directional & velocity correlation, and
 % radial distribution functions
@@ -72,7 +72,7 @@ vxcorr = NaN(size(pairdist));
 distBins = 0:distBinWidth:maxDist;
 gr = NaN(length(distBins) - 1,numFrames);
 Area = simfile.L(1)*simfile.L(end); % should work for both scalar L and [Lx, Ly]
-nearestNbrDist = NaN(N,numFrames);
+nNbrDist = NaN(N,numFrames);
 for frameCtr = 1:numFrames
     frame = framesAnalyzed(frameCtr);
     dxcorr(:,frameCtr) = vectorCrossCorrelation2D(ox(:,frame),oy(:,frame),true); % directional correlation
@@ -86,23 +86,30 @@ for frameCtr = 1:numFrames
     gr(:,frameCtr) = gr(:,frameCtr)'.*Area./(2*pi*distBins(2:end)*distBinWidth)...
         /(N*(N-1)/2); % normalisation by number of pairs, not double-counting
     distanceMatrix = squareform(pairdist(:,frameCtr)); % distance of every worm to every other
-    nearestNbrDist(:,frameCtr) = min(distanceMatrix + max(max(distanceMatrix))*eye(size(distanceMatrix)));
+    nNbrDist(:,frameCtr) = min(distanceMatrix + max(max(distanceMatrix))*eye(size(distanceMatrix)));
 end
 % bin distance data
-nearestNbrDist = quant(nearestNbrDist,distBinWidth);
-pairdist = quant(pairdist,distBinWidth);
-% ignore larger distance values and too small ones (artefact of binning)
-nNdistkeepIdcs = nearestNbrDist(:)<=maxDist;
+[nNbrDistcounts,nNbrDistBins,nNbrDistbinIdx]  = histcounts(nNbrDist(:),...
+    'BinWidth',distBinWidth,'BinLimits',[min(nNbrDist(:)) maxDist]);
+[pairDistcounts,pairDistBins,pairDistbinIdx]  = histcounts(pairdist(:),...
+    'BinWidth',distBinWidth,'BinLimits',[min(pairdist(:)) maxDist]);
+% convert bin edges to centres (for plotting)
+nNbrDistBins = nNbrDistBins(1:end-1) + diff(nNbrDistBins)/2;
+pairDistBins = pairDistBins(1:end-1) + diff(pairDistBins)/2;
+% ignore larger distance values and bins with only one element, as this will cause bootsci to fault
+nNdistkeepIdcs = nNbrDistbinIdx>0&ismember(nNbrDistbinIdx,find(nNbrDistcounts>1));
+nNbrDistBins = nNbrDistBins(nNbrDistcounts>1);
 speed = speed(nNdistkeepIdcs);
-nearestNbrDist = nearestNbrDist(nNdistkeepIdcs);
-pdistkeepIdcs = pairdist(:)<=maxDist&pairdist(:)>=distBinWidth;
+nNbrDistbinIdx = nNbrDistbinIdx(nNdistkeepIdcs);
+pdistkeepIdcs = pairDistbinIdx>0&ismember(pairDistbinIdx,find(pairDistcounts>1));
+pairDistBins = pairDistBins(pairDistcounts>1);
 dxcorr = dxcorr(pdistkeepIdcs);
 vxcorr = vxcorr(pdistkeepIdcs);
-pairdist = pairdist(pdistkeepIdcs);
+pairDistbinIdx = pairDistbinIdx(pdistkeepIdcs);
 
-[s_med,s_ci] = grpstats(speed(:),nearestNbrDist(:),{@median,bootserr});
-[corr_o_med,corr_o_ci] = grpstats(dxcorr(:),pairdist(:),{@median,bootserr});
-[corr_v_med,corr_v_ci] = grpstats(vxcorr(:),pairdist(:),{@median,bootserr});
+[s_med,s_ci] = grpstats(speed(:),nNbrDistbinIdx,{@median,bootserr});
+[corr_o_med,corr_o_ci] = grpstats(dxcorr(:),pairDistbinIdx,{@median,bootserr});
+[corr_v_med,corr_v_ci] = grpstats(vxcorr(:),pairDistbinIdx,{@median,bootserr});
 end
 
 function w = correctForPeriodicBoundary(v,L)

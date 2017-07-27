@@ -46,7 +46,9 @@
 % - is there a more efficient way of storing the coords than 4-d array?
 % - make object-orientated, see eg ../woid.m class, vector of woid
 % objects...
-% - is it still necessary to keep track of node orientation?
+% - it would be good to be able to resume a simulation from previously
+% saved output. for that we'd need to save, in addition to xyarray:
+% reversalLogIng, orientations, phaseOffset, 
 
 function xyarray = runWoids(T,N,M,L,varargin)
 
@@ -128,8 +130,6 @@ assert(min(L)>segmentLength*(M - 1),...
     'Domain size (L) must be bigger than object length (segmentLength*M). Increase L.')
 assert(v0>=vs,'vs should be chosen smaller or equal to v0')
 
-% preallocate internal oscillators
-theta = NaN(N,M,numSavepoints);
 % preallocate reversal states
 reversalLogInd = false(N,numTimepoints);
 reversalLogIndPrev = reversalLogInd(:,1);
@@ -138,10 +138,9 @@ phaseOffset = wrapTo2Pi(rand(N,1)*2*pi - deltaPhase*(1:M));
 % initialise worm positions and node directions - respecting volume
 % exclusion
 initialExclusionRadius = max(rc,sigma_LJ/2); % so that we don't get too overlapping initial positions, even when rc = 0
-[xyarray, theta(:,:,1)] = initialiseWoids(N,M,numSavepoints,L,segmentLength,...
+[xyarray, orientations] = initialiseWoids(N,M,numSavepoints,L,segmentLength,...
     phaseOffset,theta_0,initialExclusionRadius,bc);
 positions = xyarray(:,:,:,1);
-orientations = theta(:,:,1);
 % initialise time
 t = 0;
 timeCtr = 1;
@@ -196,7 +195,6 @@ while t<T
         if t>=saveCtr*dT0*saveEvery
             saveCtr = saveCtr+1;
             xyarray(:,:,:,saveCtr) = positions;
-            theta(:,:,saveCtr) = orientations;
         end
         timeCtr = timeCtr + 1;
         if mod(timeCtr,displayOutputEvery)==0

@@ -14,7 +14,7 @@ exportOptions = struct('Format','eps2',...
     'LineWidth',1,...
     'Renderer','opengl');
 
-distBinwidth = 0.05; % in units of mm, sensibly to be chosen similar worm width or radius
+distBinwidth = 0.035; % in units of mm, sensibly to be chosen similar worm width or radius
 maxDist = 2;
 % simulations = {'DA609_noflux','N2_noflux','DA609_noflux_slowingNodesAll',...
 %     'DA609_noflux_lennardjones1e-04'};
@@ -44,22 +44,20 @@ for trackedNodesName = trackedNodesNames
             maxNumFrames = size(thisFile.xyarray,4);
             burnIn = round(0.1*maxNumFrames);
             numFrames =  min(round((maxNumFrames - burnIn)*thisFile.param.dT*thisFile.saveevery),maxNumFrames - burnIn); %maxNumFrames-burnIn;
-%             framesAnalyzed = burnIn + randperm(maxNumFrames - burnIn,numFrames); % randomly sample frames without replacement
+            framesAnalyzed = burnIn + randperm(maxNumFrames - burnIn,numFrames); % randomly sample frames without replacement
 %             framesAnalyzed = round(linspace(burnIn,maxNumFrames,numFrames));
-            framesAnalyzed = burnIn+1:maxNumFrames;
+%             framesAnalyzed = burnIn+1:maxNumFrames;
             %% calculate stats
-            [s_med,s_ci, corr_o_med,corr_o_ci, corr_v_med,corr_v_ci, gr,distBins] = ...
+            [s_med,s_ci, corr_o_med,corr_o_ci, corr_v_med,corr_v_ci, gr,distBins,nearestDistBins,pairDistBins] = ...
     correlationanalysisSimulations(thisFile,trackedNodes,distBinwidth,framesAnalyzed,maxDist);
             %% plot data
             % speed v distance
-            bins = (0:numel(s_med)-1).*distBinwidth;
-            boundedline(bins,s_med,[s_med - s_ci(:,1), s_ci(:,2) - s_med],...
+            boundedline(nearestDistBins,s_med,[s_med - s_ci(:,1), s_ci(:,2) - s_med],...
                 'alpha',speedFig.Children,'cmap',plotColors(simCtr,:))
             % directional and velocity cross-correlation
-            bins = (0:numel(corr_o_med)-1).*distBinwidth;
-            boundedline(bins,corr_o_med,[corr_o_med - corr_o_ci(:,1), corr_o_ci(:,2) - corr_o_med],...
+            boundedline(pairDistBins,corr_o_med,[corr_o_med - corr_o_ci(:,1), corr_o_ci(:,2) - corr_o_med],...
                 'alpha',dircorrFig.Children,'cmap',plotColors(simCtr,:))
-            boundedline(bins,corr_v_med,[corr_v_med - corr_v_ci(:,1), corr_v_ci(:,2) - corr_v_med],...
+            boundedline(pairDistBins,corr_v_med,[corr_v_med - corr_v_ci(:,1), corr_v_ci(:,2) - corr_v_med],...
                 'alpha',velcorrFig.Children,'cmap',plotColors(simCtr,:))
             % radial distribution / pair correlation
             boundedline(distBins(2:end)-distBinwidth/2,mean(gr,2),...
@@ -83,8 +81,8 @@ for trackedNodesName = trackedNodesNames
         system(['epstopdf ' figurename '.eps']);
         system(['rm ' figurename '.eps']);
         % directional and velocity cross-correlation
-        dircorrFig.Children.YLim = [-1 1];
-        dircorrFig.Children.XLim = [0 1];
+%         dircorrFig.Children.YLim = [-1 1];
+        dircorrFig.Children.XLim = [0 2];
         ylabel(dircorrFig.Children,'directional correlation')
         xlabel(dircorrFig.Children,'distance r (mm)')
         figurename = ['figures/dircrosscorr/dircrosscorr' simulations{simCtr} '_' trackedNodesName{1}];
@@ -93,7 +91,7 @@ for trackedNodesName = trackedNodesNames
         system(['rm ' figurename '.eps']);
         %
 %         velcorrFig.Children.YLim = [-1 1];
-        velcorrFig.Children.XLim = [0 1];
+        velcorrFig.Children.XLim = [0 2];
         ylabel(velcorrFig.Children,'velocity correlation')
         xlabel(velcorrFig.Children,'distance r (mm)')
         figurename = ['figures/velcrosscorr/velcrosscorr' simulations{simCtr} '_' trackedNodesName{1}];
