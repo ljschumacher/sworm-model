@@ -75,8 +75,8 @@ Area = simfile.L(1)*simfile.L(end); % should work for both scalar L and [Lx, Ly]
 nNbrDist = NaN(N,numFrames);
 for frameCtr = 1:numFrames
     frame = framesAnalyzed(frameCtr);
-    dxcorr(:,frameCtr) = vectorCrossCorrelation2D(ox(:,frame),oy(:,frame),true); % directional correlation
-    vxcorr(:,frameCtr) = vectorCrossCorrelation2D(vx(:,frame),vy(:,frame),true); % velocity correlation
+    dxcorr(:,frameCtr) = vectorCrossCorrelation2D(ox(:,frame),oy(:,frame),true,true); % directional correlation
+    vxcorr(:,frameCtr) = vectorCrossCorrelation2D(vx(:,frame),vy(:,frame),true,true); % velocity correlation
     if strcmp(simfile.param.bc,'periodic')
         pairdist(:,frameCtr) = computeDistancesWithPeriodicBoundary([x(:,frame) y(:,frame)],simfile.L);
     else
