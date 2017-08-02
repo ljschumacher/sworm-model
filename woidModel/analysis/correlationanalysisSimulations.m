@@ -76,7 +76,7 @@ nNbrDist = NaN(N,numFrames);
 for frameCtr = 1:numFrames
     frame = framesAnalyzed(frameCtr);
     dxcorr(:,frameCtr) = vectorCrossCorrelation2D(ox(:,frame),oy(:,frame),true,true); % directional correlation
-    vxcorr(:,frameCtr) = vectorCrossCorrelation2D(vx(:,frame),vy(:,frame),true,true); % velocity correlation
+    vxcorr(:,frameCtr) = vectorCrossCorrelation2D(vx(:,frame),vy(:,frame),true,false); % velocity correlation
     if strcmp(simfile.param.bc,'periodic')
         pairdist(:,frameCtr) = computeDistancesWithPeriodicBoundary([x(:,frame) y(:,frame)],simfile.L);
     else

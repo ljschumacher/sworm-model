@@ -52,7 +52,7 @@ for speed = speeds
                 else
                     saveEvery = thisFile.saveevery;
                 end
-                numFrames =  min(round((maxNumFrames - burnIn)*thisFile.param.dT*saveEvery),maxNumFrames - burnIn); %maxNumFrames-burnIn;
+                numFrames =  min(round((maxNumFrames - burnIn)*thisFile.param.dT*saveEvery/3),maxNumFrames - burnIn); %maxNumFrames-burnIn;
                 framesAnalyzed = burnIn + randperm(maxNumFrames - burnIn,numFrames); % randomly sample frames without replacement
 %                 framesAnalyzed = round(linspace(burnIn,maxNumFrames,numFrames));
 %                             framesAnalyzed = burnIn+1:maxNumFrames;
