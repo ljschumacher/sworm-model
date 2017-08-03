@@ -97,7 +97,7 @@ numTimepoints = floor(T/dT0);
 numSavepoints = floor(T/dT0/saveEvery);
 
 v0 = iP.Results.v0;
-dTmin = dT0/10/N*v0; % set a mininum timestep below which dT won't be adapted
+dTmin = dT0/10/sqrt(N)*v0; % set a mininum timestep below which dT won't be adapted
 rc = iP.Results.rc;
 bc = iP.Results.bc;
 if M>1
