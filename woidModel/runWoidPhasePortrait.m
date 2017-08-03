@@ -22,9 +22,9 @@ paramAll.slowingNodes = [1:M];% slowingNodes: which nodes register contact (defa
 paramAll.r_LJcutoff = 5*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 
-revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];
+revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
 speeds = [0.33];
-slowspeeds = [0.33, 0.1, 0.05, 0.025];
+slowspeeds = [0.33, 0.1, 0.05, 0.025, 0.0125];
 attractionStrengths = [0];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths);
 nParamCombis = size(paramCombis,2);
