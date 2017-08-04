@@ -14,11 +14,11 @@ exportOptions = struct('Format','eps2',...
 
 radius = 0.035;
 plotColor = [0.25, 0.25, 0.25];
-Nval = 200;
-Lval = 16.8;
-revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];
+Nval = 40;
+Lval = 7.5;
+revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
 speeds = [0.33];
-slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025]);
+slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 % slowspeeds = fliplr([0.33, 0.2, 0.1, 0.05]);
 attractionStrength = [0];
 for speed = speeds
