@@ -19,9 +19,9 @@ exportOptions = struct('Format','eps2',...
 
 % Nval = 60;
 % Lval = 7.5;
-revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];
+revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
 speeds = [0.33];
-slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025]);
+slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 % slowspeeds = fliplr([0.33, 0.2, 0.1, 0.05]);
 attractionStrength = [0];
 trackedNodes = 1:5;

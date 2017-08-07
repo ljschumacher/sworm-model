@@ -78,9 +78,11 @@ addOptional(iP,'revTime',2,@isnumeric) % duration of reversal events, default 2s
 addOptional(iP,'headNodes',1:max(round(M/10),1),checkInt) % which nodes count as head, default front 10%
 addOptional(iP,'tailNodes',(M-max(round(M/10),1)+1):M,checkInt) % which nodes count as tail, default back 10%
 addOptional(iP,'ri',0.035*3,@isnumeric) % radius at which worms register contact, default 3 rc
+addOptional(iP,'Rir',1,@isnumeric) % relative interaction radius for reversals, default 1 (ie = ri)
 % slowing down
 addOptional(iP,'vs',0.33/3,@isnumeric) % speed when slowed down, default v0/3
 addOptional(iP,'slowingNodes',[1:max(round(M/10),1) (M-max(round(M/10),1)+1):M],checkInt) % which nodes sense proximity, default head and tail
+addOptional(iP,'Ris',1,@isnumeric) % relative interaction radius for slowing, default 1 (ie = ri)
 % Lennard-Jones
 addOptional(iP,'r_LJcutoff',0,@isnumeric) % cut-off above which lennard jones potential is not acting anymore
 addOptional(iP,'eps_LJ',1e-6,@isnumeric) % strength of LJ-potential
@@ -117,6 +119,8 @@ revTime = round(iP.Results.revTime/dT0); % convert to unit of timesteps
 headNodes = iP.Results.headNodes;
 tailNodes = iP.Results.tailNodes;
 ri = iP.Results.ri;
+Rir = iP.Results.Rir;
+Ris = iP.Results.Ris;
 vs = iP.Results.vs;
 slowingNodes = iP.Results.slowingNodes;
 r_LJcutoff = iP.Results.r_LJcutoff;
@@ -145,7 +149,7 @@ positions = xyarray(:,:,:,1);
 t = 0;
 timeCtr = 1;
 saveCtr = 1;
-disp('Running simulation...')
+disp(['Running simulation...' datestr(now)])
 while t<T
     % find distances between all pairs of objects
     if N==40&&M==49&&numel(L)==2&&~iscell(bc) % check if we can use compiled mex function
@@ -159,11 +163,11 @@ while t<T
     end
     distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar distances
     % check if any woids are slowed down by neighbors
-    [ v, omega ] = slowWorms(distanceMatrix,ri,slowingNodes,vs,v0,omega_m);
+    [ v, omega ] = slowWorms(distanceMatrix,Ris*ri,slowingNodes,vs,v0,omega_m);
     % check if any worms are reversing due to contacts
     reversalLogIndPrev(reversalLogInd(:,timeCtr)) = true; % only update events that happen between timeCtr updates, ie reversal starts
     reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
-        ri,headNodes,tailNodes,dT,revRate,revTime,revRateCluster,revRateClusterEdge);
+        Rir*ri,headNodes,tailNodes,dT,revRate,revTime,revRateCluster,revRateClusterEdge);
     % update internal oscillators / headings
     [orientations, phaseOffset] = updateWoidOscillators(orientations,theta_0,...
         omega,dT,phaseOffset,deltaPhase,[reversalLogIndPrev, reversalLogInd(:, timeCtr)]);
