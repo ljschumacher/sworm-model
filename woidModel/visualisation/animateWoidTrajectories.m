@@ -38,8 +38,10 @@ for frameCtr=1:nFrames
         % don't plot connecting lines for objects that span across a
         % periodic boundary
         excludedObjects = any(any(abs(diff(xyarray(:,:,:,frameCtr),1,2))>min(L./2),3),2);
-        plot(xyarray(~excludedObjects,:,x,frameCtr)',xyarray(~excludedObjects,:,y,frameCtr)','k-');
-        if any(~excludedObjects), hold on, end
+        if any(~excludedObjects)
+            plot(xyarray(~excludedObjects,:,x,frameCtr)',xyarray(~excludedObjects,:,y,frameCtr)','k-');
+            hold on
+        end
     elseif rc==0
         plot(xyarray(:,:,x,frameCtr)',xyarray(:,:,y,frameCtr)','.','Color','k');
         hold on
@@ -49,11 +51,25 @@ for frameCtr=1:nFrames
             'Color',[0.5 0.5 0.5]);
         hold on
     end
+    if rc>0
+        for objCtr = 1:N
+            patch(xyarray(objCtr,:,x,frameCtr) + rc*cos(angles),...
+                xyarray(objCtr,:,y,frameCtr) + rc*sin(angles),...
+                plotColors(objCtr,:),'EdgeColor','none')
+            if objCtr==1, hold on, end
+            % patches seems to be faster than viscircles
+            %         viscircles(squeeze(xyarray(objCtr,:,[x y],frameCtr)),rc*ones(M,1),...
+            %             'Color',plotColors(objCtr,:),'EnhanceVisibility',false,...
+            %             'LineWidth',1);
+        end
+    end
+    % plot heads
+    plot(xyarray(:,1,x,frameCtr)',xyarray(:,1,y,frameCtr)','.','Color','k');
+    % formatting    
     ax = gca;
     % plot circular domain boundaries, if given scalar domain size
     if nargin>=3&&numel(L)==1
         viscircles(ax,[0 0],L,'Color',[0.5 0.5 0.5],'LineWidth',2,'EnhanceVisibility',false);
-        hold on
         ax.XLim = [-L L];
         ax.YLim = [-L L];
     elseif numel(L)==2
@@ -68,24 +84,9 @@ for frameCtr=1:nFrames
     ax.DataAspectRatio = [1 1 1];
     ax.XTick = [];
     ax.YTick = [];
-    if rc>0
-        for objCtr = 1:N
-            patch(xyarray(objCtr,:,x,frameCtr) + rc*cos(angles),...
-                xyarray(objCtr,:,y,frameCtr) + rc*sin(angles),...
-                plotColors(objCtr,:),'EdgeColor','none')
-            if objCtr==1
-                hold on
-            end
-            % patches seems to be faster than viscircles
-            %         viscircles(squeeze(xyarray(objCtr,:,[x y],frameCtr)),rc*ones(M,1),...
-            %             'Color',plotColors(objCtr,:),'EnhanceVisibility',false,...
-            %             'LineWidth',1);
-        end
-    end
-    % plot heads
-    plot(xyarray(:,1,x,frameCtr)',xyarray(:,1,y,frameCtr)','.','Color','k');
+    
     writeVideo(vid,getframe)
-    hold off
+    cla(ax) % reset axes
 end
 close(vid)
 

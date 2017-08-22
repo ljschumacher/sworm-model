@@ -34,10 +34,10 @@ L = 2;
 % xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'revRate',0);
 % animateWoidTrajectories(xyarray,'tests/singleWorm_noflux_revRate0',L);
 % 
-rng(6)
-xyarray = runWoids(12,1,M,[L L],'bc','periodic','dT',dT,'saveEvery',saveEvery,...
-    'revRate',0.5,'theta_0',0,'omega_m',0,'deltaPhase',0);
-animateWoidTrajectories(xyarray,'tests/singleWorm_periodic_undulations0',[L L]);
+% rng(6)
+% xyarray = runWoids(12,1,M,[L L],'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+%     'revRate',0.5,'theta_0',0,'omega_m',0,'deltaPhase',0);
+% animateWoidTrajectories(xyarray,'tests/singleWorm_periodic_undulations0',[L L]);
 % 
 % xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'v0',1e-4,'vs',1e-4,'omega_m',0,'revRate',0);
 % animateWoidTrajectories(xyarray,'tests/singleWorm_targetcurvatureTest',L,0);
@@ -83,6 +83,12 @@ animateWoidTrajectories(xyarray,'tests/singleWorm_periodic_undulations0',[L L]);
 % xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,...
 %     'theta_0',0,'omega_m',0,'deltaPhase',0,'revRate',0);
 % animateWoidTrajectories(xyarray,'tests/twoWorms_noflux_undulations0',L);
+% 
+rng(1)
+eps_LJ = 4e-4;
+xyarray = runWoids(20,2,M,[L L],'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+    'r_LJcutoff',5*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035);
+animateWoidTrajectories(xyarray,['tests/twoWorms_periodic_LennardJones' num2str(eps_LJ,'%1.0e')],[L L]);
 
 % many worms
 % L = 8.5/2;
