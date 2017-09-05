@@ -66,8 +66,8 @@ for speed = speeds
                 boundedline(distBins(2:end)-distBinwidth/2,mean(gr,2),...
                     [nanstd(gr,0,2) nanstd(gr,0,2)]./sqrt(numFrames))
                 ax = formatAxes(revRateClusterEdge,slowspeed);
-                ax.YTick = 0:6;
-                ax.YLim = [0 6];
+                ax.YTick = 0:2:12;
+                ax.YLim = [0 12];
                 % speed v distance
                 set(0,'CurrentFigure',speedFig)
                 subplot(length(slowspeeds),length(revRatesClusterEdge),plotCtr)

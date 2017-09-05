@@ -1,4 +1,4 @@
-% test simplified woid model with two nodes per woid
+% test simplified woid model with single node per woid
 
 % issues/todo:
 % - always reseed random number generator before each simulation?
@@ -6,18 +6,21 @@
 clear
 close all
 
+addpath('../')
+addpath('../visualisation')
+
 % general model parameters for all test - unless set otherwise
-M = 2; % M: number of nodes in each object
+N = 160; % N: number of objects
+M = 1; % M: number of nodes in each object
 L = 10;%[20, 20]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
-param.v0 = 0.5; % v0: speed (default 0.05)
-rc = 0.35;
-param.rc = -1; % rc: core repulsion radius (default 0.07 mm)
-param.segmentLength = 2*rc;
-param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
+param.v0 = 1; % v0: speed (default 0.05)
+param.rc = 0.5; % rc: core repulsion radius (default 0.07 mm)
+% param.segmentLength = 0;
+param.dT = param.rc/param.v0/8; % dT: time step, gets adapted in simulation
 T = 50; % T: simulation duration (number of time-steps)
 saveevery = round(1/2/param.dT);
-param.k_l = 1/param.segmentLength; % stiffness of linear springs connecting nodes
 param.bc = 'noflux'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
+param.k_l = 0; % stiffness of linear springs connecting nodes
 % undulations
 param.k_theta = 0; % stiffness of rotational springs at nodes
 param.omega_m = 0; % angular frequency of oscillation of movement direction, default 0.6 Hz
@@ -29,7 +32,7 @@ param.revRateCluster = 0;% revRateCluster: rate for reversals when in a cluster 
 param.revTime = 2; % revTime: duration of reversal events (default 2s, rounded to integer number of time-steps)
 param.headNodes = [];% headNodes: which nodes count as head for defining cluster status, default front 10%
 param.tailNodes = [];% tailNodes: which nodes count as tail for defining cluster status, default back 10%
-param.ri = 3*rc;% ri: radius at which worms register contact (default 3 rc)
+param.ri = 3*param.rc;% ri: radius at which worms register contact (default 3 rc)
 % -- slow-down parameters --
 param.vs = param.v0;% vs: speed when slowed down (default v0/3)
 param.slowingNodes = [];% slowingNodes: which nodes register contact (default [1 M], ie head and tail)
@@ -37,44 +40,20 @@ param.slowingNodes = [];% slowingNodes: which nodes register contact (default [1
 param.r_LJcutoff = param.ri;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
 
-% N = 20;
-% xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_noflux_circular',L,rc);
+xyarray = runWoids(T,N,M,L,param);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlets/test_noflux_circular',L,param.rc);
 
 L = [20, 20];
-% N = 50;
-% xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_noflux_square',L,rc);
+N = 204;
+xyarray = runWoids(T,N,M,L,param);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlets/test_noflux_square',L,param.rc);
 
 param.bc = 'periodic';
-% xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square',L,rc);
+xyarray = runWoids(T,N,M,L,param);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlets/test_periodic_square',L,param.rc);
 
-% param.r_LJcutoff = 2*rc;
-% param.eps_LJ = 1e-2;
-% param.sigma_LJ = 2*rc;
-% rng(1)
-% xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_repulsionOnly',L,rc);
-% param.eps_LJ = 0;
-
-% param.r_LJcutoff = rc;
-% param.rc = rc;
-% rng(1)
-% xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_contactForces',L,rc);
-
-param.revRate = 0.1;
+param.revRate = 1;
 param.revTime = 10;
 N = 1;
 xyarray = runWoids(T,N,M,L,param);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_reversals',L,rc);
-
-% param.revRate = 0;
-% param.revRateClusterEdge = 1;
-% param.revTime = 5;
-% param.headNodes = 1;
-% param.tailNodes = 2;
-% N = 50;
-% xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'tests/woidlinos/test_periodic_square_reversalsClusterEdge',L,rc);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlets/test_periodic_square_reversals',L,param.rc);
