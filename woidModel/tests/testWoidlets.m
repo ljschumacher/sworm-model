@@ -41,19 +41,19 @@ param.r_LJcutoff = param.ri;% r_LJcutoff: cut-off above which LJ-force is not ac
 param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
 
 xyarray = runWoids(T,N,M,L,param);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlets/test_noflux_circular',L,param.rc);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlet_test_movies/test_noflux_circular',L,param.rc);
 
 L = [20, 20];
 N = 204;
 xyarray = runWoids(T,N,M,L,param);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlets/test_noflux_square',L,param.rc);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlet_test_movies/test_noflux_square',L,param.rc);
 
 param.bc = 'periodic';
 xyarray = runWoids(T,N,M,L,param);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlets/test_periodic_square',L,param.rc);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlet_test_movies/test_periodic_square',L,param.rc);
 
 param.revRate = 1;
 param.revTime = 10;
 N = 1;
 xyarray = runWoids(T,N,M,L,param);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlets/test_periodic_square_reversals',L,param.rc);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlet_test_movies/test_periodic_square_reversals',L,param.rc);

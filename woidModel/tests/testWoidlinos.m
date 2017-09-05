@@ -41,36 +41,36 @@ param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
 
 % N = 20;
 % xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlinos/test_noflux_circular',L,rc);
+% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlino_test_movies/test_noflux_circular',L,rc);
 
 L = [20, 20];
 % N = 50;
 % xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlinos/test_noflux_square',L,rc);
+% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlino_test_movies/test_noflux_square',L,rc);
 
 param.bc = 'periodic';
 % xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlinos/test_periodic_square',L,rc);
+% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlino_test_movies/test_periodic_square',L,rc);
 
 % param.r_LJcutoff = 2*rc;
 % param.eps_LJ = 1e-2;
 % param.sigma_LJ = 2*rc;
 % rng(1)
 % xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlinos/test_periodic_square_repulsionOnly',L,rc);
+% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlino_test_movies/test_periodic_square_repulsionOnly',L,rc);
 % param.eps_LJ = 0;
 
 % param.r_LJcutoff = rc;
 % param.rc = rc;
 % rng(1)
 % xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlinos/test_periodic_square_contactForces',L,rc);
+% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlino_test_movies/test_periodic_square_contactForces',L,rc);
 
 param.revRate = 0.1;
 param.revTime = 10;
 N = 1;
 xyarray = runWoids(T,N,M,L,param);
-animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlinos/test_periodic_square_reversals',L,rc);
+animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlino_test_movies/test_periodic_square_reversals',L,rc);
 
 % param.revRate = 0;
 % param.revRateClusterEdge = 1;
@@ -79,4 +79,4 @@ animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlinos/test_periodic_
 % param.tailNodes = 2;
 % N = 50;
 % xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlinos/test_periodic_square_reversalsClusterEdge',L,rc);
+% animateWoidTrajectories(xyarray(:,:,:,1:saveevery:end),'woidlino_test_movies/test_periodic_square_reversalsClusterEdge',L,rc);
