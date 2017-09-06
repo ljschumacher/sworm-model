@@ -19,6 +19,9 @@ paramAll.ri = 3*rc;
 paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 paramAll.segmentLength = 2*rc;%1.2/(M - 1);
 paramAll.k_l = 40; % stiffness of linear springs connecting nodes
+% -- reversal parameters --
+paramAll.revRate = 0;
+paramAll.revRateCluster = 0;
 % -- slow-down parameters --
 paramAll.vs = 0;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
@@ -35,7 +38,7 @@ paramAll.deltaPhase = 0;
 revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
 speeds = [0.33];
 slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
-attractionStrengths = [0];
+attractionStrengths = [0, 2e-3, 4e-3];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths);
 nParamCombis = size(paramCombis,2);
 for paramCtr = 1:nParamCombis

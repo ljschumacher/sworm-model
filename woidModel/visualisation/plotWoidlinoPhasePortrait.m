@@ -17,9 +17,9 @@ L = [7.5 7.5];
 N = 40;
 plotColor = [0.5, 0.5, 0.5];
 
-revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];
+revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
 speeds = [0.33];
-slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025]);
+slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 attractionStrengths = [0];
 for speed = speeds
     phasePortraitFig = figure;
@@ -40,8 +40,9 @@ for speed = speeds
                     subplot(length(slowspeeds),length(revRatesClusterEdge),plotCtr)
                     radius = param.rc;
                     ax = plotWoidTrajectoriesSingleFrame(positions2plot,L,radius,plotColor);
-                    title(['r=' num2str(revRateClusterEdge) ', v_s =' num2str(slowspeed,'%1.0e')],...
+                    title(['r=' num2str(revRateClusterEdge) ', v\_s =' num2str(slowspeed,'%1.0e')],...
                         'FontWeight','normal')
+                    ax.Title.Margin = 1;
                     ax.Position = ax.Position.*[1 1 1.2 1.2] - [0.0 0.0 0 0]; % stretch panel
                     ax.DataAspectRatio = [1 1 1];
                     ax.Box = 'on';
@@ -57,6 +58,7 @@ for speed = speeds
     filename = ['../figures/woidlinos/woidlinoPhasePortrait_N_' num2str(N) ...
         '_M_' num2str(M) '_L_' num2str(L(1))...
         '_speed_' num2str(speed,'%1.0e') '_slowing' '_gradual' ...
+        '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
         '.eps'];
     exportfig(phasePortraitFig,filename, exportOptions)
     system(['epstopdf ' filename]);

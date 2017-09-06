@@ -1,4 +1,5 @@
-function [ F_contact ] = resolveContacts(forceArray,distanceMatrixFull,distanceMatrix, objInd, nodeInd, r_collision, sigma_LJ, r_LJcutoff, eps_LJ)
+function [ F_contact ] = resolveContacts(forceArray,distanceMatrixFull,distanceMatrix,...
+    objInd, nodeInd, r_collision, sigma_LJ, r_LJcutoff, eps_LJ)
 % to resolve contact forces between overlapping nodes
 % inputs:
 % forceArray is N by M by ndim matrix of forces acting on every node
@@ -24,7 +25,6 @@ end
 collisionNbrs = distanceMatrix<r_collision; % check distance to all other nodes of all other objects
 collisionNbrs(objInd,:) = false; % no contact force with self or for adjacent nodes: max(nodeInd-1,1):min(nodeInd+1,M)
 lennardjonesNbrs = distanceMatrix<=r_LJcutoff;
-lennardjonesNbrs(collisionNbrs) = false;
 lennardjonesNbrs(objInd,:) = false;
 % contact forces
 if any(collisionNbrs(:))

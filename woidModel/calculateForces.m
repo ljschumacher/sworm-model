@@ -1,5 +1,6 @@
 function forceArray = calculateForces(distanceMatrixXY,distanceMatrix,rc,...
-    headings,reversals,segmentLength,v_target,k_l,k_theta,theta_0,phaseOffset,sigma_LJ,r_LJcutoff, eps_LJ)
+    headings,reversals,segmentLength,v_target,k_l,k_theta,theta_0,phaseOffset,...
+    sigma_LJ,r_LJcutoff, eps_LJ)
 % updates object directions according to update rules
 
 % issues/to-do's:
@@ -119,7 +120,8 @@ else
     for objCtr = 1:N
         for nodeCtr = 1:M
             Fc(objCtr,nodeCtr,:) = resolveContacts(forceArray,distanceMatrixXY(:,:,:,objCtr,nodeCtr),...
-                distanceMatrix(:,:,objCtr,nodeCtr),objCtr,nodeCtr,2*rc,sigma_LJ,r_LJcutoff,eps_LJ); % factor of two so that rc is node radius
+                distanceMatrix(:,:,objCtr,nodeCtr),objCtr,nodeCtr,2*rc,...
+                sigma_LJ,r_LJcutoff,eps_LJ); % factor of two so that rc is node radius
         end
     end
 end
