@@ -132,7 +132,7 @@ end
 end
 
 function ax = formatAxes(revRateClusterEdge,slowspeed)
-title(['r=' num2str(revRateClusterEdge) ', v_s =' num2str(slowspeed,'%1.0e')],...
+title(['r=' num2str(revRateClusterEdge) ', v\_s =' num2str(slowspeed,'%1.0e')],...
     'FontWeight','normal')
 ax = gca;
 ax.Position = ax.Position.*[1 1 1.2 1.2] - [0.0 0.0 0 0]; % stretch panel
