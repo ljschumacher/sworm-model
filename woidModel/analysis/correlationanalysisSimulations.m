@@ -14,7 +14,7 @@ mad1 = @(x) mad(x,1); % median absolute deviation
 % which are 1.57*iqr/sqrt(n) - unclear how justified this is
 iqrci = @(x) 1.57*iqr(x)/sqrt(numel(x));
 % or one could use a bootstrapped confidence interval
-bootserr = @(x) bootci(1e1,{@nanmedian,x},'alpha',0.05,'Options',struct('UseParallel',false));
+bootserr = @(x) bootci(1e2,{@nanmedian,x},'alpha',0.05,'Options',struct('UseParallel',false));
 
 M = size(simfile.xyarray,2);
 if nargin<2||isempty(trackedNodes)
