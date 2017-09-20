@@ -35,6 +35,7 @@ param.deltaPhase = 0;
 param.v0 = [0.33];
 param.dT = min(1/2,rc/param.v0/16); % dT: time step, scales other parameters such as velocities and rates
 param.saveEvery = round(1/4/param.dT);
+param.revRateCluster = 0;
 
 % load randomly generated parameter samples
 load('paramSamples_nSim5625_nParam4.mat','paramSamples')

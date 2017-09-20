@@ -20,10 +20,10 @@ revRateClusterEdge = samplesRaw(:,1).*(revRate_range(2) - revRate_range(1)) + re
 slowSpeed_range = [0.01 0.33];
 slowSpeed = samplesRaw(:,2).*(slowSpeed_range(2) - slowSpeed_range(1)) + slowSpeed_range(1);
 
-Ris_range = [2 6];
+Ris_range = [2/3 6];
 Ris = samplesRaw(:,3).*(Ris_range(2) - Ris_range(1)) + Ris_range(1);
 
-Rir_range = [2 6];
+Rir_range = [2/3 6];
 Rir = samplesRaw(:,4).*(Rir_range(2) - Rir_range(1)) + Rir_range(1);
 
 % make a table of the parameters
