@@ -38,7 +38,7 @@ param.saveEvery = round(1/4/param.dT);
 param.revRateCluster = 0;
 
 % load randomly generated parameter samples
-load('paramSamples_nSim5625_nParam4.mat','paramSamples')
+load('paramSamples_nSim20000_nParam4.mat','paramSamples')
 % set model parameters from generated samples
 param.revRateClusterEdge = paramSamples.revRateClusterEdge(sampleCtr);
 param.vs = paramSamples.slowSpeed(sampleCtr);
@@ -49,7 +49,7 @@ filename = ['/work/lschumac/woidlinos/wlM' num2str(M) '_N_' num2str(N) '_L_' num
     '_v0_' num2str(param.v0) '_vs_' num2str(param.vs) ...
     '_Ris_' num2str(param.Ris) ...
     '_revRateClusterEdge_' num2str(param.revRateClusterEdge) ...
-    '_Rir_' num2str(param.Rir) '_sample_' num2str(10000 + sampleCtr)];
+    '_Rir_' num2str(param.Rir) '_sample_' num2str(sampleCtr)];
 if ~exist([filename '.mat'],'file')
     rng(1) % set random seed to be the same for each simulation
     xyarray = runWoids(T,N,M,L,param);
