@@ -1,4 +1,5 @@
-function [ F_contact ] = resolveContactsLoop(forceArray,distanceMatrixFull,distanceMatrix, r_collision, sigma_LJ, r_LJcutoff, eps_LJ)
+function [ F_contact ] = resolveContactsLoop(forceArray,distanceMatrixFull,distanceMatrix,...
+    r_collision, sigma_LJ, r_LJcutoff, eps_LJ)
 % to resolve contact forces between overlapping nodes
 % inputs:
 % forceArray is N by M by ndim by N by M matrix of forces acting on every node

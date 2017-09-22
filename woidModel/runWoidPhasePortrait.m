@@ -18,6 +18,8 @@ paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'nofl
 % -- slow-down parameters --
 paramAll.vs = 0;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = [1:M];% slowingNodes: which nodes register contact (default head and tail)
+% -- reversals -- 
+paramAll.revRateCluster = 0;
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 5*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
@@ -50,6 +52,9 @@ for paramCtr = 1:nParamCombis
         '_gradualSlowDown' ...
         '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
         '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')];
+    if paramAll.revRateCluster == 0
+        filename = [filename '_noInClusterRev'];
+    end
     if ~exist(['results/woids/' filename '.mat'],'file')&&isempty(dir(['results/woids/' filename '_running_on_*.mat']))
         disp(['running ' filename])
         % make a dummy file to mark that this sim is running on this computer
@@ -59,7 +64,7 @@ for paramCtr = 1:nParamCombis
         rng(1) % set random seed to be the same for each simulation
         xyarray = runWoids(T,N,M,L,param);
         saveResults(['results/woids/' filename '.mat'],...
-            struct('xyarray',xyarray,'T',T,'N',N,'M',M,'L',L,'param',param))
+            struct('xyarray',single(xyarray),'T',T,'N',N,'M',M,'L',L,'param',param))
         delete(tmp_filename)
     end
 end
