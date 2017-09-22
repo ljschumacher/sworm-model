@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="171995849" file="/end/home/lschumac/clusterCode/sworm-model/woidModel/resolveContacts.prj" location="/end/home/lschumac/clusterCode/sworm-model/woidModel" name="resolveContacts" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="77237993" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContacts.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="resolveContacts" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -27,7 +27,7 @@
       <param.DefaultTestFile />
       <param.MergeInstrumentationResults>false</param.MergeInstrumentationResults>
       <param.VerificationMode>option.VerificationMode.None</param.VerificationMode>
-      <param.VerificationStatus>option.VerificationStatus.Passed</param.VerificationStatus>
+      <param.VerificationStatus>option.VerificationStatus.FailedTest</param.VerificationStatus>
       <param.CustomSourceCode />
       <param.CustomHeaderCode />
       <param.CustomInitializer />
@@ -721,7 +721,7 @@
     <param.DefaultImportExportVariable>config</param.DefaultImportExportVariable>
     <param.RowMajor>false</param.RowMajor>
     <param.UseGlobals>option.UseGlobals.No</param.UseGlobals>
-    <param.outputfile>${PROJECT_ROOT}/resolveContactsLoop_N80_mex.mexa64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/resolveContactsLoop_mex.mexmaci64</param.outputfile>
     <param.version>R2012a</param.version>
     <param.HasECoderFeatures>true</param.HasECoderFeatures>
     <param.mex.mainhtml />
@@ -734,7 +734,7 @@
     <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
     <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
     <param.EnableScreener>true</param.EnableScreener>
-    <param.AnnotationChecksum>482296912</param.AnnotationChecksum>
+    <param.AnnotationChecksum>829451139</param.AnnotationChecksum>
     <var.LegacyTarget />
     <var.MirrorOnOpen>false</var.MirrorOnOpen>
     <param.FixedPointEnabled>false</param.FixedPointEnabled>
@@ -743,20 +743,20 @@
     <param.unifiedParamStorage />
     <var.gc.lastOutputRoot>codegen/mex/resolveContactsLoop</var.gc.lastOutputRoot>
     <var.gc.lastOutputType>MEX_FILE</var.gc.lastOutputType>
-    <var.gc.preBuildChecksum>4196604770</var.gc.preBuildChecksum>
+    <var.gc.preBuildChecksum>619496018</var.gc.preBuildChecksum>
     <var.cfi.lastOutputRoot>codegen/mex/resolveContactsLoop</var.cfi.lastOutputRoot>
-    <var.cfi.preBuildChecksum>3424954418</var.cfi.preBuildChecksum>
+    <var.cfi.preBuildChecksum>2735046997</var.cfi.preBuildChecksum>
     <var.lastCfiTestSnippet>xyarray = runWoids(1,40,49,[7.5, 7.5],'bc','periodic','dT',0.035/0.33/16);</var.lastCfiTestSnippet>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
-    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/end/home/lschumac/clusterCode/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;400594218&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
-    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/end/home/lschumac/clusterCode/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
+    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;811624593&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
+    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
     <param.forceMexBuild>false</param.forceMexBuild>
     <param.configImportActive>false</param.configImportActive>
     <var.boundToGui>true</var.boundToGui>
-    <param.mex.outputfile>resolveContactsLoop_N80_mex</param.mex.outputfile>
+    <param.mex.outputfile>resolveContactsLoop_mex</param.mex.outputfile>
     <param.grt.outputfile>resolveContactsLoop</param.grt.outputfile>
     <param.artifact>option.target.artifact.mex</param.artifact>
-    <param.outputfile>${PROJECT_ROOT}/resolveContactsLoop_N80_mex.mexa64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/resolveContactsLoop_mex.mexmaci64</param.outputfile>
     <param.EnableAutoExtrinsicCalls>true</param.EnableAutoExtrinsicCalls>
     <param.UsePreconditions>false</param.UsePreconditions>
     <param.FeatureFlags />
@@ -828,6 +828,7 @@
       <var.outdatedOnRestore />
       <param.forceMexBuild />
       <param.configImportActive />
+      <param.mex.outputfile />
       <param.grt.outputfile />
       <param.artifact />
       <param.EnableAutoExtrinsicCalls />
@@ -877,7 +878,7 @@
     </unset>
     <fileset.entrypoints>
       <file custom-data-expanded="false" value="${PROJECT_ROOT}/resolveContactsLoop.m">
-        <Marker>1497349233366</Marker>
+        <Marker>1503666918824</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench />
@@ -894,7 +895,7 @@
           <idpTable>
             <type typeId="0">
               <Class>double</Class>
-              <Size>80 x 49 x 2</Size>
+              <Size>40 x 49 x 2</Size>
               <Value />
               <InitialValue />
               <UserDefined>true</UserDefined>
@@ -902,7 +903,7 @@
             </type>
             <type typeId="1">
               <Class>double</Class>
-              <Size>80 x 49 x 2 x 80 x 49</Size>
+              <Size>40 x 49 x 2 x 40 x 49</Size>
               <Value />
               <InitialValue />
               <UserDefined>true</UserDefined>
@@ -910,7 +911,7 @@
             </type>
             <type typeId="2">
               <Class>double</Class>
-              <Size>80 x 49 x 80 x 49</Size>
+              <Size>40 x 49 x 40 x 49</Size>
               <Value />
               <InitialValue />
               <UserDefined>true</UserDefined>
@@ -929,15 +930,14 @@
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="/end/home/lschumac/clusterCode/sworm-model/woidModel" name="resolveContactsLoop_N80_mex.mexa64" optional="false">/end/home/lschumac/clusterCode/sworm-model/woidModel/resolveContactsLoop_N80_mex.mexa64</file>
+      <file location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="resolveContactsLoop_mex.mexmaci64" optional="false">/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop_mex.mexmaci64</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/data2/local/MATLAB/R2016b</root>
+      <root>/Applications/MATLAB_R2016b.app</root>
       <toolboxes>
         <toolbox name="fixedpoint" />
         <toolbox name="matlabcoder" />
-        <toolbox name="matlabhdlcoder" />
         <toolbox name="embeddedcoder" />
       </toolboxes>
       <toolbox>
@@ -951,11 +951,6 @@
         </matlabcoder>
       </toolbox>
       <toolbox>
-        <matlabhdlcoder>
-          <enabled>true</enabled>
-        </matlabhdlcoder>
-      </toolbox>
-      <toolbox>
         <embeddedcoder>
           <enabled>true</enabled>
         </embeddedcoder>
@@ -963,17 +958,17 @@
     </matlab>
     <platform>
       <unix>true</unix>
-      <mac>false</mac>
+      <mac>true</mac>
       <windows>false</windows>
       <win2k>false</win2k>
       <winxp>false</winxp>
       <vista>false</vista>
-      <linux>true</linux>
+      <linux>false</linux>
       <solaris>false</solaris>
-      <osver>2.6.32-504.el6.x86_64</osver>
+      <osver>10.12.6</osver>
       <os32>false</os32>
       <os64>true</os64>
-      <arch>glnxa64</arch>
+      <arch>maci64</arch>
       <matlab>true</matlab>
     </platform>
   </configuration>

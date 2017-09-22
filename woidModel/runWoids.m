@@ -37,6 +37,10 @@
 % -- Lennard-Jones parameters --
 % r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 % eps_LJ: strength of LJ-potential
+% sigma_LJ: particle size of the LJ-force, so minimum is at ca 1.122sigma
+% LJnodes: which nodes the LJ-forces acts on (default 1:M). This is
+%   asymmetric in the sense that these nodes will feel the force from all
+%   other nodes, but the other nodes won't feel the force from these nodes
 %
 % OUTPUTS
 % xyarray: Array containing the position, and movement direction for
@@ -87,6 +91,7 @@ addOptional(iP,'Ris',1,@isnumeric) % relative interaction radius for slowing, de
 addOptional(iP,'r_LJcutoff',0,@isnumeric) % cut-off above which lennard jones potential is not acting anymore
 addOptional(iP,'eps_LJ',1e-6,@isnumeric) % strength of LJ-potential
 addOptional(iP,'sigma_LJ',0,@isnumeric) % particle size for Lennard-Jones force
+addOptional(iP,'LJnodes',1:M,checkInt) % nodes which feel LJ-force
 % simulation parameters
 addOptional(iP,'saveEvery',1,checkInt);
 
@@ -126,6 +131,7 @@ slowingNodes = iP.Results.slowingNodes;
 r_LJcutoff = iP.Results.r_LJcutoff;
 eps_LJ = iP.Results.eps_LJ;
 sigma_LJ = iP.Results.sigma_LJ;
+LJnodes = iP.Results.LJnodes;
 
 % check input relationships to each other
 % assert(segmentLength>2*rc,...
@@ -174,12 +180,8 @@ while t<T
     % calculate forces
     forceArray = calculateForces(distanceMatrixXY,distanceMatrix,...
         rc,orientations,reversalLogInd(:,timeCtr),segmentLength,...
-        v,k_l,k_theta*v./v0,theta_0,phaseOffset,sigma_LJ,r_LJcutoff, eps_LJ);
-        % uncomment for debugging...
-%         plot(squeeze(positions(objCtr,:,1)),squeeze(positions(objCtr,:,2)),'.-'), axis equal, hold on
-%         quiver(squeeze(positions(objCtr,:,1)),squeeze(positions(objCtr,:,2)),...
-%             squeeze(forceArray(objCtr,:,1)),squeeze(forceArray(objCtr,:,2)),1)
-%         1;
+        v,k_l,k_theta*v./v0,theta_0,phaseOffset,sigma_LJ,r_LJcutoff,eps_LJ,LJnodes);
+
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % adapt time-step such that it scales inversily with the max force
     dT = adaptTimeStep(dT0,v0,forceArray);

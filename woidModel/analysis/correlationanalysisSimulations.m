@@ -14,7 +14,7 @@ mad1 = @(x) mad(x,1); % median absolute deviation
 % which are 1.57*iqr/sqrt(n) - unclear how justified this is
 iqrci = @(x) 1.57*iqr(x)/sqrt(numel(x));
 % or one could use a bootstrapped confidence interval
-bootserr = @(x) bootci(1e1,{@nanmedian,x},'alpha',0.05,'Options',struct('UseParallel',false));
+bootserr = @(x) bootci(1e2,{@nanmedian,x},'alpha',0.05,'Options',struct('UseParallel',false));
 
 M = size(simfile.xyarray,2);
 if nargin<2||isempty(trackedNodes)
@@ -45,13 +45,17 @@ else
 end
 dxdt = diff(x,1,2);
 dydt = diff(y,1,2);
-dxds = diff(simfile.xyarray(:,fliplr(trackedNodes),1,:),1,2);
-dyds = diff(simfile.xyarray(:,fliplr(trackedNodes),2,:),1,2);
-if strcmp(simfile.param.bc,'periodic')
-    dxdt = correctForPeriodicBoundary(dxdt,simfile.L(1));
-    dydt = correctForPeriodicBoundary(dydt,simfile.L(2));
-    dxds = correctForPeriodicBoundary(dxds,simfile.L(1));
-    dyds = correctForPeriodicBoundary(dyds,simfile.L(2));
+if numel(trackedNodes)>1
+    dxds = diff(simfile.xyarray(:,fliplr(trackedNodes),1,:),1,2);
+    dyds = diff(simfile.xyarray(:,fliplr(trackedNodes),2,:),1,2);
+    if strcmp(simfile.param.bc,'periodic')
+        dxdt = correctForPeriodicBoundary(dxdt,simfile.L(1));
+        dydt = correctForPeriodicBoundary(dydt,simfile.L(2));
+        dxds = correctForPeriodicBoundary(dxds,simfile.L(1));
+        dyds = correctForPeriodicBoundary(dyds,simfile.L(2));
+    end
+    ox = squeeze(mean(dxds,2));
+    oy = squeeze(mean(dyds,2));
 end
 % central difference (should be equibalent to matlab's gradient function
 dxdt = ([dxdt, dxdt(:,end)] + [dxdt(:,1), dxdt])./2;
@@ -62,8 +66,6 @@ if ~isfield(simfile,'dT')
 end
 vx = dxdt./(simfile.dT*saveEvery);
 vy = dydt./(simfile.dT*saveEvery);
-ox = squeeze(mean(dxds,2));
-oy = squeeze(mean(dyds,2));
 speed = sqrt(vx(:,framesAnalyzed).^2 + vy(:,framesAnalyzed).^2);
 N = simfile.N;
 pairdist = NaN(N*(N-1)/2,numFrames);
@@ -75,7 +77,9 @@ Area = simfile.L(1)*simfile.L(end); % should work for both scalar L and [Lx, Ly]
 nNbrDist = NaN(N,numFrames);
 for frameCtr = 1:numFrames
     frame = framesAnalyzed(frameCtr);
-    dxcorr(:,frameCtr) = vectorCrossCorrelation2D(ox(:,frame),oy(:,frame),true,true); % directional correlation
+    if numel(trackedNodes)>1
+        dxcorr(:,frameCtr) = vectorCrossCorrelation2D(ox(:,frame),oy(:,frame),true,true); % directional correlation
+    end
     vxcorr(:,frameCtr) = vectorCrossCorrelation2D(vx(:,frame),vy(:,frame),true,false); % velocity correlation
     if strcmp(simfile.param.bc,'periodic')
         pairdist(:,frameCtr) = computeDistancesWithPeriodicBoundary([x(:,frame) y(:,frame)],simfile.L);
@@ -108,8 +112,13 @@ vxcorr = vxcorr(pdistkeepIdcs);
 pairDistbinIdx = pairDistbinIdx(pdistkeepIdcs);
 
 [s_med,s_ci] = grpstats(speed(:),nNbrDistbinIdx,{@median,bootserr});
-[corr_o_med,corr_o_ci] = grpstats(dxcorr(:),pairDistbinIdx,{@median,bootserr});
 [corr_v_med,corr_v_ci] = grpstats(vxcorr(:),pairDistbinIdx,{@median,bootserr});
+if numel(trackedNodes)>1
+    [corr_o_med,corr_o_ci] = grpstats(dxcorr(:),pairDistbinIdx,{@median,bootserr});
+else
+    corr_o_med = NaN(size(corr_v_med));
+    corr_o_ci = NaN(size(corr_v_ci));
+end
 end
 
 function w = correctForPeriodicBoundary(v,L)
