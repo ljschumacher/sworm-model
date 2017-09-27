@@ -108,13 +108,13 @@ end
 % resolve contact forces
 if N==40&&M==49 % check if we can use compiled mex function
     Fc = resolveContactsLoop_mex(forceArray,distanceMatrixXY,...
-        distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ);
-elseif N==60&&M==49 % check if we can use compiled mex function
-    Fc = resolveContactsLoop_N60_mex(forceArray,distanceMatrixXY,...
-        distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ);
-elseif N==80&&M==49 % check if we can use compiled mex function
-    Fc = resolveContactsLoop_N80_mex(forceArray,distanceMatrixXY,...
-        distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ);
+        distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes);
+% elseif N==60&&M==49 % check if we can use compiled mex function
+%     Fc = resolveContactsLoop_N60_mex(forceArray,distanceMatrixXY,...
+%         distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ);
+% elseif N==80&&M==49 % check if we can use compiled mex function
+%     Fc = resolveContactsLoop_N80_mex(forceArray,distanceMatrixXY,...
+%         distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ);
 else
     Fc = NaN(N,M,2);
     for objCtr = 1:N

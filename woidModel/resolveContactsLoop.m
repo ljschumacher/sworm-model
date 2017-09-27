@@ -1,5 +1,5 @@
 function [ F_contact ] = resolveContactsLoop(forceArray,distanceMatrixFull,distanceMatrix,...
-    r_collision, sigma_LJ, r_LJcutoff, eps_LJ)
+    r_collision, sigma_LJ, r_LJcutoff, eps_LJ, LJnodes)
 % to resolve contact forces between overlapping nodes
 % inputs:
 % forceArray is N by M by ndim by N by M matrix of forces acting on every node
@@ -17,21 +17,13 @@ N = size(distanceMatrixFull,1);
 M = size(distanceMatrixFull,2);
 F_contact = NaN(N,M,2);
 F_LJ = NaN(N,M,2);
-if nargin < 7
-    eps_LJ = 0;
-    if nargin < 6
-        r_LJcutoff = 0;
-    end
-end
+
 for objCtr = 1:N
     for nodeCtr = 1:M
         thisDistanceMatrix = distanceMatrix(:,:,objCtr,nodeCtr);
         thisDistanceMatrixFull = distanceMatrixFull(:,:,:,objCtr,nodeCtr);
         collisionNbrs = thisDistanceMatrix<r_collision; % check distance to all other nodes of all other objects
         collisionNbrs(objCtr,:) = false; % no contact force with self or for adjacent nodes: max(nodeInd-1,1):min(nodeInd+1,M)
-        lennardjonesNbrs = thisDistanceMatrix<=r_LJcutoff;
-        lennardjonesNbrs(collisionNbrs) = false;
-        lennardjonesNbrs(objCtr,:) = false;
         % contact forces
         if any(collisionNbrs(:))
             % find unit vectors pointing from neighbours to node
@@ -49,16 +41,22 @@ for objCtr = 1:N
             F_contact(objCtr,nodeCtr,:) = [0; 0];
         end
         % adhesion forces
-        if any(lennardjonesNbrs(:))&&N>1
-            e_nN = bsxfun(@rdivide,[thisDistanceMatrixFull(lennardjonesNbrs(:)) thisDistanceMatrixFull(find(lennardjonesNbrs(:)) + N*M)],...
-                thisDistanceMatrix(lennardjonesNbrs(:))); % bsxfun has similar performace to implicit expansion (below) but is mex-file compatible
-            %   e_nN = [distanceMatrixFull(lennardjonesNbrs(:)) distanceMatrixFull(find(lennardjonesNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
-            %         ./distanceMatrix(lennardjonesNbrs(:)); % normalise for distance
-            f_LJ = 48*eps_LJ./thisDistanceMatrix(lennardjonesNbrs(:)).*((sigma_LJ./thisDistanceMatrix(lennardjonesNbrs(:))).^12 ...
-                - 1/2*(sigma_LJ./thisDistanceMatrix(lennardjonesNbrs(:))).^6);
-            F_LJ(objCtr,nodeCtr,:) = sum(bsxfun(@times,f_LJ,e_nN),1); % adhesion force, summed over neighbours
+        if ismember(nodeCtr,LJnodes)
+            lennardjonesNbrs = thisDistanceMatrix<=r_LJcutoff;
+            lennardjonesNbrs(objCtr,:) = false;
+            if any(lennardjonesNbrs(:))&&N>1
+                e_nN = bsxfun(@rdivide,[thisDistanceMatrixFull(lennardjonesNbrs(:)) thisDistanceMatrixFull(find(lennardjonesNbrs(:)) + N*M)],...
+                    thisDistanceMatrix(lennardjonesNbrs(:))); % bsxfun has similar performace to implicit expansion (below) but is mex-file compatible
+                %   e_nN = [distanceMatrixFull(lennardjonesNbrs(:)) distanceMatrixFull(find(lennardjonesNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
+                %         ./distanceMatrix(lennardjonesNbrs(:)); % normalise for distance
+                f_LJ = 48*eps_LJ./thisDistanceMatrix(lennardjonesNbrs(:)).*((sigma_LJ./thisDistanceMatrix(lennardjonesNbrs(:))).^12 ...
+                    - 1/2*(sigma_LJ./thisDistanceMatrix(lennardjonesNbrs(:))).^6);
+                F_LJ(objCtr,nodeCtr,:) = sum(bsxfun(@times,f_LJ,e_nN),1); % adhesion force, summed over neighbours
+            else
+                F_LJ(objCtr,nodeCtr,:) = [0; 0];
+            end
         else
-            F_LJ(objCtr,nodeCtr,:) = [0; 0];
+             F_LJ(objCtr,nodeCtr,:) = [0; 0];
         end
     end
 end

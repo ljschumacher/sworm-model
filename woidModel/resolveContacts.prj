@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="77237993" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContacts.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="resolveContacts" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="629419615" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContacts.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="resolveContacts" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -734,7 +734,7 @@
     <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
     <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
     <param.EnableScreener>true</param.EnableScreener>
-    <param.AnnotationChecksum>829451139</param.AnnotationChecksum>
+    <param.AnnotationChecksum>2079666046</param.AnnotationChecksum>
     <var.LegacyTarget />
     <var.MirrorOnOpen>false</var.MirrorOnOpen>
     <param.FixedPointEnabled>false</param.FixedPointEnabled>
@@ -743,12 +743,12 @@
     <param.unifiedParamStorage />
     <var.gc.lastOutputRoot>codegen/mex/resolveContactsLoop</var.gc.lastOutputRoot>
     <var.gc.lastOutputType>MEX_FILE</var.gc.lastOutputType>
-    <var.gc.preBuildChecksum>619496018</var.gc.preBuildChecksum>
+    <var.gc.preBuildChecksum>629419615</var.gc.preBuildChecksum>
     <var.cfi.lastOutputRoot>codegen/mex/resolveContactsLoop</var.cfi.lastOutputRoot>
-    <var.cfi.preBuildChecksum>2735046997</var.cfi.preBuildChecksum>
+    <var.cfi.preBuildChecksum>2558219788</var.cfi.preBuildChecksum>
     <var.lastCfiTestSnippet>xyarray = runWoids(1,40,49,[7.5, 7.5],'bc','periodic','dT',0.035/0.33/16);</var.lastCfiTestSnippet>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
-    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;811624593&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
+    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/data1/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/coder/coder/+coder/+internal/JITSupportedExternalDependency.p&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/coder/coder/+coder/+internal/c_cast.p&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/coder/coder/+coder/+internal/matlabCodegenHandle.p&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/+blas/BLASApi.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/+blas/inline.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/+blas/int.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/+blas/size_ptr.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/+blas/threshold.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/+blas/use_refblas.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/+blas/xgemm.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/+refblas/xgemm.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/+scalar/abs.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/+scalar/floor.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/+scalar/nextpow2.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/allOrAny.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/applyScalarFunction.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/applyScalarFunctionInPlace.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/assertValidDim.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/cat.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/constNonSingletonDim.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/div.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/error.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/floatModel.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/indexMinus.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/indexPlus.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/indexShapeCheck.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/indexTimes.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/isBuiltInNumeric.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/isaUint.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/mantissa_nbits.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/minOrMax.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/nan.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/nonSingletonDim.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/prodsize.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/relop.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/safeEq.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/scalarEg.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/scalexpAlloc.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/scalexpAllocNoCheck.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/scalexpCompatible.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/sort.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/sortIdx.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/sortLE.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/sortLT.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/unsignedClass.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/useParfor.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/eml/+coder/+internal/useParforConst.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/fixedpoint/isfi.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/fixedpoint/isfimath.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/fixedpoint/isnumerictype.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/datafun/issorted.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/datafun/max.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/datafun/min.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/datafun/private/combine_vector_elements.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/datafun/private/process_sumprod_inputs.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/datafun/private/sumprod.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/datafun/sort.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/datafun/sum.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elfun/abs.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elfun/floor.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elfun/nextpow2.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elmat/bsxfun.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elmat/diag.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elmat/eps.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elmat/find.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elmat/intmax.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elmat/intmin.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elmat/isequal.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elmat/isfinite.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elmat/isinf.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elmat/ismatrix.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elmat/isnan.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elmat/private/eml_isequal_core.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elmat/private/eml_realmin.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/elmat/private/eml_realmin_denormal.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/eml/eml_int_forloop_overflow_check.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/ops/any.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/ops/eml_mtimes_helper.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/ops/ismember.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/ops/mrdivide.p&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/ops/power.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/eml/lib/matlab/ops/rdivide.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/shared/coder/coder/+coder/+internal/indexIntRelop.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/shared/coder/coder/+coder/+internal/narginchk.m&lt;/file&gt;&lt;file&gt;/data2/local/MATLAB/R2016b/toolbox/shared/coder/coder/+coder/ExternalDependency.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;3720179842&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
     <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
     <param.forceMexBuild>false</param.forceMexBuild>
     <param.configImportActive>false</param.configImportActive>
@@ -878,7 +878,7 @@
     </unset>
     <fileset.entrypoints>
       <file custom-data-expanded="false" value="${PROJECT_ROOT}/resolveContactsLoop.m">
-        <Marker>1503666918824</Marker>
+        <Marker>1506503143375</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench />
@@ -892,6 +892,7 @@
           <Input Name="sigma_LJ" typeId="3" />
           <Input Name="r_LJcutoff" typeId="3" />
           <Input Name="eps_LJ" typeId="3" />
+          <Input Name="LJnodes" typeId="4" />
           <idpTable>
             <type typeId="0">
               <Class>double</Class>
@@ -923,6 +924,14 @@
               <Value />
               <InitialValue />
               <UserDefined>false</UserDefined>
+              <Complex>false</Complex>
+            </type>
+            <type typeId="4">
+              <Class>double</Class>
+              <Size>1 x :49</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
               <Complex>false</Complex>
             </type>
           </idpTable>

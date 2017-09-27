@@ -140,10 +140,12 @@ L = 8.5/2;
 rng(1)
 eps_LJ = 2e-3;
 L = [7.5, 7.5];
-xyarray = runWoids(100,39,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
-    'r_LJcutoff',5*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035,'LJnodes',1);
-animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_periodic_LennardJones' num2str(eps_LJ,'%1.0e') '_head'],[L L]);
-
+xyarray = runWoids(100,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+    'r_LJcutoff',5*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035,'LJnodes',1,...
+    'slowingNodes',[],...
+    'revRate', 0, 'revRateCluster', 0,'revRateClusterEdge',0);
+animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_periodic_LennardJones' num2str(eps_LJ,'%1.0e')...
+    '_head' '_slowingNodesNone' '_noRev'],[L L]);
 
 % L = [7.5, 7.5];
 % xyarray = runWoids(80,N,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);

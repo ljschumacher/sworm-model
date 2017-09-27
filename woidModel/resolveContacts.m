@@ -16,12 +16,7 @@ function [ F_contact ] = resolveContacts(forceArray,distanceMatrixFull,distanceM
 N = size(distanceMatrixFull,1);
 M = size(distanceMatrixFull,2);
 % ndim = size(distanceMatrixFull,3);
-if nargin < 8
-    eps_LJ = 0;
-    if nargin < 7
-        r_LJcutoff = 0;
-    end
-end
+
 collisionNbrs = distanceMatrix<r_collision; % check distance to all other nodes of all other objects
 collisionNbrs(objInd,:) = false; % no contact force with self or for adjacent nodes: max(nodeInd-1,1):min(nodeInd+1,M)
 % contact forces
