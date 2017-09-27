@@ -49,8 +49,8 @@ for objCtr = 1:N
                     thisDistanceMatrix(lennardjonesNbrs(:))); % bsxfun has similar performace to implicit expansion (below) but is mex-file compatible
                 %   e_nN = [distanceMatrixFull(lennardjonesNbrs(:)) distanceMatrixFull(find(lennardjonesNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
                 %         ./distanceMatrix(lennardjonesNbrs(:)); % normalise for distance
-                f_LJ = 48*eps_LJ./thisDistanceMatrix(lennardjonesNbrs(:)).*((sigma_LJ./thisDistanceMatrix(lennardjonesNbrs(:))).^12 ...
-                    - 1/2*(sigma_LJ./thisDistanceMatrix(lennardjonesNbrs(:))).^6);
+                sr6 = (sigma_LJ./thisDistanceMatrix(lennardjonesNbrs(:))).^6;
+                f_LJ = 48*eps_LJ./thisDistanceMatrix(lennardjonesNbrs(:)).*(sr6.^2 - 1/2*sr6);
                 F_LJ(objCtr,nodeCtr,:) = sum(bsxfun(@times,f_LJ,e_nN),1); % adhesion force, summed over neighbours
             else
                 F_LJ(objCtr,nodeCtr,:) = [0; 0];

@@ -124,10 +124,11 @@ param.revRate = 0;
 param.revRateClusterEdge = 0;
 param.revRateCluster = 0;
 param.r_LJcutoff = -1;
-param.eps_LJ = 0;
+param.eps_LJ = 2e-3;
 param.sigma_LJ = 2*rc0;
-param.LJnodes = [];
+param.LJnodes = 1:M;
 xyarray = runWoids(T,N,M,L,param);
 animateWoidTrajectories(xyarray,...
     ['woidlino_test_movies/test_longBody_periodic_square_noRev'...
+    'eps_LJ_' num2str(param.eps_LJ,'%1.0e'),...
     '_noVolExcl'],L,rc0);

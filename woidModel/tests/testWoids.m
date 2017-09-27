@@ -96,8 +96,8 @@ L = 2;
 % many worms
 L = 8.5/2;
 rng(1)
-xyarray = runWoids(10,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,...
-     'deltaPhase',0.65,'k_l',800);
+xyarray = runWoids(15,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,...
+     'deltaPhase',0.65,'k_l',1600);
 animateWoidTrajectories(xyarray,['woid_test_movies/40wormsM' num2str(M) '_noflux'],L);
 
 % % plot distribution of lengths to check length conservation
@@ -144,9 +144,10 @@ animateWoidTrajectories(xyarray,['woid_test_movies/40wormsM' num2str(M) '_noflux
 % xyarray = runWoids(100,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
 %     'r_LJcutoff',5*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035,'LJnodes',1,...
 %     'slowingNodes',[],...
-%     'revRate', 0, 'revRateCluster', 0,'revRateClusterEdge',0);
+%     'revRate', 0, 'revRateCluster', 0,'revRateClusterEdge',0,...
+%     'theta_0',0,'omega_m',0,'deltaPhase',0);
 % animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_periodic_LennardJones' num2str(eps_LJ,'%1.0e')...
-%     '_head' '_slowingNodesNone' '_noRev'],[L L]);
+%     '_head' '_slowingNodesNone' '_noRev' '_undulations0'],[L L]);
 
 % L = [7.5, 7.5];
 % xyarray = runWoids(80,N,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);

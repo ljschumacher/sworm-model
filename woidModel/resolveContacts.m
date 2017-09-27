@@ -44,8 +44,8 @@ if ismember(nodeInd,LJnodes) % check if current node feels LJ force
             distanceMatrix(lennardjonesNbrs(:))); % bsxfun has similar performace to implicit expansion (below) but is mex-file compatible
         %   e_nN = [distanceMatrixFull(lennardjonesNbrs(:)) distanceMatrixFull(find(lennardjonesNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
         %         ./distanceMatrix(lennardjonesNbrs(:)); % normalise for distance
-        f_LJ = 48*eps_LJ./distanceMatrix(lennardjonesNbrs(:)).*((sigma_LJ./distanceMatrix(lennardjonesNbrs(:))).^12 ...
-            - 1/2*(sigma_LJ./distanceMatrix(lennardjonesNbrs(:))).^6);
+        sr6 = (sigma_LJ./distanceMatrix(lennardjonesNbrs(:))).^6;
+        f_LJ = 48*eps_LJ./distanceMatrix(lennardjonesNbrs(:)).*(sr6.^2 - 1/2*sr6);
         F_LJ = sum(bsxfun(@times,f_LJ,e_nN),1); % adhesion force, summed over neighbours
         if ~any(collisionNbrs(:))
             F_contact = F_contact + F_LJ';
