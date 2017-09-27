@@ -10,15 +10,16 @@ addpath('../')
 addpath('../visualisation')
 % general model parameters for all test - unless set otherwise
 N = 40;
-M = 49;
+M = 18;
 dT = 0.035/0.33/16; % baseline timestep, eg rc/v0/8 when bending
 % set this to  rc/v0/16 to get better reversal accuracy
 saveEvery = 16;
 
 % single worm
 L = 2;
-% xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery);
-% animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_noflux',L);
+% xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,...
+%     'deltaPhase',0.65);
+% animateWoidTrajectories(xyarray,['woid_test_movies/singleWormM' num2str(M) '_noflux'],L);
 % % plot distribution of lengths to check length conservation
 % histogram(squeeze(sum(sqrt(sum(diff(xyarray(:,:,1:2,:),1,2).^2,3)),2)),...
 %     'Normalization','Probability','EdgeColor','none')
@@ -46,9 +47,10 @@ L = 2;
 % xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'v0',1e-4,'vs',1e-4,'theta_0',0,'omega_m',0,'deltaPhase',0,'revRate',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_straighteningTest',L,0);
 % 
-% % two worms
-% xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery);
-% animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_noflux',L);
+% two worms
+% xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,...
+%     'deltaPhase',0.65);
+% animateWoidTrajectories(xyarray,['woid_test_movies/twoWormsM' num2str(M) '_noflux'],L);
 % 
 % % plot distribution of lengths to check length conservation
 % histogram(squeeze(sum(sqrt(sum(diff(xyarray(:,:,1:2,:),1,2).^2,3)),2)),...
@@ -93,11 +95,10 @@ L = 2;
 
 % many worms
 L = 8.5/2;
-% tic
-% rng(1)
-% xyarray = runWoids(5,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery);
-% toc
-% animateWoidTrajectories(xyarray,'woid_test_movies/40worms_noflux',L);
+rng(1)
+xyarray = runWoids(10,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,...
+     'deltaPhase',0.65,'k_l',800);
+animateWoidTrajectories(xyarray,['woid_test_movies/40wormsM' num2str(M) '_noflux'],L);
 
 % % plot distribution of lengths to check length conservation
 % histogram(squeeze(sum(sqrt(sum(diff(xyarray(:,:,1:2,:),1,2).^2,3)),2)),...
@@ -137,15 +138,15 @@ L = 8.5/2;
 %     'theta_0',0,'omega_m',0,'deltaPhase',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/40worms_noflux_undulations0',L);
 
-rng(1)
-eps_LJ = 2e-3;
-L = [7.5, 7.5];
-xyarray = runWoids(100,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
-    'r_LJcutoff',5*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035,'LJnodes',1,...
-    'slowingNodes',[],...
-    'revRate', 0, 'revRateCluster', 0,'revRateClusterEdge',0);
-animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_periodic_LennardJones' num2str(eps_LJ,'%1.0e')...
-    '_head' '_slowingNodesNone' '_noRev'],[L L]);
+% rng(1)
+% eps_LJ = 2e-3;
+% L = [7.5, 7.5];
+% xyarray = runWoids(100,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+%     'r_LJcutoff',5*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035,'LJnodes',1,...
+%     'slowingNodes',[],...
+%     'revRate', 0, 'revRateCluster', 0,'revRateClusterEdge',0);
+% animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_periodic_LennardJones' num2str(eps_LJ,'%1.0e')...
+%     '_head' '_slowingNodesNone' '_noRev'],[L L]);
 
 % L = [7.5, 7.5];
 % xyarray = runWoids(80,N,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);

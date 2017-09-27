@@ -59,14 +59,15 @@ function xyarray = runWoids(T,N,M,L,varargin)
 % parse inputs (see matlab documentation)
 iP = inputParser;
 checkInt = @(x) all(x>0&~mod(x,1));
+isPositiveNumeric = @(x) all(isnumeric(x)&x>0);
 addRequired(iP,'T',checkInt);
 addRequired(iP,'N',checkInt);
 addRequired(iP,'M',checkInt);
 addRequired(iP,'L',@checkL);
 addOptional(iP,'v0',0.33,@isnumeric) % worm forward speed is approx 330mu/s
-addOptional(iP,'dT',0.035/0.33/16,@isnumeric) % timestep, default rc/v0/16 seconds
+addOptional(iP,'dT',0.035/0.33/16,isPositiveNumeric) % timestep, default rc/v0/16 seconds
 addOptional(iP,'rc',0.035,@isnumeric) % worm width is approx 50 to 90 mu = approx 0.07mm
-addOptional(iP,'segmentLength',1.2/(M - 1),@isnumeric) % worm length is approx 1.2 mm
+addOptional(iP,'segmentLength',(1.2-2*0.035)/(M - 1),@isnumeric) % worm length is approx 1.2 mm
 addOptional(iP,'bc','free',@checkBcs)
 addOptional(iP,'k_l',40,@isnumeric) % stiffness of linear springs connecting nodes
 addOptional(iP,'k_theta',20,@isnumeric) % stiffness of rotational springs at nodes

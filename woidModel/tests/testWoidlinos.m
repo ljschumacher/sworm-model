@@ -81,26 +81,53 @@ param.bc = 'periodic';
 % xyarray = runWoids(T,N,M,L,param);
 % animateWoidTrajectories(xyarray,'woidlino_test_movies/test_periodic_square_reversalsClusterEdge',L,rc);
 
+% % test woidlinos with adhesion and wout reversals/slowing
+% rng(1)
+% T= 400;
+% N = 40;
+% L = [7.5, 7.5];
+% param.rc = 0.105;
+% param.ri = 3*param.rc;
+% param.segmentLength = 2*param.rc;
+% param.v0 = 0.33;
+% param.dT = min(1/2,param.rc/param.v0/8);
+% param.saveEvery = round(1/4/param.dT);
+% param.vs = param.v0;
+% param.revRate = 0;
+% param.revRateClusterEdge = 0;
+% param.revRateCluster = 0;
+% param.r_LJcutoff = 5*param.rc;
+% param.eps_LJ = 1e-3;
+% param.sigma_LJ = 2*param.rc;
+% param.LJnodes = 1;
+% xyarray = runWoids(T,N,M,L,param);
+% animateWoidTrajectories(xyarray,...
+%     ['woidlino_test_movies/test_periodic_square_adhesion_eps'...
+%     num2str(param.eps_LJ,'%1.0e') '_noRev'...
+%     '_LJhead'],L,param.rc);
+
+% % test long woidlinos without volume exclusion
 rng(1)
-T= 400;
+T= 40;
 N = 40;
+M = 18;
 L = [7.5, 7.5];
-param.rc = 0.105;
-param.ri = 3*param.rc;
-param.segmentLength = 2*param.rc;
+rc0 = 0.035;
+param.bc = 'periodic';
+param.rc = 0;
+param.segmentLength = (1.2-2*rc0)/(M - 1);
 param.v0 = 0.33;
-param.dT = min(1/2,param.rc/param.v0/8);
+param.dT = min(1/2,rc0/param.v0/8);
 param.saveEvery = round(1/4/param.dT);
 param.vs = param.v0;
 param.revRate = 0;
 param.revRateClusterEdge = 0;
 param.revRateCluster = 0;
-param.r_LJcutoff = 5*param.rc;
-param.eps_LJ = 1e-3;
-param.sigma_LJ = 2*param.rc;
-param.LJnodes = 1;
+param.r_LJcutoff = -1;
+param.eps_LJ = 0;
+param.sigma_LJ = 2*rc0;
+param.LJnodes = [];
 xyarray = runWoids(T,N,M,L,param);
 animateWoidTrajectories(xyarray,...
-    ['woidlino_test_movies/test_periodic_square_adhesion_eps'...
-    num2str(param.eps_LJ,'%1.0e') '_noRev'...
-    '_LJhead'],L,param.rc);
+    ['woidlino_test_movies/test_longBody_periodic_square_noRev'...
+    '_noVolExcl'],L,rc0);
