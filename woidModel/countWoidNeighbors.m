@@ -11,7 +11,7 @@ nbrNMNLogInd = squeeze(any(distanceMatrix(:,nodeIndcs,:,:)<=r,4));
 for n = 1:N
     nbrNMNLogInd(n,:,n) = false; % exclude self from neighbors
 end
-nbrNMLogInd = any(nbrNMNLogInd,3); 
+nbrNMLogInd = any(nbrNMNLogInd,3); % don't care how many other objects in contact with
 numNodeswNbrs = sum(nbrNMLogInd,2); % count how many nodes of each object have neighbours
 end
 

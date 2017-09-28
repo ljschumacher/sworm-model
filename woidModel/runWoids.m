@@ -86,7 +86,8 @@ addOptional(iP,'ri',0.035*3,@isnumeric) % radius at which worms register contact
 addOptional(iP,'Rir',1,@isnumeric) % relative interaction radius for reversals, default 1 (ie = ri)
 % slowing down
 addOptional(iP,'vs',0.33/3,@isnumeric) % speed when slowed down, default v0/3
-addOptional(iP,'slowingNodes',[1:max(round(M/10),1) (M-max(round(M/10),1)+1):M],checkInt) % which nodes sense proximity, default head and tail
+addOptional(iP,'slowingNodes',1:M,checkInt) % which nodes sense proximity, default all
+addOptional(iP,'slowingMode','gradual',@checkSlowingMode) % 'gradual' or 'abrupt'
 addOptional(iP,'Ris',1,@isnumeric) % relative interaction radius for slowing, default 1 (ie = ri)
 % Lennard-Jones
 addOptional(iP,'r_LJcutoff',0,@isnumeric) % cut-off above which lennard jones potential is not acting anymore
@@ -129,6 +130,7 @@ Rir = iP.Results.Rir;
 Ris = iP.Results.Ris;
 vs = iP.Results.vs;
 slowingNodes = iP.Results.slowingNodes;
+slowingMode = iP.Results.slowingMode;
 r_LJcutoff = iP.Results.r_LJcutoff;
 eps_LJ = iP.Results.eps_LJ;
 sigma_LJ = iP.Results.sigma_LJ;
@@ -170,7 +172,8 @@ while t<T
     end
     distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar distances
     % check if any woids are slowed down by neighbors
-    [ v, omega ] = slowWorms(distanceMatrix,Ris*ri,slowingNodes,vs,v0,omega_m);
+    [ v, omega ] = slowWorms(distanceMatrix,Ris*ri,slowingNodes,slowingMode,...
+        vs,v0,omega_m);
     % check if any worms are reversing due to contacts
     reversalLogIndPrev(reversalLogInd(:,timeCtr)) = true; % only update events that happen between timeCtr updates, ie reversal starts
     reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
@@ -222,13 +225,17 @@ if numel(x)==2||numel(x)==1
 end
 end
 
-function BcCheck = checkBcs(x)
+function BcCheck = checkBcs(s)
 validBcs = {'free','noflux','periodic'};
-if iscell(x)&&numel(x)==2
-    BcCheck = any(validatestring(x{1},validBcs))...
-        &any(validatestring(x{2},validBcs))...
-        &any(validatestring(x{3},validBcs));
+if iscell(s)&&numel(s)==2
+    BcCheck = any(strcmp(s{1},validBcs))...
+        &any(strcmp(s{2},validBcs));
 else
-    BcCheck = any(validatestring(x,validBcs));
+    BcCheck = any(validatestring(s,validBcs));
 end
+end
+
+function SlowModeCheck = checkSlowingMode(s)
+validSlowingModes = {'gradual','abrupt'};
+SlowModeCheck = any(strcmp(s,validSlowingModes));
 end
