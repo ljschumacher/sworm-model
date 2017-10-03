@@ -76,8 +76,8 @@ addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation
 addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement direction, default pi/4
 addOptional(iP,'deltaPhase',0.24,@isnumeric) % for phase shift in undulations and initial positions, default 0.11
 % reversals
-addOptional(iP,'revRate',1/13,@isnumeric) % rate for poisson-distributed reversals, default 1/13s
-addOptional(iP,'revRateCluster',1/13,@isnumeric) % reduced reversal rates, when worms are in cluster
+addOptional(iP,'revRate',0,@isnumeric) % rate for poisson-distributed reversals, default 1/13s
+addOptional(iP,'revRateCluster',0,@isnumeric) % reduced reversal rates, when worms are in cluster
 addOptional(iP,'revRateClusterEdge',1/13,@isnumeric) % increased reversal rates, when worms are poking out of a cluster with their head or tail, default 1/13s (no increase)
 addOptional(iP,'revTime',2,@isnumeric) % duration of reversal events, default 2s (will be rounded to integer number of time-steps)
 addOptional(iP,'headNodes',1:max(round(M/10),1),checkInt) % which nodes count as head, default front 10%
@@ -185,8 +185,11 @@ while t<T
     forceArray = calculateForces(distanceMatrixXY,distanceMatrix,...
         rc,orientations,reversalLogInd(:,timeCtr),segmentLength,...
         v,k_l,k_theta*v./v0,theta_0,phaseOffset,sigma_LJ,r_LJcutoff,eps_LJ,LJnodes);
-
+    try
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
+    catch
+        1;
+    end
     % adapt time-step such that it scales inversily with the max force
     dT = adaptTimeStep(dT0,v0,forceArray);
     if dT<=dTmin

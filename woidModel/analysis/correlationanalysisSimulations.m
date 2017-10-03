@@ -16,6 +16,9 @@ iqrci = @(x) 1.57*iqr(x)/sqrt(numel(x));
 % or one could use a bootstrapped confidence interval
 bootserr = @(x) bootci(1e2,{@nanmedian,x},'alpha',0.05,'Options',struct('UseParallel',false));
 
+% convert result to double precision
+simfile.xyarray = double(simfile.xyarray);
+
 M = size(simfile.xyarray,2);
 if nargin<2||isempty(trackedNodes)
     trackedNodes = 1:M;

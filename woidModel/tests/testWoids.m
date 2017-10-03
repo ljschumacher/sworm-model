@@ -100,7 +100,7 @@ rng(1)
 M = 18;
 param.rc = 0;
 param.sigma_LJ = 2*0.035;
-param.r_LJcutoff = 2^(1/6)*param.sigma_LJ;
+param.r_LJcutoff = 1.12*param.sigma_LJ;
 param.eps_LJ = 10;
 xyarray = runWoids(20,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,...
      'deltaPhase',0.65,'k_l',400);
