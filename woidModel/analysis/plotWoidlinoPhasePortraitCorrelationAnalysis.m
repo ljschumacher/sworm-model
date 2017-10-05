@@ -15,7 +15,7 @@ exportOptions = struct('Format','eps2',...
     'LineWidth',1,...
     'Renderer','opengl');
 
-numRepeats = 1;
+numRepeats = 4;
 revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
 speeds = [0.33];
 slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
@@ -63,7 +63,7 @@ for speed = speeds
             set(0,'CurrentFigure',poscorrFig)
             subplot(length(slowspeeds),length(revRatesClusterEdge),plotCtr)
             boundedline(distBins(2:end)-distBinwidth/2,mean(gr,2),...
-                [std(gr,0,2) std(gr,0,2)]./sqrt(size(gr,2)))
+                [std(gr,0,2) std(gr,0,2)])%./sqrt(size(gr,2)))
             ax = formatAxes(revRateClusterEdge,slowspeed);
             ax.YTick = 0:2:12;
             ax.YLim = [0 12];

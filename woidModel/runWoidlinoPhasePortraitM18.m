@@ -10,7 +10,7 @@ close all
 N = 40; % N: number of objects
 M = 18; % M: number of nodes in each object
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
-numRepeats = 10;
+numRepeats = 1;
 
 T = 500;
 rc0 = 0.035; % rc: core repulsion radius (default 0.035 mm)
@@ -23,11 +23,12 @@ paramAll.k_l = 40; % stiffness of linear springs connecting nodes
 % -- reversal parameters --
 paramAll.revRate = 0;
 paramAll.revRateCluster = 0;
+paramAll.headNodes = 1:max(round(M/10),1);
+paramAll.tailNodes = (M-max(round(M/10),1)+1):M;
 % -- slow-down parameters --
 paramAll.vs = 0;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
-paramAll.headNodes = 1:max(round(M/10),1);
-paramAll.tailNodes = (M-max(round(M/10),1)+1):M;
+paramAll.slowingMode = 'abrupt';
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 5*rc0;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc0;  % particle size for Lennard-Jones force
@@ -61,7 +62,7 @@ for repCtr = 1:numRepeats
         param.eps_LJ = attractionStrength;
         filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) '_noVolExcl'...
             '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
-            '_gradualSlowDown' ...
+            '_' param.slowingMode 'SlowDown' ...
             '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
             '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')...
             '_run' num2str(repCtr)];
