@@ -21,9 +21,5 @@ for dimCtr = 1:ndim
     underIndcs = find(distanceMatrix(:,:,dimCtr)<=-Ldim/2) + N^2*(dimCtr - 1);
     distanceMatrix(underIndcs) = distanceMatrix(underIndcs) + Ldim;
 end
-try
-    distances = squareform(sqrt(sum(distanceMatrix.^2,3)));
-catch
-    1;
-end
+distances = squareform(sqrt(sum(distanceMatrix.^2,3)));
 end

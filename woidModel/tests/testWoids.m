@@ -36,10 +36,10 @@ L = 2;
 % xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'revRate',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_noflux_revRate0',L);
 % 
-% rng(6)
-% xyarray = runWoids(12,1,M,[L L],'bc','periodic','dT',dT,'saveEvery',saveEvery,...
-%     'revRate',0.5,'theta_0',0,'omega_m',0,'deltaPhase',0);
-% animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_periodic_undulations0',[L L]);
+rng(6)
+xyarray = runWoids(12,1,M,[L L],'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+    'revRate',0.5,'theta_0',0,'omega_m',0,'deltaPhase',0);
+animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_periodic_undulations0',[L L]);
 % 
 % xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'v0',1e-4,'vs',1e-4,'omega_m',0,'revRate',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_targetcurvatureTest',L,0);
@@ -84,9 +84,9 @@ L = 2;
 % xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'slowingMode','abrupt');
 % animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_noflux_slowingAbrupt',L);
 % 
-% xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,...
-%     'theta_0',0,'omega_m',0,'deltaPhase',0,'revRate',0);
-% animateWoidTrajectories(xyarray,'woid_test_movies/woid_test_movies/twoWorms_noflux_undulations0',L);
+xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,...
+    'theta_0',0,'omega_m',0,'deltaPhase',0,'revRate',0);
+animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_noflux_undulations0',L);
 % 
 % rng(1)
 % eps_LJ = 2e-3;
@@ -140,9 +140,9 @@ animateWoidTrajectories(xyarray,['woid_test_movies/40wormsM' num2str(M) '_noflux
 % xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'slowingNodes',1:M);
 % animateWoidTrajectories(xyarray,'woid_test_movies/40worms_noflux_slowingNodesAll',L);
 % 
-% xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,...
-%     'theta_0',0,'omega_m',0,'deltaPhase',0);
-% animateWoidTrajectories(xyarray,'woid_test_movies/40worms_noflux_undulations0',L);
+xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,...
+    'theta_0',0,'omega_m',0,'deltaPhase',0);
+animateWoidTrajectories(xyarray,'woid_test_movies/40worms_noflux_undulations0',L);
 
 % rng(1)
 % eps_LJ = 2e-3;

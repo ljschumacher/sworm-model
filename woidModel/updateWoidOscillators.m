@@ -17,7 +17,7 @@ N = size(headingsPrev,1);
 movState = 1 - 2*reversals(:,end); % =-1 if worm is reversing, 1 if not
 omegaSigned = (omega.*movState)*ones(1,M); % signed angular velocities for each worm and its nodes
 reversalChanges = diff(reversals,1,2);
-if M>2
+if M>2&&theta_0>0
     % if a reversal starts or ends, reset the phase based on current slope of
     % shape at head
     if any(reversalChanges ~=0)
@@ -32,6 +32,7 @@ if M>2
         try
             phaseOffset(reversalChanges~=0,:) = wrapTo2Pi(phaseFromShape(find(reversalChanges~=0)+(headIndcs-1)*N)...
                 - movState(reversalChanges~=0).*deltaPhase.*(allIndcsOrdered - 1));
+            assert(~any(isnan(phaseOffset(:))),'Error, angles have become undefinded')
         catch
             error('phase reset went wrong')
         end
