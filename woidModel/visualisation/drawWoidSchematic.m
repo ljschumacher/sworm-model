@@ -1,5 +1,6 @@
 function [ ] = drawWoidSchematic( )
 close all
+addpath('../')
 % draws a schematic of the agent based model
 N = 1;
 M = 49;

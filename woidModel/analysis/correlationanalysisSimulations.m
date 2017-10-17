@@ -97,9 +97,9 @@ for frameCtr = 1:numFrames
 end
 % bin distance data
 [nNbrDistcounts,nNbrDistBins,nNbrDistbinIdx]  = histcounts(nNbrDist(:),...
-    'BinWidth',distBinWidth,'BinLimits',[min(nNbrDist(:)) maxDist]);
+    'BinWidth',distBinWidth,'BinLimits',[0 maxDist]);
 [pairDistcounts,pairDistBins,pairDistbinIdx]  = histcounts(pairdist(:),...
-    'BinWidth',distBinWidth,'BinLimits',[min(pairdist(:)) maxDist]);
+    'BinWidth',distBinWidth,'BinLimits',[0 maxDist]);
 % convert bin edges to centres (for plotting)
 nNbrDistBins = nNbrDistBins(1:end-1) + diff(nNbrDistBins)/2;
 pairDistBins = pairDistBins(1:end-1) + diff(pairDistBins)/2;

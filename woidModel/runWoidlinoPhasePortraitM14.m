@@ -8,17 +8,17 @@ close all
 
 % general model parameters for all test - unless set otherwise
 N = 40; % N: number of objects
-M = 18; % M: number of nodes in each object
+M = 14; % M: number of nodes in each object
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
-numRepeats = 3;
+numRepeats = 1;
 
 T = 500;
 rc0 = 0.035; % rc: core repulsion radius (default 0.035 mm)
 paramAll.rc = 0;
-paramAll.ri = 3*rc0;
+paramAll.ri = 6*rc0;
 % saveevery = round(1/2/param.dT);
 paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
-paramAll.segmentLength = 1.13/(M - 1);
+paramAll.segmentLength = 0.88/(M - 1);
 paramAll.k_l = 40; % stiffness of linear springs connecting nodes
 % -- reversal parameters --
 paramAll.revRate = 0;
@@ -37,7 +37,7 @@ paramAll.theta_0 = 0;
 paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
 
-revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
+revRatesClusterEdge = fliplr([0, 0.1, 0.2, 0.4, 0.8, 1.6]);
 speeds = [0.33];
 slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 attractionStrengths = [0];
