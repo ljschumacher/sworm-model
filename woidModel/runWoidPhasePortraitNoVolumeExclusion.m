@@ -24,6 +24,8 @@ paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 % -- volume exclusion
 paramAll.rc = 0;
 
+paramAll.angleNoise = 0.01;
+
 revRatesClusterEdge = fliplr([0, 0.1, 0.2, 0.4, 0.8, 1.6]);
 speeds = [0.33];
 slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
@@ -47,6 +49,7 @@ for paramCtr = 1:nParamCombis
     end
     param.eps_LJ = attractionStrength;
     filename = ['woids_N_' num2str(N) '_L_' num2str(L(1)) '_noVolExcl' ... 
+        '_angleNoise'...
         '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
         '_gradualSlowDown' ...
         '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
@@ -54,7 +57,7 @@ for paramCtr = 1:nParamCombis
     if ~exist(['results/woids/' filename '.mat'],'file')&&isempty(dir(['results/woids/' filename '_running_on_*.mat']))
         disp(['running ' filename])
         % make a dummy file to mark that this sim is running on this computer
-        [~, hostname] = system('hostname -s'); hostname = strrep(hostname,sprintf('\n'),'');
+        [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
         tmp_filename = ['results/woids/' filename '_running_on_' hostname '.mat'];
         save(tmp_filename,'N','M','L','param')
         rng(1) % set random seed to be the same for each simulation

@@ -127,8 +127,9 @@ param.r_LJcutoff = 5*rc0;
 param.eps_LJ = 0;
 param.sigma_LJ = 2*rc0;
 param.LJnodes = 1:M;
+param.angleNoise = 0.01;
 xyarray = runWoids(T,N,M,L,param);
 animateWoidTrajectories(xyarray,...
     ['woidlino_test_movies/test_longBody_periodic_square_noRev'...
     'eps_LJ_' num2str(param.eps_LJ,'%1.0e'),...
-    '_noVolExcl'],L,rc0);
+    '_noVolExcl' '_angleNoise'],L,rc0);

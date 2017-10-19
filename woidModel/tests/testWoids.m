@@ -35,10 +35,10 @@ L = 2;
 % xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'revRate',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_noflux_revRate0',L);
 % 
-rng(6)
-xyarray = runWoids(12,1,M,[L L],'bc','periodic','dT',dT,'saveEvery',saveEvery,...
-    'revRate',0.5,'theta_0',0,'omega_m',0,'deltaPhase',0);
-animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_periodic_undulations0',[L L]);
+% rng(6)
+% xyarray = runWoids(12,1,M,[L L],'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+%     'revRate',0.5,'theta_0',0,'omega_m',0,'deltaPhase',0);
+% animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_periodic_undulations0',[L L]);
 % 
 % xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'v0',1e-4,'vs',1e-4,'omega_m',0,'revRate',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_targetcurvatureTest',L,0);
@@ -47,9 +47,8 @@ animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_periodic_undulation
 % animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_straighteningTest',L,0);
 % 
 % two worms
-% M = 18;
-% xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,...
-%     'deltaPhase',0.65);
+L = [2 2];
+% xyarray = runWoids(20,2,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);
 % animateWoidTrajectories(xyarray,['woid_test_movies/twoWormsM' num2str(M) '_noflux'],L);
 % 
 % % plot distribution of lengths to check length conservation
@@ -62,8 +61,8 @@ animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_periodic_undulation
 % system(['epstopdf ' filename '.eps']);
 % system(['rm ' filename '.eps']);
 % 
-% xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'k_theta',0);
-% animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_noflux_ktheta0',L);
+xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'k_theta',00);
+animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_noflux_ktheta0',L);
 % 
 % xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'revRate',0,'revRateCluster',0,'revRateClusterEdge',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_noflux_revRate0',L);

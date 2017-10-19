@@ -58,7 +58,7 @@ for objCtr = 1:N
     
     % head motile force
     headAngle = headings(objCtr,headInd) + angleNoise*randn();
-    
+
     Fm(headInd,:) = [cos(headAngle), sin(headAngle)];
     % body motile force
     Fm(bodyInd,:) = movState*ds(bodyInd,:);

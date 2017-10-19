@@ -36,8 +36,9 @@ paramAll.sigma_LJ = 2*rc0;  % particle size for Lennard-Jones force
 paramAll.theta_0 = 0;
 paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
+paramAll.angleNoise = 0.01;
 
-revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
+revRatesClusterEdge = fliplr([0, 0.1, 0.2, 0.4, 0.8, 1.6]);
 speeds = [0.33];
 slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 attractionStrengths = [0];
@@ -61,6 +62,7 @@ for repCtr = 1:numRepeats
         end
         param.eps_LJ = attractionStrength;
         filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) '_noVolExcl'...
+            '_angleNoise'...
             '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
             '_' param.slowingMode 'SlowDown' ...
             '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
@@ -69,7 +71,7 @@ for repCtr = 1:numRepeats
         if ~exist(['results/woidlinos/' filename '.mat'],'file')&&isempty(dir(['results/woidlinos/' filename '_running_on_*.mat']))
             disp(['running ' filename])
             % make a dummy file to mark that this sim is running on this computer
-            [~, hostname] = system('hostname -s'); hostname = strrep(hostname,sprintf('\n'),'');
+            [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
             tmp_filename = ['results/woidlinos/' filename '_running_on_' hostname '.mat'];
             save(tmp_filename,'N','M','L','param')
             rng(repCtr) % set random seed to be the same for each simulation
