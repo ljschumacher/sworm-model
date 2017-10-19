@@ -12,7 +12,7 @@ exportOptions = struct('Format','eps2',...
     'LineWidth',1,...
     'Renderer','painters');
 
-M = 18;
+M = 14;
 L = [7.5 7.5];
 N = 40;
 plotColor = [0.5, 0.5, 0.5];
@@ -21,7 +21,7 @@ revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
 speeds = [0.33];
 slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 attractionStrengths = [0];
-slowingMode = 'abrupt';
+slowingMode = 'gradual';
 for speed = speeds
     phasePortraitFig = figure;
     plotCtr = 1;

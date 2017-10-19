@@ -7,14 +7,14 @@ close all
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 % rc = 0.035;
 N = 40;
-M = 18;
+M = 14;
 revRatesClusterEdge = fliplr([0, 0.1, 0.2, 0.4, 0.8, 1.6]);
 speeds = [0.33];
-slowspeeds = ([0.33, 0.1, 0.05])%, 0.025, 0.0125]);
+slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 attractionStrengths = [0];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths);
 nParamCombis = size(paramCombis,2);
-slowingMode = 'abrupt';
+slowingMode = 'gradual';
 
 for paramCtr = 1:nParamCombis % can be parfor but might impair movie quality
     revRateClusterEdge = paramCombis(1,paramCtr);

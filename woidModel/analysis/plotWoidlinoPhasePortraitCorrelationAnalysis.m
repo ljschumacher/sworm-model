@@ -22,7 +22,7 @@ slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 trackedNodes = 1:max(round(M/10),1);
 distBinwidth = 0.05; % in units of mm, sensibly to be chosen similar worm width or radius
 maxDist = 2;
-slowingMode = 'abrupt';
+slowingMode = 'gradual';
 
 for speed = speeds
     poscorrFig = figure;

@@ -75,6 +75,7 @@ addOptional(iP,'k_theta',20,@isnumeric) % stiffness of rotational springs at nod
 addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation of movement direction, default 0.6 Hz
 addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement direction, default pi/4
 addOptional(iP,'deltaPhase',0.24,@isnumeric) % for phase shift in undulations and initial positions, default 0.11
+addOptional(iP,'angleNoise',0,@isnumeric) % noise in heading of worm
 % reversals
 addOptional(iP,'revRate',0,@isnumeric) % rate for poisson-distributed reversals, default 1/13s
 addOptional(iP,'revRateCluster',0,@isnumeric) % reduced reversal rates, when worms are in cluster
@@ -119,6 +120,7 @@ k_theta = iP.Results.k_theta; % scale with dT as F~v~dT
 deltaPhase = iP.Results.deltaPhase;
 omega_m = iP.Results.omega_m;
 theta_0 = iP.Results.theta_0;
+angleNoise = iP.Results.angleNoise;
 revRate = iP.Results.revRate;
 revRateCluster = iP.Results.revRateCluster;
 revRateClusterEdge = iP.Results.revRateClusterEdge;
@@ -184,7 +186,8 @@ while t<T
     % calculate forces
     forceArray = calculateForces(distanceMatrixXY,distanceMatrix,...
         rc,orientations,reversalLogInd(:,timeCtr),segmentLength,...
-        v,k_l,k_theta*v./v0,theta_0,phaseOffset,sigma_LJ,r_LJcutoff,eps_LJ,LJnodes);
+        v,k_l,k_theta*v./v0,theta_0,phaseOffset,sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,...
+        angleNoise);
     try
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     catch

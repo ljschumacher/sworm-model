@@ -20,20 +20,22 @@ rng(1)
 eps_LJ = 1;
 r_LJcutoff = 5*rc;
 sigma_LJ = 2*rc;
-f_LJ = @(x) 48*eps_LJ./x.*((sigma_LJ./x).^12 - 1/2*(sigma_LJ./x).^6);
+f_LJ = @(x,b) 8*b*eps_LJ./x.*((sigma_LJ./x).^(2*b)*2.^(b/6 - 1) - 1/2*(sigma_LJ./x).^b);
+% for forces with other exponents of form 2b, b, mulitply repulsive term by
+% 2^(b/6 - 1) for potential to have minimum at same radius
 
-x = linspace(-0.1,1.2,2600);
-y = linspace(-0.2,0.3,1000);
+x = linspace(-0.1,1.2,1300);
+y = linspace(-0.2,0.3,500);
 [X,Y] = meshgrid(x,y);
 F_LJ = zeros(size(X));
 for nodeCtr = 1:M
     r = sqrt((x - xyarray(:,nodeCtr,1)).^2 + (y - xyarray(:,nodeCtr,2))'.^2);
-    % ignore values smaller than the node radius for plotting
-    r(r<2*rc) = 2*rc;
+%     r = distPoint2Lineseg([X(:), Y(:)],squeeze(xyarray(:,nodeCtr,:))',squeeze(xyarray(:,nodeCtr+1,:))');
     r(r>r_LJcutoff) = Inf;
-    F_LJ = F_LJ + f_LJ(r);
+    F_LJ = F_LJ + f_LJ(reshape(r,size(X)),1);
 end
-F_LJ(F_LJ>0) = -min(min(F_LJ));
+maxForce = abs(min(min(F_LJ)));
+F_LJ(F_LJ>maxForce) = maxForce;
 h = pcolor(X,Y,F_LJ);
 h.MeshStyle = 'none';
 hold on

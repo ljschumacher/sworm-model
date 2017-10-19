@@ -1,12 +1,15 @@
 function forceArray = calculateForces(distanceMatrixXY,distanceMatrix,rc,...
     headings,reversals,segmentLength,v_target,k_l,k_theta,theta_0,phaseOffset,...
-    sigma_LJ,r_LJcutoff,eps_LJ,LJnodes)
+    sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,angleNoise)
 % updates object directions according to update rules
 
 % issues/to-do's:
 % - mixed periodic boundary conditions can be quite slow
 % - calculate forces without loops?
 % - refactor individual forces into their own functions
+% - if using noise for head angle, better use von mises random number?
+% - if changing head orientation based on forces instantaneously, move
+% angleNoise generation to updateOscillators function
 
 % short-hand for indexing coordinates
 x =     1;
@@ -54,7 +57,7 @@ for objCtr = 1:N
     end
     
     % head motile force
-    headAngle = headings(objCtr,headInd);
+    headAngle = headings(objCtr,headInd) + angleNoise*randn();
     
     Fm(headInd,:) = [cos(headAngle), sin(headAngle)];
     % body motile force
