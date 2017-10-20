@@ -12,7 +12,7 @@ addpath('../visualisation')
 M = 2; % M: number of nodes in each object
 L = 10;%[20, 20]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 param.v0 = 0.5; % v0: speed (default 0.05)
-rc = 0.35;
+rc = 0.035;
 param.rc = -1; % rc: core repulsion radius (default 0.07 mm)
 param.segmentLength = 2*rc;
 param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
@@ -119,7 +119,7 @@ param.segmentLength = (1.2-2*rc0)/(M - 1);
 param.v0 = 0.33;
 param.dT = min(1/2,rc0/param.v0/8);
 param.saveEvery = round(1/4/param.dT);
-param.vs = param.v0;
+param.vs = 1e-2;%param.v0;
 param.revRate = 0;
 param.revRateClusterEdge = 0;
 param.revRateCluster = 0;
@@ -127,9 +127,11 @@ param.r_LJcutoff = 5*rc0;
 param.eps_LJ = 0;
 param.sigma_LJ = 2*rc0;
 param.LJnodes = 1:M;
-param.angleNoise = 0.01;
+param.slowingNodes = 1:M;
+param.slowingMode = 'density';
+param.num_nbr_max_per_node = 1;
 xyarray = runWoids(T,N,M,L,param);
 animateWoidTrajectories(xyarray,...
     ['woidlino_test_movies/test_longBody_periodic_square_noRev'...
     'eps_LJ_' num2str(param.eps_LJ,'%1.0e'),...
-    '_noVolExcl' '_angleNoise'],L,rc0);
+    '_noVolExcl' '_slowingDensity' num2str(param.num_nbr_max_per_node)],L,rc0);

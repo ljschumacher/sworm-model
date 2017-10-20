@@ -10,7 +10,7 @@ close all
 N = 40; % N: number of objects
 M = 18; % M: number of nodes in each object
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
-numRepeats = 3;
+numRepeats = 1;
 
 T = 500;
 rc0 = 0.035; % rc: core repulsion radius (default 0.035 mm)
@@ -28,7 +28,8 @@ paramAll.tailNodes = (M-max(round(M/10),1)+1):M;
 % -- slow-down parameters --
 paramAll.vs = 0;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
-paramAll.slowingMode = 'gradual';
+paramAll.slowingMode = 'density';
+% paramAll.num_nbr_max_per_node = 2;
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 5*rc0;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc0;  % particle size for Lennard-Jones force
@@ -42,7 +43,8 @@ revRatesClusterEdge = fliplr([0, 0.1, 0.2, 0.4, 0.8, 1.6]);
 speeds = [0.33];
 slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 attractionStrengths = [0];
-paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths);
+num_nbr_max_per_nodes = [2, 3];
+paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths,num_nbr_max_per_nodes);
 nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats
     for paramCtr = 1:nParamCombis
@@ -55,6 +57,7 @@ for repCtr = 1:numRepeats
         param.saveEvery = round(1/4/param.dT);
         param.vs = paramCombis(3,paramCtr);
         attractionStrength = paramCombis(4,paramCtr);
+        param.num_nbr_max_per_node = paramCombis(5,paramCtr);
         if attractionStrength>0
             param.r_LJcutoff = 5*rc0;
         else
@@ -62,9 +65,9 @@ for repCtr = 1:numRepeats
         end
         param.eps_LJ = attractionStrength;
         filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) '_noVolExcl'...
-            '_angleNoise'...
+            ... '_angleNoise'...
             '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
-            '_' param.slowingMode 'SlowDown' ...
+            '_' param.slowingMode 'SlowDown' num2str(param.num_nbr_max_per_node)...
             '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
             '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')...
             '_run' num2str(repCtr)];

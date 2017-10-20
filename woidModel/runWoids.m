@@ -90,6 +90,7 @@ addOptional(iP,'vs',0.33/3,@isnumeric) % speed when slowed down, default v0/3
 addOptional(iP,'slowingNodes',1:M,checkInt) % which nodes sense proximity, default all
 addOptional(iP,'slowingMode','gradual',@checkSlowingMode) % 'gradual' or 'abrupt'
 addOptional(iP,'Ris',1,@isnumeric) % relative interaction radius for slowing, default 1 (ie = ri)
+addOptional(iP,'num_nbr_max_per_node',1,checkInt) % how many max nbrs per node to count for density-dependent speed
 % Lennard-Jones
 addOptional(iP,'r_LJcutoff',0,@isnumeric) % cut-off above which lennard jones potential is not acting anymore
 addOptional(iP,'eps_LJ',1e-6,@isnumeric) % strength of LJ-potential
@@ -133,6 +134,7 @@ Ris = iP.Results.Ris;
 vs = iP.Results.vs;
 slowingNodes = iP.Results.slowingNodes;
 slowingMode = iP.Results.slowingMode;
+num_nbr_max_per_node = iP.Results.num_nbr_max_per_node;
 r_LJcutoff = iP.Results.r_LJcutoff;
 eps_LJ = iP.Results.eps_LJ;
 sigma_LJ = iP.Results.sigma_LJ;
@@ -175,7 +177,7 @@ while t<T
     distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar distances
     % check if any woids are slowed down by neighbors
     [ v, omega ] = slowWorms(distanceMatrix,Ris*ri,slowingNodes,slowingMode,...
-        vs,v0,omega_m);
+        vs,v0,omega_m,num_nbr_max_per_node);
     % check if any worms are reversing due to contacts
     reversalLogIndPrev(reversalLogInd(:,timeCtr)) = true; % only update events that happen between timeCtr updates, ie reversal starts
     reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
@@ -242,6 +244,6 @@ end
 end
 
 function SlowModeCheck = checkSlowingMode(s)
-validSlowingModes = {'gradual','abrupt'};
+validSlowingModes = {'gradual','abrupt','density'};
 SlowModeCheck = any(strcmp(s,validSlowingModes));
 end
