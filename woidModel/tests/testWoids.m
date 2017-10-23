@@ -61,8 +61,8 @@ L = [2 2];
 % system(['epstopdf ' filename '.eps']);
 % system(['rm ' filename '.eps']);
 % 
-xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'k_theta',00);
-animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_noflux_ktheta0',L);
+% xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'k_theta',00);
+% animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_noflux_ktheta0',L);
 % 
 % xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'revRate',0,'revRateCluster',0,'revRateClusterEdge',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_noflux_revRate0',L);
@@ -82,6 +82,9 @@ animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_noflux_ktheta0',L);
 % xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'slowingMode','abrupt');
 % animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_noflux_slowingAbrupt',L);
 % 
+xyarray = runWoids(20,2,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,'k_roam',0.1,'k_unroam',0.1);
+animateWoidTrajectories(xyarray,['woid_test_movies/twoWormsM' num2str(M) '_roaming'],L);
+%
 % xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,...
 %     'theta_0',0,'omega_m',0,'deltaPhase',0,'revRate',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_noflux_undulations0',L);

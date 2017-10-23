@@ -1,5 +1,5 @@
 function reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
-    interactionRadius,headInd,tailInd,dT,revRate,revTime,revRateCluster,revRateClusterEdge)
+    interactionRadius,headInd,tailInd,dT,revRate,revTime,revRateCluster,revRateClusterEdge,roamingLogInd)
 % find which worms are in or out of clusters    
 tailContacts = findWoidNeighbors(distanceMatrix,interactionRadius,tailInd);
 headContacts = findWoidNeighbors(distanceMatrix,interactionRadius,headInd);
@@ -16,11 +16,13 @@ reversalLogInd(clustFwdWorms,timeCtr:(timeCtr+revTime)) ... % set reversal state
     = repmat(logical(poissrnd(revRateCluster*dT,nnz(clustFwdWorms),1)),1,revTime+1);
 
 % stop reversal with increased rate if tail is sticking out of cluster
-freeBwdTails = ~tailContacts&headContacts&currentReversals;
+% (unless roaming)
+freeBwdTails = ~tailContacts&headContacts&currentReversals&~roamingLogInd;
 stoppedReversalsLogInd = logical(poissrnd(revRateClusterEdge*dT,nnz(freeBwdTails),1));
 reversalLogInd(freeBwdTails(stoppedReversalsLogInd),timeCtr:end) = false;
-% reverse with increased rate if head is sticking out of cluster
-freeFwdHeads = tailContacts&~headContacts&~currentReversals;
+% reverse with increased rate if head is sticking out of cluster (unless
+% roaming)
+freeFwdHeads = tailContacts&~headContacts&~currentReversals&~roamingLogInd;
 reversalLogInd(freeFwdHeads,timeCtr:(timeCtr+revTime)) ...
     = repmat(logical(poissrnd(revRateClusterEdge*dT,nnz(freeFwdHeads),1)),1,revTime+1);
 
