@@ -23,7 +23,7 @@ if ~isempty(slowingNodes)&&any(~roamingLogInd)
             v = v0*~slowWorms + vs*slowWorms;
         end
     end
-    v(~roamingLogInd) = v0; % roaming worms don't slow down
+    v(roamingLogInd) = v0; % roaming worms don't slow down
     assert(~any(v>v0+eps(v0)))
     omega = omega_m*v/v0; % adjust internal oscillator freq for slowed worms
 else

@@ -82,7 +82,9 @@ L = [2 2];
 % xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'slowingMode','abrupt');
 % animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_noflux_slowingAbrupt',L);
 % 
-xyarray = runWoids(20,2,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,'k_roam',0.1,'k_unroam',0.1);
+rng(1)
+xyarray = runWoids(20,3,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+    'vs',1e-2,'slowingMode','abrupt','k_roam',0.1,'k_unroam',0.1);
 animateWoidTrajectories(xyarray,['woid_test_movies/twoWormsM' num2str(M) '_roaming'],L);
 %
 % xyarray = runWoids(20,2,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,...
