@@ -23,6 +23,7 @@
 % omega_m: angular frequency of undulations (default 0.6Hz)
 % theta_0: amplitude of undulations (default pi/4)
 % deltaPhase: phase shift in undulations from node to node
+% angleNoise: noise (gaussian) in direction of movement for head node
 % -- reversal parameters --
 % revRate: rate for poisson-distributed reversals (default 1/13s)
 % revRateCluster: rate for reversals when in a cluster (default 1/130s)
@@ -31,16 +32,23 @@
 % headNodes: which nodes count as head for defining cluster status, default front 10%
 % tailNodes: which nodes count as tail for defining cluster status, default back 10%
 % ri: radius at which worms register contact (default 3/2 rc)
+% Rir: relative interaction radius for reversals, default 1 (ie = ri)
+% num_nbr_max_per_node: how many max nbrs per node to count for density-dependent speed
 % -- slow-down parameters --
 % vs: speed when slowed down (default v0/3)
 % slowingNodes: which nodes register contact (default [1 M], ie head and tail)
-% -- Lennard-Jones parameters --
+% slowingMode: how worms slow down, 'abrupt', 'gradual', or 'density'
+% Ris: relative interaction radius for slowing, default 1 (ie = ri)
+% -- adhesion (Lennard-Jones) parameters --
 % r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 % eps_LJ: strength of LJ-potential
 % sigma_LJ: particle size of the LJ-force, so minimum is at ca 1.122sigma
 % LJnodes: which nodes the LJ-forces acts on (default 1:M). This is
 %   asymmetric in the sense that these nodes will feel the force from all
 %   other nodes, but the other nodes won't feel the force from these nodes
+% -- state parameters --
+% k_roam: rate to spontaneously enter the roaming state (like off-food)
+% k_unroam: rate to spontaneously leave the roaming state
 %
 % OUTPUTS
 % xyarray: Array containing the position, and movement direction for
@@ -88,14 +96,17 @@ addOptional(iP,'Rir',1,@isnumeric) % relative interaction radius for reversals, 
 % slowing down
 addOptional(iP,'vs',0.33/3,@isnumeric) % speed when slowed down, default v0/3
 addOptional(iP,'slowingNodes',1:M,checkInt) % which nodes sense proximity, default all
-addOptional(iP,'slowingMode','gradual',@checkSlowingMode) % 'gradual' or 'abrupt'
+addOptional(iP,'slowingMode','gradual',@checkSlowingMode) % 'gradual' or 'abrupt'or 'density'
 addOptional(iP,'Ris',1,@isnumeric) % relative interaction radius for slowing, default 1 (ie = ri)
 addOptional(iP,'num_nbr_max_per_node',1,checkInt) % how many max nbrs per node to count for density-dependent speed
-% Lennard-Jones
+% adhesion forces (Lennard-Jones)
 addOptional(iP,'r_LJcutoff',0,@isnumeric) % cut-off above which lennard jones potential is not acting anymore
 addOptional(iP,'eps_LJ',1e-6,@isnumeric) % strength of LJ-potential
 addOptional(iP,'sigma_LJ',0,@isnumeric) % particle size for Lennard-Jones force
 addOptional(iP,'LJnodes',1:M,checkInt) % nodes which feel LJ-force
+% state parameters
+addOptional(iP,'k_roam',0,@isnumeric) % rate to spontaneously enter the roaming state (like off-food) (default 0)
+addOptional(iP,'k_unroam',0,@isnumeric) % rate to spontaneously leave the roaming state (default 0)
 % simulation parameters
 addOptional(iP,'saveEvery',1,checkInt);
 
@@ -139,6 +150,8 @@ r_LJcutoff = iP.Results.r_LJcutoff;
 eps_LJ = iP.Results.eps_LJ;
 sigma_LJ = iP.Results.sigma_LJ;
 LJnodes = iP.Results.LJnodes;
+k_roam = iP.Results.k_roam;
+k_unroam = iP.Results.k_unroam;
 
 % check input relationships to each other
 % assert(segmentLength>2*rc,...
@@ -150,10 +163,11 @@ assert(v0>=vs,'vs should be chosen smaller or equal to v0')
 % preallocate reversal states
 reversalLogInd = false(N,numTimepoints);
 reversalLogIndPrev = reversalLogInd(:,1);
-% random phase offset for each object plus phase shift for each node
+% preallocate roaming state variable
+roamingLogInd = false(N,1);
+% generate random phase offset for each object plus phase shift for each node
 phaseOffset = wrapTo2Pi(rand(N,1)*2*pi - deltaPhase*(1:M));
-% initialise worm positions and node directions - respecting volume
-% exclusion
+% initialise worm positions and node directions - respecting volume exclusion
 initialExclusionRadius = max(rc,sigma_LJ/2); % so that we don't get too overlapping initial positions, even when rc = 0
 [xyarray, orientations] = initialiseWoids(N,M,numSavepoints,L,segmentLength,...
     phaseOffset,theta_0,initialExclusionRadius,bc);
@@ -175,13 +189,15 @@ while t<T
         distanceMatrixXY = computeWoidDistancesWithBCs(positions,L,bc);
     end
     distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar distances
+    % check if any woids are changing their movement state
+    roamingLogInd = updateRoamingState(roamingLogInd,k_roam,k_unroam,dT);
     % check if any woids are slowed down by neighbors
     [ v, omega ] = slowWorms(distanceMatrix,Ris*ri,slowingNodes,slowingMode,...
-        vs,v0,omega_m,num_nbr_max_per_node);
+        vs,v0,omega_m,num_nbr_max_per_node,roamingLogInd);
     % check if any worms are reversing due to contacts
     reversalLogIndPrev(reversalLogInd(:,timeCtr)) = true; % only update events that happen between timeCtr updates, ie reversal starts
     reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
-        Rir*ri,headNodes,tailNodes,dT,revRate,revTime,revRateCluster,revRateClusterEdge);
+        Rir*ri,headNodes,tailNodes,dT,revRate,revTime,revRateCluster,revRateClusterEdge,roamingLogInd);
     % update internal oscillators / headings
     [orientations, phaseOffset] = updateWoidOscillators(orientations,theta_0,...
         omega,dT,phaseOffset,deltaPhase,[reversalLogIndPrev, reversalLogInd(:, timeCtr)]);
