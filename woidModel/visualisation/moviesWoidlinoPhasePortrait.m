@@ -7,14 +7,15 @@ close all
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 % rc = 0.035;
 N = 40;
-M = 14;
-revRatesClusterEdge = fliplr([0, 0.1, 0.2, 0.4, 0.8, 1.6]);
+M = 18;
+revRatesClusterEdge = 1.6%fliplr([0, 0.1, 0.2, 0.4, 0.8, 1.6]);
 speeds = [0.33];
 slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 attractionStrengths = [0];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths);
 nParamCombis = size(paramCombis,2);
-slowingMode = 'gradual';
+slowingMode = 'density';
+num_nbr_max_per_node = 3;
 
 for paramCtr = 1:nParamCombis % can be parfor but might impair movie quality
     revRateClusterEdge = paramCombis(1,paramCtr);
@@ -24,7 +25,7 @@ for paramCtr = 1:nParamCombis % can be parfor but might impair movie quality
     filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
         '_noVolExcl' ...
         '_v0_' num2str(speed,'%1.0e') '_vs_' num2str(slowspeed,'%1.0e') ...
-        '_' slowingMode 'SlowDown' ...
+        '_' slowingMode 'SlowDown' num2str(num_nbr_max_per_node) ...
         '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
         '_revRateClusterEdge_' num2str(revRateClusterEdge,'%1.0e') ...
         '_run1'];

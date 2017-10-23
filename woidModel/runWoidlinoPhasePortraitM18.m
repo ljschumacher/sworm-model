@@ -37,7 +37,7 @@ paramAll.sigma_LJ = 2*rc0;  % particle size for Lennard-Jones force
 paramAll.theta_0 = 0;
 paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
-paramAll.angleNoise = 0.01;
+paramAll.angleNoise = 0;
 
 revRatesClusterEdge = fliplr([0, 0.1, 0.2, 0.4, 0.8, 1.6]);
 speeds = [0.33];
