@@ -18,20 +18,20 @@ paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'nofl
 % -- slow-down parameters --
 paramAll.vs = 0;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = [1:M];% slowingNodes: which nodes register contact (default head and tail)
-paramAll.slowingMode = 'density';
+paramAll.slowingMode = 'gradual';
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 5*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 % -- volume exclusion
 paramAll.rc = 0;
 
-paramAll.angleNoise = 0;
+paramAll.angleNoise = 0.1;
 
 revRatesClusterEdge = fliplr([0, 0.1, 0.2, 0.4, 0.8, 1.6]);
 speeds = [0.33];
 slowspeeds = fliplr([0.33, 0.025, 0.0125, 0.005, 0.001]);
 attractionStrengths = [0];
-num_nbr_max_per_nodes = [3];
+% num_nbr_max_per_nodes = [3];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths,num_nbr_max_per_nodes);
 nParamCombis = size(paramCombis,2);
 for paramCtr = 1:nParamCombis
@@ -52,9 +52,9 @@ for paramCtr = 1:nParamCombis
     end
     param.eps_LJ = attractionStrength;
     filename = ['woids_N_' num2str(N) '_L_' num2str(L(1)) '_noVolExcl' ... 
-        ... '_angleNoise'...
+        '_angleNoise'...
         '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
-        '_'  param.slowingMode 'SlowDown' num2str(param.num_nbr_max_per_node)...
+        '_'  param.slowingMode 'SlowDown' ...num2str(param.num_nbr_max_per_node)...
         '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
         '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')];
     if ~exist(['results/woids/' filename '.mat'],'file')&&isempty(dir(['results/woids/' filename '_running_on_*.mat']))
