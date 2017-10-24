@@ -3,11 +3,11 @@ close all
 addpath('../')
 % draws a schematic of the agent based model
 N = 1;
-M = 49;
+M = 18;
 rc = 0.035;
 L = 1.25;
 segmentLength = 1.13/(M-1);
-deltaPhase = 0.25;
+deltaPhase = 0.25*49/18;
 theta_0 = pi/4;
 bc = 'free';
 angles = linspace(0,2*pi,48)'; % for plotting node size
@@ -25,11 +25,18 @@ f_LJ = @(x,b) 8*b*eps_LJ./x.*((sigma_LJ./x).^(2*b)*2.^(b/6 - 1) - 1/2*(sigma_LJ.
 % 2^(b/6 - 1) for potential to have minimum at same radius
 
 x = linspace(-0.1,1.2,1300);
-y = linspace(-0.2,0.3,500);
+y = linspace(-0.25,0.25,500);
 [X,Y] = meshgrid(x,y);
 F_LJ = zeros(size(X));
-for nodeCtr = 1:M
-    r = sqrt((x - xyarray(:,nodeCtr,1)).^2 + (y - xyarray(:,nodeCtr,2))'.^2);
+interpfactor = 6;
+xw0 = xyarray(:,:,1);
+xw = xw0;
+for ii = 1:(interpfactor - 1)
+    xw = [xw, xw0(1:end-1) + diff(xw0)*ii/interpfactor];
+end
+yw = interp1(xyarray(:,:,1),xyarray(:,:,2),xw);
+for nodeCtr = 1:length(xw)
+    r = sqrt((x - xw(nodeCtr)).^2 + (y - yw(nodeCtr))'.^2);
 %     r = distPoint2Lineseg([X(:), Y(:)],squeeze(xyarray(:,nodeCtr,:))',squeeze(xyarray(:,nodeCtr+1,:))');
     r(r>r_LJcutoff) = Inf;
     F_LJ = F_LJ + f_LJ(reshape(r,size(X)),1);

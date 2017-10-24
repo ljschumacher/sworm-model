@@ -107,6 +107,7 @@ param.bc = 'periodic';
 %     '_LJhead'],L,param.rc);
 
 % % test long woidlinos without volume exclusion
+% test density dependent slowing
 rng(1)
 T= 40;
 N = 40;
@@ -130,8 +131,18 @@ param.LJnodes = 1:M;
 param.slowingNodes = 1:M;
 param.slowingMode = 'density';
 param.num_nbr_max_per_node = 1;
-xyarray = runWoids(T,N,M,L,param);
+% xyarray = runWoids(T,N,M,L,param);
+% animateWoidTrajectories(xyarray,...
+%     ['woidlino_test_movies/test_longBody_periodic_square_noRev'...
+%     'eps_LJ_' num2str(param.eps_LJ,'%1.0e'),...
+%     '_noVolExcl' '_slowingDensity' num2str(param.num_nbr_max_per_node)],L,rc0);
+
+% test roaming state
+param.slowingMode = 'gradual';
+param.k_roam = 0.1;
+param.k_unroam = 0.1;
+xyarray = runWoids(40,N,M,L,param);
 animateWoidTrajectories(xyarray,...
     ['woidlino_test_movies/test_longBody_periodic_square_noRev'...
     'eps_LJ_' num2str(param.eps_LJ,'%1.0e'),...
-    '_noVolExcl' '_slowingDensity' num2str(param.num_nbr_max_per_node)],L,rc0);
+    '_noVolExcl' '_slowing' param.slowingMode],L,rc0);
