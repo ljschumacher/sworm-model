@@ -29,7 +29,7 @@ paramAll.angleNoise = 0;
 
 revRatesClusterEdge = fliplr([0, 0.1, 0.2, 0.4, 0.8, 1.6]);
 speeds = [0.33];
-slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
+slowspeeds = fliplr([0.33, 0.025, 0.0125, 0.005, 0.001]);
 attractionStrengths = [0];
 num_nbr_max_per_nodes = [3];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths,num_nbr_max_per_nodes);
