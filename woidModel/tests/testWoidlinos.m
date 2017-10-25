@@ -139,10 +139,13 @@ param.num_nbr_max_per_node = 1;
 
 % test roaming state
 param.slowingMode = 'gradual';
-param.k_roam = 0.1;
-param.k_unroam = 0.1;
-xyarray = runWoids(40,N,M,L,param);
+param.k_roam = 100;
+param.k_unroam = 1000;
+param.vs = 0.01;
+param.revRateClusterEdge = 1.6;
+xyarray = runWoids(50,N,M,L,param);
 animateWoidTrajectories(xyarray,...
     ['woidlino_test_movies/test_longBody_periodic_square_noRev'...
     'eps_LJ_' num2str(param.eps_LJ,'%1.0e'),...
-    '_noVolExcl' '_slowing' param.slowingMode],L,rc0);
+    '_noVolExcl' '_slowing' param.slowingMode ...
+    '_roam_' num2str(param.k_roam) '_' num2str(param.k_unroam)],L,rc0);

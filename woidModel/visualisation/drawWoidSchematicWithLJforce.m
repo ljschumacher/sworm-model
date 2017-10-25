@@ -3,11 +3,11 @@ close all
 addpath('../')
 % draws a schematic of the agent based model
 N = 1;
-M = 18;
+M = 49;
 rc = 0.035;
 L = 1.25;
 segmentLength = 1.13/(M-1);
-deltaPhase = 0.25*49/18;
+deltaPhase = 0.25;
 theta_0 = pi/4;
 bc = 'free';
 angles = linspace(0,2*pi,48)'; % for plotting node size
@@ -28,7 +28,7 @@ x = linspace(-0.1,1.2,1300);
 y = linspace(-0.25,0.25,500);
 [X,Y] = meshgrid(x,y);
 F_LJ = zeros(size(X));
-interpfactor = 6;
+interpfactor = 0;
 xw0 = xyarray(:,:,1);
 xw = xw0;
 for ii = 1:(interpfactor - 1)
