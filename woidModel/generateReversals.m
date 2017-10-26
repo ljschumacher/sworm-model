@@ -5,26 +5,26 @@ tailContacts = findWoidNeighbors(distanceMatrix,interactionRadius,tailInd);
 headContacts = findWoidNeighbors(distanceMatrix,interactionRadius,headInd);
 % generates reversal states
 % find worms currently in reversal state
-currentReversals = reversalLogInd(:,timeCtr);
+currentReversalsLogInd = reversalLogInd(:,timeCtr);
 % worms outside clusters reverse with revRate for revTime, unless already reversing
-freeFwdWorms = ~tailContacts&~headContacts&~currentReversals;
-reversalLogInd(freeFwdWorms,timeCtr:(timeCtr+revTime)) ... % set reversal state for duration of reversal
-    = repmat(logical(poissrnd(revRate*dT,nnz(freeFwdWorms),1)),1,revTime+1);
+freeFwdWormsLogInd = ~tailContacts&~headContacts&~currentReversalsLogInd;
+reversalLogInd(freeFwdWormsLogInd,timeCtr:(timeCtr+revTime)) ... % set reversal state for duration of reversal
+    = repmat(logical(poissrnd(revRate*dT,nnz(freeFwdWormsLogInd),1)),1,revTime+1);
 % worms inside clusters reverse with revRateCluster for revTime, unless already reversing
-clustFwdWorms = tailContacts&headContacts&~currentReversals;
-reversalLogInd(clustFwdWorms,timeCtr:(timeCtr+revTime)) ... % set reversal state for duration of reversal
-    = repmat(logical(poissrnd(revRateCluster*dT,nnz(clustFwdWorms),1)),1,revTime+1);
+clustFwdWormsLogInd = tailContacts&headContacts&~currentReversalsLogInd;
+reversalLogInd(clustFwdWormsLogInd,timeCtr:(timeCtr+revTime)) ... % set reversal state for duration of reversal
+    = repmat(logical(poissrnd(revRateCluster*dT,nnz(clustFwdWormsLogInd),1)),1,revTime+1);
 
 % stop reversal with increased rate if tail is sticking out of cluster
 % (unless roaming)
-freeBwdTails = ~tailContacts&headContacts&currentReversals&~roamingLogInd;
-stoppedReversalsLogInd = logical(poissrnd(revRateClusterEdge*dT,nnz(freeBwdTails),1));
-reversalLogInd(freeBwdTails(stoppedReversalsLogInd),timeCtr:end) = false;
+freeBwdTailsInd = find(~tailContacts&headContacts&currentReversalsLogInd&~roamingLogInd); % Ntrue by 1
+stoppedReversalsLogInd = logical(poissrnd(revRateClusterEdge*dT,numel(freeBwdTailsInd),1)); % Ntrue by 1
+reversalLogInd(freeBwdTailsInd(stoppedReversalsLogInd),timeCtr:end) = false;
 % reverse with increased rate if head is sticking out of cluster (unless
 % roaming)
-freeFwdHeads = tailContacts&~headContacts&~currentReversals&~roamingLogInd;
-reversalLogInd(freeFwdHeads,timeCtr:(timeCtr+revTime)) ...
-    = repmat(logical(poissrnd(revRateClusterEdge*dT,nnz(freeFwdHeads),1)),1,revTime+1);
+freeFwdHeadsLogInd = tailContacts&~headContacts&~currentReversalsLogInd&~roamingLogInd; % N by 1
+reversalLogInd(freeFwdHeadsLogInd,timeCtr:(timeCtr+revTime)) ...
+    = repmat(logical(poissrnd(revRateClusterEdge*dT,nnz(freeFwdHeadsLogInd),1)),1,revTime+1);
 
 end
 
