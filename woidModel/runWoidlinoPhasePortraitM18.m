@@ -28,7 +28,9 @@ paramAll.tailNodes = (M-max(round(M/10),1)+1):M;
 % -- slow-down parameters --
 paramAll.vs = 0;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
-paramAll.slowingMode = 'density';
+paramAll.slowingMode = 'stochastic';
+paramAll.k_dwell = 1/4;
+paramAll.k_undwell = 1/2.2;
 % paramAll.num_nbr_max_per_node = 2;
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 5*rc0;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
@@ -43,7 +45,7 @@ revRatesClusterEdge = fliplr([0, 0.1, 0.2, 0.4, 0.8, 1.6]);
 speeds = [0.33];
 slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 attractionStrengths = [0];
-num_nbr_max_per_nodes = [2, 3];
+num_nbr_max_per_nodes = [1];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths,num_nbr_max_per_nodes);
 nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats
@@ -67,7 +69,7 @@ for repCtr = 1:numRepeats
         filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) '_noVolExcl'...
             ... '_angleNoise'...
             '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
-            '_' param.slowingMode 'SlowDown' num2str(param.num_nbr_max_per_node)...
+            '_' param.slowingMode 'SlowDown' ...num2str(param.num_nbr_max_per_node)...
             '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
             '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')...
             '_run' num2str(repCtr)];
