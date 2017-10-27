@@ -18,17 +18,17 @@ paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'nofl
 % -- slow-down parameters --
 paramAll.vs = 0;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = [1:M];% slowingNodes: which nodes register contact (default head and tail)
-% -- reversals -- 
-paramAll.revRateCluster = 0;
+paramAll.slowingMode = 'density';
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 5*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 
-revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];%, 1.6];
+revRatesClusterEdge = fliplr([0, 0.2, 0.4, 0.8, 1.6]);
 speeds = [0.33];
-slowspeeds = [0.33, 0.1, 0.05, 0.025];%, 0.0125];
+slowspeeds = fliplr([0.33, 0.025, 0.0125, 0.005, 0.001]);
 attractionStrengths = [0];
-paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths);
+num_nbr_max_per_nodes = [3 4];
+paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths,num_nbr_max_per_nodes);
 nParamCombis = size(paramCombis,2);
 for paramCtr = 1:nParamCombis
     param = paramAll;
@@ -41,6 +41,7 @@ for paramCtr = 1:nParamCombis
     param.saveEvery = round(1/4/param.dT);
     param.vs = paramCombis(3,paramCtr);
     attractionStrength = paramCombis(4,paramCtr);
+    param.num_nbr_max_per_node = paramCombis(5,paramCtr);
     if attractionStrength>0
         param.r_LJcutoff = 5*rc;
     else
@@ -49,20 +50,18 @@ for paramCtr = 1:nParamCombis
     param.eps_LJ = attractionStrength;
     filename = ['woids_N_' num2str(N) '_L_' num2str(L(1)) ...
         '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
-        '_gradualSlowDown' ...
+        '_'  param.slowingMode 'SlowDown' num2str(param.num_nbr_max_per_node)...
         '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
         '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')];
-    if paramAll.revRateCluster == 0
-        filename = [filename '_noInClusterRev'];
-    end
     if ~exist(['results/woids/' filename '.mat'],'file')&&isempty(dir(['results/woids/' filename '_running_on_*.mat']))
         disp(['running ' filename])
         % make a dummy file to mark that this sim is running on this computer
-        [~, hostname] = system('hostname -s'); hostname = strrep(hostname,sprintf('\n'),'');
+        [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
         tmp_filename = ['results/woids/' filename '_running_on_' hostname '.mat'];
         save(tmp_filename,'N','M','L','param')
         rng(1) % set random seed to be the same for each simulation
         xyarray = runWoids(T,N,M,L,param);
+        xyarray = single(xyarray); % save space by using single precision
         saveResults(['results/woids/' filename '.mat'],...
             struct('xyarray',single(xyarray),'T',T,'N',N,'M',M,'L',L,'param',param))
         delete(tmp_filename)
