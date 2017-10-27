@@ -21,8 +21,8 @@ exportOptions = struct('Format','eps2',...
 % Lval = 7.5;
 revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
 speeds = [0.33];
-% slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
-slowspeeds = fliplr([0.33, 0.025, 0.0125, 0.005, 0.001]);
+slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
+% slowspeeds = fliplr([0.33, 0.025, 0.0125, 0.005, 0.001]);
 attractionStrength = [0];
 trackedNodes = 1:5;
 distBinwidth = 0.05; % in units of mm, sensibly to be chosen similar worm width or radius
@@ -40,7 +40,7 @@ for speed = speeds
     for slowspeed = slowspeeds
         for revRateClusterEdge = revRatesClusterEdge
             filename = ['../results/woids/woids' '_N_' num2str(Nvalue) '_L_' num2str(Lvalue) ...
-                 '_noVolExcl'  '_angleNoise'... %'_noUndulations'
+                 ...'_noVolExcl'  '_angleNoise'... %'_noUndulations'
                  '_v0_' num2str(speed,'%1.0e') '_vs_' num2str(slowspeed,'%1.0e')...
                 '_' slowingMode 'SlowDown' ...num2str(num_nbr_max_per_nodes) ...
                 '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
@@ -103,7 +103,7 @@ for speed = speeds
     poscorrFig.PaperUnits = 'centimeters';
     fignameprefix = 'figures/woidPhasePortrait';
     fignamesuffix = ['_N_' num2str(thisFile.N) '_L_' num2str(thisFile.L(1)) ...
-        '_noVolExcl' '_angleNoise'...%'_noUndulations'
+        ...'_noVolExcl' '_angleNoise'...%'_noUndulations'
         '_speed_' num2str(speed,'%1.0e') '_slowing' '_' slowingMode ...num2str(num_nbr_max_per_nodes) ...
         '.eps'];
     filename = [ fignameprefix 'Radialdistribution' fignamesuffix];

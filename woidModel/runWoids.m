@@ -10,7 +10,7 @@
 %
 % optional inputs
 % -- general parameters--
-% v0: speed (default 0.05)
+% v0: speed (default 0.33 for npr1, 0.14 for N2)
 % dT: time step, scaled adaptively when forces are large (default 1/9s)
 % rc: core repulsion radius (default 0.07/2 mm)
 % segmentLength: length of a segment between nodes (default 1.2mm/(M-1))
@@ -36,8 +36,17 @@
 % num_nbr_max_per_node: how many max nbrs per node to count for density-dependent speed
 % -- slow-down parameters --
 % vs: speed when slowed down (default v0/3)
+%   for stochastic slowing, low dwelling speeds are 0.018 and 0.014 for
+%   npr1/N2
 % slowingNodes: which nodes register contact (default [1 M], ie head and tail)
-% slowingMode: how worms slow down, 'abrupt', 'gradual', or 'density'
+% slowingMode: how worms slow down, 'abrupt', 'gradual', 'density', or
+% 'stochastic'
+% k_dwell: rate to enter low-speed dwelling state, for stochastic slowing
+%   mode, and in the absence of neighbours (default 1/275s for npr1,
+%   1/4 s for N2) ??????
+% k_undwell: rate to leave low-speed dwelling state, for stochastic slowing
+%   mode, and in the absence of neighbours (default 1/0.9s for npr1,
+%   1/2.2s for N2)
 % Ris: relative interaction radius for slowing, default 1 (ie = ri)
 % -- adhesion (Lennard-Jones) parameters --
 % r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
@@ -99,6 +108,8 @@ addOptional(iP,'slowingNodes',1:M,checkInt) % which nodes sense proximity, defau
 addOptional(iP,'slowingMode','gradual',@checkSlowingMode) % 'gradual' or 'abrupt'or 'density'
 addOptional(iP,'Ris',1,@isnumeric) % relative interaction radius for slowing, default 1 (ie = ri)
 addOptional(iP,'num_nbr_max_per_node',1,checkInt) % how many max nbrs per node to count for density-dependent speed
+addOptional(iP,'k_dwell',0,@isnumeric) % rate to enter low-speed dwelling state, for stochastic slowing
+addOptional(iP,'k_undwell',0,@isnumeric) % rate to leave low-speed dwelling state, for stochastic slowing
 % adhesion forces (Lennard-Jones)
 addOptional(iP,'r_LJcutoff',0,@isnumeric) % cut-off above which lennard jones potential is not acting anymore
 addOptional(iP,'eps_LJ',1e-6,@isnumeric) % strength of LJ-potential
@@ -146,6 +157,8 @@ vs = iP.Results.vs;
 slowingNodes = iP.Results.slowingNodes;
 slowingMode = iP.Results.slowingMode;
 num_nbr_max_per_node = iP.Results.num_nbr_max_per_node;
+k_dwell = iP.Results.k_dwell;
+k_undwell = iP.Results.k_undwell;
 r_LJcutoff = iP.Results.r_LJcutoff;
 eps_LJ = iP.Results.eps_LJ;
 sigma_LJ = iP.Results.sigma_LJ;
@@ -165,6 +178,7 @@ reversalLogInd = false(N,numTimepoints);
 reversalLogIndPrev = reversalLogInd(:,1);
 % preallocate roaming state variable
 roamingLogInd = false(N,1);
+dwellLogInd = false(N,1);
 % generate random phase offset for each object plus phase shift for each node
 phaseOffset = wrapTo2Pi(rand(N,1)*2*pi - deltaPhase*(1:M));
 % initialise worm positions and node directions - respecting volume exclusion
@@ -192,8 +206,8 @@ while t<T
     % check if any woids are changing their movement state
     roamingLogInd = updateRoamingState(roamingLogInd,k_roam,k_unroam,dT);
     % check if any woids are slowed down by neighbors
-    [ v, omega ] = slowWorms(distanceMatrix,Ris*ri,slowingNodes,slowingMode,...
-        vs,v0,omega_m,num_nbr_max_per_node,roamingLogInd);
+    [ v, omega, dwellLogInd ] = slowWorms(distanceMatrix,Ris*ri,slowingNodes,slowingMode,...
+        vs,v0,omega_m,num_nbr_max_per_node,roamingLogInd, k_dwell,k_undwell,dwellLogInd,dT);
     % check if any worms are reversing due to contacts
     reversalLogIndPrev(reversalLogInd(:,timeCtr)) = true; % only update events that happen between timeCtr updates, ie reversal starts
     reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
@@ -260,6 +274,6 @@ end
 end
 
 function SlowModeCheck = checkSlowingMode(s)
-validSlowingModes = {'gradual','abrupt','density'};
+validSlowingModes = {'gradual','abrupt','density','stochastic'};
 SlowModeCheck = any(strcmp(s,validSlowingModes));
 end
