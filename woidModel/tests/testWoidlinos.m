@@ -154,9 +154,11 @@ param.num_nbr_max_per_node = 1;
 param.slowingMode = 'stochastic';
 param.k_dwell = 0.0036;%1/275;%1/4;
 param.k_undwell = 1.1;%1/0.9; %1/2.2;
-param.dkdN_dwell = 0.25;
+param.dkdN_dwell = 0.5;
 param.revRateClusterEdge = 1.6;
 param.vs = 0.014;
+param.dT = min(1/2,rc0/param.v0/64);
+param.saveEvery = round(1/4/param.dT);
 % xyarray = runWoids(50,N,M,L,param);
 % animateWoidTrajectories(xyarray,...
 %     ['woidlino_test_movies/test_longBody_periodic_square'...
@@ -170,7 +172,9 @@ param.bc = 'free';
 param.k_dwell = 2;%1/275;%1/4;
 param.k_undwell = 0.1;%1/0.9; %1/2.2;
 param.dkdN_dwell = 0;
-param.revRate = 1.6;
+param.revRate = 0.8;
+param.dT = min(1/2,rc0/param.v0/16);
+param.saveEvery = round(1/4/param.dT);
 xyarray = runWoids(50,N,M,L,param);
 animateWoidTrajectories(xyarray,...
     ['woidlino_test_movies/test_single_periodic_square'...

@@ -234,6 +234,9 @@ while t<T
         warning(['Minimum time-step of ' num2str(dTmin) ' reached at time ' num2str(t)])
         dT = dTmin;
     end
+    if dT>dT0
+        1;
+    end
     % update position (with boundary conditions)
     [positions, orientations] = applyForces(positions,forceArray,...
         dT,orientations,bc,L);
