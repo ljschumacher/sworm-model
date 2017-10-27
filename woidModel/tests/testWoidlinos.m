@@ -138,25 +138,46 @@ param.num_nbr_max_per_node = 1;
 %     '_noVolExcl' '_slowingDensity' num2str(param.num_nbr_max_per_node)],L,rc0);
 
 % % test roaming state
-param.slowingMode = 'gradual';
-param.k_roam = 0.01;
-param.k_unroam = 0.05;
-param.vs = 0.01;
-param.revRateClusterEdge = 1.6;
-xyarray = runWoids(250,N,M,L,param);
-animateWoidTrajectories(xyarray,...
-    ['woidlino_test_movies/test_longBody_periodic_square'...
-    '_eps_LJ_' num2str(param.eps_LJ,'%1.0e'),...
-    '_noVolExcl' '_slowing' param.slowingMode ...
-    '_roam_' num2str(param.k_roam) '_' num2str(param.k_unroam)],L,rc0);
+% param.slowingMode = 'gradual';
+% param.k_roam = 0.01;
+% param.k_unroam = 0.05;
+% param.vs = 0.01;
+% param.revRateClusterEdge = 1.6;
+% xyarray = runWoids(250,N,M,L,param);
+% animateWoidTrajectories(xyarray,...
+%     ['woidlino_test_movies/test_longBody_periodic_square'...
+%     '_eps_LJ_' num2str(param.eps_LJ,'%1.0e'),...
+%     '_noVolExcl' '_slowing' param.slowingMode ...
+%     '_roam_' num2str(param.k_roam) '_' num2str(param.k_unroam)],L,rc0);
 
-% % test stochastic slowing
-% param.slowingMode = 'stochastic';
-% param.k_dwell = 1/275;%1/4;
-% param.k_undwell = 1/0.9; %1/2.2;
-% param.vs = 0.014;
-% xyarray = runWoids(20,N,M,L,param);
+% test stochastic slowing
+param.slowingMode = 'stochastic';
+param.k_dwell = 0.0036;%1/275;%1/4;
+param.k_undwell = 1.1;%1/0.9; %1/2.2;
+param.dkdN_dwell = 0.5;
+param.revRateClusterEdge = 1.6;
+param.vs = 0.014;
+param.dT = min(1/2,rc0/param.v0/64);
+param.saveEvery = round(1/4/param.dT);
+% xyarray = runWoids(50,N,M,L,param);
 % animateWoidTrajectories(xyarray,...
 %     ['woidlino_test_movies/test_longBody_periodic_square'...
 %     '_noVolExcl' '_slowing' param.slowingMode ...
-%     '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell)],L,rc0);
+%     '_revRateClusterEdge_' num2str(param.revRateClusterEdge) ...
+%     '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
+%     '_dkdN_' num2str(param.dkdN_dwell) ],L,rc0);
+
+N = 1;
+param.bc = 'free';
+param.k_dwell = 2;%1/275;%1/4;
+param.k_undwell = 0.1;%1/0.9; %1/2.2;
+param.dkdN_dwell = 0;
+param.revRate = 0.8;
+param.dT = min(1/2,rc0/param.v0/16);
+param.saveEvery = round(1/4/param.dT);
+xyarray = runWoids(50,N,M,L,param);
+animateWoidTrajectories(xyarray,...
+    ['woidlino_test_movies/test_single_periodic_square'...
+    '_noVolExcl' '_slowing' param.slowingMode ...
+    '_revRate_' num2str(param.revRateClusterEdge) ...
+    '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell)],L,rc0);

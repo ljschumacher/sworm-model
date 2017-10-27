@@ -187,11 +187,11 @@ param.slowingMode = 'stochastic';
 param.k_dwell = 1/4;
 param.k_undwell = 1/2.2;
 param.vs = 0.014;
-xyarray = runWoids(20,N,M,L,param);
+xyarray = runWoids(20,N,M,L,param,'saveEvery',saveEvery);
 animateWoidTrajectories(xyarray,...
     ['woid_test_movies/40Worms_periodic_square'...
     '_slowing' param.slowingMode ...
-    '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell)],L);
+    '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell)],[L L]);
 
 % L = [7.5, 7.5];
 % xyarray = runWoids(80,N,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);

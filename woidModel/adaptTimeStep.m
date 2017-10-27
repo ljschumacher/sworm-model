@@ -5,8 +5,10 @@ function [ dT ] = adaptTimeStep( dT0,v0,forceArray )
 %       motile forces are acting with intended magnitude
 
 Fmax = max(max(sqrt(sum(forceArray.^2,3))));
-if Fmax~=0&&v0>0
+if Fmax>v0&&v0>0 % only adapts time step downwards, so it doesn't increase
     dT = dT0*v0/Fmax;
+else
+    dT = dT0;
 end
 
 end
