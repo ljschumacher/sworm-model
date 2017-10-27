@@ -43,7 +43,8 @@
 % 'stochastic'
 % k_dwell: rate to enter low-speed dwelling state, for stochastic slowing
 %   mode, and in the absence of neighbours (default 1/275s for npr1,
-%   1/4 s for N2) ??????
+%   1/4 s for N2) ???
+% dkdN_dwell: increase in dwelling rate with neighbour density
 % k_undwell: rate to leave low-speed dwelling state, for stochastic slowing
 %   mode, and in the absence of neighbours (default 1/0.9s for npr1,
 %   1/2.2s for N2)
@@ -110,6 +111,7 @@ addOptional(iP,'Ris',1,@isnumeric) % relative interaction radius for slowing, de
 addOptional(iP,'num_nbr_max_per_node',1,checkInt) % how many max nbrs per node to count for density-dependent speed
 addOptional(iP,'k_dwell',0,@isnumeric) % rate to enter low-speed dwelling state, for stochastic slowing
 addOptional(iP,'k_undwell',0,@isnumeric) % rate to leave low-speed dwelling state, for stochastic slowing
+addOptional(iP,'dkdN_dwell',0,@isnumeric) % increase in dwelling rate with nbr density, for stochastic slowing
 % adhesion forces (Lennard-Jones)
 addOptional(iP,'r_LJcutoff',0,@isnumeric) % cut-off above which lennard jones potential is not acting anymore
 addOptional(iP,'eps_LJ',1e-6,@isnumeric) % strength of LJ-potential
@@ -159,6 +161,7 @@ slowingMode = iP.Results.slowingMode;
 num_nbr_max_per_node = iP.Results.num_nbr_max_per_node;
 k_dwell = iP.Results.k_dwell;
 k_undwell = iP.Results.k_undwell;
+dkdN_dwell = iP.Results.dkdN_dwell;
 r_LJcutoff = iP.Results.r_LJcutoff;
 eps_LJ = iP.Results.eps_LJ;
 sigma_LJ = iP.Results.sigma_LJ;
@@ -207,7 +210,7 @@ while t<T
     roamingLogInd = updateRoamingState(roamingLogInd,k_roam,k_unroam,dT);
     % check if any woids are slowed down by neighbors
     [ v, omega, dwellLogInd ] = slowWorms(distanceMatrix,Ris*ri,slowingNodes,slowingMode,...
-        vs,v0,omega_m,num_nbr_max_per_node,roamingLogInd, k_dwell,k_undwell,dwellLogInd,dT);
+        vs,v0,omega_m,num_nbr_max_per_node,roamingLogInd,k_dwell,k_undwell,dkdN_dwell,dwellLogInd,dT);
     % check if any worms are reversing due to contacts
     reversalLogIndPrev(reversalLogInd(:,timeCtr)) = true; % only update events that happen between timeCtr updates, ie reversal starts
     reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
