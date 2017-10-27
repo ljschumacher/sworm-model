@@ -29,8 +29,8 @@ paramAll.tailNodes = (M-max(round(M/10),1)+1):M;
 paramAll.vs = 0;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
 paramAll.slowingMode = 'stochastic';
-paramAll.k_dwell = 1/4;
-paramAll.k_undwell = 1/2.2;
+paramAll.k_dwell = 0.0036;
+paramAll.k_undwell = 1.1;
 % paramAll.num_nbr_max_per_node = 2;
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 5*rc0;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
@@ -41,12 +41,12 @@ paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
 paramAll.angleNoise = 0;
 
-revRatesClusterEdge = fliplr([0, 0.1, 0.2, 0.4, 0.8, 1.6]);
+revRatesClusterEdge = fliplr([0, 0.2, 0.4, 0.8, 1.6]);
 speeds = [0.33];
-slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
+slowspeeds = [0.018];
 attractionStrengths = [0];
-num_nbr_max_per_nodes = [1];
-paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths,num_nbr_max_per_nodes);
+dkdN_dwell_values = [0 1./[8 4 2 1]];
+paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths,dkdN_dwell_values);
 nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats
     for paramCtr = 1:nParamCombis
@@ -59,7 +59,7 @@ for repCtr = 1:numRepeats
         param.saveEvery = round(1/4/param.dT);
         param.vs = paramCombis(3,paramCtr);
         attractionStrength = paramCombis(4,paramCtr);
-        param.num_nbr_max_per_node = paramCombis(5,paramCtr);
+        param.dkdN_dwell = paramCombis(5,paramCtr);
         if attractionStrength>0
             param.r_LJcutoff = 5*rc0;
         else
@@ -69,7 +69,8 @@ for repCtr = 1:numRepeats
         filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) '_noVolExcl'...
             ... '_angleNoise'...
             '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
-            '_' param.slowingMode 'SlowDown' ...num2str(param.num_nbr_max_per_node)...
+            '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
+            '_dkdN_' num2str(param.dkdN_dwell)...num2str(param.num_nbr_max_per_node)...
             '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
             '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')...
             '_run' num2str(repCtr)];
