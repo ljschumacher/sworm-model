@@ -17,7 +17,7 @@ exportOptions = struct('Format','eps2',...
 
 numRepeats = 1;
 % revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
-revRatesClusterEdge = [0, 0.2, 0.4, 0.8, 1.6];
+revRatesClusterEdge = [0, 0.2, 0.4, 0.8, 1.6, 3.2];
 speeds = [0.33];
 % slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 slowspeeds = [0.018];
@@ -27,7 +27,7 @@ maxDist = 2;
 slowingMode = 'stochastic';
 k_dwell = 0.0036;
 k_undwell = 1.1;
-dkdN_dwell_values = fliplr([0 1./[8 4 2 1]]);
+dkdN_dwell_values = fliplr([0 1./[8 4 2 1 0.5]]);
 % num_nbr_max_per_nodes = 2;
 
 for speed = speeds
