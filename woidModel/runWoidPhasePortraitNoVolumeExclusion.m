@@ -49,7 +49,7 @@ for paramCtr = 1:nParamCombis
     param.saveEvery = round(1/4/param.dT);
     param.vs = paramCombis(3,paramCtr);
     attractionStrength = paramCombis(4,paramCtr);
-    param.num_nbr_max_per_node = paramCombis(5,paramCtr);
+    param.dkdN_dwell = paramCombis(5,paramCtr);
     if attractionStrength>0
         param.r_LJcutoff = 5*rc;
     else
