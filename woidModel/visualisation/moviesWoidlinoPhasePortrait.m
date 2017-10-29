@@ -10,22 +10,29 @@ N = 40;
 M = 18;
 revRatesClusterEdge = 1.6%fliplr([0, 0.1, 0.2, 0.4, 0.8, 1.6]);
 speeds = [0.33];
-slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
+% slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
+slowspeeds = [0.018];
 attractionStrengths = [0];
-paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths);
+slowingMode = 'stochastic';
+k_dwell = 0.0036;
+k_undwell = 1.1;
+dkdN_dwell_values = [0 1./[8 4 2 1]];
+paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,...
+    attractionStrengths,dkdN_dwell_values);
 nParamCombis = size(paramCombis,2);
-slowingMode = 'density';
-num_nbr_max_per_node = 3;
+% num_nbr_max_per_node = 3;
 
 for paramCtr = 1:nParamCombis % can be parfor but might impair movie quality
     revRateClusterEdge = paramCombis(1,paramCtr);
     speed = paramCombis(2,paramCtr);
     slowspeed = paramCombis(3,paramCtr);
     attractionStrength = paramCombis(4,paramCtr);
+    dkdN_dwell = paramCombis(5,paramCtr);
     filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
         '_noVolExcl' ...
         '_v0_' num2str(speed,'%1.0e') '_vs_' num2str(slowspeed,'%1.0e') ...
-        '_' slowingMode 'SlowDown' num2str(num_nbr_max_per_node) ...
+        '_' slowingMode 'SlowDown' '_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...
+        '_dkdN_' num2str(dkdN_dwell) ...num2str(num_nbr_max_per_nodes)...
         '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
         '_revRateClusterEdge_' num2str(revRateClusterEdge,'%1.0e') ...
         '_run1'];

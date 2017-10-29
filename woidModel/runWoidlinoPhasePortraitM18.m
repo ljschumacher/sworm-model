@@ -41,11 +41,11 @@ paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
 paramAll.angleNoise = 0;
 
-revRatesClusterEdge = fliplr([0, 0.2, 0.4, 0.8, 1.6]);
+revRatesClusterEdge = fliplr([0, 0.2, 0.4, 0.8, 1.6, 3.2]);
 speeds = [0.33];
 slowspeeds = [0.018];
 attractionStrengths = [0];
-dkdN_dwell_values = [0 1./[8 4 2 1]];
+dkdN_dwell_values = [0 1./[8 4 2 1 0.5]];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths,dkdN_dwell_values);
 nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats
