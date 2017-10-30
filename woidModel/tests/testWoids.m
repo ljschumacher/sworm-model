@@ -60,7 +60,13 @@ rng(1)
 % 
 % xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'v0',1e-4,'vs',1e-4,'theta_0',0,'omega_m',0,'deltaPhase',0,'revRate',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_straighteningTest',L,0);
-% 
+%
+% test resumable simulations
+[xyarray1, currentState] = runWoids(5,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery);
+xyarray2 = runWoids(5,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'resumeState',currentState);
+xyarray = cat(4,xyarray1,xyarray2(:,:,:,2:end));
+animateWoidTrajectories(xyarray,['woid_test_movies/singleWormM' num2str(M) '_noflux_resumed'],L);
+%
 % two worms
 L = [2 2];
 % xyarray = runWoids(20,2,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);
@@ -199,19 +205,22 @@ rng(1)
 %     '_slowing' param.slowingMode ...
 %     '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell)],[L L]);
 
-param.slowingMode = 'stochastic';
-param.k_dwell = 0.0036;%1/275;%1/4;
-param.k_undwell = 1.1;%1/0.9; %1/2.2;
-param.dkdN_dwell = 0.25;
-param.revRateClusterEdge = 1.6;
-param.vs = 0.014;
-xyarray = runWoids(20,N,M,L,param);
-animateWoidTrajectories(xyarray,...
-    ['woid_test_movies/40wroms_periodic_square'...
-    '_revRateClusterEdge_' num2str(param.revRateClusterEdge) ...
-    '_slowing' param.slowingMode ...
-    '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
-    '_dkdN_' num2str(param.dkdN_dwell) ],L,rc0);
+% rng(1)
+% L = [7.5, 7.5];
+% param.bc = 'periodic';
+% param.slowingMode = 'stochastic';
+% param.k_dwell = 0.0036;%1/275;%1/4;
+% param.k_undwell = 1.1;%1/0.9; %1/2.2;
+% param.dkdN_dwell = 0.25;
+% param.revRateClusterEdge = 1.6;
+% param.vs = 0.018;
+% xyarray = runWoids(20,N,M,L,param);
+% animateWoidTrajectories(xyarray,...
+%     ['woid_test_movies/40worms_periodic_square'...
+%     '_revRateClusterEdge_' num2str(param.revRateClusterEdge) ...
+%     '_slowing' param.slowingMode ...
+%     '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
+%     '_dkdN_' num2str(param.dkdN_dwell) ],L);
 
 % L = [7.5, 7.5];
 % xyarray = runWoids(80,N,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);

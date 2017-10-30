@@ -71,9 +71,10 @@ for paramCtr = 1:nParamCombis
         tmp_filename = ['results/woids/' filename '_running_on_' hostname '.mat'];
         save(tmp_filename,'N','M','L','param')
         rng(repCtr) % set random seed to be the same for each simulation
-        xyarray = runWoids(T,N,M,L,param);
+        [xyarray, currentState] = runWoids(T,N,M,L,param);
         xyarray = single(xyarray); % save space by using single precision
-        saveResults(['results/woids/' filename '.mat'],struct('xyarray',xyarray,'T',T,'N',N,'M',M,'L',L,'param',param))
+        saveResults(['results/woids/' filename '.mat'],struct('xyarray',xyarray,...
+            'T',T,'N',N,'M',M,'L',L,'param',param,'currentState',currentState))
         delete(tmp_filename)
     end
 end

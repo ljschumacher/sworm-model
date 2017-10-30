@@ -69,14 +69,14 @@ for repCtr = 1:numRepeats
         if ~exist(['results/woidlinos/' filename '.mat'],'file')&&isempty(dir(['results/woidlinos/' filename '_running_on_*.mat']))
             disp(['running ' filename])
             % make a dummy file to mark that this sim is running on this computer
-            [~, hostname] = system('hostname -s'); hostname = strrep(hostname,sprintf('\n'),'');
+            [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
             tmp_filename = ['results/woidlinos/' filename '_running_on_' hostname '.mat'];
             save(tmp_filename,'N','M','L','param')
             rng(repCtr) % set random seed to be the same for each simulation
-            xyarray = runWoids(T,N,M,L,param);
+            [xyarray, currentState] = runWoids(T,N,M,L,param);
             xyarray = single(xyarray); % save space by using single precision
             saveResults(['results/woidlinos/' filename '.mat'],...
-                struct('xyarray',xyarray,'T',T,'N',N,'M',M,'L',L,'param',param))
+                struct('xyarray',xyarray,'T',T,'N',N,'M',M,'L',L,'param',param,'currentState',currentState))
             delete(tmp_filename)
         end
     end

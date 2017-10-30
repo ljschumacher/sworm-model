@@ -52,8 +52,8 @@ filename = ['/work/lschumac/woidlinos/wlM' num2str(M) '_N_' num2str(N) '_L_' num
     '_Rir_' num2str(param.Rir) '_sample_' num2str(sampleCtr)];
 if ~exist([filename '.mat'],'file')
     rng(1) % set random seed to be the same for each simulation
-    xyarray = runWoids(T,N,M,L,param);
+    [xyarray, currentState] = runWoids(T,N,M,L,param);
     xyarray = single(xyarray); % save space by using single precision
-    save([filename '.mat'],'xyarray','T','N','M','L','param')
+    save([filename '.mat'],'xyarray','T','N','M','L','param','currentState')
 end
 end

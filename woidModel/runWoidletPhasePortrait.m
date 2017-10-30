@@ -54,7 +54,7 @@ for revRate = [0, 0.1, 1]
                 num2str(attractionStrength,'%1.0e')...
                 '_revRate_' num2str(param.revRate,'%1.0e') '_noContactForces'];
             if ~exist(['results/woidlets/' filename '.mat'],'file')
-                xyarray = runWoids(T,N,M,L,param);
+                [xyarray, currentState] = runWoids(T,N,M,L,param);
                 xyarray = xyarray(:,:,:,1:saveevery:end);
                 save(['results/woidlets/' filename])
 %                 animateWoidTrajectories(xyarray,['tests/woidlets/' filename],L,rc);

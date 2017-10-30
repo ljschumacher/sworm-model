@@ -68,11 +68,8 @@
 % - is there a more efficient way of storing the coords than 4-d array?
 % - make object-orientated, see eg ../woid.m class, vector of woid
 % objects...
-% - it would be good to be able to resume a simulation from previously
-% saved output. for that we'd need to save, in addition to xyarray:
-% reversalLogIng, orientations, phaseOffset, 
 
-function xyarray = runWoids(T,N,M,L,varargin)
+function [xyarray, currentState] = runWoids(T,N,M,L,varargin)
 
 % parse inputs (see matlab documentation)
 iP = inputParser;
@@ -122,6 +119,7 @@ addOptional(iP,'k_roam',0,@isnumeric) % rate to spontaneously enter the roaming 
 addOptional(iP,'k_unroam',0,@isnumeric) % rate to spontaneously leave the roaming state (default 0)
 % simulation parameters
 addOptional(iP,'saveEvery',1,checkInt);
+addOptional(iP,'resumeState',struct([]),@checkResumeState); % current state of previous simulation to initialize from
 
 parse(iP,T,N,M,L,varargin{:})
 dT0 = iP.Results.dT;
@@ -130,6 +128,7 @@ saveEvery = iP.Results.saveEvery;
 displayOutputEvery = round(1/dT0);
 numTimepoints = floor(T/dT0);
 numSavepoints = floor(T/dT0/saveEvery);
+resumeState = iP.Results.resumeState;
 
 v0 = iP.Results.v0;
 dTmin = dT0/10/sqrt(N)*v0; % set a mininum timestep below which dT won't be adapted
@@ -178,17 +177,30 @@ assert(v0>=vs,'vs should be chosen smaller or equal to v0')
 
 % preallocate reversal states
 reversalLogInd = false(N,numTimepoints);
+% check if resuming a previous simulation
+if isempty(resumeState) 
+    % preallocate roaming state variable
+    roamingLogInd = false(N,1);
+    dwellLogInd = false(N,1);
+    % generate random phase offset for each object plus phase shift for each node
+    phaseOffset = wrapTo2Pi(rand(N,1)*2*pi - deltaPhase*(1:M));
+    % initialise worm positions and node directions - respecting volume exclusion
+    initialExclusionRadius = max(rc,sigma_LJ/2); % so that we don't get too overlapping initial positions, even when rc = 0
+    [xyarray, orientations] = initialiseWoids(N,M,numSavepoints,L,segmentLength,...
+        phaseOffset,theta_0,initialExclusionRadius,bc);
+    positions = xyarray(:,:,:,1);
+else
+    reversalLogInd(:,1) = resumeState.reversalLogInd;
+    roamingLogInd = resumeState.roamingLogInd;
+    dwellLogInd = resumeState.dwellLogInd;
+    phaseOffset = resumeState.phaseOffset;
+    positions = resumeState.positions;
+    orientations = resumeState.orientations;
+    xyarray = NaN(N,M,2,numSavepoints);
+    xyarray(:,:,:,1) = positions;
+end
 reversalLogIndPrev = reversalLogInd(:,1);
-% preallocate roaming state variable
-roamingLogInd = false(N,1);
-dwellLogInd = false(N,1);
-% generate random phase offset for each object plus phase shift for each node
-phaseOffset = wrapTo2Pi(rand(N,1)*2*pi - deltaPhase*(1:M));
-% initialise worm positions and node directions - respecting volume exclusion
-initialExclusionRadius = max(rc,sigma_LJ/2); % so that we don't get too overlapping initial positions, even when rc = 0
-[xyarray, orientations] = initialiseWoids(N,M,numSavepoints,L,segmentLength,...
-    phaseOffset,theta_0,initialExclusionRadius,bc);
-positions = xyarray(:,:,:,1);
+
 % initialise time
 t = 0;
 timeCtr = 1;
@@ -246,6 +258,13 @@ while t<T
         if t>=saveCtr*dT0*saveEvery
             saveCtr = saveCtr+1;
             xyarray(:,:,:,saveCtr) = positions;
+            % save other outputs to enable resuming simulations
+            currentState.positions = positions;
+            currentState.orientations = orientations;
+            currentState.phaseOffset = phaseOffset;
+            currentState.reversalLogInd = reversalLogInd(:,timeCtr);
+            currentState.roamingLogInd = roamingLogInd;
+            currentState.dwellLogInd= dwellLogInd;
         end
         timeCtr = timeCtr + 1;
         if mod(timeCtr,displayOutputEvery)==0
@@ -279,4 +298,10 @@ end
 function SlowModeCheck = checkSlowingMode(s)
 validSlowingModes = {'gradual','abrupt','density','stochastic'};
 SlowModeCheck = any(strcmp(s,validSlowingModes));
+end
+
+function resumeStateCheck = checkResumeState(resumeState)
+    resumeStateCheck = isstruct(resumeState)&&...
+        all(isfield(resumeState,{'positions','orientations','phaseOffset',...
+        'reversalLogInd','roamingLogInd','dwellLogInd'}));
 end

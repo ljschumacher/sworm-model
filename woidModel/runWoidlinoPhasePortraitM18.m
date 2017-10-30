@@ -41,7 +41,7 @@ paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
 paramAll.angleNoise = 0;
 
-revRatesClusterEdge = fliplr([0, 0.2, 0.4, 0.8, 1.6, 3.2]);
+revRatesClusterEdge = fliplr([0, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4]);
 speeds = [0.33];
 slowspeeds = [0.018];
 attractionStrengths = [0];
@@ -81,10 +81,10 @@ for repCtr = 1:numRepeats
             tmp_filename = ['results/woidlinos/' filename '_running_on_' hostname '.mat'];
             save(tmp_filename,'N','M','L','param')
             rng(repCtr) % set random seed to be the same for each simulation
-            xyarray = runWoids(T,N,M,L,param);
+            [xyarray, currentState] = runWoids(T,N,M,L,param);
             xyarray = single(xyarray); % save space by using single precision
             saveResults(['results/woidlinos/' filename '.mat'],...
-                struct('xyarray',xyarray,'T',T,'N',N,'M',M,'L',L,'param',param))
+                struct('xyarray',xyarray,'T',T,'N',N,'M',M,'L',L,'param',param,'currentState',currentState))
             delete(tmp_filename)
         end
     end
