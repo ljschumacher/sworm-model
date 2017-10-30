@@ -8,12 +8,12 @@ function [ v, omega, dwellLogInd] = slowWorms(distanceMatrix,ri,slowingNodes,slo
 if ~isempty(slowingNodes)&&any(~roamingLogInd)
     if strcmp(slowingMode,'density')
         num_nbr_max = numel(slowingNodes)*num_nbr_max_per_node;
-        num_nbr = countWoidNeighbors(distanceMatrix,ri,slowingNodes); % number of neighbouring nodes in contact
+        num_nbr = countNbrsByObject(distanceMatrix,ri,slowingNodes); % number of neighbouring nodes in contact
         num_nbr = min(num_nbr,num_nbr_max); % depending on how we count neighbours, we may have more than the max number
         % slow worms proportional to how many nbrs it has cumulatively over all nodes
         v = v0*(1 - num_nbr/num_nbr_max) + vs*(num_nbr/num_nbr_max);
     elseif strcmp(slowingMode,'stochastic')
-        num_nbr = countWoidNeighbors(distanceMatrix,ri,slowingNodes); % number of neighbouring nodes in contact
+        num_nbr = countNbrsByObject(distanceMatrix,ri,slowingNodes); % number of neighbouring nodes in contact
         num_nbr_per_node = num_nbr./numel(slowingNodes); % normalise for number of nodes sensing density
         % switch to fast / slow states
         dwellLogInd = updateDwellingState(dwellLogInd,k_dwell,k_undwell,dkdN_dwell,num_nbr_per_node,dT);

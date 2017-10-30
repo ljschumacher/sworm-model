@@ -1,4 +1,4 @@
-function [ numNbrsAndNodes ] = countWoidNeighbors(distanceMatrix,r,nodeIndcs)
+function [ numNbrsAndNodes ] = countNbrsByObject(distanceMatrix,r,nodeIndcs)
 % counts how many nodes of each object have neighbours at r_ij<r
 % distance matrix should have the form N by M by N by M with scalar
 % distance values

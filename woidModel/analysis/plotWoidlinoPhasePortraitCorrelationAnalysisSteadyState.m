@@ -2,7 +2,6 @@ function [] = plotWoidlinoPhasePortraitCorrelationAnalysisSteadyState
 % plot phase portrait of g(r) vs time to show quasi steady state
 
 % issues/to-do:
-clear
 close all
 
 exportOptions = struct('Format','eps2',...
@@ -65,7 +64,7 @@ for speed = speeds
                         % plot lines for this file
                         % speed v distance
                         subplot(length(dkdN_dwell_values),length(revRatesClusterEdge),plotCtr)
-                        plot(framesAnalyzed,smoothdata(grmax,'SmoothingFactor',0.4))
+                        plot(framesAnalyzed,smoothdata(grmax,'movmean',5))
                         if repCtr==1, hold on, end
                         plot(burnIn*[1 1],[0 max(grmax)],'k--')
                     end
