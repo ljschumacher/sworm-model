@@ -10,9 +10,9 @@ close all
 N = 40; % N: number of objects
 M = 18; % M: number of nodes in each object
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
-numRepeats = 10;
+numRepeats = 5;
 
-T = 500;
+T = 1000;
 rc0 = 0.035; % rc: core repulsion radius (default 0.035 mm)
 paramAll.rc = 0;
 paramAll.ri = 3*rc0;
@@ -28,7 +28,7 @@ paramAll.tailNodes = (M-max(round(M/10),1)+1):M;
 % -- slow-down parameters --
 paramAll.vs = 0;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
-paramAll.slowingMode = 'stochastic';
+paramAll.slowingMode = 'stochastic_bynode';
 paramAll.k_dwell = 0.0036;
 paramAll.k_undwell = 1.1;
 % paramAll.num_nbr_max_per_node = 2;
@@ -41,11 +41,11 @@ paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
 paramAll.angleNoise = 0;
 
-revRatesClusterEdge = fliplr([0, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4]);
+revRatesClusterEdge = fliplr([0, 0.4, 0.8, 1.6, 3.2, 6.4]);
 speeds = [0.33];
 slowspeeds = [0.018];
 attractionStrengths = [0];
-dkdN_dwell_values = [0 1./[8 4 2 1 0.5]];
+dkdN_dwell_values = [0 1./[8 4 2 1]];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths,dkdN_dwell_values);
 nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats

@@ -19,7 +19,7 @@ L = 7.5;
 attractionStrength = 0;
 numRepeats = 4;
 % revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
-revRatesClusterEdge = [0, 0.2, 0.4, 0.8, 1.6, 3.2];
+revRatesClusterEdge = [0, 0.4, 0.8, 1.6, 3.2, 6.4];
 speeds = [0.33];
 % slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 slowspeeds = [0.018];
@@ -64,7 +64,7 @@ for speed = speeds
                         % plot lines for this file
                         % speed v distance
                         subplot(length(dkdN_dwell_values),length(revRatesClusterEdge),plotCtr)
-                        plot(framesAnalyzed,smoothdata(grmax,'movmean',5))
+                        plot(framesAnalyzed,smoothdata(grmax,'movmean',7))
                         if repCtr==1, hold on, end
                         plot(burnIn*[1 1],[0 max(grmax)],'k--')
                     end

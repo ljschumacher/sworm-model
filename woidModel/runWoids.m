@@ -246,6 +246,7 @@ while t<T
         warning(['Minimum time-step of ' num2str(dTmin) ' reached at time ' num2str(t)])
         dT = dTmin;
     end
+    assert(dT<=dT0)
     % update position (with boundary conditions)
     [positions, orientations] = applyForces(positions,forceArray,...
         dT,orientations,bc,L);
@@ -296,7 +297,7 @@ end
 end
 
 function SlowModeCheck = checkSlowingMode(s)
-validSlowingModes = {'gradual','abrupt','density','stochastic'};
+validSlowingModes = {'gradual','abrupt','density','stochastic','stochastic_bynode'};
 SlowModeCheck = any(strcmp(s,validSlowingModes));
 end
 

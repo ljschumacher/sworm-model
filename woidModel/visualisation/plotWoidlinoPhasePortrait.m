@@ -18,7 +18,7 @@ N = 40;
 plotColor = [0.5, 0.5, 0.5];
 
 % revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
-revRatesClusterEdge = [0, 0.2, 0.4, 0.8, 1.6, 3.2];
+revRatesClusterEdge = [0, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4];
 speeds = [0.33];
 % slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 slowspeeds = [0.018];

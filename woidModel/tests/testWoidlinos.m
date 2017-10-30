@@ -151,19 +151,21 @@ param.num_nbr_max_per_node = 1;
 %     '_roam_' num2str(param.k_roam) '_' num2str(param.k_unroam)],L,rc0);
 
 % test stochastic slowing
-param.slowingMode = 'stochastic';
+param.dT = rc/param.v0/16; % dT: time step, gets adapted in simulation
+param.saveEvery = round(1/2/param.dT);
+param.slowingMode = 'stochastic_bynode';
 param.k_dwell = 0.0036;%1/275;%1/4;
 param.k_undwell = 1.1;%1/0.9; %1/2.2;
-param.dkdN_dwell = 0.25;
+param.dkdN_dwell = 2;
 param.revRateClusterEdge = 1.6;
 param.vs = 0.014;
-xyarray = runWoids(50,N,M,L,param);
+xyarray = runWoids(150,N,M,L,param);
 animateWoidTrajectories(xyarray,...
     ['woidlino_test_movies/test_longBody_periodic_square'...
     '_noVolExcl' '_slowing' param.slowingMode ...
     '_revRateClusterEdge_' num2str(param.revRateClusterEdge) ...
     '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
-    '_dkdN_' num2str(param.dkdN_dwell) ],L,rc0);
+    '_dkdN_' num2str(param.dkdN_dwell)],L,rc0);
 
 N = 1;
 param.bc = 'free';
