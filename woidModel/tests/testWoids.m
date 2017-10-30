@@ -41,10 +41,10 @@ rng(1)
 %     'revRate',0.5);
 % animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_periodic_reversals',[L L]);
 %
-rng(6)
-xyarray = runWoids(12,1,M,[L L],'bc','periodic','dT',dT,'saveEvery',saveEvery,...
-    'revRate',0.5,'theta_0',0,'omega_m',0,'deltaPhase',0);
-animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_periodic_undulations0',[L L]);
+% rng(6)
+% xyarray = runWoids(12,1,M,[L L],'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+%     'revRate',0.5,'theta_0',0,'omega_m',0,'deltaPhase',0);
+% animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_periodic_undulations0',[L L]);
 %
 % xyarray = runWoids(20,1,M,[L L],'bc','free','dT',dT,'saveEvery',saveEvery,...
 %     'vs',0.014,'slowingMode','stochastic','k_dwell',1/4,'k_undwell',1/2.2);
@@ -188,7 +188,8 @@ rng(1)
 %     ...'_asVolExcl'...
 %     ],L);
 
-% param.slowingMode = 'stochastic';
+% test stochastic slowing
+% % param.slowingMode = 'stochastic';
 % param.k_dwell = 1/4;
 % param.k_undwell = 1/2.2;
 % param.vs = 0.014;
@@ -197,6 +198,20 @@ rng(1)
 %     ['woid_test_movies/40Worms_periodic_square'...
 %     '_slowing' param.slowingMode ...
 %     '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell)],[L L]);
+
+param.slowingMode = 'stochastic';
+param.k_dwell = 0.0036;%1/275;%1/4;
+param.k_undwell = 1.1;%1/0.9; %1/2.2;
+param.dkdN_dwell = 0.25;
+param.revRateClusterEdge = 1.6;
+param.vs = 0.014;
+xyarray = runWoids(20,N,M,L,param);
+animateWoidTrajectories(xyarray,...
+    ['woid_test_movies/40wroms_periodic_square'...
+    '_revRateClusterEdge_' num2str(param.revRateClusterEdge) ...
+    '_slowing' param.slowingMode ...
+    '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
+    '_dkdN_' num2str(param.dkdN_dwell) ],L,rc0);
 
 % L = [7.5, 7.5];
 % xyarray = runWoids(80,N,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);

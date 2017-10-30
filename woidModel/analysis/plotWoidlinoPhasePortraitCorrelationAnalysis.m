@@ -15,7 +15,7 @@ exportOptions = struct('Format','eps2',...
     'LineWidth',1,...
     'Renderer','opengl');
 
-numRepeats = 1;
+numRepeats = 3;
 % revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
 revRatesClusterEdge = [0, 0.2, 0.4, 0.8, 1.6, 3.2];
 speeds = [0.33];
