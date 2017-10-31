@@ -15,19 +15,19 @@ exportOptions = struct('Format','eps2',...
     'LineWidth',1,...
     'Renderer','opengl');
 
-numRepeats = 4;
+numRepeats = 5;
 % revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
-revRatesClusterEdge = [0, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4];
+revRatesClusterEdge = [0, 0.4, 0.8, 1.6, 3.2, 6.4];
 speeds = [0.33];
 % slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 slowspeeds = [0.018];
-trackedNodes = 1:max(round(M/10),1);
+trackedNodes = 1:max(round(M*0.16),1);
 distBinwidth = 0.05; % in units of mm, sensibly to be chosen similar worm width or radius
 maxDist = 2;
-slowingMode = 'stochastic';
+slowingMode = 'stochastic_bynode';
 k_dwell = 0.0036;
 k_undwell = 1.1;
-dkdN_dwell_values = fliplr([0 1./[8 4 2 1 0.5]]);
+dkdN_dwell_values = fliplr([0 1./[8 4 2 1]]);
 % num_nbr_max_per_nodes = 2;
 
 for speed = speeds
@@ -53,7 +53,7 @@ for speed = speeds
                     if exist(filename,'file')
                         thisFile = load(filename);
                         maxNumFrames = size(thisFile.xyarray,4);
-                        burnIn = round(0.5*maxNumFrames);
+                        burnIn = round(250./thisFile.T*maxNumFrames);
                         if isfield(thisFile.param,'saveEvery')
                             saveEvery = thisFile.param.saveEvery;
                         else
