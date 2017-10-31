@@ -25,7 +25,7 @@ end
 nSims = length(simulations);
 plotColors = lines(nSims);
 trackedNodesNames = {'head'};%,'body'};
-trackedNodesDict = containers.Map({'head','body'},{1:5; 1:49});% which nodes to calculate the tracking stats from, to compare eg with pharynx labeled expmntal data
+trackedNodesDict = containers.Map({'head','body'},{1:8; 1:49});% which nodes to calculate the tracking stats from, to compare eg with pharynx labeled expmntal data
 
 for trackedNodesName = trackedNodesNames
     trackedNodes = trackedNodesDict(trackedNodesName{1});
