@@ -26,9 +26,9 @@ paramAll.theta_0 = 0;
 paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
  
-revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8];
+revRatesClusterEdge = [0, 0.2, 0.4, 0.8, 1.6];
 speeds = [0.33];
-slowspeeds = [0.33, 0.1, 0.05, 0.025];
+slowspeeds = [0.33, 0.1, 0.05, 0.025, 0.0125];
 attractionStrengths = [0];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths);
 nParamCombis = size(paramCombis,2);
@@ -61,6 +61,7 @@ for paramCtr = 1:nParamCombis
         save(tmp_filename,'N','M','L','param')
         rng(1) % set random seed to be the same for each simulation
         [xyarray, currentState] = runWoids(T,N,M,L,param);
+        xyarray = single(xyarray); % save space by using single precision
         saveResults(['results/woids/' filename '.mat'],...
         struct('xyarray',xyarray,'T',T,'N',N,'M',M,'L',L,'param',param,'currentState',currentState))
         delete(tmp_filename)
