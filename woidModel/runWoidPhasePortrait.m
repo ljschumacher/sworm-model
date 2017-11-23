@@ -26,7 +26,7 @@ paramAll.k_undwell = 1.1;
 paramAll.r_LJcutoff = 5*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 
-revRatesClusterEdge = fliplr([0, 0.4, 0.8, 1.6, 3.2]);
+revRatesClusterEdge = fliplr([0, 0.4, 0.8, 1.6, 3.2, 6.4]);
 speeds = [0.33];
 % slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125, 0.005]);
 slowspeeds = [0.018];

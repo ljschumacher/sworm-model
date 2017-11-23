@@ -24,12 +24,14 @@ speeds = [0.33];
 % slowspeeds = fliplr([0.33, 0.025, 0.0125, 0.005, 0.001]);
 slowspeeds = [0.018];
 attractionStrength = [0];
-slowingMode = 'stochastic_bynode';
+slowingMode = 'stochastic';
 k_dwell = 0.0036;
 k_undwell = 1.1;
-dkdN_dwell_values = fliplr([0 1./[8 4 2 1]]);
+dkdN_dwell_values = fliplr([0 1./[8 4 2 1 0.5]]);
 secondVariables = dkdN_dwell_values;
-aspectRatio = numel(revRatesClusterEdge)/numel(dkdN_dwell_values);
+nrevRates = numel(revRatesClusterEdge);
+ndwellVals = numel(dkdN_dwell_values);
+aspectRatio = nrevRates/ndwellVals;
 for speed = speeds
     phasePortraitFig = figure;
     plotCtr = 1;
@@ -44,7 +46,7 @@ for speed = speeds
                     '_dkdN_' num2str(dkdN_dwell) ...num2str(num_nbr_max_per_nodes)...
                     '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
                     '_revRateClusterEdge_' num2str(revRateClusterEdge,'%1.0e')...
-                    '_run1.mat'];
+                    '.mat'];
                 if exist(filename,'file')
                     load(filename)
                     time2plot = round(size(xyarray,4));%*(0.9 + 0.1*rand()));
@@ -61,12 +63,21 @@ for speed = speeds
             end
         end
     end
+    % make overall axes
+    ax = axes('Color','none');
+    ax.XTick = linspace(1/nrevRates/2,1-1/nrevRates/2,nrevRates);
+    ax.XTickLabel = num2str(revRatesClusterEdge');
+    ax.YTick = linspace(1/ndwellVals/2,1-1/ndwellVals/2,ndwellVals);
+    ax.YTickLabel = num2str(fliplr(dkdN_dwell_values)');
+    ax.TickDir = 'out';
+    xlabel('cluster-edge reversal rate (1/s)')
+    ylabel('dk/d\rho')
     %% export figure
     phasePortraitFig.Position(3) = phasePortraitFig.Position(4)*aspectRatio; % resize figure
     phasePortraitFig.PaperUnits = 'centimeters';
     filename = ['../figures/woids/woidPhasePortrait_N_' num2str(Nval) '_L_' num2str(Lval) ...
         ...'_noUndulations'...'_noVolExcl' ...'_angleNoise'
-        '_speed_' num2str(speed,'%1.0e') '_slowing' '_' slowingMode ...'_dwell_' num2str(k_dwell) '_' num2str(k_undwell) ...
+        '_speed_' num2str(speed,'%1.0e') '_slowing' '_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell) ...
         '.eps'];
     exportfig(phasePortraitFig,filename, exportOptions)
     system(['epstopdf ' filename]);
