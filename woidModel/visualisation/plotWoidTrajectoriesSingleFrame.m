@@ -1,4 +1,4 @@
-function ax = plotWoidTrajectoriesSingleFrame(xyarray,L,rc,plotColors)
+function ax = plotWoidTrajectoriesSingleFrame(xyarray,L,rc,plotColors,centering)
 % takes in an array of N by M by x y  by T and makes a movie of the resulting
 % trajectories
 
@@ -8,9 +8,12 @@ function ax = plotWoidTrajectoriesSingleFrame(xyarray,L,rc,plotColors)
 x =     1;
 y =     2;
 
-if nargin <3
-    rc = 0.035;
-    disp(['Setting node radius to ' num2str(rc) ' for animations.'])
+if nargin < 4
+    centering = false;
+    if nargin <3
+        rc = 0.035;
+        disp(['Setting node radius to ' num2str(rc) ' for animations.'])
+    end
 end
 
 N = size(xyarray,1);
@@ -23,9 +26,18 @@ end
 assert(size(plotColors,1)==N,'Number of colors not matching number of objects')
 angles = linspace(0,2*pi,10)'; % for plotting node size
 
+if centering&&numel(L)==2 % center plot of center of mass - useful for periodic boundary conditions
+    xoffset = mean(mean(xyarray(:,:,x),2),1) - L(x)/2;
+    yoffset = mean(mean(xyarray(:,:,y),2),1) - L(y)/2;
+    xyarray(:,:,x) = xyarray(:,:,x) - xoffset;
+    xyarray(:,:,y) = xyarray(:,:,y) - yoffset;
+    % re-enforce periodic boundaries
+    [ xyarray, ~ ] = checkWoidBoundaryConditions(xyarray, [], 'periodic', L);
+end
 % set overall axes limits
-xrange = minmax(reshape(xyarray(:,:,x,:),1,numel(xyarray(:,:,x,:))));
-yrange = minmax(reshape(xyarray(:,:,y,:),1,numel(xyarray(:,:,y,:))));
+xrange = minmax(reshape(xyarray(:,:,x),1,numel(xyarray(:,:,x))));
+yrange = minmax(reshape(xyarray(:,:,y),1,numel(xyarray(:,:,y))));
+
 % xrange = [floor(xrange(1)) ceil(xrange(2))];
 % yrange = [floor(yrange(1)) ceil(yrange(2))];
 

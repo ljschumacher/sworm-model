@@ -19,7 +19,7 @@ paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'nofl
 % -- slow-down parameters --
 paramAll.vs = 0;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = [1:M];% slowingNodes: which nodes register contact (default head and tail)
-paramAll.slowingMode = 'gradual';
+paramAll.slowingMode = 'stochastic_bynode';
 % paramAll.k_dwell = 0.0036;
 % paramAll.k_undwell = 1.1;
 % -- Lennard-Jones parameters --
@@ -28,11 +28,11 @@ paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 
 revRatesClusterEdge = fliplr([0, 0.4, 0.8, 1.6, 3.2]);
 speeds = [0.33];
-slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125, 0.005]);
-% slowspeeds = [0.018];
+% slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125, 0.005]);
+slowspeeds = [0.018];
 attractionStrengths = [0];
 % num_nbr_max_per_nodes = [3 4];
-dkdN_dwell_values = 0;%[0 1./[8 4 2 1]];
+dkdN_dwell_values = [0 1./[8 4 2 1]];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths,dkdN_dwell_values);
 nParamCombis = size(paramCombis,2);
 for paramCtr = 1:nParamCombis
@@ -56,8 +56,8 @@ for paramCtr = 1:nParamCombis
     for repCtr = 1:numRepeats
     filename = ['woids_N_' num2str(N) '_L_' num2str(L(1)) ...
         '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
-        '_' param.slowingMode 'SlowDown' ...'_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
-        ...'_dkdN_' num2str(param.dkdN_dwell)...num2str(param.num_nbr_max_per_node)...
+        '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
+        '_dkdN_' num2str(param.dkdN_dwell)...
         '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
         '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')...
         '_run' num2str(repCtr)];
