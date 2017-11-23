@@ -69,7 +69,7 @@
 % - make object-orientated, see eg ../woid.m class, vector of woid
 % objects...
 
-function [xyarray, currentState] = runWoids(T,N,M,L,varargin)
+function [xyarray, currentState, food] = runWoids(T,N,M,L,varargin)
 
 % parse inputs (see matlab documentation)
 iP = inputParser;
@@ -117,6 +117,8 @@ addOptional(iP,'LJnodes',1:M,checkInt) % nodes which feel LJ-force
 % state parameters
 addOptional(iP,'k_roam',0,@isnumeric) % rate to spontaneously enter the roaming state (like off-food) (default 0)
 addOptional(iP,'k_unroam',0,@isnumeric) % rate to spontaneously leave the roaming state (default 0)
+% feeding parameters
+addOptional(iP,'r_feed',0,@isnumeric) % feeding rate (1/s), in arbitrary concentration amounts
 % simulation parameters
 addOptional(iP,'saveEvery',1,checkInt);
 addOptional(iP,'resumeState',struct([]),@checkResumeState); % current state of previous simulation to initialize from
@@ -167,6 +169,7 @@ sigma_LJ = iP.Results.sigma_LJ;
 LJnodes = iP.Results.LJnodes;
 k_roam = iP.Results.k_roam;
 k_unroam = iP.Results.k_unroam;
+r_feed = iP.Results.r_feed;
 
 % check input relationships to each other
 % assert(segmentLength>2*rc,...
@@ -189,6 +192,15 @@ if isempty(resumeState)
     [xyarray, orientations] = initialiseWoids(N,M,numSavepoints,L,segmentLength,...
         phaseOffset,theta_0,initialExclusionRadius,bc);
     positions = xyarray(:,:,:,1);
+    if r_feed>0
+       % preallocate food lattice 
+       Ngrid = ceil(L./(max(rc,0.035))); % determine how many grid points to use
+       foodGrid = ones(Ngrid);
+       food = ones(Ngrid(1),Ngrid(2),numSavepoints);
+    else
+       foodGrid = [];
+       food = [];
+    end
 else
     reversalLogInd(:,1) = resumeState.reversalLogInd;
     roamingLogInd = resumeState.roamingLogInd;
@@ -198,9 +210,23 @@ else
     orientations = resumeState.orientations;
     xyarray = NaN(N,M,2,numSavepoints);
     xyarray(:,:,:,1) = positions;
+    if r_feed>0
+        foodGrid = resumeState.foodGrid;
+        food = NaN(size(foodGrid,1),size(foodGrid,2),numSavepoints);
+        food(:,:,1) = foodGrid;
+    else
+        foodGrid = [];
+        food = [];
+    end
 end
 reversalLogIndPrev = reversalLogInd(:,1);
-
+if r_feed>0
+    % initialise food grid coordinates
+    xgrid = [1:Ngrid(1)]./Ngrid(1)*L(1);
+    xgrid = xgrid - mean(diff(xgrid))/2; % centre coordinates on grid
+    ygrid = [1:Ngrid(2)]./Ngrid(2)*L(2);
+    ygrid = ygrid - mean(diff(ygrid))/2; % centre coordinates on grid
+end
 % initialise time
 t = 0;
 timeCtr = 1;
@@ -219,7 +245,8 @@ while t<T
     end
     distanceMatrix = sqrt(sum(distanceMatrixXY.^2,5)); % reduce to scalar distances
     % check if any woids are changing their movement state
-    roamingLogInd = updateRoamingState(roamingLogInd,k_roam,k_unroam,dT);
+    roamingLogInd = updateRoamingState(roamingLogInd,k_roam,k_unroam,dT,...
+        foodGrid,xgrid,ygrid,r_feed,positions);
     % check if any woids are slowed down by neighbors
     [ v, omega, dwellLogInd ] = slowWorms(distanceMatrix,Ris*ri,slowingNodes,slowingMode,...
         vs,v0,omega_m,num_nbr_max_per_node,roamingLogInd,k_dwell,k_undwell,dkdN_dwell,dwellLogInd,dT);
@@ -251,6 +278,10 @@ while t<T
     [positions, orientations] = applyForces(positions,forceArray,...
         dT,orientations,bc,L);
     assert(~any(isinf(positions(:))),'Uh-oh, something has gone wrong... (infinite positions)')
+    % consume food
+    if r_feed>0
+       foodGrid = consumeFood(foodGrid,xgrid,ygrid,r_feed,dT,positions);
+    end
     % update time
     t = t + dT;
     % output positions and orientations
@@ -259,13 +290,17 @@ while t<T
         if t>=saveCtr*dT0*saveEvery
             saveCtr = saveCtr+1;
             xyarray(:,:,:,saveCtr) = positions;
+            if r_feed>0
+               food(:,:,saveCtr) = foodGrid; 
+            end
             % save other outputs to enable resuming simulations
             currentState.positions = positions;
             currentState.orientations = orientations;
             currentState.phaseOffset = phaseOffset;
             currentState.reversalLogInd = reversalLogInd(:,timeCtr);
             currentState.roamingLogInd = roamingLogInd;
-            currentState.dwellLogInd= dwellLogInd;
+            currentState.dwellLogInd = dwellLogInd;
+            currentState.foodGrid = foodGrid;
         end
         timeCtr = timeCtr + 1;
         if mod(timeCtr,displayOutputEvery)==0
