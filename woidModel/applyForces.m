@@ -15,14 +15,12 @@ y =     2;
 
 arrayNow = arrayPrev;
 
-forceAngles = atan2(forceArray(:,:,y),forceArray(:,:,x));
+% forceAngles = atan2(forceArray(:,:,y),forceArray(:,:,x));
 v = sqrt(sum(forceArray.^2,3));
 
 % update position
-arrayNow(:,:,x) = arrayPrev(:,:,x) + ...
-    v.*cos(forceAngles)*dT;
-arrayNow(:,:,y) = arrayPrev(:,:,y) + ...
-    v.*sin(forceAngles)*dT;
+arrayNow(:,:,x) = arrayPrev(:,:,x) + forceArray(:,:,x)*dT;
+arrayNow(:,:,y) = arrayPrev(:,:,y) + forceArray(:,:,y)*dT;
 
 % assert no large displacements - max(v)*dT = v0*dT0
 assert(~any(abs(arrayPrev(:) - arrayNow(:))>4*max(v(:))*dT),...

@@ -226,6 +226,9 @@ if r_feed>0
     xgrid = xgrid - mean(diff(xgrid))/2; % centre coordinates on grid
     ygrid = [1:Ngrid(2)]./Ngrid(2)*L(2);
     ygrid = ygrid - mean(diff(ygrid))/2; % centre coordinates on grid
+else
+    xgrid = [];
+    ygrid = [];
 end
 % initialise time
 t = 0;
