@@ -51,6 +51,8 @@ if ismember(nodeInd,LJnodes) % check if current node feels LJ force
             case 'soft'
                 asigr = (2/3*sigma_LJ + distanceMatrix(lennardjonesNbrs(:)));
                 f_LJ = 8*eps_LJ./asigr.*((sigma_LJ./asigr).^2 - 1/2*sigma_LJ./asigr);
+            otherwise
+                f_LJ = zeros(size(lennardjonesNbrs(:)));
         end
         F_LJ = sum(bsxfun(@times,f_LJ,e_nN),1); % adhesion force, summed over neighbours
         if ~any(collisionNbrs(:))

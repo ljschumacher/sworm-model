@@ -26,13 +26,14 @@ paramAll.k_undwell = 1.1;
 paramAll.r_LJcutoff = 4*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 
-paramAll.k_theta = 40;
+paramAll.LJmode = 'soft';
+paramAll.rc = 0;
 
 revRatesClusterEdge = 6.4%fliplr([0, 0.4, 0.8, 1.6, 3.2, 6.4]);
 speeds = [0.33];
 % slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125, 0.005]);
 slowspeeds = [0.018];
-attractionStrengths = [0];
+attractionStrengths = [4e-3];
 % num_nbr_max_per_nodes = [3 4];
 dkdN_dwell_values = [0.125]%[0 1./[8 4 2 1 0.5]];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths,dkdN_dwell_values);
@@ -60,9 +61,8 @@ for paramCtr = 1:nParamCombis
         '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
         '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
         '_dkdN_' num2str(param.dkdN_dwell)...
-        '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
+        '_epsLJ_' num2str(attractionStrength,'%1.0e') '_' param.LJmode ...
         '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')...
-        '_kTheta_' num2str(param.k_theta) ...
         '_run' num2str(repCtr)];
     if ~exist(['results/woids/' filename '.mat'],'file')&&isempty(dir(['results/woids/' filename '_running_on_*.mat']))
         disp(['running ' filename])
