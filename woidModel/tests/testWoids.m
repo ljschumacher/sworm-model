@@ -40,16 +40,16 @@ rng(1)
 % xyarray = runWoids(12,1,M,[L L],'bc','periodic','dT',dT,'saveEvery',saveEvery,...
 %     'revRate',0.5);
 % animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_periodic_reversals',[L L]);
-%
+% 
 % rng(6)
-% xyarray = runWoids(12,1,M,[L L],'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+% xyarray = runWoids(20,1,M,[L L],'bc','periodic','dT',dT,'saveEvery',saveEvery,...
 %     'revRate',0.5,'theta_0',0,'omega_m',0,'deltaPhase',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_periodic_undulations0',[L L]);
-%
+% 
 % xyarray = runWoids(20,1,M,[L L],'bc','free','dT',dT,'saveEvery',saveEvery,...
 %     'vs',0.014,'slowingMode','stochastic','k_dwell',1/4,'k_undwell',1/2.2);
 % animateWoidTrajectories(xyarray,['woid_test_movies/singleWormM' num2str(M) '_dwelling'],[L L]);
-%
+% 
 % angleNoise = 0.1;
 % xyarray = runWoids(40,1,M,[L L],'bc','free','dT',dT,'saveEvery',saveEvery,...
 %     'angleNoise',angleNoise);
@@ -60,13 +60,13 @@ rng(1)
 % 
 % xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'v0',1e-4,'vs',1e-4,'theta_0',0,'omega_m',0,'deltaPhase',0,'revRate',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_straighteningTest',L,0);
-%
-% test resumable simulations
+
+% % test resumable simulations
 % [xyarray1, currentState] = runWoids(5,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery);
 % xyarray2 = runWoids(5,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'resumeState',currentState);
 % xyarray = cat(4,xyarray1,xyarray2(:,:,:,2:end));
 % animateWoidTrajectories(xyarray,['woid_test_movies/singleWormM' num2str(M) '_noflux_resumed'],L);
-%
+% 
 % % test feeding
 % L = [2.5 2.5];
 % [xyarray, ~, food] = runWoids(10,1,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,'r_feed',5);
@@ -169,23 +169,25 @@ rng(1)
 L = [7.5 7.5];
 % [xyarray, ~, food] = runWoids(40,10,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,'r_feed',5);
 % animateWoidTrajectories(xyarray,['woid_test_movies/manyWormM' num2str(M) '_feeding'],L,0.035,food);
-rng(1)
-param.r_feed = 0.5;
-param.slowingMode = 'stochastic';
-param.k_dwell = 0.0036;
-param.k_undwell = 1.1;
-param.revRateClusterEdge = 3.2;
-param.vs = 0.018;
-param.dkdN_dwell = 0.25;
-[xyarray, ~, food] = runWoids(500,10,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
-animateWoidTrajectories(xyarray,['woid_test_movies/40WormM' num2str(M) ...
-    '_sweeping_feedrate_' num2str(param.r_feed)],L,0.035,food);
-
 % rng(1)
-% eps_LJ = 4e-3;
+% param.r_feed = 2;
+% param.k_unroam = 1;
+% param.slowingMode = 'stochastic';
+% param.k_dwell = 0.0036;
+% param.k_undwell = 1.1;
+% param.revRateClusterEdge = 3.2;
+% param.vs = 0.018;
+% param.dkdN_dwell = 0.25;
+% [xyarray, ~, food] = runWoids(500,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
+% animateWoidTrajectories(xyarray,['woid_test_movies/40WormM' num2str(M) ...
+%     '_sweeping_feedrate_' num2str(param.r_feed)],L,0.035,food);
+
+% % test attraction on head-only
+% rng(1)
+% eps_LJ = 1e-3;
 % L = [7.5, 7.5];
-% xyarray = runWoids(100,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
-%     'r_LJcutoff',5*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035,'LJnodes',1,...
+% xyarray = runWoids(20,39,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+%     'r_LJcutoff',4*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035,'LJnodes',1,...
 %     'slowingNodes',[],...
 %     'revRate', 0, 'revRateCluster', 0,'revRateClusterEdge',0 ...
 %     ,'theta_0',0,'omega_m',0,'deltaPhase',0 ...
@@ -195,10 +197,11 @@ animateWoidTrajectories(xyarray,['woid_test_movies/40WormM' num2str(M) ...
 %     ,'_undulations0'...
 %     ],L);
 % 
+% % test volume exclusion only through LJ force
 % rng(1)
 % eps_LJ = 1e-2;
 % L = [7.5, 7.5];
-% xyarray = runWoids(10,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+% xyarray = runWoids(20,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
 %     'rc',0,'r_LJcutoff',2*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035,'LJnodes',1:M,...
 %     'slowingNodes',[],...
 %     'revRateClusterEdge',0 ...
@@ -206,6 +209,19 @@ animateWoidTrajectories(xyarray,['woid_test_movies/40WormM' num2str(M) ...
 % animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_periodic_LennardJones' num2str(eps_LJ,'%1.0e')...
 %     '_asVolExcl'...
 %     ],L);
+
+% test soft lennard-jones potential
+rng(1)
+eps_LJ = 4e-3;
+L = [7.5, 7.5];
+xyarray = runWoids(10,39,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+    'rc',0,'r_LJcutoff',4*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035,'LJnodes',1:M,...
+    'LJmode','soft','slowingNodes',[],...
+    'revRateClusterEdge',0 ...
+    );
+animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_periodic_LennardJones' num2str(eps_LJ,'%1.0e')...
+    '_soft'...
+    ],L);
 
 % test stochastic slowing
 % % param.slowingMode = 'stochastic';

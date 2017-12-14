@@ -10,6 +10,10 @@ nonroamers = find(~roamingLogInd);
 starters = logical(poissrnd(k_roam*dT,numel(nonroamers),1));
 roamingLogInd(nonroamers(starters)) = true;
 
+% roaming worms stop roaming with rate k_unroam
+stoppers = logical(poissrnd(k_unroam*dT,numel(roamers),1));
+roamingLogInd(roamers(stoppers)) = false;
+
 % worms that have run out of food start roaming
 if r_feed>0
     headPositions_x = positions(:,1,1);
@@ -25,9 +29,6 @@ if r_feed>0
         end
     end
 end
-% roaming worms stop roaming with rate k_unroam
-stoppers = logical(poissrnd(k_unroam*dT,numel(roamers),1));
-roamingLogInd(roamers(stoppers)) = false;
 
 end
 

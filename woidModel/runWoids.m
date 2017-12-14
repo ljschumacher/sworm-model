@@ -114,6 +114,7 @@ addOptional(iP,'r_LJcutoff',0,@isnumeric) % cut-off above which lennard jones po
 addOptional(iP,'eps_LJ',1e-6,@isnumeric) % strength of LJ-potential
 addOptional(iP,'sigma_LJ',0,@isnumeric) % particle size for Lennard-Jones force
 addOptional(iP,'LJnodes',1:M,checkInt) % nodes which feel LJ-force
+addOptional(iP,'LJmode','hard',@checkLJmode) % whether LJ-force is 'hard' or 'soft'
 % state parameters
 addOptional(iP,'k_roam',0,@isnumeric) % rate to spontaneously enter the roaming state (like off-food) (default 0)
 addOptional(iP,'k_unroam',0,@isnumeric) % rate to spontaneously leave the roaming state (default 0)
@@ -167,6 +168,7 @@ r_LJcutoff = iP.Results.r_LJcutoff;
 eps_LJ = iP.Results.eps_LJ;
 sigma_LJ = iP.Results.sigma_LJ;
 LJnodes = iP.Results.LJnodes;
+LJmode = iP.Results.LJmode;
 k_roam = iP.Results.k_roam;
 k_unroam = iP.Results.k_unroam;
 r_feed = iP.Results.r_feed;
@@ -181,7 +183,7 @@ assert(v0>=vs,'vs should be chosen smaller or equal to v0')
 % preallocate reversal states
 reversalLogInd = false(N,numTimepoints);
 % check if resuming a previous simulation
-if isempty(resumeState) 
+if isempty(resumeState)
     % preallocate roaming state variable
     roamingLogInd = false(N,1);
     dwellLogInd = false(N,1);
@@ -193,13 +195,13 @@ if isempty(resumeState)
         phaseOffset,theta_0,initialExclusionRadius,bc);
     positions = xyarray(:,:,:,1);
     if r_feed>0
-       % preallocate food lattice 
-       Ngrid = ceil(L./(max(rc,0.035))); % determine how many grid points to use
-       foodGrid = ones(Ngrid);
-       food = ones(Ngrid(1),Ngrid(2),numSavepoints);
+        % preallocate food lattice
+        Ngrid = ceil(L./(max(rc,0.035))); % determine how many grid points to use
+        foodGrid = ones(Ngrid);
+        food = ones(Ngrid(1),Ngrid(2),numSavepoints);
     else
-       foodGrid = [];
-       food = [];
+        foodGrid = [];
+        food = [];
     end
 else
     reversalLogInd(:,1) = resumeState.reversalLogInd;
@@ -264,9 +266,9 @@ while t<T
     forceArray = calculateForces(distanceMatrixXY,distanceMatrix,...
         rc,orientations,reversalLogInd(:,timeCtr),segmentLength,...
         v,k_l,k_theta*v./v0,theta_0,phaseOffset,sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,...
-        angleNoise);
+        LJmode,angleNoise);
     try
-    assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
+        assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     catch
         1;
     end
@@ -283,7 +285,7 @@ while t<T
     assert(~any(isinf(positions(:))),'Uh-oh, something has gone wrong... (infinite positions)')
     % consume food
     if r_feed>0
-       foodGrid = consumeFood(foodGrid,xgrid,ygrid,r_feed,dT,positions);
+        foodGrid = consumeFood(foodGrid,xgrid,ygrid,r_feed,dT,positions);
     end
     % update time
     t = t + dT;
@@ -294,7 +296,7 @@ while t<T
             saveCtr = saveCtr+1;
             xyarray(:,:,:,saveCtr) = positions;
             if r_feed>0
-               food(:,:,saveCtr) = foodGrid; 
+                food(:,:,saveCtr) = foodGrid;
             end
             % save other outputs to enable resuming simulations
             currentState.positions = positions;
@@ -339,8 +341,13 @@ validSlowingModes = {'gradual','abrupt','density','stochastic','stochastic_bynod
 SlowModeCheck = any(strcmp(s,validSlowingModes));
 end
 
+function LJmodeCheck = checkLJmode(s)
+validLJmodes = {'hard','soft'};
+LJmodeCheck = any(strcmp(s,validLJmodes));
+end
+
 function resumeStateCheck = checkResumeState(resumeState)
-    resumeStateCheck = isstruct(resumeState)&&...
-        all(isfield(resumeState,{'positions','orientations','phaseOffset',...
-        'reversalLogInd','roamingLogInd','dwellLogInd'}));
+resumeStateCheck = isstruct(resumeState)&&...
+    all(isfield(resumeState,{'positions','orientations','phaseOffset',...
+    'reversalLogInd','roamingLogInd','dwellLogInd'}));
 end

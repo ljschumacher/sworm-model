@@ -18,14 +18,19 @@ rng(1)
 
 % plot lennard jones force
 eps_LJ = 1;
-r_LJcutoff = 5*rc;
+r_LJcutoff = 4*rc;
 sigma_LJ = 2*rc;
-f_LJ = @(x,b) 8*b*eps_LJ./x.*((sigma_LJ./x).^(2*b)*2.^(b/6 - 1) - 1/2*(sigma_LJ./x).^b);
-% for forces with other exponents of form 2b, b, mulitply repulsive term by
-% 2^(b/6 - 1) for potential to have minimum at same radius
+f_LJ = @(x,b) 8*b*eps_LJ./x.*((sigma_LJ./x).^(2*b) - 1/2.^(b/6)*(sigma_LJ./x).^b);
+% for forces with other exponents of form 2b, b, mulitply second term by
+% 2^(-b/6) for potential to have minimum at same radius
 
-x = linspace(-0.1,1.2,1300);
-y = linspace(-0.25,0.25,500);
+%soft-core LJ
+a = 2/3;
+f_LJ = @(x,b) 8*b*eps_LJ./(a.*sigma_LJ + x).*((sigma_LJ./(a.*sigma_LJ + x)).^(2*b)...
+    - 1/2.*(sigma_LJ./(a.*sigma_LJ + x)).^b);
+
+x = linspace(-0.1,1.2,1950);
+y = linspace(-0.25,0.25,750);
 [X,Y] = meshgrid(x,y);
 F_LJ = zeros(size(X));
 interpfactor = 0;
@@ -42,13 +47,16 @@ for nodeCtr = 1:length(xw)
     F_LJ = F_LJ + f_LJ(reshape(r,size(X)),1);
 end
 maxForce = abs(min(min(F_LJ)));
-F_LJ(F_LJ>maxForce) = maxForce;
 h = pcolor(X,Y,F_LJ);
 h.MeshStyle = 'none';
 hold on
 % load divergent colormap
 divcmap = load('/Users/linus/Dropbox/Utilities/colormaps_ascii/diverging/cmap_BuRd.txt');
 colormap(divcmap)
+caxis([-maxForce maxForce])
+
+% plot contour of zero force
+contour(X,Y,F_LJ,[0 0],'k--')
 
 % plot worm
 patch(xyarray(:,:,1,1) + rc*cos(angles),...
