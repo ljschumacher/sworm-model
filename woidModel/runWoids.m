@@ -128,7 +128,7 @@ parse(iP,T,N,M,L,varargin{:})
 dT0 = iP.Results.dT;
 dT = dT0; % set initial time-step (will be adapted during simulation)
 saveEvery = iP.Results.saveEvery;
-displayOutputEvery = round(1/dT0);
+displayOutputEvery = round(5/dT0);
 numTimepoints = floor(T/dT0);
 numSavepoints = floor(T/dT0/saveEvery);
 resumeState = iP.Results.resumeState;

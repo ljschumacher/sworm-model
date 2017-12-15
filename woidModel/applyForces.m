@@ -18,7 +18,7 @@ arrayNow = arrayPrev;
 % forceAngles = atan2(forceArray(:,:,y),forceArray(:,:,x));
 v = sqrt(sum(forceArray.^2,3));
 
-% update position
+% update position - forward Euler
 arrayNow(:,:,x) = arrayPrev(:,:,x) + forceArray(:,:,x)*dT;
 arrayNow(:,:,y) = arrayPrev(:,:,y) + forceArray(:,:,y)*dT;
 
@@ -28,5 +28,5 @@ assert(~any(abs(arrayPrev(:) - arrayNow(:))>4*max(v(:))*dT),...
 
 % correct heading (e.g. if movement has been constrained)
 headings = correctHeading(forceArray,headings,bc,L);
-    
+
 [xyOut, headingsOut] = checkWoidBoundaryConditions(arrayNow,headings,bc,L);

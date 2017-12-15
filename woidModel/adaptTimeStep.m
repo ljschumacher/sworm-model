@@ -6,7 +6,7 @@ function [ dT ] = adaptTimeStep( dT0,v0,forceArray )
 
 Fmax = max(max(sqrt(sum(forceArray.^2,3))));
 if Fmax>v0&&v0>0 % only adapts time step downwards, so it doesn't increase
-    dT = dT0*v0/Fmax;
+    dT = dT0*16/2/(Fmax/v0 + 7);
 else
     dT = dT0;
 end
