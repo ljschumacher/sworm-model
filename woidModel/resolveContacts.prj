@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="3569141593" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContacts.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="resolveContacts" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="2730834859" file="/data1/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContacts.prj" location="/data1/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="resolveContacts" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -16,8 +16,6 @@
       <param.EnableVariableSizing>true</param.EnableVariableSizing>
       <param.DynamicMemoryAllocation>option.DynamicMemoryAllocation.Threshold</param.DynamicMemoryAllocation>
       <param.DynamicMemoryAllocationThreshold>65536</param.DynamicMemoryAllocationThreshold>
-      <param.RowMajor>option.RowMajor.ColumnMajor</param.RowMajor>
-      <param.HighlightPotentialRowMajorIssues>false</param.HighlightPotentialRowMajorIssues>
       <param.StackUsageMax>200000</param.StackUsageMax>
       <param.FilePartitionMethod>option.FilePartitionMethod.MapMFileToCFile</param.FilePartitionMethod>
       <param.GenerateComments>true</param.GenerateComments>
@@ -70,8 +68,6 @@
         <param.EnableVariableSizing />
         <param.DynamicMemoryAllocation />
         <param.DynamicMemoryAllocationThreshold />
-        <param.RowMajor />
-        <param.HighlightPotentialRowMajorIssues />
         <param.StackUsageMax />
         <param.FilePartitionMethod />
         <param.GenerateComments />
@@ -124,8 +120,6 @@
       <param.EnableVariableSizing>true</param.EnableVariableSizing>
       <param.DynamicMemoryAllocation>option.DynamicMemoryAllocation.Threshold</param.DynamicMemoryAllocation>
       <param.DynamicMemoryAllocationThreshold>65536</param.DynamicMemoryAllocationThreshold>
-      <param.RowMajor>option.RowMajor.ColumnMajor</param.RowMajor>
-      <param.HighlightPotentialRowMajorIssues>false</param.HighlightPotentialRowMajorIssues>
       <param.StackUsageMax>200000</param.StackUsageMax>
       <param.MultiInstanceCode />
       <param.FilePartitionMethod>option.FilePartitionMethod.MapMFileToCFile</param.FilePartitionMethod>
@@ -158,8 +152,6 @@
       <param.LaunchReport>false</param.LaunchReport>
       <param.ReportPotentialDifferences>false</param.ReportPotentialDifferences>
       <param.SILDebugging />
-      <param.SILPILCheckConstantInputs />
-      <param.SILPILSyncGlobalData />
       <param.CodeExecutionProfiling />
       <param.DefaultTestFile />
       <param.MergeInstrumentationResults>false</param.MergeInstrumentationResults>
@@ -254,9 +246,7 @@
       <param.InitFltsAndDblsToZero>true</param.InitFltsAndDblsToZero>
       <param.PassStructByReference />
       <param.CustomLAPACKCallback />
-      <param.CustomFFTCallback />
-      <param.GenerateDefaultInSwitch />
-      <param.UseECoderFeatures>false</param.UseECoderFeatures>
+      <param.UseECoderFeatures />
       <unset>
         <param.grt.GenCodeOnly />
         <param.WorkingFolder />
@@ -270,8 +260,6 @@
         <param.EnableVariableSizing />
         <param.DynamicMemoryAllocation />
         <param.DynamicMemoryAllocationThreshold />
-        <param.RowMajor />
-        <param.HighlightPotentialRowMajorIssues />
         <param.StackUsageMax />
         <param.MultiInstanceCode />
         <param.FilePartitionMethod />
@@ -304,8 +292,6 @@
         <param.LaunchReport />
         <param.ReportPotentialDifferences />
         <param.SILDebugging />
-        <param.SILPILCheckConstantInputs />
-        <param.SILPILSyncGlobalData />
         <param.CodeExecutionProfiling />
         <param.DefaultTestFile />
         <param.MergeInstrumentationResults />
@@ -384,8 +370,6 @@
         <param.InitFltsAndDblsToZero />
         <param.PassStructByReference />
         <param.CustomLAPACKCallback />
-        <param.CustomFFTCallback />
-        <param.GenerateDefaultInSwitch />
         <param.UseECoderFeatures />
       </unset>
     </profile>
@@ -740,12 +724,14 @@
       <item>xyarray = runWoids(1,40,49,[7.5, 7.5],'bc','periodic','dT',0.035/0.33/16);</item>
     </param.TestSnippets>
     <param.DefaultImportExportVariable>config</param.DefaultImportExportVariable>
+    <param.RowMajor>false</param.RowMajor>
+    <param.HighlightPotentialRowMajorIssues>false</param.HighlightPotentialRowMajorIssues>
     <param.ExternalFcnMajority>column</param.ExternalFcnMajority>
     <param.UseGlobals>option.UseGlobals.No</param.UseGlobals>
-    <param.outputfile>${PROJECT_ROOT}/resolveContactsLoop_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/resolveContactsLoop_mex.mexa64</param.outputfile>
     <param.version>R2012a</param.version>
-    <param.HasECoderFeatures>false</param.HasECoderFeatures>
-    <param.HasGpuCoder>false</param.HasGpuCoder>
+    <param.HasECoderFeatures>true</param.HasECoderFeatures>
+    <param.HasGpuCoder>true</param.HasGpuCoder>
     <param.mex.mainhtml />
     <param.grt.mainhtml />
     <param.CallGeneratedCodeFromTest>true</param.CallGeneratedCodeFromTest>
@@ -756,7 +742,7 @@
     <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
     <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
     <param.EnableScreener>true</param.EnableScreener>
-    <param.AnnotationChecksum>939741350</param.AnnotationChecksum>
+    <param.AnnotationChecksum>541930097</param.AnnotationChecksum>
     <var.LegacyTarget />
     <var.MirrorOnOpen>false</var.MirrorOnOpen>
     <param.FixedPointEnabled>false</param.FixedPointEnabled>
@@ -765,22 +751,20 @@
     <param.unifiedParamStorage />
     <var.gc.lastOutputRoot>codegen/mex/resolveContactsLoop</var.gc.lastOutputRoot>
     <var.gc.lastOutputType>MEX_FILE</var.gc.lastOutputType>
-    <var.gc.preBuildChecksum>3569141593</var.gc.preBuildChecksum>
+    <var.gc.preBuildChecksum>2375730240</var.gc.preBuildChecksum>
     <var.cfi.lastOutputRoot>codegen/mex/resolveContactsLoop</var.cfi.lastOutputRoot>
     <var.cfi.preBuildChecksum>18879095</var.cfi.preBuildChecksum>
     <var.lastCfiTestSnippet>xyarray = runWoids(1,40,49,[7.5, 7.5],'bc','periodic','dT',0.035/0.33/16,'LJmode','soft');</var.lastCfiTestSnippet>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
-    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;748742563&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
-    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
+    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/data1/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;748742563&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
+    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/data1/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
     <param.forceMexBuild>false</param.forceMexBuild>
     <param.configImportActive>false</param.configImportActive>
-    <var.isGpuCoder>false</var.isGpuCoder>
-    <var.notGpuCoder>true</var.notGpuCoder>
     <var.boundToGui>true</var.boundToGui>
     <param.mex.outputfile>resolveContactsLoop_mex</param.mex.outputfile>
     <param.grt.outputfile>resolveContactsLoop</param.grt.outputfile>
     <param.artifact>option.target.artifact.mex</param.artifact>
-    <param.outputfile>${PROJECT_ROOT}/resolveContactsLoop_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/resolveContactsLoop_mex.mexa64</param.outputfile>
     <param.EnableAutoExtrinsicCalls>true</param.EnableAutoExtrinsicCalls>
     <param.UsePreconditions>false</param.UsePreconditions>
     <param.FeatureFlags />
@@ -827,24 +811,11 @@
     <param.fptSignedness>false</param.fptSignedness>
     <var.FixedPointAnalysisMode>option.FixedPointAnalysisMode.Sim</var.FixedPointAnalysisMode>
     <param.FixedPointUseDesignRanges>false</param.FixedPointUseDesignRanges>
-    <param.gpu.Enabled>false</param.gpu.Enabled>
-    <param.gpu.KernelNamePrefix />
-    <param.gpu.MallocMode />
-    <param.gpu.MallocThreshold>200</param.gpu.MallocThreshold>
-    <param.gpu.StackLimitPerThread>1024</param.gpu.StackLimitPerThread>
-    <param.gpu.EnableCUBLAS>false</param.gpu.EnableCUBLAS>
-    <param.gpu.EnableCUSOLVER>false</param.gpu.EnableCUSOLVER>
-    <param.gpu.EnableCUFFT>false</param.gpu.EnableCUFFT>
-    <param.gpu.Benchmarking>false</param.gpu.Benchmarking>
-    <param.gpu.SafeBuild>false</param.gpu.SafeBuild>
-    <param.gpu.ComputeCapability />
-    <param.gpu.CustomComputeCapability />
-    <param.gpu.CompilerFlags />
-    <var.checkIssuesGpu>false</var.checkIssuesGpu>
-    <var.hasGpu>false</var.hasGpu>
     <unset>
       <param.objective />
       <param.DefaultImportExportVariable />
+      <param.RowMajor />
+      <param.HighlightPotentialRowMajorIssues />
       <param.ExternalFcnMajority />
       <param.UseGlobals />
       <param.outputfile />
@@ -869,8 +840,6 @@
       <var.outdatedOnRestore />
       <param.forceMexBuild />
       <param.configImportActive />
-      <var.isGpuCoder />
-      <var.notGpuCoder />
       <param.mex.outputfile />
       <param.grt.outputfile />
       <param.artifact />
@@ -919,31 +888,16 @@
       <param.fptSignedness />
       <var.FixedPointAnalysisMode />
       <param.FixedPointUseDesignRanges />
-      <param.gpu.Enabled />
-      <param.gpu.KernelNamePrefix />
-      <param.gpu.MallocMode />
-      <param.gpu.MallocThreshold />
-      <param.gpu.StackLimitPerThread />
-      <param.gpu.EnableCUBLAS />
-      <param.gpu.EnableCUSOLVER />
-      <param.gpu.EnableCUFFT />
-      <param.gpu.Benchmarking />
-      <param.gpu.SafeBuild />
-      <param.gpu.ComputeCapability />
-      <param.gpu.CustomComputeCapability />
-      <param.gpu.CompilerFlags />
-      <var.checkIssuesGpu />
-      <var.hasGpu />
     </unset>
     <fileset.entrypoints>
       <file custom-data-expanded="false" value="${PROJECT_ROOT}/resolveContactsLoop.m">
-        <Marker>1513275716239</Marker>
+        <Marker>1513703126686</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench />
     <fileset.inputtypes>
       <file custom-data-expanded="false" value="${PROJECT_ROOT}/resolveContactsLoop.m">
-        <Inputs fileName="resolveContactsLoop.m" functionName="resolveContactsLoop" nargout="1">
+        <Inputs fileName="resolveContactsLoop.m" functionName="resolveContactsLoop">
           <Input Name="forceArray" typeId="0" />
           <Input Name="distanceMatrixFull" typeId="1" />
           <Input Name="distanceMatrix" typeId="2" />
@@ -1006,14 +960,16 @@
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="resolveContactsLoop_mex.mexmaci64" optional="false">/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop_mex.mexmaci64</file>
+      <file location="/data1/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="resolveContactsLoop_mex.mexa64" optional="false">/data1/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop_mex.mexa64</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/Applications/MATLAB_R2017b.app</root>
+      <root>/data2/local/MATLAB/R2017a</root>
       <toolboxes>
         <toolbox name="fixedpoint" />
         <toolbox name="matlabcoder" />
+        <toolbox name="matlabhdlcoder" />
+        <toolbox name="embeddedcoder" />
       </toolboxes>
       <toolbox>
         <fixedpoint>
@@ -1025,20 +981,30 @@
           <enabled>true</enabled>
         </matlabcoder>
       </toolbox>
+      <toolbox>
+        <matlabhdlcoder>
+          <enabled>true</enabled>
+        </matlabhdlcoder>
+      </toolbox>
+      <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
     </matlab>
     <platform>
       <unix>true</unix>
-      <mac>true</mac>
+      <mac>false</mac>
       <windows>false</windows>
       <win2k>false</win2k>
       <winxp>false</winxp>
       <vista>false</vista>
-      <linux>false</linux>
+      <linux>true</linux>
       <solaris>false</solaris>
-      <osver>10.13.2</osver>
+      <osver>2.6.32-504.el6.x86_64</osver>
       <os32>false</os32>
       <os64>true</os64>
-      <arch>maci64</arch>
+      <arch>glnxa64</arch>
       <matlab>true</matlab>
     </platform>
   </configuration>
