@@ -19,7 +19,7 @@ paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'nofl
 % -- slow-down parameters --
 paramAll.vs = 0;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = [1:M];% slowingNodes: which nodes register contact (default head and tail)
-paramAll.slowingMode = 'stochastic';
+paramAll.slowingMode = 'stochastic_bynode';
 paramAll.k_dwell = 0.0036;
 paramAll.k_undwell = 1.1;
 % -- Lennard-Jones parameters --
@@ -35,7 +35,7 @@ speeds = [0.33];
 slowspeeds = [0.018];
 attractionStrengths = [0];
 % num_nbr_max_per_nodes = [3 4];
-dkdN_dwell_values = [0 1./[8 4 2 1 0.5]];
+dkdN_dwell_values = [0 1./[8 4 2 1]];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths,dkdN_dwell_values);
 nParamCombis = size(paramCombis,2);
 for paramCtr = 1:nParamCombis
