@@ -14,6 +14,6 @@ end
 % nbrNMLogInd = any(nbrNMNLogInd,3); % don't care how many other objects in contact with
 % numNodeswNbrs = sum(nbrNMLogInd,2); % count how many nodes of each object have neighbours
 numNbrsPerNode = sum(sum(nbrNMNMLogInd,3),4); % count how many nodes of other objects each node is in contact with
-numNbrsAndNodes = sum(numNbrsPerNode,2); % sum num nbrs over nodes
+numNbrsAndNodes = sum(numNbrsPerNode,2); % sum num nbrs over nodes (of this object)
 end
 

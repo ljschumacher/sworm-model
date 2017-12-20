@@ -28,8 +28,8 @@ paramAll.tailNodes = (M-max(round(M/10),1)+1):M;
 % -- slow-down parameters --
 paramAll.vs = 0;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
-paramAll.slowingMode = 'stochastic';
-paramAll.k_dwell = 0.0036;
+paramAll.slowingMode = 'stochastic_bynode';
+paramAll.k_dwell = 0.0036; 
 paramAll.k_undwell = 1.1;
 % paramAll.num_nbr_max_per_node = 2;
 % -- Lennard-Jones parameters --
@@ -39,13 +39,13 @@ paramAll.sigma_LJ = 2*rc0;  % particle size for Lennard-Jones force
 paramAll.theta_0 = 0;
 paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
-paramAll.angleNoise = 0;
+paramAll.angleNoise = 0.02;
 
 revRatesClusterEdge = fliplr([0, 0.4, 0.8, 1.6, 3.2, 6.4]);
 speeds = [0.33];
 slowspeeds = [0.018];
 attractionStrengths = [0];
-dkdN_dwell_values = [0 1./[8 4 2 1 0.5]];
+dkdN_dwell_values = [0 1./[8 4 2 1]];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths,dkdN_dwell_values);
 nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats
@@ -67,7 +67,7 @@ for repCtr = 1:numRepeats
         end
         param.eps_LJ = attractionStrength;
         filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) '_noVolExcl'...
-            ... '_angleNoise'...
+            '_angleNoise_' num2str(paramAll.angleNoise) ...
             '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
             '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
             '_dkdN_' num2str(param.dkdN_dwell)...num2str(param.num_nbr_max_per_node)...

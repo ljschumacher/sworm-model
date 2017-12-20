@@ -41,12 +41,12 @@ rng(1)
 %     'revRate',0.5);
 % animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_periodic_reversals',[L L]);
 % 
-rng(6)
-tic
-xyarray = runWoids(20,1,M,[L L],'bc','periodic','dT',dT,'saveEvery',saveEvery,...
-    'revRate',0.5,'theta_0',0,'omega_m',0,'deltaPhase',0);
-toc
-animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_periodic_undulations0',[L L]);
+% rng(6)
+% tic
+% xyarray = runWoids(20,1,M,[L L],'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+%     'revRate',0.5,'theta_0',0,'omega_m',0,'deltaPhase',0);
+% toc
+% animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_periodic_undulations0',[L L]);
 
 % 
 % xyarray = runWoids(20,1,M,[L L],'bc','free','dT',dT,'saveEvery',saveEvery,...
@@ -228,7 +228,7 @@ L = [7.5 7.5];
 
 % % test soft lennard-jones potential as volume exclusion
 % rng(1)
-% eps_LJ = 1e-2;
+% eps_LJ = 2e-2;
 % L = [7.5, 7.5];
 % xyarray = runWoids(40,39,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
 %     'rc',0,'r_LJcutoff',2*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035,'LJnodes',1:M,...

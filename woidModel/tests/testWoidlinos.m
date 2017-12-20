@@ -12,7 +12,7 @@ addpath('../visualisation')
 M = 2; % M: number of nodes in each object
 L = [10 10];%[20, 20]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 param.v0 = 0.5; % v0: speed (default 0.05)
-rc = 0.105;
+rc = 0.035;
 param.rc = -1; % rc: core repulsion radius (default 0.07 mm)
 param.segmentLength = 2*rc;
 param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
@@ -33,6 +33,13 @@ param.slowingNodes = [];% slowingNodes: which nodes register contact (default [1
 % -- Lennard-Jones parameters --
 param.r_LJcutoff = param.ri;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
+
+% test angle noise 
+param.angleNoise = 0.02;
+param.bc = 'free';
+L = [3 3];
+xyarray = runWoids(40,1,18,L,param);
+animateWoidTrajectories(xyarray,['woidlino_test_movies/test_free_angleNoise' num2str(param.angleNoise)],L);
 
 % L = [15 15];
 % N = 50;
