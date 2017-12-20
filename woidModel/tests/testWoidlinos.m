@@ -35,10 +35,10 @@ param.r_LJcutoff = param.ri;% r_LJcutoff: cut-off above which LJ-force is not ac
 param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
 
 % test angle noise 
-param.angleNoise = 0.02;
+param.angleNoise = 0.1;
 param.bc = 'free';
 L = [3 3];
-xyarray = runWoids(40,1,18,L,param);
+xyarray = runWoids(100,1,18,L,param);
 animateWoidTrajectories(xyarray,['woidlino_test_movies/test_free_angleNoise' num2str(param.angleNoise)],L);
 
 % L = [15 15];

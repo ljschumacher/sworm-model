@@ -31,9 +31,8 @@ paramAll.slowingNodes = 1:M;% slowingNodes: which nodes register contact (defaul
 paramAll.slowingMode = 'stochastic_bynode';
 paramAll.k_dwell = 0.0036; 
 paramAll.k_undwell = 1.1;
-% paramAll.num_nbr_max_per_node = 2;
 % -- Lennard-Jones parameters --
-paramAll.r_LJcutoff = 5*rc0;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
+paramAll.r_LJcutoff = 4*rc0;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc0;  % particle size for Lennard-Jones force
 % -- undulation parameters --
 paramAll.theta_0 = 0;
@@ -56,7 +55,7 @@ for repCtr = 1:numRepeats
         speed = paramCombis(2,paramCtr);
         param.v0 = speed;
         param.dT = min(1/2,rc0/param.v0/16); % dT: time step, scales other parameters such as velocities and rates
-        param.saveEvery = round(1/4/param.dT);
+        param.saveEvery = round(1/2/param.dT);
         param.vs = paramCombis(3,paramCtr);
         attractionStrength = paramCombis(4,paramCtr);
         param.dkdN_dwell = paramCombis(5,paramCtr);
