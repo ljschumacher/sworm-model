@@ -41,7 +41,7 @@ param.saveEvery = round(1/2/param.dT);
 load('paramSamples_nSim1000_nParam2.mat','paramSamples')
 % set model parameters from generated samples
 param.revRateClusterEdge = paramSamples.revRateClusterEdge(sampleCtr);
-param.dkdN = paramSamples.dkdN(sampleCtr);
+param.dkdN_dwell = paramSamples.dkdN(sampleCtr);
 
 filename = ['/work/lschumac/woidlinos/wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
     '_v0_' num2str(param.v0) '_vs_' num2str(param.vs) ...
