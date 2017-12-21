@@ -9,16 +9,15 @@ close all
 addpath('../')
 addpath('../visualisation')
 % general model parameters for all test - unless set otherwise
-M = 2; % M: number of nodes in each object
-L = [10 10];%[20, 20]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
-param.v0 = 0.5; % v0: speed (default 0.05)
+M = 18; % M: number of nodes in each object
+L = [7.5, 7.5];%[20, 20]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
+param.v0 = 0.33; % v0: speed (default 0.05)
 rc = 0.035;
-param.rc = -1; % rc: core repulsion radius (default 0.07 mm)
-param.segmentLength = 2*rc;
-param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
+param.rc = 0; % rc: core repulsion radius (default 0.07 mm)
+param.segmentLength = 1.13/(M - 1);
+param.dT = rc/param.v0/16; % dT: time step, gets adapted in simulation
 T = 50; % T: simulation duration (number of time-steps)
 param.saveEvery = round(1/2/param.dT);
-param.k_l = 40; % stiffness of linear springs connecting nodes
 param.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 % undulations
 param.k_theta = 0; % stiffness of rotational springs at nodes
@@ -31,23 +30,26 @@ param.ri = 3*rc;% ri: radius at which worms register contact (default 3 rc)
 param.vs = param.v0;% vs: speed when slowed down (default v0/3)
 param.slowingNodes = [];% slowingNodes: which nodes register contact (default [1 M], ie head and tail)
 % -- Lennard-Jones parameters --
-param.r_LJcutoff = param.ri;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
+param.r_LJcutoff = 4*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
+param.sigma_LJ = 2*rc;
 param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
 
-% % test angle noise 
-% param.angleNoise = 0.1;
+% test angle noise 
+% param.angleNoise = 1;
 % param.bc = 'free';
+% param.k_theta = 20;
 % L = [3 3];
-% xyarray = runWoids(100,1,18,L,param);
-% animateWoidTrajectories(xyarray,['woidlino_test_movies/test_free_angleNoise' num2str(param.angleNoise)],L);
+% xyarray = runWoids(100,1,M,L,param);
+% animateWoidTrajectories(xyarray,['woidlino_test_movies/test_free_'...
+%     'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)],L);
 
 % angle noise for multiple worms
 % test angle noise 
-param.angleNoise = 0.02;
-param.bc = 'periodic';
-L = [7.5 7.5];
-xyarray = runWoids(10,40,18,L,param);
-animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40worms_angleNoise' num2str(param.angleNoise)],L);
+param.angleNoise = 1;
+param.k_theta = 20;
+xyarray = runWoids(10,40,M,L,param);
+animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40worms_' ...
+    'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)],L);
 
 % L = [15 15];
 % N = 50;

@@ -8,7 +8,7 @@ L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will g
 % rc = 0.035;
 N = 40;
 M = 18;
-revRatesClusterEdge = fliplr([0, 0.4, 0.8, 1.6, 3.2, 6.4]);
+revRatesClusterEdge = 1.6%fliplr([0, 0.4, 0.8, 1.6, 3.2, 6.4]);
 speeds = [0.33];
 % slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 slowspeeds = [0.018];
@@ -16,7 +16,7 @@ attractionStrengths = [0];
 slowingMode = 'stochastic_bynode';
 k_dwell = 0.0036;
 k_undwell = 1.1;
-dkdN_dwell_values = [0 1./[8 4 2 1]];
+dkdN_dwell_values = 1/8%[0 1./[8 4 2 1]];
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,...
     attractionStrengths,dkdN_dwell_values);
 nParamCombis = size(paramCombis,2);

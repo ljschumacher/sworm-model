@@ -12,7 +12,7 @@ M = 18; % M: number of nodes in each object
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 numRepeats = 1;
 
-T = 1000;
+T = 10;
 rc0 = 0.035; % rc: core repulsion radius (default 0.035 mm)
 paramAll.rc = 0;
 paramAll.ri = 3*rc0;
@@ -38,7 +38,7 @@ paramAll.sigma_LJ = 2*rc0;  % particle size for Lennard-Jones force
 paramAll.theta_0 = 0;
 paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
-paramAll.angleNoise = 0.02;
+paramAll.angleNoise = 1;
 
 revRatesClusterEdge = fliplr([0, 0.4, 0.8, 1.6, 3.2, 6.4]);
 speeds = [0.33];
@@ -66,7 +66,7 @@ for repCtr = 1:numRepeats
         end
         param.eps_LJ = attractionStrength;
         filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) '_noVolExcl'...
-            '_angleNoise_' num2str(paramAll.angleNoise) ...
+            '_angleNoise_' num2str(param.angleNoise) ...
             '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
             '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
             '_dkdN_' num2str(param.dkdN_dwell)...num2str(param.num_nbr_max_per_node)...
