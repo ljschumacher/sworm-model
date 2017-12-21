@@ -12,7 +12,7 @@ M = 18; % M: number of nodes in each object
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 numRepeats = 1;
 
-T = 10;
+T = 1000;
 rc0 = 0.035; % rc: core repulsion radius (default 0.035 mm)
 paramAll.rc = 0;
 paramAll.ri = 3*rc0;
