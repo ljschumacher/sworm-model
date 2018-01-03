@@ -17,19 +17,21 @@ exportOptions = struct('Format','eps2',...
 
 numRepeats = 1;
 % revRatesClusterEdge = [0, 0.1, 0.2, 0.4, 0.8, 1.6];
-revRatesClusterEdge = [0, 0.2, 0.4, 0.8, 1.6];
+revRatesClusterEdge = [0, 0.4, 0.8, 1.6, 3.2, 6.4];
 speeds = [0.33];
 % slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
-slowspeeds = fliplr([0.33, 0.05, 0.025, 0.0125]);
-% slowspeeds = [0.018];
+% slowspeeds = fliplr([0.33, 0.05, 0.025, 0.0125]);
+slowspeeds = [0.018];
 trackedNodes = 1:max(round(M*0.16),1);
 distBinwidth = 0.05; % in units of mm, sensibly to be chosen similar worm width or radius
 maxDist = 2;
-slowingMode = 'gradual';
-% k_dwell = 0.0036;
-% k_undwell = 1.1;
-dkdN_dwell_values = 0;%fliplr([0 1./[8 4 2 1]]);
-secondVariables = slowspeeds;
+slowingMode = 'stochastic_bynode';
+k_dwell = 0.0036;
+k_undwell = 1.1;
+dkdN_dwell_values = fliplr([0 1./[8 4 2 1]]);
+angleNoise = 1;
+
+secondVariables = dkdN_dwell_values;
 
 for speed = speeds
     poscorrFig = figure;
@@ -44,10 +46,10 @@ for speed = speeds
                 gr = cell(numRepeats,1);
                 for repCtr = 1:numRepeats
                     filename = ['../results/woidlinos/wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L) ...
-                        '_noVolExcl' ...'_angleNoise' ...
+                        '_noVolExcl' '_angleNoise_' num2str(angleNoise)...
                         '_v0_' num2str(speed,'%1.0e') '_vs_' num2str(slowspeed,'%1.0e') ...
-                        '_' slowingMode 'SlowDown' ...'_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...
-                        ...'_dkdN_' num2str(dkdN_dwell) ...num2str(num_nbr_max_per_nodes)...
+                        '_' slowingMode 'SlowDown' '_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...
+                        '_dkdN_' num2str(dkdN_dwell) ...
                         '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
                         '_revRateClusterEdge_' num2str(revRateClusterEdge,'%1.0e') ...
                         '_run' num2str(repCtr) '.mat'];
@@ -60,7 +62,7 @@ for speed = speeds
                         else
                             saveEvery = thisFile.saveevery;
                         end
-                        numFrames =  min(round((maxNumFrames - burnIn)*thisFile.param.dT*saveEvery),maxNumFrames - burnIn); %maxNumFrames-burnIn;
+                        numFrames =  min(round((maxNumFrames - burnIn)*thisFile.param.dT*saveEvery),maxNumFrames - burnIn);
                         framesAnalyzed = burnIn + randperm(maxNumFrames - burnIn,numFrames); % randomly sample frames without replacement
                         %                 framesAnalyzed = round(linspace(burnIn,maxNumFrames,numFrames));
                         %                             framesAnalyzed = burnIn+1:maxNumFrames;
@@ -128,9 +130,9 @@ for speed = speeds
     fignameprefix = ['figures/woidlinoPhasePortrait'];
     fignamesuffix = ['_M' num2str(M)...
         'N_' num2str(thisFile.N) '_L_' num2str(thisFile.L(1)) ...
-        '_noVolExcl' ...'_angleNoise'...
+        '_noVolExcl' '_angleNoise_' num2str(angleNoise)...
         '_speed_' num2str(speed,'%1.0e') ...
-        '_slowing_' slowingMode ...'_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...num2str(num_nbr_max_per_nodes) ...
+        '_slowing_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...
         '_epsLJ_' num2str(attractionStrength,'%1.0e')...
         '.eps'];
     filename = [fignameprefix 'Radialdistribution' fignamesuffix];
@@ -158,7 +160,7 @@ end
 end
 
 function ax = formatAxes(revRateClusterEdge,var2)
-title(['r=' num2str(revRateClusterEdge) ', v_s =' num2str(var2)],...
+title(['r=' num2str(revRateClusterEdge) ', dk/dN =' num2str(var2)],...
     'FontWeight','normal')
 ax = gca;
 ax.Position = ax.Position.*[1 1 1.2 1.2] - [0.0 0.0 0 0]; % stretch panel

@@ -29,7 +29,7 @@ slowingMode = 'stochastic_bynode';
 k_dwell = 0.0036;
 k_undwell = 1.1;
 dkdN_dwell_values = fliplr([0 1./[8 4 2 1]]);
-angleNoise = 0.02;
+angleNoise = 1;
 
 secondVariables = dkdN_dwell_values;
 
