@@ -1,4 +1,4 @@
-function [] = runWoidlinoParamSamples(sampleCtr)
+function [] = runWoidlinoBlindSamples(sampleCtr)
 % run simulations of simplified woid model with single node per woid
 % for previously generated random parameter samples
 
@@ -17,7 +17,7 @@ param.k_l = 40; % stiffness of linear springs connecting nodes
 param.vs = 0.018;
 param.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
 param.slowingMode = 'stochastic_bynode';
-param.k_dwell = 0.0036; 
+param.k_dwell = 0.0036;
 param.k_undwell = 1.1;
 % -- Lennard-Jones parameters --
 param.r_LJcutoff = 4*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
@@ -38,24 +38,18 @@ param.dT = min(1/2,rc/param.v0/16); % dT: time step, scales other parameters suc
 param.saveEvery = round(1/2/param.dT);
 
 % load randomly generated parameter samples
-load('paramSamples_nSim10000_nParam2.mat','paramSamples')
+load('blindSamples_nSim100_nParam4.mat','paramSamples')
 
 % set model parameters from generated samples
 param.revRateClusterEdge = paramSamples.revRateClusterEdge(sampleCtr);
 param.dkdN_dwell = paramSamples.dkdN(sampleCtr);
 
-filename = ['/work/lschumac/woidlinos/wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
-    '_v0_' num2str(param.v0) '_vs_' num2str(param.vs) ...
-    ...'_Ris_' num2str(param.Ris) ...
-    '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
-    '_dkdN_' num2str(param.dkdN_dwell)...
-    '_revRateClusterEdge_' num2str(param.revRateClusterEdge) ...
-    ...'_Rir_' num2str(param.Rir)
-    '_sample_' num2str(sampleCtr)];
+filename = ['results/paramSampleResults/woidlinos/blind/wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
+    '_blind_sample_' num2str(sampleCtr)];
 if ~exist([filename '.mat'],'file')
     rng('shuffle') % set random seed to be DIFFERENT for each simulation
     [xyarray, currentState] = runWoids(T,N,M,L,param);
     xyarray = single(xyarray); % save space by using single precision
-    save([filename '.mat'],'xyarray','T','N','M','L','param','currentState')
+    save([filename '.mat'],'xyarray','T','N','M','L','currentState')
 end
 end

@@ -196,7 +196,7 @@ if isempty(resumeState)
     positions = xyarray(:,:,:,1);
     if r_feed>0
         % preallocate food lattice
-        Ngrid = ceil(L./(max(rc,0.035))); % determine how many grid points to use
+        Ngrid = ceil(L./(4*max(rc,0.035))); % determine how many grid points to use
         foodGrid = ones(Ngrid);
         food = ones(Ngrid(1),Ngrid(2),numSavepoints);
     else

@@ -13,7 +13,7 @@ samplesRaw = rand(nParam,nSim)';
 % parameters first, then number of samples. This makes it easier to add
 % more samples later on
 
-% scales samples to the appropriate range for the parameters
+% scale samples to the appropriate range for the parameters
 revRate_range = [0 10];
 revRateClusterEdge = samplesRaw(:,1).*(revRate_range(2) - revRate_range(1)) + revRate_range(1);
 

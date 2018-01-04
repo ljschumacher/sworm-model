@@ -70,7 +70,7 @@ rng(1)
 % xyarray = cat(4,xyarray1,xyarray2(:,:,:,2:end));
 % animateWoidTrajectories(xyarray,['woid_test_movies/singleWormM' num2str(M) '_noflux_resumed'],L);
 % 
-% % test feeding
+% test feeding
 % L = [2.5 2.5];
 % [xyarray, ~, food] = runWoids(10,1,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,'r_feed',5);
 % animateWoidTrajectories(xyarray,['woid_test_movies/singleWormM' num2str(M) '_feeding'],L,0.035,food);
@@ -172,18 +172,19 @@ rng(1)
 L = [7.5 7.5];
 % [xyarray, ~, food] = runWoids(40,10,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,'r_feed',5);
 % animateWoidTrajectories(xyarray,['woid_test_movies/manyWormM' num2str(M) '_feeding'],L,0.035,food);
-% rng(1)
-% param.r_feed = 2;
-% param.k_unroam = 1;
-% param.slowingMode = 'stochastic';
-% param.k_dwell = 0.0036;
-% param.k_undwell = 1.1;
-% param.revRateClusterEdge = 3.2;
-% param.vs = 0.018;
-% param.dkdN_dwell = 0.25;
-% [xyarray, ~, food] = runWoids(500,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
-% animateWoidTrajectories(xyarray,['woid_test_movies/40WormM' num2str(M) ...
-%     '_sweeping_feedrate_' num2str(param.r_feed)],L,0.035,food);
+rng(1)
+param.r_feed = 2;
+param.k_unroam = 10;
+param.slowingMode = 'stochastic';
+param.k_dwell = 0.0036;
+param.k_undwell = 1.1;
+param.revRateClusterEdge = 3.2;
+param.vs = 0.018;
+param.dkdN_dwell = 0.25;
+[xyarray, ~, food] = runWoids(150,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
+animateWoidTrajectories(xyarray,['woid_test_movies/40WormM' num2str(M) ...
+    '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
+    ],L,0.035,food);
 
 % % test attraction on head-only
 % rng(1)
