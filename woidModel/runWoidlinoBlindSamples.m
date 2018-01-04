@@ -38,7 +38,7 @@ param.dT = min(1/2,rc/param.v0/16); % dT: time step, scales other parameters suc
 param.saveEvery = round(1/2/param.dT);
 
 % load randomly generated parameter samples
-load('blindSamples_nSim100_nParam4.mat','paramSamples')
+load('blindSamples_nSim100_nParam2.mat','paramSamples')
 
 % set model parameters from generated samples
 param.revRateClusterEdge = paramSamples.revRateClusterEdge(sampleCtr);
