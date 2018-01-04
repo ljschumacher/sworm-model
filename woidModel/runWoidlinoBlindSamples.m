@@ -44,7 +44,7 @@ load('blindSamples_nSim100_nParam4.mat','paramSamples')
 param.revRateClusterEdge = paramSamples.revRateClusterEdge(sampleCtr);
 param.dkdN_dwell = paramSamples.dkdN(sampleCtr);
 
-filename = ['results/paramSampleResults/woidlinos/blind/wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
+filename = ['/work/lschumac/woidlinos/blind/wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
     '_blind_sample_' num2str(sampleCtr)];
 if ~exist([filename '.mat'],'file')
     rng('shuffle') % set random seed to be DIFFERENT for each simulation
