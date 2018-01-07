@@ -50,6 +50,9 @@ if ~exist([filename '.mat'],'file')
     rng('shuffle') % set random seed to be DIFFERENT for each simulation
     [xyarray, currentState] = runWoids(T,N,M,L,param);
     xyarray = single(xyarray); % save space by using single precision
-    save([filename '.mat'],'xyarray','T','N','M','L','currentState')
+    % remove the blinded parameters
+    param = rmfield(param,{'revRateClusterEdge','dkdN_dwell'});
+    
+    save([filename '.mat'],'xyarray','T','N','M','L','currentState','param')
 end
 end

@@ -35,10 +35,10 @@ param.deltaPhase = 0;
 % -- speed and time-step --
 param.v0 = [0.33];
 param.dT = min(1/2,rc/param.v0/16); % dT: time step, scales other parameters such as velocities and rates
-param.saveEvery = round(1/2/param.dT);
+param.saveEvery = round(1/4/param.dT);
 
 % load randomly generated parameter samples
-load('paramSamples_nSim10000_nParam2.mat','paramSamples')
+load('paramSamples_nSim20000_nParam2.mat','paramSamples')
 
 % set model parameters from generated samples
 param.revRateClusterEdge = paramSamples.revRateClusterEdge(sampleCtr);
