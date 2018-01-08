@@ -17,8 +17,8 @@ param.k_l = 40; % stiffness of linear springs connecting nodes
 param.vs = 0.014; % npr1 0.018; N2 0.014
 param.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
 param.slowingMode = 'stochastic_bynode';
-param.k_dwell = 0.0036; % npr1 0.0036; N2 0.25
-param.k_undwell = 1.1; % npr1 1.1; N2 0.45
+param.k_dwell = 0.25; % npr1 0.0036; N2 0.25
+param.k_undwell = 0.45; % npr1 1.1; N2 0.45
 % -- Lennard-Jones parameters --
 param.r_LJcutoff = 4*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 param.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
@@ -33,7 +33,7 @@ param.theta_0 = 0;
 param.omega_m = 0;
 param.deltaPhase = 0;
 % -- speed and time-step --
-param.v0 = [0.33]; % npr1 0.33; N2 0.14
+param.v0 = [0.14]; % npr1 0.33; N2 0.14
 param.dT = min(1/2,rc/param.v0/16); % dT: time step, scales other parameters such as velocities and rates
 param.saveEvery = round(1/4/param.dT);
 
