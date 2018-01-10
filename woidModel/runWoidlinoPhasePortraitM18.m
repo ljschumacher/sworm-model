@@ -30,10 +30,10 @@ paramAll.k_undwell = 1.1;
 paramAll.r_LJcutoff = 4*rc0;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc0;  % particle size for Lennard-Jones force
 paramAll.eps_LJ = 0;
-if param.eps_LJ>0
-    param.r_LJcutoff = 5*rc;
+if paramAll.eps_LJ>0
+    paramAll.r_LJcutoff = 5*rc;
 else
-    param.r_LJcutoff = -1; % don't need to compute attraction if it's zero
+    paramAll.r_LJcutoff = -1; % don't need to compute attraction if it's zero
 end
 % -- undulation parameters --
 paramAll.theta_0 = 0;
