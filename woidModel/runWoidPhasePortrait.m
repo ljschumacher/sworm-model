@@ -16,6 +16,7 @@ numRepeats = 3;
 rc = 0.035;
 % saveevery = round(1/2/param.dT);
 paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
+paramAll.segmentLength = 1.13/(M - 1);
 % -- slow-down parameters --
 paramAll.vs = 0.018;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = [1:M];% slowingNodes: which nodes register contact (default head and tail)
@@ -27,51 +28,33 @@ paramAll.r_LJcutoff = 4*rc;% r_LJcutoff: cut-off above which LJ-force is not act
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 paramAll.eps_LJ = 0;
 if paramAll.eps_LJ>0
-    paramAll.r_LJcutoff = 5*rc;
+    paramAll.r_LJcutoff = 4*rc;
 else
     paramAll.r_LJcutoff = -1; % don't need to compute attraction if it's zero
 end
-% paramAll.LJmode = 'soft';
-% paramAll.r_LJcutoff = 2*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
-% paramAll.rc = 0;
-% paramAll.LJnodes = 1:M;
-paramAll.angleNoise = 0.1;
+% -- speed and time-step --
+paramAll.v0 = [0.33]; % npr1 0.33; N2 0.14
+paramAll.dT = min(1/2,rc/paramAll.v0/16); % dT: time step, scales other parameters such as velocities and rates
+paramAll.saveEvery = round(1/paramAll.dT);
 
-revRatesClusterEdge = 6.4%fliplr([0, 0.4, 0.8, 1.6, 3.2, 6.4]);
-speeds = [0.33];
-% slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125, 0.005]);
-slowspeeds = [0.018];
-attractionStrengths = [0];
-% num_nbr_max_per_nodes = [3 4];
-dkdN_dwell_values = 1/8%[0 1./[8 4 2 1]];
-paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,attractionStrengths,dkdN_dwell_values);
+
+revRatesClusterEdge = 0:10;
+dkdN_dwell_values = 0:0.2:1;
+paramCombis = combvec(revRatesClusterEdge,dkdN_dwell_values);
 nParamCombis = size(paramCombis,2);
 for paramCtr = 1:nParamCombis
     param = paramAll;
-    revRateClusterEdge = paramCombis(1,paramCtr);
-    param.revRateClusterEdge = revRateClusterEdge;
-    speed = paramCombis(2,paramCtr);
-    param.omega_m = 2*pi*0.6/0.33*speed;
-    param.v0 = speed;
-    param.dT = min(1/2,rc/param.v0/16); % dT: time step, scales other parameters such as velocities and rates
-    param.saveEvery = round(1/4/param.dT);
-    param.vs = paramCombis(3,paramCtr);
-    attractionStrength = paramCombis(4,paramCtr);
+    param.revRateClusterEdge =  paramCombis(1,paramCtr);
     param.dkdN_dwell = paramCombis(5,paramCtr);
-    if attractionStrength==0
-        param.r_LJcutoff = -1; % don't need to compute attraction if it's zero
-    end
-    param.eps_LJ = attractionStrength;
-    for repCtr = 1:numRepeats
     filename = ['woids_N_' num2str(N) '_L_' num2str(L(1)) ...
         '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
         '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
         '_dkdN_' num2str(param.dkdN_dwell)...
-        '_epsLJ_' num2str(attractionStrength,'%1.0e') ...'_' param.LJmode ...
-        '_angleNoise' ...'_noContactForce' ...
         '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')...
         '_run' num2str(repCtr)];
-    if ~exist(['results/woids/' filename '.mat'],'file')&&isempty(dir(['results/woids/' filename '_running_on_*.mat']))
+    filepath = 'results/woids/mapping/';
+    if ~exist([filepath filename '.mat'],'file')...
+            &&isempty(dir([filepath filename '_running_on_*.mat']))
         disp(['running ' filename])
         % make a dummy file to mark that this sim is running on this computer
         [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
@@ -80,9 +63,8 @@ for paramCtr = 1:nParamCombis
         rng(1) % set random seed to be the same for each simulation
         [xyarray, currentState] = runWoids(T,N,M,L,param);
         xyarray = single(xyarray); % save space by using single precision
-        saveResults(['results/woids/' filename '.mat'],...
-            struct('xyarray',single(xyarray),'T',T,'N',N,'M',M,'L',L,'param',param,'currentState',currentState))
+        save([filepath filename '.mat'],'xyarray','T','N','M','L','param','currentState')
         delete(tmp_filename)
     end
-    end
+end
 end

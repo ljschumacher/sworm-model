@@ -19,7 +19,6 @@ paramAll.ri = 3*rc0;
 % saveevery = round(1/2/param.dT);
 paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 paramAll.segmentLength = 1.13/(M - 1);
-paramAll.k_l = 40; % stiffness of linear springs connecting nodes
 % -- slow-down parameters --
 paramAll.vs = 0.018;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
@@ -31,7 +30,7 @@ paramAll.r_LJcutoff = 4*rc0;% r_LJcutoff: cut-off above which LJ-force is not ac
 paramAll.sigma_LJ = 2*rc0;  % particle size for Lennard-Jones force
 paramAll.eps_LJ = 0;
 if paramAll.eps_LJ>0
-    paramAll.r_LJcutoff = 5*rc;
+    paramAll.r_LJcutoff = 4*rc;
 else
     paramAll.r_LJcutoff = -1; % don't need to compute attraction if it's zero
 end
@@ -41,7 +40,7 @@ paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
 % -- speed and time-step --
 paramAll.v0 = [0.33]; % npr1 0.33; N2 0.14
-paramAll.dT = min(1/2,rc/paramAll.v0/16); % dT: time step, scales other parameters such as velocities and rates
+paramAll.dT = min(1/2,rc0/paramAll.v0/16); % dT: time step, scales other parameters such as velocities and rates
 paramAll.saveEvery = round(1/paramAll.dT);
 
 revRatesClusterEdge = 0:10;
@@ -54,7 +53,6 @@ for repCtr = 1:numRepeats
         param.revRateClusterEdge =  paramCombis(1,paramCtr);
         param.dkdN_dwell = paramCombis(5,paramCtr);
         filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
-            '_angleNoise_' num2str(param.angleNoise) ...
             '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
             '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
             '_dkdN_' num2str(param.dkdN_dwell)...
@@ -71,7 +69,7 @@ for repCtr = 1:numRepeats
             rng(repCtr) % set random seed to be the same for each simulation
             [xyarray, currentState] = runWoids(T,N,M,L,param);
             xyarray = single(xyarray); % save space by using single precision
-            save([filename '.mat'],'xyarray','T','N','M','L','param','currentState')
+            save([filepath filename '.mat'],'xyarray','T','N','M','L','param','currentState')
             delete(tmp_filename)
         end
     end
