@@ -41,8 +41,8 @@ paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
 % -- speed and time-step --
 paramAll.v0 = [0.33]; % npr1 0.33; N2 0.14
-paramAll.dT = min(1/2,rc/param.v0/16); % dT: time step, scales other parameters such as velocities and rates
-paramAll.saveEvery = round(1/param.dT);
+paramAll.dT = min(1/2,rc/paramAll.v0/16); % dT: time step, scales other parameters such as velocities and rates
+paramAll.saveEvery = round(1/paramAll.dT);
 
 revRatesClusterEdge = 0:10;
 dkdN_dwell_values = 0:0.2:1;
