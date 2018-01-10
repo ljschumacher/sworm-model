@@ -1,4 +1,4 @@
-function [] = runWoidlinoParamSamples(sampleCtr)
+function [] = runWoidlinoParamSamplesN2(sampleCtr)
 % run simulations of simplified woid model with single node per woid
 % for previously generated random parameter samples
 

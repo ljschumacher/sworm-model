@@ -3,11 +3,11 @@ close all
 addpath('../')
 % draws a schematic of the agent based model
 N = 1;
-M = 49;
+M = 36;
 rc = 0.035;
 L = 1.25;
 segmentLength = 1.13/(M-1);
-deltaPhase = 0.25;
+deltaPhase = 0.25*49/M;
 theta_0 = pi/4;
 bc = 'free';
 angles = linspace(0,2*pi,48)'; % for plotting node size
@@ -17,12 +17,12 @@ rng(1)
 [xyarray, ~] = initialiseWoids(N,M,1,L,segmentLength,phaseOffset,theta_0,rc,bc);
 
 % plot lennard jones force
-eps_LJ = 1;
+eps_LJ = 1e-2;
 r_LJcutoff = 4*rc;
 sigma_LJ = 2*rc;
-f_LJ = @(x,b) 8*b*eps_LJ./x.*((sigma_LJ./x).^(2*b) - 1/2.^(b/6)*(sigma_LJ./x).^b);
-% for forces with other exponents of form 2b, b, mulitply second term by
-% 2^(-b/6) for potential to have minimum at same radius
+% f_LJ = @(x,b) 8*b*eps_LJ./x.*((sigma_LJ./x).^(2*b) - 1/2.^(b/6)*(sigma_LJ./x).^b);
+% % for forces with other exponents of form 2b, b, mulitply second term by
+% % 2^(-b/6) for potential to have minimum at same radius
 
 %soft-core LJ
 a = 2/3;
@@ -56,7 +56,7 @@ colormap(divcmap)
 caxis([-maxForce maxForce])
 
 % plot contour of zero force
-contour(X,Y,F_LJ,[0 0],'k--')
+% contour(X,Y,F_LJ,[0 0],'k--')
 
 % plot worm
 patch(xyarray(:,:,1,1) + rc*cos(angles),...

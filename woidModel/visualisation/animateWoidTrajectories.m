@@ -28,8 +28,10 @@ plotColors = lines(N);
 angles = linspace(0,2*pi,20)'; % for plotting node size
 
 % set overall axes limits
-xrange = minmax(reshape(xyarray(:,:,x,:),1,numel(xyarray(:,:,x,:))));
-yrange = minmax(reshape(xyarray(:,:,y,:),1,numel(xyarray(:,:,y,:))));
+xrange = [min(reshape(xyarray(:,:,x,:),1,numel(xyarray(:,:,x,:)))), ...
+    max(reshape(xyarray(:,:,x,:),1,numel(xyarray(:,:,x,:))))];
+yrange = [min(reshape(xyarray(:,:,y,:),1,numel(xyarray(:,:,y,:)))), ...
+    max(reshape(xyarray(:,:,y,:),1,numel(xyarray(:,:,y,:))))];
 % xrange = [floor(xrange(1)) ceil(xrange(2))];
 % yrange = [floor(yrange(1)) ceil(yrange(2))];
 if ~isempty(food)

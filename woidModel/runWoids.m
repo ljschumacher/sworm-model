@@ -89,7 +89,7 @@ addOptional(iP,'k_theta',20,@isnumeric) % stiffness of rotational springs at nod
 % undulations
 addOptional(iP,'omega_m',2*pi*0.6,@isnumeric) % angular frequency of oscillation of movement direction, default 0.6 Hz
 addOptional(iP,'theta_0',pi/4,@isnumeric) % amplitude of oscillation of movement direction, default pi/4
-addOptional(iP,'deltaPhase',0.24,@isnumeric) % for phase shift in undulations and initial positions, default 0.11
+addOptional(iP,'deltaPhase',0.24*49/M,@isnumeric) % for phase shift in undulations and initial positions, default 0.24 - adjust for <49 nodes
 addOptional(iP,'angleNoise',0,@isnumeric) % noise in heading of worm
 % reversals
 addOptional(iP,'revRate',0,@isnumeric) % rate for poisson-distributed reversals, default 1/13s
