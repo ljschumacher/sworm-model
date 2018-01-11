@@ -59,7 +59,7 @@ for repCtr = 1:numRepeats
             disp(['running ' filename])
             % make a dummy file to mark that this sim is running on this computer
             [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
-            tmp_filename = ['results/woids/' filename '_running_on_' hostname '.mat'];
+            tmp_filename = [filepath filename '_running_on_' hostname '.mat'];
             save(tmp_filename,'N','M','L','param')
             rng(1) % set random seed to be the same for each simulation
             [xyarray, currentState] = runWoids(T,N,M,L,param);

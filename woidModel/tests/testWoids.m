@@ -157,8 +157,8 @@ rng(1)
 % xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'headNodes',[],'tailNodes',[]);
 % animateWoidTrajectories(xyarray,'woid_test_movies/40worms_noflux_revUnresponsive',L);
 
-% xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'revRateClusterEdge',10/13);
-% animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_noflux_revClusterEdgeIncreased',L);
+xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'revRateClusterEdge',10/13);
+animateWoidTrajectories(xyarray,'woid_test_movies/40Worms_noflux_revClusterEdgeIncreased',L);
 % 
 % xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'rc',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/40worms_noflux_rc0',L);
@@ -264,7 +264,7 @@ param.k_undwell = 1.1;%1/0.9; %1/2.2;
 param.dkdN_dwell = 0.25;
 param.revRateClusterEdge = 1.6;
 param.vs = 0.018;
-xyarray = runWoids(20,N,M,L,param);
+xyarray = runWoids(20,N,M,L,param,'saveEvery',saveEvery);
 animateWoidTrajectories(xyarray,...
     ['woid_test_movies/40worms_periodic_square'...
     '_revRateClusterEdge_' num2str(param.revRateClusterEdge) ...
