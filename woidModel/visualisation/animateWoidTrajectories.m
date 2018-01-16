@@ -1,4 +1,4 @@
-function [ ] = animateWoidTrajectories(xyarray,filename,L,rc,food)
+function [ ] = animateWoidTrajectories(xyarray,filename,L,rc,food,offset)
 % takes in an array of N by M by x y  by T and makes a movie of the resulting
 % trajectories
 
@@ -8,11 +8,14 @@ function [ ] = animateWoidTrajectories(xyarray,filename,L,rc,food)
 x =     1;
 y =     2;
 
-if nargin<5
-    food = [];
-    if nargin <4
-        rc = 0.035;
-        disp(['Setting node radius to ' num2str(rc) ' for animations.'])
+if nargin<6
+    offset = [];
+    if nargin<5
+        food = [];
+        if nargin <4
+            rc = 0.035;
+            disp(['Setting node radius to ' num2str(rc) ' for animations.'])
+        end
     end
 end
 if ~ismac
@@ -27,6 +30,14 @@ M = size(xyarray,2);
 plotColors = lines(N);
 angles = linspace(0,2*pi,20)'; % for plotting node size
 
+if ~isempty(offset)&&max(abs(offset))>0&&numel(L)==2 % re-center plot - useful for periodic boundary conditions
+    xyarray(:,:,x,:) = xyarray(:,:,x,:) + offset(1);
+    xyarray(:,:,y,:) = xyarray(:,:,y,:) + offset(2);
+    % re-enforce periodic boundaries
+    for frameCtr=1:nFrames
+    [ xyarray(:,:,:,frameCtr), ~ ] = checkWoidBoundaryConditions(xyarray(:,:,:,frameCtr), [], 'periodic', L);
+    end
+end
 % set overall axes limits
 xrange = [min(reshape(xyarray(:,:,x,:),1,numel(xyarray(:,:,x,:)))), ...
     max(reshape(xyarray(:,:,x,:),1,numel(xyarray(:,:,x,:))))];

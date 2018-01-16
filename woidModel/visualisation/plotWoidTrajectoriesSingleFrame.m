@@ -26,7 +26,7 @@ end
 assert(size(plotColors,1)==N,'Number of colors not matching number of objects')
 angles = linspace(0,2*pi,10)'; % for plotting node size
 
-if centering&&numel(L)==2 % center plot of center of mass - useful for periodic boundary conditions
+if centering&&numel(L)==2 % center plot on center of mass - useful for periodic boundary conditions
     xoffset = mean(mean(xyarray(:,:,x),2),1) - L(x)/2;
     yoffset = mean(mean(xyarray(:,:,y),2),1) - L(y)/2;
     xyarray(:,:,x) = xyarray(:,:,x) - xoffset;

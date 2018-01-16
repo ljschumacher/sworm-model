@@ -12,11 +12,11 @@ if numel(L)==1
     L = [L, L];
 end
 T = 1000; % T: simulation duration
-numRepeats = 3;
 rc = 0.035;
 % saveevery = round(1/2/param.dT);
 paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 paramAll.segmentLength = 1.13/(M - 1);
+paramAll.k_l = 80;
 % -- slow-down parameters --
 paramAll.vs = 0.018;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = [1:M];% slowingNodes: which nodes register contact (default head and tail)
@@ -37,7 +37,7 @@ paramAll.v0 = [0.33]; % npr1 0.33; N2 0.14
 paramAll.dT = min(1/2,rc/paramAll.v0/16); % dT: time step, scales other parameters such as velocities and rates
 paramAll.saveEvery = round(1/paramAll.dT);
 
-
+numRepeats = 3;
 revRatesClusterEdge = 0:10;
 dkdN_dwell_values = 0:0.2:1;
 paramCombis = combvec(revRatesClusterEdge,dkdN_dwell_values);

@@ -16,10 +16,10 @@ dT = 0.035/0.33/16; % baseline timestep, eg rc/v0/8 when bending
 % set this to  rc/v0/16 to get better reversal accuracy
 saveEvery = 16;
 
-% single worm
-L = 2;
-rng(1)
-% xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery);
+% % single worm
+% L = 2;
+% rng(1)
+% xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'k_l',80);
 % animateWoidTrajectories(xyarray,['woid_test_movies/singleWormM' num2str(M) '_noflux'],L);
 % % plot distribution of lengths to check length conservation
 % figure, histogram(squeeze(sum(sqrt(sum(diff(xyarray(:,:,1:2,:),1,2).^2,3)),2)),...
@@ -130,7 +130,7 @@ L = [2 2];
 % animateWoidTrajectories(xyarray,['woid_test_movies/twoWorms_periodic_LennardJones' num2str(eps_LJ,'%1.0e') '_head'],L);
 
 % many worms
-L = 8.5/2;
+L = [7.5, 7.5];
 rng(1)
 % xyarray = runWoids(20,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery);
 % animateWoidTrajectories(xyarray,['woid_test_movies/40wormsM' num2str(M) '_noflux'],L);
@@ -157,8 +157,11 @@ rng(1)
 % xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'headNodes',[],'tailNodes',[]);
 % animateWoidTrajectories(xyarray,'woid_test_movies/40worms_noflux_revUnresponsive',L);
 
-xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'revRateClusterEdge',10/13);
-animateWoidTrajectories(xyarray,'woid_test_movies/40Worms_noflux_revClusterEdgeIncreased',L);
+rng(1)
+L = 8.5/2;
+k_l = 54;
+xyarray = runWoids(80,N,M,L,'bc','free','k_l',k_l,'dT',dT,'saveEvery',saveEvery,'revRateClusterEdge',10/13);
+animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_noflux_revClusterEdgeIncreased' '_kl_' num2str(k_l)],L);
 % 
 % xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'rc',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/40worms_noflux_rc0',L);
@@ -255,22 +258,22 @@ L = [7.5, 7.5];
 %     '_slowing' param.slowingMode ...
 %     '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell)],[L L]);
 
-rng(1)
-L = [7.5, 7.5];
-param.bc = 'periodic';
-param.slowingMode = 'stochastic';
-param.k_dwell = 0.0036;%1/275;%1/4;
-param.k_undwell = 1.1;%1/0.9; %1/2.2;
-param.dkdN_dwell = 0.25;
-param.revRateClusterEdge = 1.6;
-param.vs = 0.018;
-xyarray = runWoids(20,N,M,L,param,'saveEvery',saveEvery);
-animateWoidTrajectories(xyarray,...
-    ['woid_test_movies/40worms_periodic_square'...
-    '_revRateClusterEdge_' num2str(param.revRateClusterEdge) ...
-    '_slowing' param.slowingMode ...
-    '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
-    '_dkdN_' num2str(param.dkdN_dwell) ],L);
+% rng(1)
+% L = [7.5, 7.5];
+% param.bc = 'periodic';
+% param.slowingMode = 'stochastic';
+% param.k_dwell = 0.0036;%1/275;%1/4;
+% param.k_undwell = 1.1;%1/0.9; %1/2.2;
+% param.dkdN_dwell = 0.25;
+% param.revRateClusterEdge = 1.6;
+% param.vs = 0.018;
+% xyarray = runWoids(20,N,M,L,param,'saveEvery',saveEvery);
+% animateWoidTrajectories(xyarray,...
+%     ['woid_test_movies/40worms_periodic_square'...
+%     '_revRateClusterEdge_' num2str(param.revRateClusterEdge) ...
+%     '_slowing' param.slowingMode ...
+%     '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
+%     '_dkdN_' num2str(param.dkdN_dwell) ],L);
 
 % L = [7.5, 7.5];
 % xyarray = runWoids(80,N,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);
