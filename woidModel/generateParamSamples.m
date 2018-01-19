@@ -1,11 +1,11 @@
 % generate random parameter samples
 clear all
 
-nSim = 9921; % number of samples
+nSim = 10000; % number of samples
 nParam = 2; % number of parameters
 
 % seed random number generator for reproducibility
-rng(2)
+rng(1)
 
 % use rand for uniform prior
 samplesRaw = rand(nParam,nSim)'; 
@@ -14,10 +14,10 @@ samplesRaw = rand(nParam,nSim)';
 % more samples later on
 
 % scale samples to the appropriate range for the parameters
-revRate_range = [0 5];
+revRate_range = [0 3];
 revRateClusterEdge = samplesRaw(:,1).*(revRate_range(2) - revRate_range(1)) + revRate_range(1);
 
-dkdN_range = [0 1];
+dkdN_range = [0 0.8];
 dkdN = samplesRaw(:,2).*(dkdN_range(2) - dkdN_range(1)) + dkdN_range(1);
 
 % Ris_range = [2/3 6];
