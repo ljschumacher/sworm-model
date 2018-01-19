@@ -18,7 +18,7 @@ k_undwell = 1.1;
 dkdN_dwell_values = 0:0.2:1;%fliplr([0 1./[8 4 2 1]]);
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,dkdN_dwell_values);
 nParamCombis = size(paramCombis,2);
-numRepeats = 3;
+numRepeats = 1;
 for repCtr =1:numRepeats
     for paramCtr = 1:nParamCombis % can be parfor but might impair movie quality
         revRateClusterEdge = paramCombis(1,paramCtr);
@@ -37,6 +37,7 @@ for repCtr =1:numRepeats
                 &&~exist([moviepath filename '.mp4'],'file')
             out = load([resultspath filename '.mat']);
             animateWoidTrajectories(out.xyarray,[moviepath filename],L,rc);
+            close(gcf)
         elseif ~exist([resultspath filename '.mat'],'file')
             disp(['no results for ' filename])
         end

@@ -43,7 +43,7 @@
 % 'stochastic'
 % k_dwell: rate to enter low-speed dwelling state, for stochastic slowing
 %   mode, and in the absence of neighbours (default 1/275s for npr1,
-%   1/4 s for N2) ???
+%   1/4 s for N2)
 % dkdN_dwell: increase in dwelling rate with neighbour density
 % k_undwell: rate to leave low-speed dwelling state, for stochastic slowing
 %   mode, and in the absence of neighbours (default 1/0.9s for npr1,
