@@ -61,7 +61,7 @@ for repCtr = 1:numRepeats
             [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
             tmp_filename = [filepath filename '_running_on_' hostname '.mat'];
             save(tmp_filename,'N','M','L','param')
-            rng(1) % set random seed to be the same for each simulation
+            rng(repCtr) % set random seed to be the same for each simulation
             [xyarray, currentState] = runWoids(T,N,M,L,param);
             xyarray = single(xyarray); % save space by using single precision
             save([filepath filename '.mat'],'xyarray','T','N','M','L','param','currentState')

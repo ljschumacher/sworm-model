@@ -32,6 +32,7 @@ nrevRates = numel(revRatesClusterEdge);
 ndwellVals = numel(dkdN_dwell_values);
 aspectRatio = nrevRates/(ndwellVals + 2/3);
 numRepeats = 3;
+for repCtr=1:numRepeats
 for speed = speeds
     phasePortraitFig = figure;
     plotCtr = 1;
@@ -39,7 +40,6 @@ for speed = speeds
     for slowspeed = slowspeeds
         for dkdN_dwell = dkdN_dwell_values
             for revRateClusterEdge = revRatesClusterEdge
-                for repCtr=1:numRepeats
                     filename = ['woids_N_' num2str(N) '_L_' num2str(Lval) ...
                         '_v0_' num2str(speed,'%1.0e') '_vs_' num2str(slowspeed,'%1.0e') ...
                         '_' slowingMode 'SlowDown' '_dwell_' num2str(k_dwell) '_' num2str(k_undwell) ...
@@ -58,11 +58,9 @@ for speed = speeds
                         ax.Position = ax.Position.*[1 1 1.25 1.25] - [0.0 0.0 0 0]; % stretch panel
                         ax.DataAspectRatio = [1 1 1];
                         ax.Box = 'on';
-                        break
                     else
                         disp(['No file ' filename])
                     end
-                end
                 plotCtr = plotCtr + 1;
             end
         end
@@ -80,11 +78,12 @@ for speed = speeds
     %% export figure
     phasePortraitFig.Position(3) = phasePortraitFig.Position(4)*aspectRatio; % resize figure
     phasePortraitFig.PaperUnits = 'centimeters';
-    filename = ['../figures/woids/woidPhasePortrait_mapping_N_' num2str(N) '_L_' num2str(Lval) ...
+    filename = ['../figures/woids/woidPhasePortrait_mapping_' num2str(repCtr) '_N_' num2str(N) '_L_' num2str(Lval) ...
         ...'_noUndulations'...'_noVolExcl' ...'_angleNoise'
         '_speed_' num2str(speed,'%1.0e') '_slowing' '_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell) ...
         '.eps'];
     exportfig(phasePortraitFig,filename, exportOptions)
     system(['epstopdf ' filename]);
     system(['rm ' filename]);
+end
 end
