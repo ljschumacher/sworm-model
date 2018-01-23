@@ -26,19 +26,20 @@ paramAll.k_undwell = 1.1;
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 4*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
-paramAll.eps_LJ = 0;
+paramAll.eps_LJ = 1e-2;
 if paramAll.eps_LJ>0
     paramAll.r_LJcutoff = 4*rc;
 else
     paramAll.r_LJcutoff = -1; % don't need to compute attraction if it's zero
 end
+paramAll.LJmode = 'soft';
 % -- speed and time-step --
 paramAll.v0 = [0.33]; % npr1 0.33; N2 0.14
 paramAll.dT = min(1/2,rc/paramAll.v0/16); % dT: time step, scales other parameters such as velocities and rates
 paramAll.saveEvery = round(1/paramAll.dT);
 
-numRepeats = 3;
-revRatesClusterEdge = 0:10;
+numRepeats = 1;
+revRatesClusterEdge = 0:5;
 dkdN_dwell_values = 0:0.2:1;
 paramCombis = combvec(revRatesClusterEdge,dkdN_dwell_values);
 nParamCombis = size(paramCombis,2);
@@ -52,6 +53,7 @@ for repCtr = 1:numRepeats
             '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
             '_dkdN_' num2str(param.dkdN_dwell)...
             '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')...
+            '_LJ' param.LJmode num2str(param.eps_LJ) ...
             '_run' num2str(repCtr)];
         filepath = 'results/woids/mapping/';
         if ~exist([filepath filename '.mat'],'file')...
