@@ -158,10 +158,10 @@ rng(1)
 % animateWoidTrajectories(xyarray,'woid_test_movies/40worms_noflux_revUnresponsive',L);
 
 rng(1)
-L = 8.5/2;
-k_l = 54;
-xyarray = runWoids(80,N,M,L,'bc','free','k_l',k_l,'dT',dT,'saveEvery',saveEvery,'revRateClusterEdge',10/13);
-animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_noflux_revClusterEdgeIncreased' '_kl_' num2str(k_l)],L);
+% L = 8.5/2;
+% k_l = 54;
+% xyarray = runWoids(80,N,M,L,'bc','free','k_l',k_l,'dT',dT,'saveEvery',saveEvery,'revRateClusterEdge',10/13);
+% animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_noflux_revClusterEdgeIncreased' '_kl_' num2str(k_l)],L);
 % 
 % xyarray = runWoids(80,N,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'rc',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/40worms_noflux_rc0',L);
@@ -220,18 +220,18 @@ animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_noflux_revClusterEdge
 %     '_asVolExcl'...
 %     ],L);
 
-% % test soft lennard-jones potential
-% rng(1)
-% eps_LJ = 1e-2;
-% L = [7.5, 7.5];
-% xyarray = runWoids(40,39,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
-%     'rc',0,'r_LJcutoff',4*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035,'LJnodes',1:M,...
-%     'LJmode','soft','slowingNodes',[],...
-%     'revRateClusterEdge',0 ...
-%     );
-% animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_periodic_LennardJones' num2str(eps_LJ,'%1.0e')...
-%     '_soft'...
-%     ],L);
+% test soft lennard-jones potential
+rng(1)
+eps_LJ = 1e-3;
+L = [7.5, 7.5];
+xyarray = runWoids(40,39,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+    'k_l',80,'r_LJcutoff',4*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035,'LJnodes',1:M,...
+    'LJmode','soft','slowingNodes',[],...
+    'revRateClusterEdge',0 ...
+    );
+animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_periodic_LennardJones' num2str(eps_LJ,'%1.0e')...
+    '_soft'...
+    ],L);
 
 % % test soft lennard-jones potential as volume exclusion
 % rng(1)

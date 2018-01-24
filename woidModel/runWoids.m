@@ -241,10 +241,10 @@ while t<T
     % find distances between all pairs of objects
     if N==40&&M==49&&numel(L)==2&&~iscell(bc) % check if we can use compiled mex function
         distanceMatrixXY = computeWoidDistancesWithBCs_mex(positions,L,bc);
-    elseif N==60&&M==49&&numel(L)==2&&~iscell(bc) % check if we can use compiled mex function
-        distanceMatrixXY = computeWoidDistancesWithBCs_N60_mex(positions,L,bc);
-    elseif N==80&&M==49&&numel(L)==2&&~iscell(bc) % check if we can use compiled mex function
-        distanceMatrixXY = computeWoidDistancesWithBCs_N80_mex(positions,L,bc);
+    elseif N==40&&M==36&&numel(L)==2&&~iscell(bc) % check if we can use compiled mex function
+        distanceMatrixXY = computeWoidDistancesWithBCs_M36_mex(positions,L,bc);
+    elseif N==40&&M==18&&numel(L)==2&&~iscell(bc) % check if we can use compiled mex function
+        distanceMatrixXY = computeWoidDistancesWithBCs_M18_mex(positions,L,bc);
     else
         distanceMatrixXY = computeWoidDistancesWithBCs(positions,L,bc);
     end

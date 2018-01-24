@@ -1,4 +1,4 @@
-% plot woidlet phase portrait
+% plot woid phase portrait
 % shows the end-points of of woidlet simulations for a 2D parameter sweep
 close all
 clear
@@ -24,6 +24,7 @@ speeds = [0.33];
 % slowspeeds = fliplr([0.33, 0.025, 0.0125, 0.005, 0.001]);
 slowspeeds = [0.018];
 slowingMode = 'stochastic_bynode';
+eps_LJ = 1e-2;
 k_dwell = 0.0036;
 k_undwell = 1.1;
 dkdN_dwell_values = fliplr(0:0.2:1);
@@ -31,7 +32,7 @@ secondVariables = dkdN_dwell_values;
 nrevRates = numel(revRatesClusterEdge);
 ndwellVals = numel(dkdN_dwell_values);
 aspectRatio = nrevRates/(ndwellVals + 1/3);
-numRepeats = 3;
+numRepeats = 1
 for repCtr=1:numRepeats
 for speed = speeds
     phasePortraitFig = figure;
@@ -45,6 +46,7 @@ for speed = speeds
                         '_' slowingMode 'SlowDown' '_dwell_' num2str(k_dwell) '_' num2str(k_undwell) ...
                         '_dkdN_' num2str(dkdN_dwell)...
                         '_revRateClusterEdge_' num2str(revRateClusterEdge,'%1.0e')...
+                        '_LJsoft' num2str(eps_LJ) ...
                         '_run' num2str(repCtr) '.mat'];
                     filepath = '../results/woids/mapping/';
                     if exist([filepath filename],'file')
@@ -81,6 +83,7 @@ for speed = speeds
     filename = ['../figures/woids/woidPhasePortrait_mapping_' num2str(repCtr) '_N_' num2str(N) '_L_' num2str(Lval) ...
         ...'_noUndulations'...'_noVolExcl' ...'_angleNoise'
         '_speed_' num2str(speed,'%1.0e') '_slowing' '_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell) ...
+        '_LJsoft' num2str(eps_LJ) ...
         '.eps'];
     exportfig(phasePortraitFig,filename, exportOptions)
     system(['epstopdf ' filename]);
