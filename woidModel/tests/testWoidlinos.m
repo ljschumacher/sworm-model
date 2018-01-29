@@ -35,19 +35,20 @@ param.sigma_LJ = 2*rc;
 param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
 
 % test angle noise 
-% param.angleNoise = 1;
-% param.bc = 'free';
-% param.k_theta = 20;
-% L = [3 3];
-% xyarray = runWoids(100,1,M,L,param);
-% animateWoidTrajectories(xyarray,['woidlino_test_movies/test_free_'...
-%     'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)],L);
+param.angleNoise = 1;% not much point making this any bigger than 10, because it's angular
+param.bc = 'free';
+param.k_theta = 2;
+L = [3 3];
+rng(1)
+xyarray = runWoids(100,1,M,L,param);
+animateWoidTrajectories(xyarray,['woidlino_test_movies/test_free_'...
+    'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)],L);
 
 % % angle noise for multiple worms
 % % test angle noise 
-% param.angleNoise = 1;
+% param.angleNoise = 10; % not much point making this any bigger than 10, because it's angular
 % param.k_theta = 20;
-% xyarray = runWoids(10,40,M,L,param);
+% xyarray = runWoids(20,40,M,L,param);
 % animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40worms_' ...
 %     'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)],L);
 

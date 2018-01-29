@@ -10,7 +10,7 @@ close all
 N = 40; % N: number of objects
 M = 18; % M: number of nodes in each object
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
-numRepeats = 3;
+numRepeats = 1;
 
 T = 1000;
 rc0 = 0.035; % rc: core repulsion radius (default 0.035 mm)
@@ -38,21 +38,25 @@ end
 paramAll.theta_0 = 0;
 paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
+paramAll.angleNoise = 1;
 % -- speed and time-step --
 paramAll.v0 = [0.33]; % npr1 0.33; N2 0.14
 paramAll.dT = min(1/2,rc0/paramAll.v0/16); % dT: time step, scales other parameters such as velocities and rates
 paramAll.saveEvery = round(1/paramAll.dT);
 
-revRatesClusterEdge = 0:10;
+revRatesClusterEdge = 0:5;
 dkdN_dwell_values = 0:0.2:1;
-paramCombis = combvec(revRatesClusterEdge,dkdN_dwell_values);
+k_thetas = [20,2];
+paramCombis = combvec(revRatesClusterEdge,dkdN_dwell_values,k_thetas);
 nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats
     for paramCtr = 1:nParamCombis
         param = paramAll;
         param.revRateClusterEdge =  paramCombis(1,paramCtr);
         param.dkdN_dwell = paramCombis(2,paramCtr);
+        param.k_theta = paramCombis(3,paramCtr);
         filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
+            '_angleNoise_' num2str(param.angleNoise) '_k_theta_' num2str(param.k_theta) ...
             '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
             '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
             '_dkdN_' num2str(param.dkdN_dwell)...
