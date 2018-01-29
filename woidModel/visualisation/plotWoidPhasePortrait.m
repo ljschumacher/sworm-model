@@ -33,14 +33,17 @@ nrevRates = numel(revRatesClusterEdge);
 ndwellVals = numel(dkdN_dwell_values);
 aspectRatio = nrevRates/(ndwellVals + 1/3);
 numRepeats = 1
+% highlight panels
+select_panels = [15, 13];
+select_colors = lines(2);
 for repCtr=1:numRepeats
-for speed = speeds
-    phasePortraitFig = figure;
-    plotCtr = 1;
-    phasePortraitFig.Name = ['speed = ' num2str(speed)];
-    for slowspeed = slowspeeds
-        for dkdN_dwell = dkdN_dwell_values
-            for revRateClusterEdge = revRatesClusterEdge
+    for speed = speeds
+        phasePortraitFig = figure;
+        plotCtr = 1;
+        phasePortraitFig.Name = ['speed = ' num2str(speed)];
+        for slowspeed = slowspeeds
+            for dkdN_dwell = dkdN_dwell_values
+                for revRateClusterEdge = revRatesClusterEdge
                     filename = ['woids_N_' num2str(N) '_L_' num2str(Lval) ...
                         '_v0_' num2str(speed,'%1.0e') '_vs_' num2str(slowspeed,'%1.0e') ...
                         '_' slowingMode 'SlowDown' '_dwell_' num2str(k_dwell) '_' num2str(k_undwell) ...
@@ -54,39 +57,45 @@ for speed = speeds
                         time2plot = round(size(xyarray,4)*(0.9 + 0.1*rand()));
                         positions2plot = xyarray(:,:,:,time2plot);
                         subplot(length(secondVariables),length(revRatesClusterEdge),plotCtr)
-                        ax = plotWoidTrajectoriesSingleFrame(positions2plot,L,radius,plotColor,true);
-                        %                     title(['r=' num2str(revRateClusterEdge) ', dk/dN =' num2str(dkdN_dwell,'%1.0e')],...
-                        %                         'FontWeight','normal')
+                        % highlight panels
+                        if plotCtr==select_panels(1)
+                            thisColor = select_colors(1,:);
+                        elseif plotCtr==select_panels(2)
+                            thisColor = select_colors(2,:);
+                        else
+                            thisColor = plotColor;
+                        end
+                        ax = plotWoidTrajectoriesSingleFrame(positions2plot,L,radius,thisColor,true);
                         ax.Position = ax.Position.*[1 1 1.25 1.25] - [0.0 0.0 0 0]; % stretch panel
                         ax.DataAspectRatio = [1 1 1];
                         ax.Box = 'on';
                     else
                         disp(['No file ' filename])
                     end
-                plotCtr = plotCtr + 1;
+                    plotCtr = plotCtr + 1;
+                end
             end
         end
+        % make overall axes
+        ax = axes('Color','none');
+        ax.XTick = linspace(1/nrevRates/2,1-1/nrevRates/2,nrevRates);
+        ax.XTickLabel = num2str(revRatesClusterEdge');
+        ax.YTick = linspace(1/ndwellVals/2,1-1/ndwellVals/2,ndwellVals);
+        ax.YTickLabel = num2str(fliplr(dkdN_dwell_values)');
+        ax.TickDir = 'out';
+        ax.Position = ax.Position.*[1 1 1 1];
+        xlabel('cluster-edge reversal rate (1/s)')
+        ylabel('dk/d\rho')
+        %% export figure
+        phasePortraitFig.Position(3) = phasePortraitFig.Position(4)*aspectRatio; % resize figure
+        phasePortraitFig.PaperUnits = 'centimeters';
+        filename = ['../figures/woids/woidPhasePortrait_mapping_' num2str(repCtr) '_N_' num2str(N) '_L_' num2str(Lval) ...
+            ...'_noUndulations'...'_noVolExcl' ...'_angleNoise'
+            '_speed_' num2str(speed,'%1.0e') '_slowing' '_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell) ...
+            '_LJsoft' num2str(eps_LJ) ...
+            '.eps'];
+        exportfig(phasePortraitFig,filename, exportOptions)
+        system(['epstopdf ' filename]);
+        system(['rm ' filename]);
     end
-    % make overall axes
-    ax = axes('Color','none');
-    ax.XTick = linspace(1/nrevRates/2,1-1/nrevRates/2,nrevRates);
-    ax.XTickLabel = num2str(revRatesClusterEdge');
-    ax.YTick = linspace(1/ndwellVals/2,1-1/ndwellVals/2,ndwellVals);
-    ax.YTickLabel = num2str(fliplr(dkdN_dwell_values)');
-    ax.TickDir = 'out';
-    ax.Position = ax.Position.*[1 1 1 1];
-    xlabel('cluster-edge reversal rate (1/s)')
-    ylabel('dk/d\rho')
-    %% export figure
-    phasePortraitFig.Position(3) = phasePortraitFig.Position(4)*aspectRatio; % resize figure
-    phasePortraitFig.PaperUnits = 'centimeters';
-    filename = ['../figures/woids/woidPhasePortrait_mapping_' num2str(repCtr) '_N_' num2str(N) '_L_' num2str(Lval) ...
-        ...'_noUndulations'...'_noVolExcl' ...'_angleNoise'
-        '_speed_' num2str(speed,'%1.0e') '_slowing' '_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell) ...
-        '_LJsoft' num2str(eps_LJ) ...
-        '.eps'];
-    exportfig(phasePortraitFig,filename, exportOptions)
-    system(['epstopdf ' filename]);
-    system(['rm ' filename]);
-end
 end

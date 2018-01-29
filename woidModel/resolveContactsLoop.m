@@ -51,10 +51,10 @@ for objCtr = 1:N
                 %         ./distanceMatrix(lennardjonesNbrs(:)); % normalise for distance
                 switch LJmode
                     case 'hard'
-                        sr6 = (sigma_LJ./distanceMatrix(lennardjonesNbrs(:))).^6;
-                        f_LJ = 48*eps_LJ./distanceMatrix(lennardjonesNbrs(:)).*(sr6.^2 - 1/2*sr6);
+                        sr6 = (sigma_LJ./thisDistanceMatrix(lennardjonesNbrs(:))).^6;
+                        f_LJ = 48*eps_LJ./thisDistanceMatrix(lennardjonesNbrs(:)).*(sr6.^2 - 1/2*sr6);
                     case 'soft'
-                        asigr = (2/3*sigma_LJ + distanceMatrix(lennardjonesNbrs(:)));
+                        asigr = (2/3*sigma_LJ + thisDistanceMatrix(lennardjonesNbrs(:)));
                         f_LJ = 8*eps_LJ./asigr.*((sigma_LJ./asigr).^2 - 1/2*sigma_LJ./asigr);
                     otherwise
                         f_LJ = zeros(size(lennardjonesNbrs(:)));
