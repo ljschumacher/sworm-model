@@ -26,13 +26,15 @@ paramAll.k_undwell = 1.1;
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 4*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
-paramAll.eps_LJ = 1e-2;
+paramAll.eps_LJ = 0;
 if paramAll.eps_LJ>0
     paramAll.r_LJcutoff = 4*rc;
 else
     paramAll.r_LJcutoff = -1; % don't need to compute attraction if it's zero
 end
 paramAll.LJmode = 'soft';
+% -- haptotaxis
+paramAll.f_hapt = 1;
 % -- speed and time-step --
 paramAll.v0 = [0.33]; % npr1 0.33; N2 0.14
 paramAll.dT = min(1/2,rc/paramAll.v0/16); % dT: time step, scales other parameters such as velocities and rates
@@ -53,7 +55,8 @@ for repCtr = 1:numRepeats
             '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
             '_dkdN_' num2str(param.dkdN_dwell)...
             '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')...
-            '_LJ' param.LJmode num2str(param.eps_LJ) ...
+            ...'_LJ' param.LJmode num2str(param.eps_LJ) ...
+            '_haptotaxis_' num2str(param.f_hapt) ...
             '_run' num2str(repCtr)];
         filepath = 'results/woids/mapping/';
         if ~exist([filepath filename '.mat'],'file')...

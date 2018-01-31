@@ -24,7 +24,7 @@ param.omega_m = 0; % angular frequency of oscillation of movement direction, def
 param.theta_0 = 0; % amplitude of oscillation of movement direction, default pi/4
 param.deltaPhase = 0; % for phase shift in undulations and initial positions, default 0.11
 % -- reversal parameters --
-param.ri = 3*rc;% ri: radius at which worms register contact (default 3 rc)
+param.ri = 3*rc;% ri: radius at which rods register contact (default 3 rc)
 % -- slow-down parameters --
 param.vs = param.v0;% vs: speed when slowed down (default v0/3)
 param.slowingNodes = [];% slowingNodes: which nodes register contact (default [1 M], ie head and tail)
@@ -43,19 +43,26 @@ param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
 % animateWoidTrajectories(xyarray,['woidlino_test_movies/test_free_'...
 %     'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)],L);
 
-rng(2)
-L = [3 3];
-param.f_hapt = 0.25;
-xyarray = runWoids(20,2,M,L,param);
-animateWoidTrajectories(xyarray,['woidlino_test_movies/test_periodic_haptotaxis_' num2str(param.f_hapt)],L);
+% % test haptotaxis
+% rng(2)
+% L = [3 3];
+% param.f_hapt = 0.25;
+% xyarray = runWoids(20,2,M,L,param);
+% animateWoidTrajectories(xyarray,['woidlino_test_movies/test_periodic_haptotaxis_' num2str(param.f_hapt)],L);
 
-% % angle noise for multiple worms
+% % angle noise for multiple rods
 % % test angle noise 
 % param.angleNoise = 10; % not much point making this any bigger than 10, because it's angular
 % param.k_theta = 20;
 % xyarray = runWoids(20,40,M,L,param);
-% animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40worms_' ...
+% animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40rods_' ...
 %     'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)],L);
+
+% test haptotaxis for multiple rods
+rng(2)
+param.f_hapt = 0.1;
+xyarray = runWoids(100,40,M,L,param);
+animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40rods_haptotaxis_' num2str(param.f_hapt)],L);
 
 % L = [15 15];
 % N = 50;

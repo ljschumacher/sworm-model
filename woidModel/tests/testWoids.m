@@ -289,5 +289,7 @@ L = [7.5, 7.5];
 
 % test haptotaxis
 rng(1)
-xyarray = runWoids(20,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,'f_hapt',1);
-animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_periodic_haptotaxis',L);
+k_l = 80;
+f_hapt = 0.1;
+xyarray = runWoids(20,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,'f_hapt',1,'k_l',k_l);
+animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_periodic_haptotaxis_' num2str(f_hapt) '_kl_' num2str(k_l)],L);
