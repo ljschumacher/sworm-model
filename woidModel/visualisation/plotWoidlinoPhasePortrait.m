@@ -19,7 +19,7 @@ L = [7.5 7.5];
 N = 40;
 plotColor = [0.25, 0.25, 0.25];
 
-revRatesClusterEdge = 0:10;
+revRatesClusterEdge = 0:5;
 
 speeds = [0.33];
 % slowspeeds = fliplr([0.33, 0.05, 0.025, 0.0125]);
@@ -28,16 +28,17 @@ slowingMode = 'stochastic_bynode';
 k_dwell = 0.0036;
 k_undwell = 1.1;
 dkdN_dwell_values = fliplr(0:0.2:1);
-angleNoise = 1;
+% angleNoise = 1;
+% k_theta = 20;
 
 secondVariables = dkdN_dwell_values;
 nrevRates = numel(revRatesClusterEdge);
 ndwellVals = numel(dkdN_dwell_values);
-aspectRatio = nrevRates/(ndwellVals + 2/3);
+aspectRatio = nrevRates/(ndwellVals);
 
 % highlight panels
 select_panels = [12:15,23:26,34:37,45:48,56:59];
-select_colors = [0 1 0.5]%lines(2);
+select_colors = plotColor;%[0 1 0.5]%lines(2);
 for repCtr =1:1
     for speed = speeds
         phasePortraitFig = figure;
@@ -47,7 +48,7 @@ for repCtr =1:1
             for dkdN_dwell = dkdN_dwell_values
                 for revRateClusterEdge = revRatesClusterEdge
                     filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
-                        ...'_noVolExcl' '_angleNoise_' num2str(angleNoise)...
+                        ...'_angleNoise_' num2str(angleNoise) '_k_theta_' num2str(k_theta)...
                         '_v0_' num2str(speed,'%1.0e') '_vs_' num2str(slowspeed,'%1.0e') ...
                         '_' slowingMode 'SlowDown' '_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...
                         '_dkdN_' num2str(dkdN_dwell) ...
@@ -95,8 +96,8 @@ for repCtr =1:1
         phasePortraitFig.Position(3) = phasePortraitFig.Position(4)*aspectRatio; % resize figure
         phasePortraitFig.PaperUnits = 'centimeters';
         filename = ['../figures/woidlinos/woidlinoPhasePortrait_mapping_' num2str(repCtr) '_N_' num2str(N) ...
-            '_M_' num2str(M) '_L_' num2str(L(1))...
-            '_noVolExcl' '_angleNoise_' num2str(angleNoise)...
+            '_M_' num2str(M) '_L_' num2str(L(1)) '_noVolExcl' ...
+            ...'_angleNoise_' num2str(angleNoise) '_k_theta_' num2str(k_theta)...
             '_speed_' num2str(speed,'%1.0e') ...
             '_slowing_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...
             '.eps'];

@@ -1,5 +1,5 @@
 function [ v, omega, dwellLogInd] = slowWorms(distanceMatrix,ri,slowingNodes,slowingMode,...
-    vs,v0,omega_m,num_nbr_max_per_node,roamingLogInd,k_dwell,k_undwell,dkdN_dwell,dwellLogInd,dT)
+    vs,v0,omega_m,roamingLogInd,k_dwell,k_undwell,dkdN_dwell,dwellLogInd,dT)
 % slow down worms based on contact with other worms
 % slowLogInd = findWoidNeighbors(distanceMatrix,ri,slowingNodes);
 % v = vs*slowLogInd + v0*(~slowLogInd); % adjust speed for slowed worms
@@ -7,7 +7,7 @@ function [ v, omega, dwellLogInd] = slowWorms(distanceMatrix,ri,slowingNodes,slo
 
 if ~isempty(slowingNodes)&&any(~roamingLogInd)
     if strcmp(slowingMode,'density')
-        num_nbr_max = numel(slowingNodes)*num_nbr_max_per_node;
+        num_nbr_max = numel(slowingNodes);
         num_nbr = countNbrsByObject(distanceMatrix,ri,slowingNodes); % number of neighbouring nodes in contact
         num_nbr = min(num_nbr,num_nbr_max); % depending on how we count neighbours, we may have more than the max number
         % slow worms proportional to how many nbrs it has cumulatively over all nodes

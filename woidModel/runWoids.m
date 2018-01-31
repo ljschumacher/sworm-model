@@ -33,14 +33,13 @@
 % tailNodes: which nodes count as tail for defining cluster status, default back 10%
 % ri: radius at which worms register contact (default 3/2 rc)
 % Rir: relative interaction radius for reversals, default 1 (ie = ri)
-% num_nbr_max_per_node: how many max nbrs per node to count for density-dependent speed
 % -- slow-down parameters --
 % vs: speed when slowed down (default v0/3)
 %   for stochastic slowing, low dwelling speeds are 0.018 and 0.014 for
 %   npr1/N2
 % slowingNodes: which nodes register contact (default [1 M], ie head and tail)
 % slowingMode: how worms slow down, 'abrupt', 'gradual', 'density', or
-% 'stochastic'
+% 'stochastic' or 'stochastic_bynode'
 % k_dwell: rate to enter low-speed dwelling state, for stochastic slowing
 %   mode, and in the absence of neighbours (default 1/275s for npr1,
 %   1/4 s for N2)
@@ -56,9 +55,14 @@
 % LJnodes: which nodes the LJ-forces acts on (default 1:M). This is
 %   asymmetric in the sense that these nodes will feel the force from all
 %   other nodes, but the other nodes won't feel the force from these nodes
+% LJmodes:  whether LJ-force is 'hard' or 'soft'
 % -- state parameters --
 % k_roam: rate to spontaneously enter the roaming state (like off-food)
 % k_unroam: rate to spontaneously leave the roaming state
+% -- feeding parameters --
+% r_feed: feeding rate (1/s), in arbitrary concentration amounts
+% -- haptotaxis parameters
+% f_hapt: haptotaxis bias, can be attractive or repulse (default 0)
 %
 % OUTPUTS
 % xyarray: Array containing the position, and movement direction for
@@ -103,9 +107,8 @@ addOptional(iP,'Rir',1,@isnumeric) % relative interaction radius for reversals, 
 % slowing down
 addOptional(iP,'vs',0.33/3,@isnumeric) % speed when slowed down, default v0/3
 addOptional(iP,'slowingNodes',1:M,checkInt) % which nodes sense proximity, default all
-addOptional(iP,'slowingMode','gradual',@checkSlowingMode) % 'gradual' or 'abrupt'or 'density'
+addOptional(iP,'slowingMode','gradual',@checkSlowingMode) % 'gradual', 'abrupt', 'density', 'stochastic' or 'stochastic_bynode'
 addOptional(iP,'Ris',1,@isnumeric) % relative interaction radius for slowing, default 1 (ie = ri)
-addOptional(iP,'num_nbr_max_per_node',1,checkInt) % how many max nbrs per node to count for density-dependent speed
 addOptional(iP,'k_dwell',0,@isnumeric) % rate to enter low-speed dwelling state, for stochastic slowing
 addOptional(iP,'k_undwell',0,@isnumeric) % rate to leave low-speed dwelling state, for stochastic slowing
 addOptional(iP,'dkdN_dwell',0,@isnumeric) % increase in dwelling rate with nbr density, for stochastic slowing
@@ -120,6 +123,8 @@ addOptional(iP,'k_roam',0,@isnumeric) % rate to spontaneously enter the roaming 
 addOptional(iP,'k_unroam',0,@isnumeric) % rate to spontaneously leave the roaming state (default 0)
 % feeding parameters
 addOptional(iP,'r_feed',0,@isnumeric) % feeding rate (1/s), in arbitrary concentration amounts
+% haptotaxis
+addOptional(iP,'f_hapt',0,@isnumeric) % haptotaxis bias, can be attractive or repulse (default 0)
 % simulation parameters
 addOptional(iP,'saveEvery',1,checkInt);
 addOptional(iP,'resumeState',struct([]),@checkResumeState); % current state of previous simulation to initialize from
@@ -160,7 +165,6 @@ Ris = iP.Results.Ris;
 vs = iP.Results.vs;
 slowingNodes = iP.Results.slowingNodes;
 slowingMode = iP.Results.slowingMode;
-num_nbr_max_per_node = iP.Results.num_nbr_max_per_node;
 k_dwell = iP.Results.k_dwell;
 k_undwell = iP.Results.k_undwell;
 dkdN_dwell = iP.Results.dkdN_dwell;
@@ -172,6 +176,7 @@ LJmode = iP.Results.LJmode;
 k_roam = iP.Results.k_roam;
 k_unroam = iP.Results.k_unroam;
 r_feed = iP.Results.r_feed;
+f_hapt = iP.Results.f_hapt;
 
 % check input relationships to each other
 % assert(segmentLength>2*rc,...
@@ -224,9 +229,9 @@ end
 reversalLogIndPrev = reversalLogInd(:,1);
 if r_feed>0
     % initialise food grid coordinates
-    xgrid = [1:Ngrid(1)]./Ngrid(1)*L(1);
+    xgrid = (1:Ngrid(1))./Ngrid(1)*L(1);
     xgrid = xgrid - mean(diff(xgrid))/2; % centre coordinates on grid
-    ygrid = [1:Ngrid(2)]./Ngrid(2)*L(2);
+    ygrid = (1:Ngrid(2))./Ngrid(2)*L(2);
     ygrid = ygrid - mean(diff(ygrid))/2; % centre coordinates on grid
 else
     xgrid = [];
@@ -254,7 +259,7 @@ while t<T
         foodGrid,xgrid,ygrid,r_feed,positions);
     % check if any woids are slowed down by neighbors
     [ v, omega, dwellLogInd ] = slowWorms(distanceMatrix,Ris*ri,slowingNodes,slowingMode,...
-        vs,v0,omega_m,num_nbr_max_per_node,roamingLogInd,k_dwell,k_undwell,dkdN_dwell,dwellLogInd,dT);
+        vs,v0,omega_m,roamingLogInd,k_dwell,k_undwell,dkdN_dwell,dwellLogInd,dT);
     % check if any worms are reversing due to contacts
     reversalLogIndPrev(reversalLogInd(:,timeCtr)) = true; % only update events that happen between timeCtr updates, ie reversal starts
     reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
@@ -266,7 +271,7 @@ while t<T
     forceArray = calculateForces(distanceMatrixXY,distanceMatrix,...
         rc,orientations,reversalLogInd(:,timeCtr),segmentLength,...
         v,k_l,k_theta*v./v0,theta_0,phaseOffset,sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,...
-        LJmode,angleNoise);
+        LJmode,angleNoise,ri,f_hapt);
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % adapt time-step such that it scales inversily with the max force
     dT = adaptTimeStep(dT0,v0,forceArray);
