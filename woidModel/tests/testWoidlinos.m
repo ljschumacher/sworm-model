@@ -20,7 +20,6 @@ T = 50; % T: simulation duration (number of time-steps)
 param.saveEvery = round(1/2/param.dT);
 param.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 % undulations
-param.k_theta = 0; % stiffness of rotational springs at nodes
 param.omega_m = 0; % angular frequency of oscillation of movement direction, default 0.6 Hz
 param.theta_0 = 0; % amplitude of oscillation of movement direction, default pi/4
 param.deltaPhase = 0; % for phase shift in undulations and initial positions, default 0.11
@@ -34,15 +33,21 @@ param.r_LJcutoff = 4*rc;% r_LJcutoff: cut-off above which LJ-force is not acting
 param.sigma_LJ = 2*rc;
 param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
 
-% test angle noise 
-param.angleNoise = 1;% not much point making this any bigger than 10, because it's angular
-param.bc = 'free';
-param.k_theta = 2;
+% % test angle noise 
+% param.angleNoise = 1;% not much point making this any bigger than 10, because it's angular
+% param.bc = 'free';
+% param.k_theta = 2;
+% L = [3 3];
+% rng(1)
+% xyarray = runWoids(100,1,M,L,param);
+% animateWoidTrajectories(xyarray,['woidlino_test_movies/test_free_'...
+%     'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)],L);
+
+rng(2)
 L = [3 3];
-rng(1)
-xyarray = runWoids(100,1,M,L,param);
-animateWoidTrajectories(xyarray,['woidlino_test_movies/test_free_'...
-    'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)],L);
+param.f_hapt = 0.25;
+xyarray = runWoids(20,2,M,L,param);
+animateWoidTrajectories(xyarray,['woidlino_test_movies/test_periodic_haptotaxis_' num2str(param.f_hapt)],L);
 
 % % angle noise for multiple worms
 % % test angle noise 

@@ -18,7 +18,7 @@ M = size(distanceMatrixFull,2);
 % ndim = size(distanceMatrixFull,3);
 
 collisionNbrs = distanceMatrix<r_collision; % check distance to all other nodes of all other objects
-collisionNbrs(objInd,:) = false; % no contact force with self or for adjacent nodes: max(nodeInd-1,1):min(nodeInd+1,M)
+collisionNbrs(objInd,:) = false; % no contact force with self (or for adjacent nodes: max(nodeInd-1,1):min(nodeInd+1,M))
 % contact forces
 if any(collisionNbrs(:))
     % find unit vectors pointing from neighbours to node

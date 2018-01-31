@@ -64,7 +64,7 @@ for objCtr = 1:N
     if f_hapt~=0 % haptotaxis could be attractive or repulsie
               Fm(headInd,:) = Fm(headInd,:) ...
                   + calculateHaptotaxis(distanceMatrixXY(:,:,:,objCtr,headInd),...
-                  distanceMatrix(:,:,objCtr,headInd),ri,f_hapt);
+                  distanceMatrix(:,:,objCtr,headInd),objCtr,ri,f_hapt);
     end
     
     % body motile force
