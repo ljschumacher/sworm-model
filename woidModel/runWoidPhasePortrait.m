@@ -41,8 +41,8 @@ paramAll.dT = min(1/2,rc/paramAll.v0/16); % dT: time step, scales other paramete
 paramAll.saveEvery = round(1/paramAll.dT);
 
 numRepeats = 1;
-revRatesClusterEdge = 1%0:5;
-dkdN_dwell_values = 0.2%0:0.2:1;
+revRatesClusterEdge = 0:5;
+dkdN_dwell_values = 0:0.2:1;
 paramCombis = combvec(revRatesClusterEdge,dkdN_dwell_values);
 nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats
