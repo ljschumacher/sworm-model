@@ -38,9 +38,9 @@ end
 paramAll.theta_0 = 0;
 paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
-paramAll.angleNoise = 0%1;
+paramAll.angleNoise = 1;
 % -- haptotaxis --
-paramAll.f_hapt = 0.1;
+paramAll.f_hapt = 0.25;
 % -- speed and time-step --
 paramAll.v0 = [0.33]; % npr1 0.33; N2 0.14
 paramAll.dT = min(1/2,rc0/paramAll.v0/16); % dT: time step, scales other parameters such as velocities and rates
@@ -48,7 +48,7 @@ paramAll.saveEvery = round(1/paramAll.dT);
 
 revRatesClusterEdge = 0:5;
 dkdN_dwell_values = 0:0.2:1;
-k_thetas = [20];
+k_thetas = [2];
 paramCombis = combvec(revRatesClusterEdge,dkdN_dwell_values,k_thetas);
 nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats

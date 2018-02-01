@@ -58,11 +58,21 @@ param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
 % animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40rods_' ...
 %     'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)],L);
 
-% test haptotaxis for multiple rods
+% % test haptotaxis for multiple rods
+% rng(2)
+% param.f_hapt = 0.1;
+% param.k_theta = 2;
+% xyarray = runWoids(50,40,M,L,param);
+% animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40rods_haptotaxis_' num2str(param.f_hapt) '_ktheta_' num2str(param.k_theta)],L);
+
+% test haptotaxis for multiple rods with angle noise
 rng(2)
-param.f_hapt = 0.1;
-xyarray = runWoids(100,40,M,L,param);
-animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40rods_haptotaxis_' num2str(param.f_hapt)],L);
+param.f_hapt = 0.25;
+param.k_theta = 2;
+param.angleNoise = 1;
+xyarray = runWoids(50,40,M,L,param);
+animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40rods_haptotaxis_' ...
+    num2str(param.f_hapt) '_angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)],L);
 
 % L = [15 15];
 % N = 50;
