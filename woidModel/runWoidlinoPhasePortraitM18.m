@@ -40,7 +40,7 @@ paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
 paramAll.angleNoise = 1;
 % -- haptotaxis --
-paramAll.f_hapt = 0.25;
+paramAll.f_hapt = 0.1;
 % -- speed and time-step --
 paramAll.v0 = [0.33]; % npr1 0.33; N2 0.14
 paramAll.dT = min(1/2,rc0/paramAll.v0/16); % dT: time step, scales other parameters such as velocities and rates

@@ -11,7 +11,7 @@ M = 36; % M: number of nodes in each object
 if numel(L)==1
     L = [L, L];
 end
-T = 60; % T: simulation duration
+T = 1000; % T: simulation duration
 rc = 0.035;
 % saveevery = round(1/2/param.dT);
 paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
@@ -26,7 +26,7 @@ paramAll.k_undwell = 1.1;
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 4*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
-paramAll.eps_LJ = 1e-2;
+paramAll.eps_LJ = 5e-3;
 if paramAll.eps_LJ>0
     paramAll.r_LJcutoff = 4*rc;
 else
