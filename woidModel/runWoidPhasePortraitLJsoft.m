@@ -1,4 +1,4 @@
-function [] = runWoidPhasePortrait(N,L)
+function [] = runWoidPhasePortraitLJsoft(N,L)
 % run simulations of simplified woid model with single node per woid
 % for various speeds, attractions strengths, reversal probabilities...
 
@@ -11,7 +11,7 @@ M = 36; % M: number of nodes in each object
 if numel(L)==1
     L = [L, L];
 end
-T = 500 % T: simulation duration
+T = 1000; % T: simulation duration
 rc = 0.035;
 % saveevery = round(1/2/param.dT);
 paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
