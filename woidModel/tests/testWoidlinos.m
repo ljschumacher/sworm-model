@@ -1,4 +1,4 @@
-% test simplified woid model with two nodes per woid
+% test simplified woid model with rods
 
 % issues/todo:
 % - always reseed random number generator before each simulation?

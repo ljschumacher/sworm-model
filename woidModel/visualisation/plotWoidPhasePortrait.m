@@ -24,7 +24,9 @@ speeds = [0.33];
 % slowspeeds = fliplr([0.33, 0.025, 0.0125, 0.005, 0.001]);
 slowspeeds = [0.018];
 slowingMode = 'stochastic_bynode';
-eps_LJ = 1e-2;
+eps_LJ = 5e-3;
+% f_hapt = 1;
+
 k_dwell = 0.0036;
 k_undwell = 1.1;
 dkdN_dwell_values = fliplr(0:0.2:1);
@@ -50,6 +52,7 @@ for repCtr=1:numRepeats
                         '_dkdN_' num2str(dkdN_dwell)...
                         '_revRateClusterEdge_' num2str(revRateClusterEdge,'%1.0e')...
                         '_LJsoft' num2str(eps_LJ) ...
+                        ...'_haptotaxis_' num2str(f_hapt) ...
                         '_run' num2str(repCtr) '.mat'];
                     filepath = '../results/woids/mapping/';
                     if exist([filepath filename],'file')
@@ -93,6 +96,7 @@ for repCtr=1:numRepeats
             ...'_noUndulations'...'_noVolExcl' ...'_angleNoise'
             '_speed_' num2str(speed,'%1.0e') '_slowing' '_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell) ...
             '_LJsoft' num2str(eps_LJ) ...
+            ...'_haptotaxis_' num2str(f_hapt) ...
             '.eps'];
         exportfig(phasePortraitFig,filename, exportOptions)
         system(['epstopdf ' filename]);

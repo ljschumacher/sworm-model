@@ -17,8 +17,8 @@ rng(1)
 [xyarray, ~] = initialiseWoids(N,M,1,L,segmentLength,phaseOffset,theta_0,rc,bc);
 
 % plot lennard jones force
-eps_LJ = 1e-2;
-r_LJcutoff = 3*rc;
+eps_LJ = 5e-3;
+r_LJcutoff = 3.75*rc;
 sigma_LJ = 2*rc;
 % f_LJ = @(x,b) 8*b*eps_LJ./x.*((sigma_LJ./x).^(2*b) - 1/2.^(b/6)*(sigma_LJ./x).^b);
 % % for forces with other exponents of form 2b, b, mulitply second term by
