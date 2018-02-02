@@ -24,7 +24,7 @@ param.r_LJcutoff = 4*rc;% r_LJcutoff: cut-off above which LJ-force is not acting
 param.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
 param.eps_LJ = 0;
 if param.eps_LJ>0
-    param.r_LJcutoff = 5*rc;
+    param.r_LJcutoff = 4*rc;
 else
     param.r_LJcutoff = -1; % don't need to compute attraction if it's zero
 end
@@ -38,7 +38,7 @@ param.dT = min(1/2,rc/param.v0/16); % dT: time step, scales other parameters suc
 param.saveEvery = round(1/param.dT);
 
 % load randomly generated parameter samples
-load('paramSamples_nSim9921_nParam2.mat','paramSamples')
+load('paramSamples_log_nSim20000_nParam2.mat','paramSamples')
 
 % set model parameters from generated samples
 param.revRateClusterEdge = paramSamples.revRateClusterEdge(sampleCtr);
