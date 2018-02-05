@@ -30,7 +30,7 @@ k_undwell = 1.1;
 dkdN_dwell_values = fliplr(0:0.2:1);
 angleNoise = 1;
 k_theta = 2;
-f_hapt = 0.1;
+f_hapt = 0.5;
 
 secondVariables = dkdN_dwell_values;
 nrevRates = numel(revRatesClusterEdge);

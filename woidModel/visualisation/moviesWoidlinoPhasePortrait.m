@@ -37,9 +37,9 @@ for paramCtr = 1:nParamCombis % can be parfor but might impair movie quality
         '_revRateClusterEdge_' num2str(revRateClusterEdge,'%1.0e') ...
         '_run1'];
     if exist(['../results/woidlinos/' filename '.mat'],'file')...
-            &&~exist(['../movies/woidlinos/' filename '.mp4'],'file')
+            &&~exist(['../movies/woidlinoMovies/' filename '.mp4'],'file')
         out = load(['../results/woidlinos/' filename '.mat']);
-        animateWoidTrajectories(out.xyarray,['../movies/woidlinos/' filename],L);%,out.param.rc);
+        animateWoidTrajectories(out.xyarray,['../movies/woidlinoMovies/' filename],L);%,out.param.rc);
     elseif ~exist(['../results/woidlinos/' filename '.mat'],'file')
         disp(['no results for ' filename])
     end

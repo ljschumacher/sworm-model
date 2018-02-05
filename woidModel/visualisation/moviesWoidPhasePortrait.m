@@ -7,17 +7,17 @@ close all
 L = 7.5*[1, 1]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 rc = 0.035;
 N = 40;
-revRatesClusterEdge = 1%0:10;%fliplr([0, 0.1, 0.2, 0.4, 0.8, 1.6]);
+revRatesClusterEdge = 5:-1:0;%fliplr([0, 0.1, 0.2, 0.4, 0.8, 1.6]);
 speeds = [0.33];
 % slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 slowspeeds = [0.018];
 slowingMode = 'stochastic_bynode';
 eps_LJ = 5e-3;
-% f_hapt = 1;
+% f_hapt = 0.1;
 
 k_dwell = 0.0036;
 k_undwell = 1.1;
-dkdN_dwell_values = 0.4%0:0.2:1;%fliplr([0 1./[8 4 2 1]]);
+dkdN_dwell_values = fliplr(0:0.2:1);%fliplr([0 1./[8 4 2 1]]);
 paramCombis = combvec(revRatesClusterEdge,speeds,slowspeeds,dkdN_dwell_values);
 nParamCombis = size(paramCombis,2);
 numRepeats = 1;
@@ -36,7 +36,7 @@ for repCtr =1:numRepeats
             ...'_haptotaxis_' num2str(f_hapt) ...
             '_run' num2str(repCtr)];
         resultspath = '../results/woids/mapping/';
-        moviepath = '../movies/woids/mapping/';
+        moviepath = '../movies/woidMovies/mappingMovies/';
         if exist([resultspath filename '.mat'],'file')...
                 &&~exist([moviepath filename '.mp4'],'file')
             out = load([resultspath filename '.mat']);
