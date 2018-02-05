@@ -26,7 +26,7 @@ paramAll.k_undwell = 1.1;
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 3.75*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
-paramAll.eps_LJ = 5e-3;
+paramAll.eps_LJ = 1e-3;
 if paramAll.eps_LJ<=0
     paramAll.r_LJcutoff = -1; % don't need to compute attraction if it's zero
 end
