@@ -24,7 +24,7 @@ speeds = [0.33];
 % slowspeeds = fliplr([0.33, 0.025, 0.0125, 0.005, 0.001]);
 slowspeeds = [0.018];
 slowingMode = 'stochastic_bynode';
-eps_LJ = 5e-3;
+eps_LJ = 1e-3;
 %f_hapt = 0.2;
 
 k_dwell = 0.0036;
