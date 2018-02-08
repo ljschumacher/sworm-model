@@ -17,21 +17,21 @@ N = 40;
 M = 18;
 L = 7.5;
 attractionStrength = 0;
-numRepeats = 1;
+numRepeats = 3;
 % revRatesClusterEdge = [0, 0.2, 0.4, 0.8, 1.6];
-revRatesClusterEdge = [0, 0.4, 0.8, 1.6, 3.2, 6.4];
+revRatesClusterEdge = 0:5;
 speeds = [0.33];
 % slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
 % slowspeeds = fliplr([0.33, 0.05, 0.025, 0.0125]);
 slowspeeds = [0.018];
 trackedNodes = 1:max(round(M*0.16),1);
-distBinwidth = 0.05; % in units of mm, sensibly to be chosen similar worm width or radius
+distBinwidth = 0.1; % in units of mm, sensibly to be chosen similar worm width or radius
 maxDist = 2;
 slowingMode = 'stochastic_bynode';
 k_dwell = 0.0036;
 k_undwell = 1.1;
-dkdN_dwell_values = fliplr([0 1./[8 4 2 1]]);
-angleNoise = 1;
+dkdN_dwell_values = fliplr(0:0.2:1);
+% angleNoise = 1;
 
 secondVariables = dkdN_dwell_values;
 
@@ -43,18 +43,18 @@ for speed = speeds
         for dkdN_dwell = dkdN_dwell_values
             for revRateClusterEdge = revRatesClusterEdge
                 for repCtr = 1:numRepeats
-                    filename = ['../results/woidlinos/wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L) ...
-                        '_noVolExcl' '_angleNoise_' num2str(angleNoise)...
+                    filename = ['../results/woidlinos/mapping/wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L) ...
+                        ...'_noVolExcl' '_angleNoise_' num2str(angleNoise)...
                         '_v0_' num2str(speed,'%1.0e') '_vs_' num2str(slowspeed,'%1.0e') ...
                         '_' slowingMode 'SlowDown' '_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...
                         '_dkdN_' num2str(dkdN_dwell) ...
-                        '_epsLJ_' num2str(attractionStrength,'%1.0e') ...
+                        ...'_epsLJ_' num2str(attractionStrength,'%1.0e') ...
                         '_revRateClusterEdge_' num2str(revRateClusterEdge,'%1.0e') ...
                         '_run' num2str(repCtr) '.mat'];
                     if exist(filename,'file')
                         thisFile = load(filename);
                         maxNumFrames = size(thisFile.xyarray,4);
-                        burnIn = round(250./thisFile.T*maxNumFrames); % used for visualizing cut-off
+                        burnIn = round(500./thisFile.T*maxNumFrames); % used for visualizing cut-off
                         numFrames =  0.1*maxNumFrames; % sample some percentage of frames
                         framesAnalyzed = round(linspace(1,maxNumFrames,numFrames)); % regularly sample frames without replacement
          
@@ -87,10 +87,10 @@ for speed = speeds
     fignameprefix = ['figures/diagnostics/grmaxOverTime'];
     fignamesuffix = ['_M' num2str(M)...
         'N_' num2str(thisFile.N) '_L_' num2str(thisFile.L(1)) ...
-        '_noVolExcl' '_angleNoise_' num2str(angleNoise)...
+        ...'_noVolExcl' '_angleNoise_' num2str(angleNoise)...
         '_speed_' num2str(speed,'%1.0e') ...
         '_slowing_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...
-        '_epsLJ_' num2str(attractionStrength,'%1.0e')...
+        ...'_epsLJ_' num2str(attractionStrength,'%1.0e')...
         '.eps'];
     filename = [fignameprefix 'Radialdistribution' fignamesuffix];
     exportfig(poscorrFig,filename, exportOptions)

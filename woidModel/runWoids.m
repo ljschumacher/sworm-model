@@ -209,6 +209,7 @@ if isempty(resumeState)
         food = [];
     end
 else
+    disp('resuming simulation from previous point ...')
     reversalLogInd(:,1) = resumeState.reversalLogInd;
     roamingLogInd = resumeState.roamingLogInd;
     dwellLogInd = resumeState.dwellLogInd;

@@ -1,4 +1,4 @@
-function [] = plotWoidPhasePortraitCorrelationAnalysisSteadyState
+function [] = plotWoidPhasePortraitPosVarSteadyState
 % plot phase portrait of g(r) vs time to show quasi steady state
 
 % issues/to-do:
@@ -52,20 +52,17 @@ for speed = speeds
                         maxNumFrames = size(thisFile.xyarray,4);
                         burnIn = round(500./thisFile.T*maxNumFrames); % used for visualizing cut-off
                         numFrames =  0.1*maxNumFrames; % sample some percentage of frames
-                        framesAnalyzed = round(linspace(1,maxNumFrames,numFrames)); % regularly sample frames without replacement
          
-                        %% calculate stats
-                        [~,~, ~,~, ~,~,...
-                            gr,distBins,~,~] = ...
-                            correlationanalysisSimulations(thisFile,trackedNodes,distBinwidth,framesAnalyzed,maxDist);
-                        % get maximum of gr
-                        [grmax, ~] = max(smoothdata(gr,2,'movmean',3));
+                         %% calculate stats
                         % plot lines for this file
-                        % speed v distance
                         subplot(length(secondVariables),length(revRatesClusterEdge),plotCtr)
-                        plot(framesAnalyzed,smoothdata(grmax,'movmean',7))
-                        if repCtr==1, hold on, end
-                        plot(burnIn*[1 1],[0 max(grmax)],'k--')
+                        plot(smoothdata(squeeze(...
+                            sqrt(sum(var(thisFile.xyarray(:,round(mean(trackedNodes)),:,:),0,1),3))),...
+                            'movmean',7))
+                        if repCtr==1
+                            hold on
+                            plot(burnIn*[1 1],[0 5],'k--')
+                        end
                     end
                 end
                 %% format plots
@@ -78,14 +75,14 @@ for speed = speeds
     %% export figures
     % radial distribution / pair correlation
     poscorrFig.PaperUnits = 'centimeters';
-    fignameprefix = ['figures/diagnostics/grmaxOverTime'];
+    fignameprefix = ['figures/diagnostics/varxOverTime'];
     fignamesuffix = ['N_' num2str(thisFile.N) '_L_' num2str(thisFile.L(1)) ...
         ...'_noUndulations_'...'_noVolExcl' ...'_angleNoise'...
         '_speed_' num2str(speed,'%1.0e') ...
         '_slowing_' slowingMode ...'_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...num2str(num_nbr_max_per_nodes) ...
         ...'_epsLJ_' num2str(attractionStrength,'%1.0e')...
         '.eps'];
-    filename = [fignameprefix 'Radialdistribution' fignamesuffix];
+    filename = [fignameprefix 'VarX' fignamesuffix];
     exportfig(poscorrFig,filename, exportOptions)
     system(['epstopdf ' filename]);
     system(['rm ' filename]);

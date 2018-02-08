@@ -56,7 +56,7 @@ for speed = speeds
                     if exist(filename,'file')
                         thisFile = load(filename);
                         maxNumFrames = size(thisFile.xyarray,4);
-                        burnIn = round(250./thisFile.T*maxNumFrames);
+                        burnIn = round(500./thisFile.T*maxNumFrames);
                         if isfield(thisFile.param,'saveEvery')
                             saveEvery = thisFile.param.saveEvery;
                         else
