@@ -178,23 +178,22 @@ rng(1)
 % animateWoidTrajectories(xyarray,'woid_test_movies/40worms_noflux_undulations0',L);
 % 
 %
-% % test feeding
-% L = [7.5 7.5];
-% [xyarray, ~, food] = runWoids(40,10,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,'r_feed',5);
-% animateWoidTrajectories(xyarray,['woid_test_movies/manyWormM' num2str(M) '_feeding'],L,0.035,food);
-% rng(1)
-% param.r_feed = 2;
-% param.k_unroam = 10;
-% param.slowingMode = 'stochastic';
-% param.k_dwell = 0.0036;
-% param.k_undwell = 1.1;
-% param.revRateClusterEdge = 3.2;
-% param.vs = 0.018;
-% param.dkdN_dwell = 0.25;
-% [xyarray, ~, food] = runWoids(150,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
-% animateWoidTrajectories(xyarray,['woid_test_movies/40WormM' num2str(M) ...
-%     '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
-%     ],L,0.035,food);
+% test feeding
+L = [7.5 7.5];
+rng(1)
+param.k_l = 80;
+param.r_feed = 1/40;
+param.k_unroam = 10;
+param.slowingMode = 'stochastic_bynode';
+param.k_dwell = 0.0036;
+param.k_undwell = 1.1;
+param.revRateClusterEdge = 1;
+param.vs = 0.018;
+param.dkdN_dwell = 0.6;
+[xyarray, ~, food] = runWoids(200,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
+animateWoidTrajectories(xyarray,['woid_test_movies/40WormM' num2str(M) ...
+    '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
+    ],L,0.035,food);
 
 % % test attraction on head-only
 % rng(1)
@@ -286,10 +285,10 @@ L = [7.5, 7.5];
 % xyarray = runWoids(80,N,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);
 % animateWoidTrajectories(xyarray,'woid_test_movies/40worms_periodic',L);
 
-% test haptotaxis
-rng(1)
-k_l = 80;
-f_hapt = 0.1;
-xyarray = runWoids(20,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
-    'f_hapt',f_hapt,'k_l',k_l);
-animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_periodic_haptotaxis_' num2str(f_hapt) '_kl_' num2str(k_l)],L);
+% % test haptotaxis
+% rng(1)
+% k_l = 80;
+% f_hapt = 0.1;
+% xyarray = runWoids(20,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+%     'f_hapt',f_hapt,'k_l',k_l);
+% animateWoidTrajectories(xyarray,['woid_test_movies/40Worms_periodic_haptotaxis_' num2str(f_hapt) '_kl_' num2str(k_l)],L);

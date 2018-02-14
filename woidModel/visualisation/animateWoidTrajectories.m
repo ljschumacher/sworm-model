@@ -58,11 +58,15 @@ end
 figure
 for frameCtr=1:nFrames
     if ~isempty(food)
-        h = pcolor(foodgridx,foodgridy,food(:,:,frameCtr)'-1);
-        h.FaceColor = 'interp'; 
-        h.EdgeColor = 'none';
+%         h = pcolor(foodgridx,foodgridy,food(:,:,frameCtr)'-1);
+                h = contourf(foodgridx,foodgridy,food(:,:,frameCtr)',0:1/N:1,...
+                    'EdgeColor','none');
+
+%         h.FaceColor = 'interp'; 
+%         h.EdgeColor = 'none';
         colormap(gray)
-        caxis([-1 0])
+        caxis([0 1])
+%         caxis([-1 0])
         hold on
     end
     if M>1% plot connecting lines btw nodes

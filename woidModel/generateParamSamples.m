@@ -1,7 +1,7 @@
 % generate random parameter samples
 clear all
 
-nSim = 10000; % number of samples
+nSim = 50000; % number of samples
 nParam = 2; % number of parameters
 
 % seed random number generator for reproducibility
