@@ -43,6 +43,7 @@ load('blindSamples_nSim100_nParam2.mat','paramSamples')
 % set model parameters from generated samples
 param.revRateClusterEdge = paramSamples.revRateClusterEdge(sampleCtr);
 param.dkdN_dwell = paramSamples.dkdN(sampleCtr);
+param.dkdN_undwell = param.dkdN_dwell;
 
 filename = ['/work/lschumac/woidlinos/blind/wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
     '_blind_sample_' num2str(sampleCtr)];

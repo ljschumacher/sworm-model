@@ -190,6 +190,7 @@ param.k_undwell = 1.1;
 param.revRateClusterEdge = 1;
 param.vs = 0.018;
 param.dkdN_dwell = 0.6;
+param.dkdN_undwell = param.dkdN_dwell;
 [xyarray, ~, food] = runWoids(200,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
 animateWoidTrajectories(xyarray,['woid_test_movies/40WormM' num2str(M) ...
     '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
@@ -271,6 +272,7 @@ L = [7.5, 7.5];
 % param.k_dwell = 0.0036;%1/275;%1/4;
 % param.k_undwell = 1.1;%1/0.9; %1/2.2;
 % param.dkdN_dwell = 0.25;
+% param.dkdN_undwell = param.dkdN_dwell;
 % param.revRateClusterEdge = 1.6;
 % param.vs = 0.018;
 % xyarray = runWoids(20,N,M,L,param,'saveEvery',saveEvery);

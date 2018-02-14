@@ -1,4 +1,4 @@
-function dwellLogInd = updateDwellingState(dwellLogInd,k_dwell,k_undwell,dkdN_dwell,num_nbr_per_node,dT)
+function dwellLogInd = updateDwellingState(dwellLogInd,k_dwell,k_undwell,dkdN_dwell,dkdN_undwell,num_nbr_per_node,dT)
 % updates movement state of worm based on specified rates of
 % entering/leaving the dwelling state
 
@@ -14,7 +14,7 @@ end
 %   exponentially with more neighbours
 if any(dwellLogInd)
     dwellers = find(dwellLogInd);
-    undwellrate = k_undwell*exp(-dkdN_dwell.*num_nbr_per_node);
+    undwellrate = k_undwell*exp(-dkdN_undwell.*num_nbr_per_node);
     stoppers = logical(poissrnd(undwellrate(dwellers)*dT,numel(dwellers),1));
     dwellLogInd(dwellers(stoppers)) = false;
 end

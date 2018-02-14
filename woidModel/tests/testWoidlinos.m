@@ -159,6 +159,7 @@ animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40rods_haptotaxis_' 
 % param.k_dwell = 0.0036;%1/275;%1/4;
 % param.k_undwell = 1.1;%1/0.9; %1/2.2;
 % param.dkdN_dwell = 2;
+% param.dkdN_undwell = param.dkdN_dwell;
 % param.revRateClusterEdge = 1.6;
 % param.vs = 0.014;
 % xyarray = runWoids(150,N,M,L,param);

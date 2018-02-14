@@ -56,6 +56,7 @@ for repCtr = 1:numRepeats
         param = paramAll;
         param.revRateClusterEdge =  paramCombis(1,paramCtr);
         param.dkdN_dwell = paramCombis(2,paramCtr);
+        param.dkdN_undwell = param.dkdN_dwell;
         param.k_theta = paramCombis(3,paramCtr);
         filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
             '_angleNoise_' num2str(param.angleNoise) '_k_theta_' num2str(param.k_theta) ...

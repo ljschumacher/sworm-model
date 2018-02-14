@@ -50,6 +50,7 @@ for paramCtr = 1:nParamCombis
     param.vs = paramCombis(3,paramCtr);
     attractionStrength = paramCombis(4,paramCtr);
     param.dkdN_dwell = paramCombis(5,paramCtr);
+    param.dkdN_undwell = param.dkdN_dwell;
     if attractionStrength>0
         param.r_LJcutoff = 5*rc;
     else
