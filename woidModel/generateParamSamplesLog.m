@@ -1,7 +1,7 @@
 % generate random parameter samples
 clear all
 
-nSim = 20000; % number of samples
+nSim = 50000; % number of samples
 nParam = 2; % number of parameters
 
 % seed random number generator for reproducibility
@@ -18,7 +18,7 @@ revRate_range_log = [-1 1];
 revRate_range = 10.^revRate_range_log;
 revRateClusterEdge = 10.^(samplesRaw(:,1).*(revRate_range_log(2) - revRate_range_log(1)) + revRate_range_log(1));
 
-dkdN_range_log = [-2 0];
+dkdN_range_log = [-3 0];
 dkdN_range = 10.^dkdN_range_log;
 dkdN = 10.^(samplesRaw(:,2).*(dkdN_range_log(2) - dkdN_range_log(1)) + dkdN_range_log(1));
 
