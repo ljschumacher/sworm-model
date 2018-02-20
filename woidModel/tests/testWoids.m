@@ -31,6 +31,11 @@ rng(1)
 % system(['epstopdf ' filename '.eps']);
 % system(['rm ' filename '.eps']);
 
+% test N2-like worm
+xyarray = runWoids(15,1,M,L,'bc','free','dT',dT,'saveEvery',saveEvery,...
+    'v0',0.14,'omega_m',2*pi*0.25);
+animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_N2like',L);
+
 % xyarray = runWoids(20,1,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,'k_theta',0);
 % animateWoidTrajectories(xyarray,'woid_test_movies/singleWorm_noflux_ktheta0',L);
 % 
@@ -205,26 +210,26 @@ rng(1)
 %     '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
 %     '_angleNoise' num2str(param.angleNoise)],L,0.035,food);
 
-% test feeding without volume exclusion for many worms
-L = 2*[7.5 7.5];
-rng(1)
-M = 18;
-param.rc = 0;
-param.k_l = 80;
-param.r_feed = 1/40;
-param.k_unroam = 10;
-param.slowingMode = 'stochastic_bynode';
-param.k_dwell = 0.0036;
-param.k_undwell = 1.1;
-param.revRateClusterEdge = 1;
-param.vs = 0.018;
-param.dkdN_dwell = 0.6;
-param.dkdN_undwell = param.dkdN_dwell;
-param.angleNoise = 1;
-[xyarray, ~, food] = runWoids(1000,200,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
-animateWoidTrajectories(xyarray,['woid_test_movies/40WormM' num2str(M) ...
-    '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
-    '_angleNoise' num2str(param.angleNoise)],L,0.035,food);
+% % test feeding without volume exclusion for many worms
+% L = 2*[7.5 7.5];
+% rng(1)
+% M = 18;
+% param.rc = 0;
+% param.k_l = 80;
+% param.r_feed = 1/40;
+% param.k_unroam = 10;
+% param.slowingMode = 'stochastic_bynode';
+% param.k_dwell = 0.0036;
+% param.k_undwell = 1.1;
+% param.revRateClusterEdge = 1;
+% param.vs = 0.018;
+% param.dkdN_dwell = 0.6;
+% param.dkdN_undwell = param.dkdN_dwell;
+% param.angleNoise = 1;
+% [xyarray, ~, food] = runWoids(1000,200,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
+% animateWoidTrajectories(xyarray,['woid_test_movies/200WormM' num2str(M) ...
+%     '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
+%     '_angleNoise' num2str(param.angleNoise)],L,0.035,food);
 
 % % test feeding
 % L = [7.5 7.5];

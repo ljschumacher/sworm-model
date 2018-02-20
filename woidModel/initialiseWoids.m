@@ -40,16 +40,22 @@ while objCtr <= N
         positions(objCtr,nodeCtr,[x y],1) = squeeze(positions(objCtr,nodeCtr - 1,[x y],1))... % previous node's position
             - segmentLength*[cos(anglesInitial(objCtr,nodeCtr)); sin(anglesInitial(objCtr,nodeCtr))];
     end
-    % check for any overlaps, and if so discard this woid's position
-    distanceMatrix = sqrt(sum(computeWoidDistancesWithBCs(positions(1:objCtr,:,[x y],1),L,bc).^2,5));% scalar distance from current object to any other
-    collisionNbrs = squeeze(any(any(2*exclusionRadius>=distanceMatrix(objCtr,:,:,:),4),2));
-    collisionNbrs(objCtr) = false; % don't volume-exclude self
+    if exclusionRadius>0
+        % check for any overlaps, and if so discard this woid's position
+        distanceMatrix = sqrt(sum(computeWoidDistancesWithBCs(positions(1:objCtr,:,[x y],1),L,bc).^2,5));% scalar distance from current object to any other
+        collisionNbrs = squeeze(any(any(2*exclusionRadius>=distanceMatrix(objCtr,:,:,:),4),2));
+        collisionNbrs(objCtr) = false; % don't volume-exclude self
+    else
+        collisionNbrs=false;
+    end
     if ~any(collisionNbrs)
-%         disp(['initialised ' num2str(objCtr) ' out of ' num2str(N) ' worms'...
-%             ' after ' num2str(tryCtr) ' tries'])
+        %         disp(['initialised ' num2str(objCtr) ' out of ' num2str(N) ' worms'...
+        %             ' after ' num2str(tryCtr) ' tries'])
         objCtr = objCtr + 1;
         tryCtr = 1;
     else
         tryCtr = tryCtr + 1;
     end
+end
+
 end

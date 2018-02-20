@@ -1,7 +1,7 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="1626678125" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="3986183219" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
-      <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
+      <param.BuiltInstrumentedMex />
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
       <param.WorkingFolder>option.WorkingFolder.Project</param.WorkingFolder>
       <param.SpecifiedWorkingFolder />
@@ -16,8 +16,8 @@
       <param.EnableVariableSizing>true</param.EnableVariableSizing>
       <param.DynamicMemoryAllocation>option.DynamicMemoryAllocation.Threshold</param.DynamicMemoryAllocation>
       <param.DynamicMemoryAllocationThreshold>65536</param.DynamicMemoryAllocationThreshold>
-      <param.RowMajor>option.RowMajor.ColumnMajor</param.RowMajor>
-      <param.HighlightPotentialRowMajorIssues>false</param.HighlightPotentialRowMajorIssues>
+      <param.RowMajor />
+      <param.HighlightPotentialRowMajorIssues />
       <param.StackUsageMax>200000</param.StackUsageMax>
       <param.FilePartitionMethod>option.FilePartitionMethod.MapMFileToCFile</param.FilePartitionMethod>
       <param.GenerateComments>true</param.GenerateComments>
@@ -56,7 +56,7 @@
       <param.ConstantInputs>option.ConstantInputs.CheckValues</param.ConstantInputs>
       <param.EnableCRICodeCoverage>true</param.EnableCRICodeCoverage>
       <param.EnableJIT>true</param.EnableJIT>
-      <param.EnableJITSilentBailOut>false</param.EnableJITSilentBailOut>
+      <param.EnableJITSilentBailOut />
       <param.CheckForIssuesJIT>true</param.CheckForIssuesJIT>
       <unset>
         <param.BuiltInstrumentedMex />
@@ -124,8 +124,8 @@
       <param.EnableVariableSizing>true</param.EnableVariableSizing>
       <param.DynamicMemoryAllocation>option.DynamicMemoryAllocation.Threshold</param.DynamicMemoryAllocation>
       <param.DynamicMemoryAllocationThreshold>65536</param.DynamicMemoryAllocationThreshold>
-      <param.RowMajor>option.RowMajor.ColumnMajor</param.RowMajor>
-      <param.HighlightPotentialRowMajorIssues>false</param.HighlightPotentialRowMajorIssues>
+      <param.RowMajor />
+      <param.HighlightPotentialRowMajorIssues />
       <param.StackUsageMax>200000</param.StackUsageMax>
       <param.MultiInstanceCode />
       <param.FilePartitionMethod>option.FilePartitionMethod.MapMFileToCFile</param.FilePartitionMethod>
@@ -174,9 +174,9 @@
       <param.CustomSource />
       <param.CustomLibrary />
       <param.PostCodeGenCommand />
-      <param.TargetLangStandard />
-      <param.CodeReplacementLibrary />
-      <param.DeprecatedCRLFlag />
+      <param.TargetLangStandard>C++03 (ISO)</param.TargetLangStandard>
+      <param.CodeReplacementLibrary>None</param.CodeReplacementLibrary>
+      <param.DeprecatedCRLFlag>false</param.DeprecatedCRLFlag>
       <param.SameHardware>true</param.SameHardware>
       <param.Toolchain>Automatically locate an installed toolchain</param.Toolchain>
       <param.BuildConfiguration />
@@ -240,7 +240,7 @@
       <param.CCompilerOptimization />
       <param.CCompilerCustomOptimizations />
       <param.GenerateMakefile />
-      <param.BuildToolEnable>false</param.BuildToolEnable>
+      <param.BuildToolEnable />
       <param.MakeCommand />
       <param.TemplateMakefile />
       <param.BuildToolConfiguration />
@@ -256,7 +256,7 @@
       <param.CustomLAPACKCallback />
       <param.CustomFFTCallback />
       <param.GenerateDefaultInSwitch />
-      <param.UseECoderFeatures />
+      <param.UseECoderFeatures>false</param.UseECoderFeatures>
       <unset>
         <param.grt.GenCodeOnly />
         <param.WorkingFolder />
@@ -734,30 +734,32 @@
       </unset>
     </profile>
     <param.objective>option.objective.c</param.objective>
-    <param.WorkflowStep>workflowSummary</param.WorkflowStep>
+    <param.WorkflowStep>generateCode</param.WorkflowStep>
     <param.TestSnippets>
+      <item>computeWoidDistancesWithBCs(rand(200,18,2),[7.5 7.5],'periodic');</item>
+      <item>computeWoidDistancesWithBCs(rand(200,36,2),[7.5 7.5],'periodic');</item>
       <item>computeWoidDistancesWithBCs(rand(60,49,2),[7.5 7.5],'periodic');</item>
       <item>computeWoidDistancesWithBCs(rand(40,49,2),[7.5 7.5],'periodic');</item>
       <item>computeWoidDistancesWithBCs(rand(40,49,2),[7.5 7.5],'periodic')</item>
     </param.TestSnippets>
-    <param.DefaultImportExportVariable>config</param.DefaultImportExportVariable>
-    <param.ExternalFcnMajority>column</param.ExternalFcnMajority>
+    <param.DefaultImportExportVariable />
+    <param.ExternalFcnMajority />
     <param.UseGlobals>option.UseGlobals.No</param.UseGlobals>
-    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_M36_mex.mexmaci64</param.outputfile>
-    <param.version>R2012a</param.version>
-    <param.HasECoderFeatures>true</param.HasECoderFeatures>
+    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N200_M36_mex.mexmaci64</param.outputfile>
+    <param.version />
+    <param.HasECoderFeatures>false</param.HasECoderFeatures>
     <param.HasGpuCoder>false</param.HasGpuCoder>
     <param.mex.mainhtml />
     <param.grt.mainhtml />
     <param.CallGeneratedCodeFromTest>true</param.CallGeneratedCodeFromTest>
     <param.AutoInferDefaultFile />
-    <param.AutoInferUseVariableSize>false</param.AutoInferUseVariableSize>
-    <param.AutoInferUseUnboundedSize>false</param.AutoInferUseUnboundedSize>
-    <param.AutoInferVariableSizeThreshold>1024</param.AutoInferVariableSizeThreshold>
-    <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
-    <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
+    <param.AutoInferUseVariableSize />
+    <param.AutoInferUseUnboundedSize />
+    <param.AutoInferVariableSizeThreshold />
+    <param.AutoInferUnboundedSizeThreshold />
+    <param.EnableFixedPointStep />
     <param.EnableScreener>true</param.EnableScreener>
-    <param.AnnotationChecksum>3979188820</param.AnnotationChecksum>
+    <param.AnnotationChecksum>264306064</param.AnnotationChecksum>
     <var.LegacyTarget />
     <var.MirrorOnOpen>false</var.MirrorOnOpen>
     <param.FixedPointEnabled>false</param.FixedPointEnabled>
@@ -766,10 +768,10 @@
     <param.unifiedParamStorage />
     <var.gc.lastOutputRoot>codegen/mex/computeWoidDistancesWithBCs</var.gc.lastOutputRoot>
     <var.gc.lastOutputType>MEX_FILE</var.gc.lastOutputType>
-    <var.gc.preBuildChecksum>1626678125</var.gc.preBuildChecksum>
+    <var.gc.preBuildChecksum>3986183219</var.gc.preBuildChecksum>
     <var.cfi.lastOutputRoot>codegen/mex/computeWoidDistancesWithBCs</var.cfi.lastOutputRoot>
-    <var.cfi.preBuildChecksum>1767052210</var.cfi.preBuildChecksum>
-    <var.lastCfiTestSnippet>computeWoidDistancesWithBCs(rand(40,49,2),[7.5 7.5],'periodic');</var.lastCfiTestSnippet>
+    <var.cfi.preBuildChecksum>506730727</var.cfi.preBuildChecksum>
+    <var.lastCfiTestSnippet>computeWoidDistancesWithBCs(rand(200,18,2),[7.5 7.5],'periodic');</var.lastCfiTestSnippet>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
     <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;3904989744&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
     <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
@@ -778,15 +780,15 @@
     <var.isGpuCoder>false</var.isGpuCoder>
     <var.notGpuCoder>true</var.notGpuCoder>
     <var.boundToGui>true</var.boundToGui>
-    <param.mex.outputfile>computeWoidDistancesWithBCs_M36_mex</param.mex.outputfile>
+    <param.mex.outputfile>computeWoidDistancesWithBCs_N200_M36_mex</param.mex.outputfile>
     <param.grt.outputfile>computeWoidDistancesWithBCs</param.grt.outputfile>
     <param.artifact>option.target.artifact.mex</param.artifact>
-    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_M36_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N200_M36_mex.mexmaci64</param.outputfile>
     <param.EnableAutoExtrinsicCalls>true</param.EnableAutoExtrinsicCalls>
     <param.UsePreconditions>false</param.UsePreconditions>
     <param.FeatureFlags />
     <param.FixedPointMode>option.FixedPointMode.None</param.FixedPointMode>
-    <param.AutoScaleLoopIndexVariables>false</param.AutoScaleLoopIndexVariables>
+    <param.AutoScaleLoopIndexVariables />
     <param.ComputedFixedPointData />
     <param.UserFixedPointData />
     <param.DefaultWordLength>16</param.DefaultWordLength>
@@ -816,8 +818,8 @@
     <param.EnableCodeEfficiencyChecks>false</param.EnableCodeEfficiencyChecks>
     <param.DefaultFixedPointSignedness>option.DefaultFixedPointSignedness.Automatic</param.DefaultFixedPointSignedness>
     <param.FixedPointTypeProposalMode>option.FixedPointTypeProposalMode.ProposeFractionLengths</param.FixedPointTypeProposalMode>
-    <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
-    <var.lastFixedPointAction>option.fixedPointAction.none</var.lastFixedPointAction>
+    <param.EnableFixedPointStep />
+    <var.lastFixedPointAction />
     <var.lastSimContext />
     <var.lastVerifyContext />
     <param.fpDataRoot />
@@ -825,19 +827,19 @@
     <var.snapshotChecksum />
     <param.fpLastConvertChecksum />
     <var.functionBlockSid />
-    <param.fptSignedness>false</param.fptSignedness>
+    <param.fptSignedness />
     <var.FixedPointAnalysisMode>option.FixedPointAnalysisMode.Sim</var.FixedPointAnalysisMode>
     <param.FixedPointUseDesignRanges>false</param.FixedPointUseDesignRanges>
     <param.gpu.Enabled>false</param.gpu.Enabled>
     <param.gpu.KernelNamePrefix />
     <param.gpu.MallocMode />
-    <param.gpu.MallocThreshold>200</param.gpu.MallocThreshold>
-    <param.gpu.StackLimitPerThread>1024</param.gpu.StackLimitPerThread>
+    <param.gpu.MallocThreshold />
+    <param.gpu.StackLimitPerThread />
     <param.gpu.EnableCUBLAS>false</param.gpu.EnableCUBLAS>
     <param.gpu.EnableCUSOLVER>false</param.gpu.EnableCUSOLVER>
     <param.gpu.EnableCUFFT>false</param.gpu.EnableCUFFT>
     <param.gpu.Benchmarking>false</param.gpu.Benchmarking>
-    <param.gpu.SafeBuild>false</param.gpu.SafeBuild>
+    <param.gpu.SafeBuild />
     <param.gpu.ComputeCapability />
     <param.gpu.CustomComputeCapability />
     <param.gpu.CompilerFlags />
@@ -937,7 +939,7 @@
     </unset>
     <fileset.entrypoints>
       <file custom-data-expanded="false" value="${PROJECT_ROOT}/computeWoidDistancesWithBCs.m">
-        <Marker>1517227631336</Marker>
+        <Marker>1519137176203</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench />
@@ -950,7 +952,7 @@
           <idpTable>
             <type typeId="0">
               <Class>double</Class>
-              <Size>40 x 36 x 2</Size>
+              <Size>200 x 36 x 2</Size>
               <Value />
               <InitialValue />
               <UserDefined>true</UserDefined>
@@ -969,14 +971,14 @@
               <Size>1 x 8</Size>
               <Value />
               <InitialValue />
-              <UserDefined>true</UserDefined>
+              <UserDefined>false</UserDefined>
             </type>
           </idpTable>
         </Inputs>
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs_M36_mex.mexmaci64" optional="false">/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs_M36_mex.mexmaci64</file>
+      <file location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs_N200_M36_mex.mexmaci64" optional="false">/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs_N200_M36_mex.mexmaci64</file>
     </build-deliverables>
     <workflow />
     <matlab>
@@ -984,7 +986,6 @@
       <toolboxes>
         <toolbox name="fixedpoint" />
         <toolbox name="matlabcoder" />
-        <toolbox name="embeddedcoder" />
       </toolboxes>
       <toolbox>
         <fixedpoint>
@@ -996,11 +997,6 @@
           <enabled>true</enabled>
         </matlabcoder>
       </toolbox>
-      <toolbox>
-        <embeddedcoder>
-          <enabled>true</enabled>
-        </embeddedcoder>
-      </toolbox>
     </matlab>
     <platform>
       <unix>true</unix>
@@ -1011,7 +1007,7 @@
       <vista>false</vista>
       <linux>false</linux>
       <solaris>false</solaris>
-      <osver>10.13.2</osver>
+      <osver>10.13.3</osver>
       <os32>false</os32>
       <os64>true</os64>
       <arch>maci64</arch>

@@ -253,6 +253,10 @@ while t<T
         distanceMatrixXY = computeWoidDistancesWithBCs_M36_mex(positions,L,bc);
     elseif N==40&&M==18&&numel(L)==2&&~iscell(bc) % check if we can use compiled mex function
         distanceMatrixXY = computeWoidDistancesWithBCs_M18_mex(positions,L,bc);
+    elseif N==200&&M==18&&numel(L)==2&&~iscell(bc)
+        distanceMatrixXY = computeWoidDistancesWithBCs_N200_M18_mex(positions,L,bc);
+    elseif N==200&&M==36&&numel(L)==2&&~iscell(bc)
+        distanceMatrixXY = computeWoidDistancesWithBCs_N200_M36_mex(positions,L,bc);
     else
         distanceMatrixXY = computeWoidDistancesWithBCs(positions,L,bc);
     end
