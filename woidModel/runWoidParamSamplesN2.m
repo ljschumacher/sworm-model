@@ -30,6 +30,7 @@ else
 end
 % -- speed and time-step --
 param.v0 = [0.14]; % npr1 0.33; N2 0.14
+param.omega_m = 2*pi*0.25;
 param.dT = min(1/2,rc/param.v0/16); % dT: time step, scales other parameters such as velocities and rates
 param.saveEvery = round(1/param.dT);
 

@@ -1,6 +1,6 @@
 function forceArray = calculateForces(distanceMatrixXY,distanceMatrix,rc,...
     headings,reversals,segmentLength,v_target,k_l,k_theta,theta_0,phaseOffset,...
-    sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,LJmode,angleNoise,ri,f_hapt)
+    sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,LJmode,angleNoise,ri,f_hapt,f_align)
 % updates object directions according to update rules
 
 % issues/to-do's:
@@ -58,13 +58,19 @@ for objCtr = 1:N
     
     % head motile force
     headAngle = headings(objCtr,headInd) + angleNoise*randn();
-
+    
     Fm(headInd,:) = [cos(headAngle), sin(headAngle)];
-    % haptotaxis - move to the direction of other worms (should this be added before angular noise?) 
-    if f_hapt~=0 % haptotaxis could be attractive or repulsie
-              Fm(headInd,:) = Fm(headInd,:) ...
-                  + calculateHaptotaxis(distanceMatrixXY(:,:,:,objCtr,headInd),...
-                  distanceMatrix(:,:,objCtr,headInd),objCtr,ri,f_hapt);
+    % haptotaxis - move to the direction of other worms (should this be added before angular noise?)
+    if f_hapt~=0 % haptotaxis could be attractive or repulsive
+        Fm(headInd,:) = Fm(headInd,:) ...
+            + calculateHaptotaxis(distanceMatrixXY(:,:,:,objCtr,headInd),...
+            distanceMatrix(:,:,objCtr,headInd),objCtr,ri,f_hapt);
+    end
+    
+    % Vicsek-type alignment force - only really used for demonstration
+    if f_align~=0
+        Fm(headInd,:) = Fm(headInd,:) ...
+            + calculateAlignmentForce(headings,distanceMatrix(:,:,objCtr,headInd),objCtr,headInd,ri,f_align,true);
     end
     
     % body motile force
@@ -124,6 +130,12 @@ elseif N==40&&M==36 % check if we can use compiled mex function
         distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes, LJmode);
 elseif N==40&&M==18 % check if we can use compiled mex function
     Fc = resolveContactsLoop_M18_mex(forceArray,distanceMatrixXY,...
+        distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes, LJmode);
+elseif N==200&&M==18 % check if we can use compiled mex function
+    Fc = resolveContactsLoop_N200_M18_mex(forceArray,distanceMatrixXY,...
+        distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes, LJmode);
+elseif N==200&&M==36 % check if we can use compiled mex function
+    Fc = resolveContactsLoop_N200_M36_mex(forceArray,distanceMatrixXY,...
         distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes, LJmode);
 else
     Fc = NaN(N,M,2);
