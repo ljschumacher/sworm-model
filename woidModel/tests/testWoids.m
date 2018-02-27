@@ -19,8 +19,8 @@ saveEvery = 16;
 % single worm
 L = [2, 2];
 rng(1)
-% xyarray = runWoids(10,1,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);
-% animateWoidTrajectories(xyarray,['woid_test_movies/singleWormM' num2str(M)],L);
+xyarray = runWoids(10,1,18,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);
+animateWoidTrajectories(xyarray,['woid_test_movies/singleWormM' num2str(M)],L);
 % % plot distribution of lengths to check length conservation
 % figure, histogram(squeeze(sum(sqrt(sum(diff(xyarray(:,:,1:2,:),1,2).^2,3)),2)),...
 %     'Normalization','Probability','EdgeColor','none')
@@ -178,23 +178,23 @@ rng(1)
 % animateWoidTrajectories(xyarray,'woid_test_movies/40worms_noflux_undulations0',L);
 % 
 %
-% test feeding
-L = [7.5 7.5];
-rng(1)
-param.k_l = 80;
-param.r_feed = 1/40;
-param.k_unroam = 10;
-param.slowingMode = 'stochastic_bynode';
-param.k_dwell = 0.0036;
-param.k_undwell = 1.1;
-param.revRateClusterEdge = 1;
-param.vs = 0.018;
-param.dkdN_dwell = 0.6;
-param.dkdN_undwell = param.dkdN_dwell;
-[xyarray, ~, food] = runWoids(200,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
-animateWoidTrajectories(xyarray,['woid_test_movies/40WormM' num2str(M) ...
-    '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
-    ],L,0.035,food);
+% % test feeding
+% L = [7.5 7.5];
+% rng(1)
+% param.k_l = 80;
+% param.r_feed = 1/40;
+% param.k_unroam = 10;
+% param.slowingMode = 'stochastic_bynode';
+% param.k_dwell = 0.0036;
+% param.k_undwell = 1.1;
+% param.revRateClusterEdge = 1;
+% param.vs = 0.018;
+% param.dkdN_dwell = 0.6;
+% param.dkdN_undwell = param.dkdN_dwell;
+% [xyarray, ~, food] = runWoids(200,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
+% animateWoidTrajectories(xyarray,['woid_test_movies/40WormM' num2str(M) ...
+%     '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
+%     ],L,0.035,food);
 
 % % test attraction on head-only
 % rng(1)
