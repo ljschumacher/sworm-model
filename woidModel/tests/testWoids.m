@@ -20,13 +20,9 @@ saveEvery = 16;
 % single worm
 L = [2, 2];
 rng(1)
-<<<<<<< HEAD
-xyarray = runWoids(10,1,18,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);
-animateWoidTrajectories(xyarray,['woid_test_movies/singleWormM' num2str(M)],L);
-=======
+
 % xyarray = runWoids(10,1,18,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);
 % animateWoidTrajectories(xyarray,['woid_test_movies/singleWormM' num2str(M)],L);
->>>>>>> cd9cc8e691ac00ce1a30ee19a16ad88873bb8ff7
 % % plot distribution of lengths to check length conservation
 % figure, histogram(squeeze(sum(sqrt(sum(diff(xyarray(:,:,1:2,:),1,2).^2,3)),2)),...
 %     'Normalization','Probability','EdgeColor','none')
@@ -207,8 +203,7 @@ rng(1)
 % animateWoidTrajectories(xyarray,'woid_test_movies/40worms_noflux_undulations0',L);
 % 
 %
-<<<<<<< HEAD
-=======
+
 % % test feeding without volume exclusion
 % L = [7.5 7.5];
 % rng(1)
@@ -273,7 +268,6 @@ rng(1)
 %     '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
 %     '_angleNoise' num2str(param.angleNoise)],L,0.035,food);
 
->>>>>>> cd9cc8e691ac00ce1a30ee19a16ad88873bb8ff7
 % % test feeding
 % L = [7.5 7.5];
 % rng(1)
@@ -287,11 +281,7 @@ rng(1)
 % param.vs = 0.018;
 % param.dkdN_dwell = 0.6;
 % param.dkdN_undwell = param.dkdN_dwell;
-<<<<<<< HEAD
-% [xyarray, ~, food] = runWoids(200,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
-=======
 % [xyarray, ~, food] = runWoids(500,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
->>>>>>> cd9cc8e691ac00ce1a30ee19a16ad88873bb8ff7
 % animateWoidTrajectories(xyarray,['woid_test_movies/40WormM' num2str(M) ...
 %     '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
 %     ],L,0.035,food);
