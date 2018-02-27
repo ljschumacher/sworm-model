@@ -27,7 +27,7 @@ paramAll.k_dwell = 0.0036;
 paramAll.k_undwell = 1.1;
 % -- reversal parameters --
 paramAll.reversalMode = 'density';
-paramAll.revRatesClusterEdge = 0;
+paramAll.revRateClusterEdge = 0;
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 4*rc0;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc0;  % particle size for Lennard-Jones force
@@ -51,7 +51,6 @@ paramAll.saveEvery = round(1/paramAll.dT);
 
 dkdN_dwell_values = 0:0.2:1;
 drdN_rev_values = 0:0.2:1;
-
 paramCombis = combvec(dkdN_dwell_values,drdN_rev_values);
 nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats
