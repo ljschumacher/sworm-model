@@ -31,8 +31,10 @@
 % revTime: duration of reversal events (default 2s, rounded to integer number of time-steps)
 % headNodes: which nodes count as head for defining cluster status, default front 10%
 % tailNodes: which nodes count as tail for defining cluster status, default back 10%
-% ri: radius at which worms register contact (default 3/2 rc)
+% ri: radius at which worms register contact (default 3 rc)
 % Rir: relative interaction radius for reversals, default 1 (ie = ri)
+% reversalMode: how worms reverse, 'contact' (default) or 'density'
+% drdN_rev: increase in revRateClusterEdge with density, default 0
 % -- slow-down parameters --
 % vs: speed when slowed down (default v0/3)
 %   for stochastic slowing, low dwelling speeds are 0.018 and 0.014 for
@@ -104,6 +106,8 @@ addOptional(iP,'headNodes',1:max(round(M/10),1),checkInt) % which nodes count as
 addOptional(iP,'tailNodes',(M-max(round(M/10),1)+1):M,checkInt) % which nodes count as tail, default back 10%
 addOptional(iP,'ri',0.035*3,@isnumeric) % radius at which worms register contact, default 3 rc
 addOptional(iP,'Rir',1,@isnumeric) % relative interaction radius for reversals, default 1 (ie = ri)
+addOptional(iP,'reversalMode','contact',@checkReversalMode) % 'density', 'contact' (default)
+addOptional(iP,'drdN_rev',0,@isnumeric) % increase in revRateClusterEdge with density, default 0
 % slowing down
 addOptional(iP,'vs',0.33/3,@isnumeric) % speed when slowed down, default v0/3
 addOptional(iP,'slowingNodes',1:M,checkInt) % which nodes sense proximity, default all
@@ -126,6 +130,8 @@ addOptional(iP,'k_unroam',0,@isnumeric) % rate to spontaneously leave the roamin
 addOptional(iP,'r_feed',0,@isnumeric) % feeding rate (1/s), in arbitrary concentration amounts
 % haptotaxis
 addOptional(iP,'f_hapt',0,@isnumeric) % haptotaxis bias, can be attractive or repulse (default 0)
+% vicsek-type alignment
+addOptional(iP,'f_align',0,@isnumeric) % vicsek-type alignment, only for demonstration
 % simulation parameters
 addOptional(iP,'saveEvery',1,checkInt);
 addOptional(iP,'resumeState',struct([]),@checkResumeState); % current state of previous simulation to initialize from
@@ -158,6 +164,8 @@ revRate = iP.Results.revRate;
 revRateCluster = iP.Results.revRateCluster;
 revRateClusterEdge = iP.Results.revRateClusterEdge;
 revTime = round(iP.Results.revTime/dT0); % convert to unit of timesteps
+reversalMode = iP.Results.reversalMode;
+drdN_rev = iP.Results.drdN_rev;
 headNodes = iP.Results.headNodes;
 tailNodes = iP.Results.tailNodes;
 ri = iP.Results.ri;
@@ -179,6 +187,7 @@ k_roam = iP.Results.k_roam;
 k_unroam = iP.Results.k_unroam;
 r_feed = iP.Results.r_feed;
 f_hapt = iP.Results.f_hapt;
+f_align = iP.Results.f_align;
 
 % check input relationships to each other
 % assert(segmentLength>2*rc,...
@@ -270,7 +279,8 @@ while t<T
     % check if any worms are reversing due to contacts
     reversalLogIndPrev(reversalLogInd(:,timeCtr)) = true; % only update events that happen between timeCtr updates, ie reversal starts
     reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
-        Rir*ri,headNodes,tailNodes,dT,revRate,revTime,revRateCluster,revRateClusterEdge,roamingLogInd);
+        Rir*ri,headNodes,tailNodes,dT,reversalMode,revRate,revTime,revRateCluster,...
+        revRateClusterEdge,roamingLogInd,drdN_rev);
     % update internal oscillators / headings
     [orientations, phaseOffset] = updateWoidOscillators(orientations,theta_0,...
         omega,dT,phaseOffset,deltaPhase,[reversalLogIndPrev, reversalLogInd(:, timeCtr)]);
@@ -278,7 +288,7 @@ while t<T
     forceArray = calculateForces(distanceMatrixXY,distanceMatrix,...
         rc,orientations,reversalLogInd(:,timeCtr),segmentLength,...
         v,k_l,k_theta*v./v0,theta_0,phaseOffset,sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,...
-        LJmode,angleNoise,ri,f_hapt);
+        LJmode,angleNoise,ri,f_hapt,f_align);
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % adapt time-step such that it scales inversily with the max force
     dT = adaptTimeStep(dT0,v0,forceArray);
@@ -347,6 +357,11 @@ end
 function SlowModeCheck = checkSlowingMode(s)
 validSlowingModes = {'gradual','abrupt','density','stochastic','stochastic_bynode'};
 SlowModeCheck = any(strcmp(s,validSlowingModes));
+end
+
+function RevModeCheck = checkReversalMode(s)
+validRevModes = {'contact','density'};
+RevModeCheck = any(strcmp(s,validRevModes));
 end
 
 function LJmodeCheck = checkLJmode(s)
