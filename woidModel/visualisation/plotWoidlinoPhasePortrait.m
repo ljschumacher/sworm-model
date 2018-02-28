@@ -38,8 +38,8 @@ ndwellVals = numel(dkdN_dwell_values);
 aspectRatio = nrevRates/(ndwellVals);
 
 % highlight panels
-select_panels = [12:15,23:26,34:37,45:48,56:59];
-select_colors = plotColor;%[0 1 0.5]%lines(2);
+select_panels = [14,26];
+select_colors = lines(2);
 for repCtr =1:1
     for speed = speeds
         phasePortraitFig = figure;
@@ -63,12 +63,12 @@ for repCtr =1:1
                         positions2plot = xyarray(:,:,:,time2plot);
                         subplot(length(secondVariables),length(revRatesClusterEdge),plotCtr)
                         % highlight panels
-                        %                         if plotCtr==select_panels(1)
-                        %                             thisColor = select_colors(1,:);
-                        %                         elseif plotCtr==select_panels(2)
-                        %                             thisColor = select_colors(2,:);
-                        if ismember(plotCtr,select_panels)
-                            thisColor = select_colors;
+                        if plotCtr==select_panels(1)
+                            thisColor = select_colors(1,:);
+                        elseif plotCtr==select_panels(2)
+                            thisColor = select_colors(2,:);
+%                         if ismember(plotCtr,select_panels)
+%                             thisColor = select_colors;
                         else
                             thisColor = plotColor;
                         end
