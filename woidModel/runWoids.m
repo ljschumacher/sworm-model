@@ -256,15 +256,15 @@ saveCtr = 1;
 disp(['Running simulation...' datestr(now)])
 while t<T
     % find distances between all pairs of objects
-    if N==40&&M==49&&numel(L)==2&&~iscell(bc) % check if we can use compiled mex function
+    if N==40&&M==49&&numel(L)==2&&strcmp(bc,'periodic') % check if we can use compiled mex function
         distanceMatrixXY = computeWoidDistancesWithBCs_mex(positions,L,bc);
-    elseif N==40&&M==36&&numel(L)==2&&~iscell(bc) % check if we can use compiled mex function
+    elseif N==40&&M==36&&numel(L)==2&&strcmp(bc,'periodic') % check if we can use compiled mex function
         distanceMatrixXY = computeWoidDistancesWithBCs_M36_mex(positions,L,bc);
-    elseif N==40&&M==18&&numel(L)==2&&~iscell(bc) % check if we can use compiled mex function
+    elseif N==40&&M==18&&numel(L)==2&&strcmp(bc,'periodic') % check if we can use compiled mex function
         distanceMatrixXY = computeWoidDistancesWithBCs_M18_mex(positions,L,bc);
-    elseif N==200&&M==18&&numel(L)==2&&~iscell(bc)
+    elseif N==200&&M==18&&numel(L)==2&&strcmp(bc,'periodic')
         distanceMatrixXY = computeWoidDistancesWithBCs_N200_M18_mex(positions,L,bc);
-    elseif N==200&&M==36&&numel(L)==2&&~iscell(bc)
+    elseif N==200&&M==36&&numel(L)==2&&strcmp(bc,'periodic')
         distanceMatrixXY = computeWoidDistancesWithBCs_N200_M36_mex(positions,L,bc);
     else
         distanceMatrixXY = computeWoidDistancesWithBCs(positions,L,bc);

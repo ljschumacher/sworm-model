@@ -33,6 +33,13 @@ param.r_LJcutoff = 4*rc;% r_LJcutoff: cut-off above which LJ-force is not acting
 param.sigma_LJ = 2*rc;
 param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
 
+% test clustered initial conditions
+param.bc = 'free';
+param.sigma_LJ = 0;
+L = [3.6, 3.6];
+xyarray = runWoids(5,40,18,L,param);
+animateWoidTrajectories(xyarray,['woidlino_test_movies/test_clustered'],L);
+
 % % test angle noise 
 % param.angleNoise = 1;% not much point making this any bigger than 10, because it's angular
 % param.bc = 'free';
@@ -65,14 +72,14 @@ param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
 % xyarray = runWoids(50,40,M,L,param);
 % animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40rods_haptotaxis_' num2str(param.f_hapt) '_ktheta_' num2str(param.k_theta)],L);
 
-% test haptotaxis for multiple rods with angle noise
-rng(2)
-param.f_hapt = 0.25;
-param.k_theta = 2;
-param.angleNoise = 1;
-xyarray = runWoids(50,40,M,L,param);
-animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40rods_haptotaxis_' ...
-    num2str(param.f_hapt) '_angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)],L);
+% % test haptotaxis for multiple rods with angle noise
+% rng(2)
+% param.f_hapt = 0.25;
+% param.k_theta = 2;
+% param.angleNoise = 1;
+% xyarray = runWoids(50,40,M,L,param);
+% animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40rods_haptotaxis_' ...
+%     num2str(param.f_hapt) '_angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)],L);
 
 % L = [15 15];
 % N = 50;
