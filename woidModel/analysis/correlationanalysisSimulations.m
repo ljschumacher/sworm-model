@@ -90,7 +90,7 @@ for frameCtr = 1:numFrames
         pairdist(:,frameCtr) = pdist([x(:,frame) y(:,frame)]); % distance between all pairs, in micrometer
     end
     gr(:,frameCtr) = histcounts(pairdist(:,frameCtr),distBins,'Normalization','count'); % radial distribution function
-    gr(:,frameCtr) = gr(:,frameCtr)'.*Area./(2*pi*distBins(2:end)*distBinWidth)...
+    gr(:,frameCtr) = gr(:,frameCtr)'.*Area./(pi*(distBins(2:end).^2 - (distBins(2:end) - distBinWidth).^2))...
         /(N*(N-1)/2); % normalisation by number of pairs, not double-counting
     distanceMatrix = squareform(pairdist(:,frameCtr)); % distance of every worm to every other
     nNbrDist(:,frameCtr) = min(distanceMatrix + max(max(distanceMatrix))*eye(size(distanceMatrix)));
