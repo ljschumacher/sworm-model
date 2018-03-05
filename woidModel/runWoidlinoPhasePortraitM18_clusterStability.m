@@ -48,9 +48,9 @@ paramAll.v0 = [0.33]; % npr1 0.33; N2 0.14
 paramAll.dT = min(1/2,rc0/paramAll.v0/16); % dT: time step, scales other parameters such as velocities and rates
 paramAll.saveEvery = round(1/paramAll.dT);
 
-revRatesClusterEdge = 0:5;
-dkdN_dwell_values = 0:0.2:1;
-dkdN_undwell_values = 0:0.2:2;
+revRatesClusterEdge = 0:0.5:5;
+dkdN_dwell_values = 0:0.1:1;
+dkdN_undwell_values = 0:0.1:2;
 
 k_thetas = [2];
 paramCombis = combvec(revRatesClusterEdge,dkdN_dwell_values,dkdN_undwell_values,k_thetas);
