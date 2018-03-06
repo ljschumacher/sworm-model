@@ -50,7 +50,7 @@ paramAll.saveEvery = round(1/paramAll.dT);
 
 revRatesClusterEdge = 0:0.5:5;
 dkdN_dwell_values = 0:0.1:1;
-dkdN_undwell_values = 0:0.1:2;
+dkdN_undwell_values = 0:0.2:2;
 
 k_thetas = [2];
 paramCombis = combvec(revRatesClusterEdge,dkdN_dwell_values,dkdN_undwell_values,k_thetas);

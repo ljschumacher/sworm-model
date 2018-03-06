@@ -1,7 +1,12 @@
 %% plot lag (or phase difference) of undulations along worm from single worm data
 close all
 clear
-
+% issues / to-do:
+% - 'range(tangentAngles)/2' can overestimate the amplitude, but if we're
+% correcting for that we're getting values above 1 which asin doesn't like,
+% so we either have to correct for it after asin, or remove large values
+% from tangentAngles
+addpath('../wormtracking/eigenworms/')
 for strain = {'npr-1','CB4856','N2'} 
     % find all files in the directory tree
     files = rdir(['../wormtracking/eigenworms/singleWorm/' strain{:} '/**/*.mat']);
@@ -16,8 +21,9 @@ for strain = {'npr-1','CB4856','N2'}
         [tangentAngles, ~] = makeAngleArrayV(worm.posture.skeleton.x',worm.posture.skeleton.y');
         % normalise for amplitude and get phase
         % dphase = 2asin(sqrt(2mean((deltaPhi/amplitude/2).^2)))
+        amplitude = range(tangentAngles)/2; % 
         deltaPhase = 2*asin(sqrt(2*diff(...
-            tangentAngles./repmat(range(tangentAngles)/2,size(tangentAngles,1),1)/2,... % amplitude = range(tangentAngles)/2
+            tangentAngles./amplitude/2,... % 
             1,2).^2));
         plot(nanmean(deltaPhase))
         meanDeltaPhase(wormCtr) = mean(nanmean(deltaPhase));

@@ -22,7 +22,8 @@
 % -- undulation parameters --
 % omega_m: angular frequency of undulations (default 0.6Hz)
 % theta_0: amplitude of undulations (default pi/4)
-% deltaPhase: phase shift in undulations from node to node
+% deltaPhase: phase shift in undulations from node to node - default value
+%   derived as follows: 2*pi*Lw/lambda/M = 2*pi*1.2/0.62/49 =approx 0.24
 % angleNoise: noise (gaussian) in direction of movement for head node
 % -- reversal parameters --
 % revRate: rate for poisson-distributed reversals (default 1/13s)
