@@ -73,7 +73,7 @@ for repCtr = 1:numRepeats
             '_run' num2str(repCtr)];
         filepath = 'results/woidlinos/';
         if ~exist([filepath filename '.mat'],'file')...
-%                 &&isempty(dir([filepath filename '_running_on_*.mat']))
+          &&isempty(dir([filepath filename '_running_on_*.mat']))
             disp(['running ' filename])
             % make a dummy file to mark that this sim is running on this computer
             [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
