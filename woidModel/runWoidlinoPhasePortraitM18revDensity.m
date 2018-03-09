@@ -23,7 +23,7 @@ paramAll.segmentLength = 1.13/(M - 1);
 paramAll.vs = 0.018;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
 paramAll.slowingMode = 'stochastic_bynode';
-paramAll.k_dwell = 0.0036; 
+paramAll.k_dwell = 0.0036;
 paramAll.k_undwell = 1.1;
 % -- reversal parameters --
 paramAll.reversalMode = 'density';
@@ -50,19 +50,21 @@ paramAll.dT = min(1/2,rc0/paramAll.v0/16); % dT: time step, scales other paramet
 paramAll.saveEvery = round(1/paramAll.dT);
 
 dkdN_dwell_values = 0:0.2:1;
+dkdN_undwell_values = 0:0.2:2;
 drdN_rev_values = 0:0.2:1;
-paramCombis = combvec(dkdN_dwell_values,drdN_rev_values);
+paramCombis = combvec(drdN_rev_values,dkdN_dwell_values,dkdN_undwell_values);
 nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats
     for paramCtr = 1:nParamCombis
         param = paramAll;
-        param.dkdN_dwell = paramCombis(1,paramCtr);
-        param.drdN_rev = paramCombis(2,paramCtr);
+        param.drdN_rev = paramCombis(1,paramCtr);
+        param.dkdN_dwell = paramCombis(2,paramCtr);
+        param.dkdN_undwell = paramCombis(3,paramCtr);
         filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
             ...'_angleNoise_' num2str(param.angleNoise) '_k_theta_' num2str(param.k_theta) ...
             '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
             '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
-            '_dkdN_' num2str(param.dkdN_dwell) ...'_' num2str(param.dkdN_undwell)...
+            '_dkdN_' num2str(param.dkdN_dwell) '_' num2str(param.dkdN_undwell)...
             ...'_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')...
             '_rev' param.reversalMode '_drdN_' num2str(param.drdN_rev) ...
             ...'_haptotaxis_' num2str(param.f_hapt) ...
