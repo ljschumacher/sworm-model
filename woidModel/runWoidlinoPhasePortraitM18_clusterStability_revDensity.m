@@ -25,7 +25,7 @@ paramAll.segmentLength = 1.13/(M - 1);
 paramAll.vs = 0.018;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
 paramAll.slowingMode = 'stochastic_bynode';
-paramAll.k_dwell = 0.0036; 
+paramAll.k_dwell = 0.0036;
 paramAll.k_undwell = 1.1;
 % -- reversal parameters --
 paramAll.reversalMode = 'density';
@@ -47,7 +47,7 @@ paramAll.deltaPhase = 0;
 % -- haptotaxis --
 % paramAll.f_hapt = 0.5;
 % -- speed and time-step --
-paramAll.v0 = [0.33]; % npr1 0.33; N2 0.14
+paramAll.v0 = 0.33; % npr1 0.33; N2 0.14
 paramAll.dT = min(1/2,rc0/paramAll.v0/16); % dT: time step, scales other parameters such as velocities and rates
 paramAll.saveEvery = round(1/paramAll.dT);
 
@@ -55,39 +55,40 @@ drdN_rev_values = 0:0.1:1;
 dkdN_dwell_values = 0:0.1:1;
 dkdN_undwell_values = 0:0.2:2;
 
-k_thetas = [2];
-paramCombis = combvec(drdN_rev_values,dkdN_dwell_values,dkdN_undwell_values,k_thetas);
-nParamCombis = size(paramCombis,2);
+paramAll.k_theta = 2;
 for repCtr = 1:numRepeats
-    for paramCtr = 1:nParamCombis
-        param = paramAll;
-        param.drdN_rev = paramCombis(1,paramCtr);
-        param.dkdN_dwell = paramCombis(2,paramCtr);
-        param.dkdN_undwell = paramCombis(3,paramCtr);
-        param.k_theta = paramCombis(4,paramCtr);
-        filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
-            ...'_angleNoise_' num2str(param.angleNoise) '_k_theta_' num2str(param.k_theta) ...
-            '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
-            '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
-            '_dkdN_' num2str(param.dkdN_dwell) '_' num2str(param.dkdN_undwell)...
-            ...'_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')...
-            '_rev' param.reversalMode '_drdN_' num2str(param.drdN_rev) ...
-            ...'_haptotaxis_' num2str(param.f_hapt) ...
-            '_clusteredStart' ...
-            '_run' num2str(repCtr)];
-        filepath = 'results/woidlinos/';
-        if ~exist([filepath filename '.mat'],'file')...
-                &&isempty(dir([filepath filename '_running_on_*.mat']))
-            disp(['running ' filename])
-            % make a dummy file to mark that this sim is running on this computer
-            [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
-            tmp_filename = [filepath filename '_running_on_' hostname '.mat'];
-            save(tmp_filename,'N','M','L','param')
-            rng(repCtr) % set random seed to be the same for each simulation
-            [xyarray, currentState] = runWoids(T,N,M,L,param);
-            xyarray = single(xyarray); % save space by using single precision
-            save([filepath filename '.mat'],'xyarray','T','N','M','L','param','currentState')
-            delete(tmp_filename)
+    param = paramAll;
+    for drdN_rev = drdN_rev_values
+        param.drdN_rev = drdN_rev;
+        for dkdN_dwell = dkdN_dwell_values
+            param.dkdN_dwell = dkdN_dwell;
+            for dkdN_undwell = dkdN_undwell_values
+                param.dkdN_undwell = dkdN_undwell;
+                filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
+                    ...'_angleNoise_' num2str(param.angleNoise) '_k_theta_' num2str(param.k_theta) ...
+                    '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
+                    '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
+                    '_dkdN_' num2str(param.dkdN_dwell) '_' num2str(param.dkdN_undwell)...
+                    ...'_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')...
+                    '_rev' param.reversalMode '_drdN_' num2str(param.drdN_rev) ...
+                    ...'_haptotaxis_' num2str(param.f_hapt) ...
+                    '_clusteredStart' ...
+                    '_run' num2str(repCtr)];
+                filepath = 'results/woidlinos/';
+                if ~exist([filepath filename '.mat'],'file')...
+                        &&isempty(dir([filepath filename '_running_on_*.mat']))
+                    disp(['running ' filename])
+                    % make a dummy file to mark that this sim is running on this computer
+                    [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
+                    tmp_filename = [filepath filename '_running_on_' hostname '.mat'];
+                    save(tmp_filename,'N','M','L','param')
+                    rng(repCtr) % set random seed to be the same for each simulation
+                    [xyarray, currentState] = runWoids(T,N,M,L,param);
+                    xyarray = single(xyarray); % save space by using single precision
+                    save([filepath filename '.mat'],'xyarray','T','N','M','L','param','currentState')
+                    delete(tmp_filename)
+                end
+            end
         end
     end
 end
