@@ -16,13 +16,13 @@ M = 36;
 dT = 0.035/0.33/16; % baseline timestep, eg rc/v0/8 when bending
 % set this to  rc/v0/16 to get better reversal accuracy
 saveEvery = 16;
-
+food = [];
 % single worm
 L = [2, 2];
 rng(1)
 
-xyarray = runWoids(10,1,36,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);
-animateWoidTrajectories(xyarray,['woid_test_movies/singleWormM' num2str(M)],L);
+% xyarray = runWoids(10,1,36,L,'bc','periodic','dT',dT,'saveEvery',saveEvery);
+% animateWoidTrajectories(xyarray,['woid_test_movies/singleWormM' num2str(M)],L);
 % % plot distribution of lengths to check length conservation
 % figure, histogram(squeeze(sum(sqrt(sum(diff(xyarray(:,:,1:2,:),1,2).^2,3)),2)),...
 %     'Normalization','Probability','EdgeColor','none')
@@ -202,23 +202,25 @@ rng(1)
 %
 
 % % test feeding without volume exclusion
-% M = 18;
-% param.rc = 0;
-% param.k_l = 80;
-% param.r_feed = 1/40;
-% param.k_unroam = 10;
-% param.slowingMode = 'stochastic_bynode';
-% param.k_dwell = 0.0036;
-% param.k_undwell = 1.1;
-% param.revRateClusterEdge = 1;
-% param.vs = 0.018;
-% param.dkdN_dwell = 0.6;
-% param.dkdN_undwell = param.dkdN_dwell;
-% param.angleNoise = 1;
-% [xyarray, ~, food] = runWoids(1000,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
-% animateWoidTrajectories(xyarray,['woid_test_movies/40WormM' num2str(M) ...
-%     '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
-%     '_angleNoise' num2str(param.angleNoise)],L,0.035,food);
+M = 18;
+param.rc = 0;
+param.k_l = 80;
+param.r_feed = 1/40;
+param.k_unroam = 10;
+param.slowingMode = 'stochastic_bynode';
+param.k_dwell = 0.0036;
+param.k_undwell = 1.1;
+param.reversalMode = 'density';
+param.revRateClusterEdge = 0;
+param.drdN_rev = 0.4;
+param.vs = 0.018;
+param.dkdN_dwell = 0;
+param.dkdN_undwell = 1.4;
+param.angleNoise = 1;
+[xyarray, ~, food] = runWoids(1000,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
+filename = ['woid_test_movies/40WormM' num2str(M) ...
+    '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
+    '_angleNoise' num2str(param.angleNoise)];
 
 % % test feeding without volume exclusion, with haptotaxis
 % M = 18;
@@ -390,7 +392,7 @@ rng(1)
 %      '_ri_' num2str(ri,2) '_kl_' num2str(k_l)];
 
 %% make movie and other plots
-animateWoidTrajectories(xyarray,filename,L);
+animateWoidTrajectories(xyarray,filename,L,0.035,food);
 
 pcf_mean = inf_pcf(xyarray,'complexsim',min(dT*saveEvery/3,1));
 figure

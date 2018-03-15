@@ -10,7 +10,7 @@ close all
 N = 40; % N: number of objects
 M = 18; % M: number of nodes in each object
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
-numRepeats = 1;
+numRepeats = 3;
 
 T = 1000;
 rc0 = 0.035; % rc: core repulsion radius (default 0.035 mm)

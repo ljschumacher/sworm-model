@@ -31,6 +31,7 @@ plotColors = lines(N);
 angles = linspace(0,2*pi,20)'; % for plotting node size
 
 if ~isempty(offset)&&max(abs(offset))>0&&numel(L)==2 % re-center plot - useful for periodic boundary conditions
+    addpath('../') % for checkWoidBoundaryConditions.m
     xyarray(:,:,x,:) = xyarray(:,:,x,:) + offset(1);
     xyarray(:,:,y,:) = xyarray(:,:,y,:) + offset(2);
     % re-enforce periodic boundaries

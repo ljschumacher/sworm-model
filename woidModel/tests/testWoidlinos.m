@@ -8,6 +8,8 @@ close all
 
 addpath('../')
 addpath('../visualisation')
+addpath('../analysis')
+
 % general model parameters for all test - unless set otherwise
 M = 18; % M: number of nodes in each object
 L = [7.5, 7.5];%[20, 20]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
@@ -32,13 +34,14 @@ param.slowingNodes = [];% slowingNodes: which nodes register contact (default [1
 param.r_LJcutoff = 4*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 param.sigma_LJ = 2*rc;
 param.eps_LJ = 0;% eps_LJ: strength of LJ-potential
+food = [];
 
-% test clustered initial conditions
-param.bc = 'free';
-param.sigma_LJ = 0;
-L = [3.6, 3.6];
-xyarray = runWoids(5,40,18,L,param);
-animateWoidTrajectories(xyarray,['woidlino_test_movies/test_clustered'],L);
+% % test clustered initial conditions
+% param.bc = 'free';
+% param.sigma_LJ = 0;
+% L = [3.6, 3.6];
+% xyarray = runWoids(5,40,18,L,param);
+% animateWoidTrajectories(xyarray,['woidlino_test_movies/test_clustered'],L);
 
 % % test angle noise 
 % param.angleNoise = 1;% not much point making this any bigger than 10, because it's angular
@@ -177,6 +180,29 @@ animateWoidTrajectories(xyarray,['woidlino_test_movies/test_clustered'],L);
 %     '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
 %     '_dkdN_' num2str(param.dkdN_dwell)],L,rc0);
 
+% test feeding
+L = [7.5 7.5];
+
+M = 18;
+param.rc = 0;
+param.k_l = 80;
+param.r_feed = 1/40;
+param.k_unroam = 10;
+param.slowingMode = 'stochastic_bynode';
+param.k_dwell = 0.0036;
+param.k_undwell = 1.1;
+param.reversalMode = 'density';
+param.revRateClusterEdge = 0;
+param.drdN_rev = 0.4;
+param.vs = 0.018;
+param.dkdN_dwell = 0;
+param.dkdN_undwell = 1.4;
+param.angleNoise = 1;
+[xyarray, ~, food] = runWoids(1000,40,M,L,'bc','periodic',param);
+filename = ['woidlino_test_movies/40rodsM' num2str(M) ...
+    '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
+    '_angleNoise' num2str(param.angleNoise)];
+
 % % N2-like
 % param.dT = rc/param.v0/16; % dT: time step, gets adapted in simulation
 % param.saveEvery = round(1/2/param.dT);
@@ -208,4 +234,18 @@ animateWoidTrajectories(xyarray,['woidlino_test_movies/test_clustered'],L);
 %     ['woidlino_test_movies/test_single_periodic_square'...
 %     '_noVolExcl' '_slowing' param.slowingMode ...
 %     '_revRate_' num2str(param.revRateClusterEdge) ...
-%     '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell)],L,rc0);
+%     '_dwell_' num2str(param.k_dwell) '_'
+%     num2str(param.k_undwell)],L,rc0);\
+%% make movie and other plots
+animateWoidTrajectories(xyarray,filename,L,0.035,food);
+
+pcf_mean = inf_pcf(xyarray,'complexsim',min(param.dT*param.saveEvery/3,1));
+figure
+plot((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
+xlabel('r (mm)'), ylabel('pcf')
+set(gcf,'PaperUnits','centimeters')
+exportfig(gcf,[filename '.eps']);
+system(['epstopdf ' filename '.eps']);
+system(['rm ' filename '.eps']);
+
+save(['../results/woidlinos/tests/' strrep(filename,'woidlino_test_movies/','') '.mat'])
