@@ -26,13 +26,13 @@ paramAll.k_undwell = 1.1;
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 3.75*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
-paramAll.eps_LJ = 1e-3;
+paramAll.eps_LJ = 0;%1e-3;
 if paramAll.eps_LJ<=0
     paramAll.r_LJcutoff = -1; % don't need to compute attraction if it's zero
 end
 paramAll.LJmode = 'soft';
 % % -- haptotaxis
-paramAll.f_hapt = 0.1;
+paramAll.f_hapt = 0;%0.1;
 % -- speed and time-step --
 paramAll.v0 = [0.33]; % npr1 0.33; N2 0.14
 paramAll.dT = min(1/2,rc/paramAll.v0/16); % dT: time step, scales other parameters such as velocities and rates
@@ -41,21 +41,23 @@ paramAll.saveEvery = round(1/paramAll.dT);
 numRepeats = 1;
 revRatesClusterEdge = 0:5;
 dkdN_dwell_values = 0:0.2:1;
-paramCombis = combvec(revRatesClusterEdge,dkdN_dwell_values);
+dkdN_undwell_values = 0:0.2:2;
+
+paramCombis = combvec(revRatesClusterEdge,dkdN_dwell_values,dkdN_undwell_values);
 nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats
     for paramCtr = 1:nParamCombis
         param = paramAll;
         param.revRateClusterEdge =  paramCombis(1,paramCtr);
         param.dkdN_dwell = paramCombis(2,paramCtr);
-        param.dkdN_undwell = param.dkdN_dwell;
+        param.dkdN_undwell = paramCombis(3,paramCtr);
         filename = ['woids_N_' num2str(N) '_L_' num2str(L(1)) ...
             '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
             '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
-            '_dkdN_' num2str(param.dkdN_dwell)...
-            '_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')...
-            '_LJ' param.LJmode num2str(param.eps_LJ) ...
-            '_haptotaxis_' num2str(param.f_hapt) ...
+            '_dkdN_' num2str(param.dkdN_dwell) '_' num2str(param.dkdN_undwell)...
+            '_revRateClusterEdge_' num2str(param.revRateClusterEdge,2)...
+            ...'_LJ' param.LJmode num2str(param.eps_LJ) ...
+            ...'_haptotaxis_' num2str(param.f_hapt) ...
             '_run' num2str(repCtr)];
         filepath = 'results/woids/mapping/';
         if ~exist([filepath filename '.mat'],'file')...
