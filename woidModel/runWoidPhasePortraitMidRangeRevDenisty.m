@@ -1,4 +1,4 @@
-function [] = runWoidPhasePortraitMidRange(paramCtr)
+function [] = runWoidPhasePortraitMidRangeRevDenisty(paramCtr)
 % run simulations of simplified woid model with single node per woid
 % for various speeds, attractions strengths, reversal probabilities...
 
@@ -24,6 +24,9 @@ paramAll.slowingNodes = [1:M];% slowingNodes: which nodes register contact (defa
 paramAll.slowingMode = 'stochastic_bynode';
 paramAll.k_dwell = 0.0036;
 paramAll.k_undwell = 1.1;
+% -- reversal parameters --
+paramAll.reversalMode = 'density';
+paramAll.revRateClusterEdge = 0;
 % -- Lennard-Jones parameters --
 paramAll.r_LJcutoff = 3.75*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
@@ -40,23 +43,23 @@ paramAll.dT = min(1/2,rc/paramAll.v0/16); % dT: time step, scales other paramete
 paramAll.saveEvery = round(1/paramAll.dT);
 
 numRepeats = 1;
-revRatesClusterEdge = 0:5;
+drdN_rev_values = 0:0.05:0.25;
 dkdN_dwell_values = 0:0.05:0.25;
 dkdN_undwell_values = 0:0.05:0.5;
 
-paramCombis = combvec(revRatesClusterEdge,dkdN_dwell_values,dkdN_undwell_values);
+paramCombis = combvec(drdN_rev_values,dkdN_dwell_values,dkdN_undwell_values);
 nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats
 %     for paramCtr = 1:nParamCombis
         param = paramAll;
-        param.revRateClusterEdge =  paramCombis(1,paramCtr);
+        param.drdN_rev =  paramCombis(1,paramCtr);
         param.dkdN_dwell = paramCombis(2,paramCtr);
         param.dkdN_undwell = paramCombis(3,paramCtr);
         filename = ['woids_N_' num2str(N) '_L_' num2str(L(1)) ...
             '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
             '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
             '_dkdN_' num2str(param.dkdN_dwell) '_' num2str(param.dkdN_undwell)...
-            '_revRateClusterEdge_' num2str(param.revRateClusterEdge,2)...
+            '_rev' param.reversalMode '_drdN_' num2str(param.drdN_rev) ...
             ...'_LJ' param.LJmode num2str(param.eps_LJ) ...
             ...'_haptotaxis_' num2str(param.f_hapt) ...
             '_ri' num2str(param.ri) ...
