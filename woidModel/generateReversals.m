@@ -1,5 +1,5 @@
 function reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
-    interactionRadius,headInd,tailInd,dT,reversalMode,revRate,revTime,revRateCluster,...
+    interactionRadius,contactRadius,headInd,tailInd,dT,reversalMode,revRate,revTime,revRateCluster,...
     revRateClusterEdge,roamingLogInd,drdN_rev)
 if strcmp(reversalMode,'density')
     % increase reversal rate based on local density
@@ -10,8 +10,8 @@ if strcmp(reversalMode,'density')
 end
 
 % find which worms are poking their head or tail out
-tailContacts = findWoidNeighbors(distanceMatrix,interactionRadius,tailInd);
-headContacts = findWoidNeighbors(distanceMatrix,interactionRadius,headInd);
+tailContacts = findWoidNeighbors(distanceMatrix,contactRadius,tailInd);
+headContacts = findWoidNeighbors(distanceMatrix,contactRadius,headInd);
 
 % generates reversal states
 % find worms currently in reversal state

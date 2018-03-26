@@ -1,4 +1,4 @@
-function [] = runWoidPhasePortraitMidRangeRevDenisty(paramCtr)
+function [] = runWoidPhasePortraitMidRangeRevDensity(paramCtr)
 % run simulations of simplified woid model with single node per woid
 % for various speeds, attractions strengths, reversal probabilities...
 
