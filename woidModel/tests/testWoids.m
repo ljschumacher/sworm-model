@@ -201,26 +201,26 @@ rng(1)
 % 
 %
 
-% % test feeding without volume exclusion
-M = 18;
-param.rc = 0;
-param.k_l = 80;
-param.r_feed = 1/40;
-param.k_unroam = 10;
-param.slowingMode = 'stochastic_bynode';
-param.k_dwell = 0.0036;
-param.k_undwell = 1.1;
-param.reversalMode = 'density';
-param.revRateClusterEdge = 0;
-param.drdN_rev = 0.4;
-param.vs = 0.018;
-param.dkdN_dwell = 0;
-param.dkdN_undwell = 1.4;
-param.angleNoise = 1;
-[xyarray, ~, food] = runWoids(1000,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
-filename = ['woid_test_movies/40WormM' num2str(M) ...
-    '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
-    '_angleNoise' num2str(param.angleNoise)];
+% % % test feeding without volume exclusion
+% M = 18;
+% param.rc = 0;
+% param.k_l = 80;
+% param.r_feed = 1/40;
+% param.k_unroam = 10;
+% param.slowingMode = 'stochastic_bynode';
+% param.k_dwell = 0.0036;
+% param.k_undwell = 1.1;
+% param.reversalMode = 'density';
+% param.revRateClusterEdge = 0;
+% param.drdN_rev = 0.4;
+% param.vs = 0.018;
+% param.dkdN_dwell = 0;
+% param.dkdN_undwell = 1.4;
+% param.angleNoise = 1;
+% [xyarray, ~, food] = runWoids(1000,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
+% filename = ['woid_test_movies/40WormM' num2str(M) ...
+%     '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
+%     '_angleNoise' num2str(param.angleNoise)];
 
 % % test feeding without volume exclusion, with haptotaxis
 % M = 18;
@@ -382,25 +382,25 @@ filename = ['woid_test_movies/40WormM' num2str(M) ...
 % filename = ['woid_test_movies/40Worms_periodic_haptotaxis_' num2str(f_hapt) '_kl_' num2str(k_l)...
 %             '_LJ' num2str(eps_LJ,'%1.0e') '_soft_asVolExcl'];
 
-% % test alignment
-% k_l = 80;
-% f_align = 1;
-% ri = 8*0.035;
-% xyarray = runWoids(500,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
-%     'f_align',f_align,'ri',ri,'k_l',k_l,'slowingNodes',[],'vs',0.33,'revRateClusterEdge',0);
-% filename = ['woid_test_movies/40Worms_periodic_align_' num2str(f_align) ...
-%      '_ri_' num2str(ri,2) '_kl_' num2str(k_l)];
+% test alignment
+k_l = 80;
+f_align = 1;
+ri = 4*0.035;
+xyarray = runWoids(500,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+    'f_align',f_align,'ri',ri,'k_l',k_l,'slowingNodes',[],'vs',0.33,'revRateClusterEdge',0);
+filename = ['woid_test_movies/40Worms_periodic_align_' num2str(f_align) ...
+     '_ri_' num2str(ri,2) '_kl_' num2str(k_l)];
 
 %% make movie and other plots
-animateWoidTrajectories(xyarray,filename,L,0.035,food);
-
-pcf_mean = inf_pcf(xyarray,'complexsim',min(dT*saveEvery/3,1));
-figure
-plot((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
-xlabel('r (mm)'), ylabel('pcf')
-set(gcf,'PaperUnits','centimeters')
-exportfig(gcf,[filename '.eps']);
-system(['epstopdf ' filename '.eps']);
-system(['rm ' filename '.eps']);
+% animateWoidTrajectories(xyarray,filename,L,0.035,food);
+% 
+% pcf_mean = inf_pcf(xyarray,'complexsim',min(dT*saveEvery/3,1));
+% figure
+% plot((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
+% xlabel('r (mm)'), ylabel('pcf')
+% set(gcf,'PaperUnits','centimeters')
+% exportfig(gcf,[filename '.eps']);
+% system(['epstopdf ' filename '.eps']);
+% system(['rm ' filename '.eps']);
 
 save(['../results/woids/tests/' strrep(filename,'woid_test_movies/','') '.mat'])

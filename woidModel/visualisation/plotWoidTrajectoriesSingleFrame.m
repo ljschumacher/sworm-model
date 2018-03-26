@@ -18,7 +18,7 @@ end
 
 N = size(xyarray,1);
 M = size(xyarray,2);
-if nargin < 4
+if nargin < 4 || isempty(plotColors)
     plotColors = lines(N);
 elseif size(plotColors,1)==1
     plotColors = repmat(plotColors,N,1);
@@ -27,13 +27,20 @@ assert(size(plotColors,1)==N,'Number of colors not matching number of objects')
 angles = linspace(0,2*pi,10)'; % for plotting node size
 
 if centering&&numel(L)==2 % center plot on center of mass - useful for periodic boundary conditions
-    xoffset = mean(mean(xyarray(:,:,x),2),1) - L(x)/2;
-    yoffset = mean(mean(xyarray(:,:,y),2),1) - L(y)/2;
+    % this calculates the centre of mass for peridic boundaries - useful
+    % trick found on wikipedia
+    c_x = mean(mean(cos(xyarray(:,:,x)/L(x)*2*pi),2),1);
+    s_x = mean(mean(sin(xyarray(:,:,x)/L(x)*2*pi),2),1);
+    xoffset = L(x)/2/pi*(atan2(-s_x,-c_x) + pi) - L(x)/2;
+    c_y = mean(mean(cos(xyarray(:,:,y)/L(y)*2*pi),2),1);
+    s_y = mean(mean(sin(xyarray(:,:,y)/L(y)*2*pi),2),1);
+    yoffset = L(y)/2/pi*(atan2(-s_y,-c_y) + pi) - L(y)/2;
     xyarray(:,:,x) = xyarray(:,:,x) - xoffset;
     xyarray(:,:,y) = xyarray(:,:,y) - yoffset;
     % re-enforce periodic boundaries
     [ xyarray, ~ ] = checkWoidBoundaryConditions(xyarray, [], 'periodic', L);
 end
+
 % set overall axes limits
 xrange = minmax(reshape(xyarray(:,:,x),1,numel(xyarray(:,:,x))));
 yrange = minmax(reshape(xyarray(:,:,y),1,numel(xyarray(:,:,y))));
@@ -61,9 +68,9 @@ if nargin>=3&&numel(L)==1
     ax.YLim = [-L L];
 elseif numel(L)==2
     ax.XLim(1) = min(xrange(1),0);
-    ax.XLim(2) = max(xrange(2),L(1));
+    ax.XLim(2) = max(xrange(2),L(x));
     ax.YLim(1) = min(yrange(1),0);
-    ax.YLim(2) = max(yrange(2),L(2));
+    ax.YLim(2) = max(yrange(2),L(y));
 else
     ax.XLim = xrange;
     ax.YLim = yrange;
