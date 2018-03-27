@@ -392,15 +392,15 @@ filename = ['woid_test_movies/40Worms_periodic_align_' num2str(f_align) ...
      '_ri_' num2str(ri,2) '_kl_' num2str(k_l)];
 
 %% make movie and other plots
-% animateWoidTrajectories(xyarray,filename,L,0.035,food);
-% 
-% pcf_mean = inf_pcf(xyarray,'complexsim',min(dT*saveEvery/3,1));
-% figure
-% plot((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
-% xlabel('r (mm)'), ylabel('pcf')
-% set(gcf,'PaperUnits','centimeters')
-% exportfig(gcf,[filename '.eps']);
-% system(['epstopdf ' filename '.eps']);
-% system(['rm ' filename '.eps']);
+animateWoidTrajectories(xyarray,filename,L,0.035,food);
+
+pcf_mean = inf_pcf(xyarray,'complexsim',min(dT*saveEvery/3,1));
+figure
+plot((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
+xlabel('r (mm)'), ylabel('pcf')
+set(gcf,'PaperUnits','centimeters')
+exportfig(gcf,[filename '.eps']);
+system(['epstopdf ' filename '.eps']);
+system(['rm ' filename '.eps']);
 
 save(['../results/woids/tests/' strrep(filename,'woid_test_movies/','') '.mat'])
