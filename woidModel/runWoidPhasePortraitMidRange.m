@@ -65,7 +65,7 @@ for repCtr = 1:numRepeats
         filepath = '/work/lschumac/woids/';
         if ~exist([filepath filename '.mat'],'file')%...
 % %                 &&isempty(dir([filepath filename '_running_on_*.mat']))
-%             disp(['running ' filename])
+            disp(['running ' filename])
 %             % make a dummy file to mark that this sim is running on this computer
 %             [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
 %             tmp_filename = [filepath filename '_running_on_' hostname '.mat'];
