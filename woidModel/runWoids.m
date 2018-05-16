@@ -234,6 +234,7 @@ else
         foodGrid = resumeState.foodGrid;
         food = NaN(size(foodGrid,1),size(foodGrid,2),numSavepoints);
         food(:,:,1) = foodGrid;
+        Ngrid = size(foodGrid);
     else
         foodGrid = [];
         food = [];

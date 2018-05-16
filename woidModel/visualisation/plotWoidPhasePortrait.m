@@ -37,7 +37,7 @@ aspectRatio = nrevRates/(ndwellVals + 1/3);
 numRepeats = 1
 % highlight panels
 select_panels = [8, 19]%[15, 13];
-select_colors = lines(2);
+select_colors = 0.*lines(2);
 for repCtr=1:numRepeats
     for speed = speeds
         phasePortraitFig = figure;
@@ -52,7 +52,7 @@ for repCtr=1:numRepeats
                         '_dkdN_' num2str(dkdN_dwell) '_' num2str(dkdN_dwell)...
                         '_revRateClusterEdge_' num2str(revRateClusterEdge,2)...
                         ...'_LJsoft' num2str(eps_LJ) ...
-                        ...'_haptotaxis_' num2str(f_hapt) ...
+                        '_haptotaxis_' num2str(f_hapt) ...
                         '_run' num2str(repCtr) '.mat'];
                     filepath = '../results/woids/mapping/';
                     if exist([filepath filename],'file')
@@ -88,7 +88,7 @@ for repCtr=1:numRepeats
         ax.TickDir = 'out';
         ax.Position = ax.Position.*[1 1 1 1];
         xlabel('cluster-edge reversal rate (1/s)')
-        ylabel('dk/d\rho')
+        ylabel('density-dependence of speed switch dk/d\rho')
         %% export figure
         phasePortraitFig.Position(3) = phasePortraitFig.Position(4)*aspectRatio; % resize figure
         phasePortraitFig.PaperUnits = 'centimeters';
@@ -96,7 +96,7 @@ for repCtr=1:numRepeats
             ...'_noUndulations'...'_noVolExcl' ...'_angleNoise'
             '_speed_' num2str(speed,'%1.0e') '_slowing' '_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell) ...
             ...'_LJsoft' num2str(eps_LJ) ...
-            ...'_haptotaxis_' num2str(f_hapt) ...
+            '_haptotaxis_' num2str(f_hapt) ...
             '.eps'];
         exportfig(phasePortraitFig,filename, exportOptions)
         system(['epstopdf ' filename]);

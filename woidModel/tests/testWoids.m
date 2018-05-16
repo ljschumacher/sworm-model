@@ -15,7 +15,7 @@ N = 40;
 M = 36;
 dT = 0.035/0.33/16; % baseline timestep, eg rc/v0/8 when bending
 % set this to  rc/v0/16 to get better reversal accuracy
-saveEvery = 16;
+saveEvery = 32;
 food = [];
 % single worm
 L = [2, 2];
@@ -269,14 +269,19 @@ rng(1)
 % param.slowingMode = 'stochastic_bynode';
 % param.k_dwell = 0.0036;
 % param.k_undwell = 1.1;
-% param.revRateClusterEdge = 1;
+% param.reversalMode = 'density';
+% param.drdN_rev = 0.05;
+% param.ri = 5*0.035;
+% param.revRateClusterEdge = 0;
 % param.vs = 0.018;
-% param.dkdN_dwell = 0.6;
-% param.dkdN_undwell = param.dkdN_dwell;
-% [xyarray, ~, food] = runWoids(500,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
-% animateWoidTrajectories(xyarray,['woid_test_movies/40WormM' num2str(M) ...
-%     '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
-%     ],L,0.035,food);
+% param.dkdN_dwell = 0.05;
+% param.dkdN_undwell = 0.4;
+% param.f_hapt = 0;
+% param.eps_LJ = 0;
+% [xyarray, currentState, food] = runWoids(2000,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,param);
+% filename = ['woid_test_movies/40WormM' num2str(M) '_sweeping_feedrate_' num2str(param.r_feed) ...
+%     '_kunroam_' num2str(param.k_unroam) '_haptotaxis_' num2str(param.f_hapt) ...
+%     '_LJsoft_' num2str(param.eps_LJ) '_midRange'];
 
 % % test attraction on head-only
 % eps_LJ = 5e-3;
@@ -382,14 +387,31 @@ rng(1)
 % filename = ['woid_test_movies/40Worms_periodic_haptotaxis_' num2str(f_hapt) '_kl_' num2str(k_l)...
 %             '_LJ' num2str(eps_LJ,'%1.0e') '_soft_asVolExcl'];
 
-% test alignment
-k_l = 80;
-f_align = 1;
-ri = 4*0.035;
-xyarray = runWoids(500,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
-    'f_align',f_align,'ri',ri,'k_l',k_l,'slowingNodes',[],'vs',0.33,'revRateClusterEdge',0);
-filename = ['woid_test_movies/40Worms_periodic_align_' num2str(f_align) ...
-     '_ri_' num2str(ri,2) '_kl_' num2str(k_l)];
+% % test alignment
+% k_l = 80;
+% f_align = 1;
+% ri = 4*0.035;
+% xyarray = runWoids(500,40,M,L,'bc','periodic','dT',dT,'saveEvery',saveEvery,...
+%     'f_align',f_align,'ri',ri,'k_l',k_l,'slowingNodes',[],'vs',0.33,'revRateClusterEdge',0);
+% filename = ['woid_test_movies/40Worms_periodic_align_' num2str(f_align) ...
+%      '_ri_' num2str(ri,2) '_kl_' num2str(k_l)];
+
+% test aggregation with circular boundary
+L = 4.25;
+param.k_l = 80;
+param.slowingMode = 'stochastic_bynode';
+param.k_dwell = 0.0036;
+param.k_undwell = 1.1;
+param.reversalMode = 'density';
+param.drdN_rev = 0.05;
+param.ri = 5*0.035;
+param.revRateClusterEdge = 0;
+param.vs = 0.018;
+param.dkdN_dwell = 0.05;
+param.dkdN_undwell = 0.4;
+
+[xyarray, currentState, food] = runWoids(500,40,M,L,'bc','noflux','dT',dT,'saveEvery',saveEvery,param);
+filename = ['woid_test_movies/40WormM' num2str(M) '_circBound' '_midRange'];
 
 %% make movie and other plots
 animateWoidTrajectories(xyarray,filename,L,0.035,food);
