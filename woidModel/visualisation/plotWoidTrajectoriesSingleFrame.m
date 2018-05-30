@@ -23,6 +23,12 @@ if nargin < 4 || isempty(plotColors)
 elseif size(plotColors,1)==1
     plotColors = repmat(plotColors,N,1);
 end
+if size(plotColors,2)>3 % use fourth value for transparency
+   plotAlpha = mean(plotColors(:,4)); % don't currently allow for individually different alphas
+   plotColors = plotColors(:,1:3);
+else
+    plotAlpha = 1;
+end
 assert(size(plotColors,1)==N,'Number of colors not matching number of objects')
 angles = linspace(0,2*pi,10)'; % for plotting node size
 
@@ -81,7 +87,8 @@ ax.YTick = [];
 for objCtr = 1:N
     patch(xyarray(objCtr,:,x) + rc*cos(angles),...
         xyarray(objCtr,:,y) + rc*sin(angles),...
-        plotColors(objCtr,:),'EdgeColor',plotColors(objCtr,:))
+        plotColors(objCtr,:),'EdgeColor',plotColors(objCtr,:),...
+        'FaceAlpha',plotAlpha,'EdgeAlpha',plotAlpha)
     if objCtr==1
         hold on
     end

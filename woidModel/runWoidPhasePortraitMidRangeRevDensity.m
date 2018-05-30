@@ -13,7 +13,7 @@ if numel(L)==1
 end
 T = 1000; % T: simulation duration
 rc = 0.035;
-paramAll.ri = 5*rc;
+paramAll.ri = 7.5*rc;
 % saveevery = round(1/2/param.dT);
 paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 paramAll.segmentLength = 1.13/(M - 1);
@@ -43,12 +43,11 @@ paramAll.dT = min(1/2,rc/paramAll.v0/16); % dT: time step, scales other paramete
 paramAll.saveEvery = round(1/paramAll.dT);
 
 numRepeats = 1;
-drdN_rev_values = 0:0.05:0.25;
-dkdN_dwell_values = 0:0.05:0.25;
-dkdN_undwell_values = 0:0.05:0.5;
+drdN_rev_values = 0:0.025:0.125;%0.05:0.25;
+dkdN_dwell_values = 0:0.025:0.125;%:0.05:0.25;
+dkdN_undwell_values = 0:0.025:0.25;%:0.05:0.5;
 
 paramCombis = combvec(drdN_rev_values,dkdN_dwell_values,dkdN_undwell_values);
-nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats
 %     for paramCtr = 1:nParamCombis
         param = paramAll;

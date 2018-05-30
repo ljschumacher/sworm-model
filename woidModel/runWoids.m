@@ -123,7 +123,7 @@ addOptional(iP,'r_LJcutoff',0,@isnumeric) % cut-off above which lennard jones po
 addOptional(iP,'eps_LJ',1e-6,@isnumeric) % strength of LJ-potential
 addOptional(iP,'sigma_LJ',0,@isnumeric) % particle size for Lennard-Jones force
 addOptional(iP,'LJnodes',1:M,checkInt) % nodes which feel LJ-force
-addOptional(iP,'LJmode','hard',@checkLJmode) % whether LJ-force is 'hard' or 'soft'
+addOptional(iP,'LJmode','soft',@checkLJmode) % whether LJ-force is 'hard' or 'soft'
 % state parameters
 addOptional(iP,'k_roam',0,@isnumeric) % rate to spontaneously enter the roaming state (like off-food) (default 0)
 addOptional(iP,'k_unroam',0,@isnumeric) % rate to spontaneously leave the roaming state (default 0)
