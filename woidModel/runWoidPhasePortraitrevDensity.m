@@ -1,13 +1,13 @@
-function [] = runWoidPhasePortraitrevDensity(N,L)
+function [] = runWoidPhasePortraitrevDensity(paramCtr)
 % run simulations of simplified woid model with single node per woid
 % for various speeds, attractions strengths, reversal probabilities...
 
 % issues/todo:
 
 % general model parameters for all test - unless set otherwise
-% N = 40; % N: number of objects
+N = 40; % N: number of objects
 M = 36; % M: number of nodes in each object
-% L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
+L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 if numel(L)==1
     L = [L, L];
 end
@@ -49,7 +49,7 @@ dkdN_undwell_values = 0:0.2:2;
 paramCombis = combvec(drdN_rev_values,dkdN_dwell_values,dkdN_undwell_values);
 nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats
-    for paramCtr = 1:nParamCombis
+%     for paramCtr = 1:nParamCombis
         param = paramAll;
         param.drdN_rev =  paramCombis(1,paramCtr);
         param.dkdN_dwell = paramCombis(2,paramCtr);
@@ -62,20 +62,21 @@ for repCtr = 1:numRepeats
             '_rev' param.reversalMode '_drdN_' num2str(param.drdN_rev) ...
             ...'_haptotaxis_' num2str(param.f_hapt) ...
             '_run' num2str(repCtr)];
-        filepath = 'results/woids/mapping/';
+%         filepath = 'results/woids/mapping/';
+        filepath = '/work/lschumac/woids/';
         if ~exist([filepath filename '.mat'],'file')...
-                &&isempty(dir([filepath filename '_running_on_*.mat']))
+%                 &&isempty(dir([filepath filename '_running_on_*.mat']))
             disp(['running ' filename])
-            % make a dummy file to mark that this sim is running on this computer
-            [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
-            tmp_filename = [filepath filename '_running_on_' hostname '.mat'];
-            save(tmp_filename,'N','M','L','param')
+%             % make a dummy file to mark that this sim is running on this computer
+%             [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
+%             tmp_filename = [filepath filename '_running_on_' hostname '.mat'];
+%             save(tmp_filename,'N','M','L','param')
             rng(repCtr) % set random seed to be the same for each simulation
             [xyarray, currentState] = runWoids(T,N,M,L,param);
             xyarray = single(xyarray); % save space by using single precision
             save([filepath filename '.mat'],'xyarray','T','N','M','L','param','currentState')
-            delete(tmp_filename)
+%             delete(tmp_filename)
         end
-    end
+%     end
 end
 end
