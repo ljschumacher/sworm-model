@@ -11,7 +11,7 @@ L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will g
 if numel(L)==1
     L = [L, L];
 end
-T = 1000; % T: simulation duration
+T = 74%1000; % T: simulation duration
 rc = 0.035;
 paramAll.ri = 7.5*rc;
 % saveevery = round(1/2/param.dT);
@@ -64,10 +64,12 @@ for repCtr = 1:numRepeats
             '_ri' num2str(param.ri) ...
             '_run' num2str(repCtr)];
 %         filepath = 'results/woids/mapping/';
-        filepath = '/work/lschumac/woids/';
+%         filepath = '/work/lschumac/woids/';
+        filepath = 'results/woids/midRange/';
+
         if ~exist([filepath filename '.mat'],'file')%...
 % %                 &&isempty(dir([filepath filename '_running_on_*.mat']))
-%             disp(['running ' filename])
+            disp(['running ' filename])
 %             % make a dummy file to mark that this sim is running on this computer
 %             [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
 %             tmp_filename = [filepath filename '_running_on_' hostname '.mat'];

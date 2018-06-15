@@ -303,6 +303,7 @@ while t<T
     [positions, orientations] = applyForces(positions,forceArray,...
         dT,orientations,bc,L);
     assert(~any(isinf(positions(:))),'Uh-oh, something has gone wrong... (infinite positions)')
+    assert(~checkIntersects(positions,distanceMatrix,2*rc,bc,L),'Worms are intersecting, when they should not')
     % consume food
     if r_feed>0
         foodGrid = consumeFood(foodGrid,xgrid,ygrid,r_feed,dT,positions);
