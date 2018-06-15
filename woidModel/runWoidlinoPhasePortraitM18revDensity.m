@@ -1,3 +1,4 @@
+function [] = runWoidlinoPhasePortraitM18revDensity(paramCtr)
 % run simulations of simplified woid model with single node per woid
 % for various speeds, attractions strengths, reversal probabilities...
 
@@ -57,7 +58,7 @@ drdN_rev_values = 0:0.2:1;
 paramCombis = combvec(drdN_rev_values,dkdN_dwell_values,dkdN_undwell_values);
 nParamCombis = size(paramCombis,2);
 for repCtr = 1:numRepeats
-    for paramCtr = 1:nParamCombis
+%     for paramCtr = 1:nParamCombis
         param = paramAll;
         param.drdN_rev = paramCombis(1,paramCtr);
         param.dkdN_dwell = paramCombis(2,paramCtr);
@@ -86,5 +87,6 @@ for repCtr = 1:numRepeats
             save([filepath filename '.mat'],'xyarray','T','N','M','L','param','currentState')
 %             delete(tmp_filename)
         end
-    end
+%     end
+end
 end
