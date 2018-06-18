@@ -149,6 +149,12 @@ resumeState = iP.Results.resumeState;
 v0 = iP.Results.v0;
 dTmin = dT0/10/sqrt(N)*v0; % set a mininum timestep below which dT won't be adapted
 rc = iP.Results.rc;
+% temporary fix: need to have non-zero rc for reversals
+if rc==0
+    rcontact = 3*0.035;
+else
+    rcontact = 3*rc;
+end
 bc = iP.Results.bc;
 if M>1
     segmentLength = iP.Results.segmentLength;
@@ -281,7 +287,7 @@ while t<T
     % check if any worms are reversing due to contacts
     reversalLogIndPrev(reversalLogInd(:,timeCtr)) = true; % only update events that happen between timeCtr updates, ie reversal starts
     reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatrix,...
-        Rir*ri,3*rc,headNodes,tailNodes,dT,reversalMode,revRate,revTime,revRateCluster,...
+        Rir*ri,rcontact,headNodes,tailNodes,dT,reversalMode,revRate,revTime,revRateCluster,...
         revRateClusterEdge,roamingLogInd,drdN_rev);
     % update internal oscillators / headings
     [orientations, phaseOffset] = updateWoidOscillators(orientations,theta_0,...
