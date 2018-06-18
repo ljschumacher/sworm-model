@@ -4,9 +4,6 @@ function [] = runWoidlinoPhasePortraitM18revDensity(paramCtr)
 
 % issues/todo:
 
-clear
-close all
-
 % general model parameters for all test - unless set otherwise
 N = 40; % N: number of objects
 M = 18; % M: number of nodes in each object
