@@ -11,13 +11,13 @@ L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will g
 if numel(L)==1
     L = [L, L];
 end
-T = 74%1000; % T: simulation duration
+T = 1000; % T: simulation duration
 rc = 0.035;
 paramAll.ri = 7.5*rc;
 % saveevery = round(1/2/param.dT);
 paramAll.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 paramAll.segmentLength = 1.13/(M - 1);
-paramAll.k_l = 80;
+paramAll.k_l = 100;
 % -- slow-down parameters --
 paramAll.vs = 0.018;% vs: speed when slowed down (default v0/3)
 paramAll.slowingNodes = [1:M];% slowingNodes: which nodes register contact (default head and tail)
