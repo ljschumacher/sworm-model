@@ -43,15 +43,42 @@ food = [];
 % xyarray = runWoids(5,40,18,L,param);
 % animateWoidTrajectories(xyarray,['woidlino_test_movies/test_clustered'],L);
 
-% % test angle noise 
-% param.angleNoise = 0.02;% not much point making this any bigger than 10, because it's angular
-% param.bc = 'free';
-% param.k_theta = 0;
-% L = [3 3];
-% rng(1)
-% xyarray = runWoids(100,1,M,L,param);
-% filename = ['woidlino_test_movies/test_free_'...
-%     'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)];
+% test angle noise 
+N = 10;
+figure, hold on
+noiseLevels = [0.03, 0.04, 0.05];
+param.ri = 0; % no interaction
+for noiseLevel = noiseLevels
+    param.angleNoise = noiseLevel;% not much point making this any bigger than 10, because it's angular, and even smaller when worm has no stiffness
+    param.bc = 'free';
+    param.k_theta = 0;
+    L = [3 3];
+    rng(1)
+    xyarray = runWoids(600,N,M,L,param);
+    filename = ['woidlino_test_movies/test_free_'...
+        'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)];
+    % plot velocity autocorrelation of worm worm trajectory to calibrate
+    % persistence
+    for nn = 1:N
+    velocities = gradient(squeeze(xyarray(nn,1,:,:)))./(param.dT*param.saveEvery); % head orientation
+    vac(nn,:) = vectorAutoCorrelation(velocities,round(30./(param.dT*param.saveEvery)));
+    end
+    vac = mean(vac);
+    plot(linspace(0,30,length(vac)),vac)
+    % plot average heading change vs time ?
+end
+ylabel('normalised velocity autocorrelation')
+xlabel('time (s)')
+h = refline(0,0.23);
+h.LineStyle = '--';
+h.Color = [0 0 0];
+ylim([0 1])
+lh = legend(num2str(noiseLevels'),'Location','SOuthWest');
+lh.Title.String = 'noise \eta';
+set(gcf,'PaperUnits','centimeters')
+exportfig(gcf,[filename '_vac.eps'],'Color','rgb');
+system(['epstopdf ' filename '_vac.eps']);
+system(['rm ' filename '_vac.eps']);
 
 % % test haptotaxis
 % rng(2)
@@ -60,13 +87,13 @@ food = [];
 % xyarray = runWoids(20,2,M,L,param);
 % animateWoidTrajectories(xyarray,['woidlino_test_movies/test_periodic_haptotaxis_' num2str(param.f_hapt)],L);
 
-% angle noise for multiple rods
-% test angle noise 
-param.angleNoise = 0.02; % not much point making this any bigger than 10, because it's angular
-param.k_theta = 0;
-xyarray = runWoids(20,40,M,L,param);
-filename = ['woidlino_test_movies/test_40rods_' ...
-    'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)];
+% % angle noise for multiple rods
+% % test angle noise 
+% param.angleNoise = 0.02; % not much point making this any bigger than 10, because it's angular
+% param.k_theta = 0;
+% xyarray = runWoids(20,40,M,L,param);
+% filename = ['woidlino_test_movies/test_40rods_' ...
+%     'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)];
 
 % % test haptotaxis for multiple rods
 % rng(2)
@@ -180,27 +207,27 @@ filename = ['woidlino_test_movies/test_40rods_' ...
 %     '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
 %     '_dkdN_' num2str(param.dkdN_dwell)],L,rc0);
 
-% test feeding
-L = [7.5 7.5];
-T = 7200;
-M = 18;
-param.rc = 0;
-param.r_feed = 1/100;
-param.k_unroam = 10;
-param.slowingMode = 'stochastic_bynode';
-param.k_dwell = 0.0036;
-param.k_undwell = 1.1;
-param.reversalMode = 'density';
-param.revRateClusterEdge = 0;
-param.drdN_rev = 0.4;
-param.vs = 0.018;
-param.dkdN_dwell = 0;
-param.dkdN_undwell = 1.4;
-param.angleNoise = 0.02;
-[xyarray, ~, food] = runWoids(T,40,M,L,'bc','periodic',param);
-filename = ['woidlino_test_movies/40rodsM' num2str(M) ...
-    '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
-    '_angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)];
+% % test feeding
+% L = [7.5 7.5];
+% T = 7200;
+% M = 18;
+% param.rc = 0;
+% param.r_feed = 1/100;
+% param.k_unroam = 10;
+% param.slowingMode = 'stochastic_bynode';
+% param.k_dwell = 0.0036;
+% param.k_undwell = 1.1;
+% param.reversalMode = 'density';
+% param.revRateClusterEdge = 0;
+% param.drdN_rev = 0.2;
+% param.vs = 0.018;
+% param.dkdN_dwell = 0.6;
+% param.dkdN_undwell = 2;
+% param.angleNoise = 0.02;
+% [xyarray, ~, food] = runWoids(T,40,M,L,'bc','periodic',param);
+% filename = ['woidlino_test_movies/40rodsM' num2str(M) ...
+%     '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
+%     '_angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)];
 
 % % N2-like
 % param.dT = rc/param.v0/16; % dT: time step, gets adapted in simulation

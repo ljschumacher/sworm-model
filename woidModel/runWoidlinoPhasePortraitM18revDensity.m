@@ -39,7 +39,7 @@ end
 paramAll.theta_0 = 0;
 paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
-paramAll.angleNoise = 0.02;
+paramAll.angleNoise = 0.04;
 paramAll.k_theta = 0;
 % -- haptotaxis --
 % paramAll.f_hapt = 0.5;
@@ -70,8 +70,8 @@ for repCtr = 1:numRepeats
         ...'_haptotaxis_' num2str(param.f_hapt) ...
         '_run' num2str(repCtr)];
     %         filepath = 'results/woidlinos/mapping/';
-    %         filepath = '/work/lschumac/woidlinos/';
-    filepath = 'results/woidlinos/floppy/';
+            filepath = '/work/lschumac/woidlinos/';
+%     filepath = 'results/woidlinos/floppy/';
     if ~exist([filepath filename '.mat'],'file')%...
         %                 &&isempty(dir([filepath filename '_running_on_*.mat']))
         %             disp(['running ' filename])
