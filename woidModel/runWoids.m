@@ -282,7 +282,7 @@ while t<T
     roamingLogInd = updateRoamingState(roamingLogInd,k_roam,k_unroam,dT,...
         foodGrid,xgrid,ygrid,r_feed,positions);
     % check if any woids are slowed down by neighbors
-    [ v, omega, dwellLogInd ] = slowWorms(distanceMatrix,Ris*ri,slowingNodes,slowingMode,...
+    [ v, omega, dwellLogInd ] = slowWorms(distanceMatrix,Ris*ri,rcontact,slowingNodes,slowingMode,...
         vs,v0,omega_m,roamingLogInd,k_dwell,k_undwell,dkdN_dwell,dkdN_undwell,dwellLogInd,dT);
     % check if any worms are reversing due to contacts
     reversalLogIndPrev(reversalLogInd(:,timeCtr)) = true; % only update events that happen between timeCtr updates, ie reversal starts
@@ -364,12 +364,12 @@ end
 end
 
 function SlowModeCheck = checkSlowingMode(s)
-validSlowingModes = {'gradual','abrupt','density','stochastic','stochastic_bynode'};
+validSlowingModes = {'gradual','abrupt','density','stochastic','stochastic_bynode','stochastic_weighted'};
 SlowModeCheck = any(strcmp(s,validSlowingModes));
 end
 
 function RevModeCheck = checkReversalMode(s)
-validRevModes = {'contact','density'};
+validRevModes = {'contact','density','density_weighted'};
 RevModeCheck = any(strcmp(s,validRevModes));
 end
 
