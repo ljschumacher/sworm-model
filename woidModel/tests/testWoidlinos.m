@@ -224,6 +224,7 @@ system(['rm ' filename '_vac.eps']);
 % param.dkdN_dwell = 0.6;
 % param.dkdN_undwell = 2;
 % param.angleNoise = 0.02;
+% param.k_theta = 0;
 % [xyarray, ~, food] = runWoids(T,40,M,L,'bc','periodic',param);
 % filename = ['woidlino_test_movies/40rodsM' num2str(M) ...
 %     '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...

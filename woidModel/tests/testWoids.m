@@ -263,7 +263,6 @@ rng(1)
 %     '_angleNoise' num2str(param.angleNoise)],L,0.035,food);
 
 % test feeding
-M = 37
 T = 1000%7200;
 bc = 'periodic';
 param.k_l = 80;
@@ -284,7 +283,7 @@ param.v0 = 0.33;
 param.f_hapt = 0%0.05;
 param.eps_LJ = 2e-5;
 param.LJmode = 'soft';
-param.LJnodes = 1:round(M*0.1);
+param.LJnodes = 1:M;
 param.sigma_LJ = 2*0.035;
 param.r_LJcutoff = 34*0.035;
 [xyarray, currentState, food] = runWoids(T,40,M,L,'bc',bc,param);

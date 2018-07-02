@@ -70,19 +70,20 @@ for repCtr = 1:numRepeats
         ...'_haptotaxis_' num2str(param.f_hapt) ...
         '_run' num2str(repCtr)];
     %         filepath = 'results/woidlinos/mapping/';
-            filepath = '/work/lschumac/woidlinos/';
-%     filepath = 'results/woidlinos/floppy/';
+%             filepath = '/work/lschumac/woidlinos/';
+    filepath = 'results/woidlinos/floppy/';
     if ~exist([filepath filename '.mat'],'file')%...
         %                 &&isempty(dir([filepath filename '_running_on_*.mat']))
         %             disp(['running ' filename])
+        paramCtr
         %             % make a dummy file to mark that this sim is running on this computer
         %             [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
         %             tmp_filename = [filepath filename '_running_on_' hostname '.mat'];
         %             save(tmp_filename,'N','M','L','param')
         rng(repCtr) % set random seed to be the same for each simulation
-        [xyarray, currentState] = runWoids(T,N,M,L,param);
-        xyarray = single(xyarray); % save space by using single precision
-        save([filepath filename '.mat'],'xyarray','T','N','M','L','param','currentState')
+%         [xyarray, currentState] = runWoids(T,N,M,L,param);
+%         xyarray = single(xyarray); % save space by using single precision
+%         save([filepath filename '.mat'],'xyarray','T','N','M','L','param','currentState')
         %             delete(tmp_filename)
     end
     %     end
