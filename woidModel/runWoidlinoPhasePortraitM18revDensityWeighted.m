@@ -70,8 +70,8 @@ for repCtr = 1:numRepeats
         ...'_haptotaxis_' num2str(param.f_hapt) ...
         '_run' num2str(repCtr)];
     %         filepath = 'results/woidlinos/mapping/';
-            filepath = '/work/lschumac/woidlinos/';
-%     filepath = 'results/woidlinos/floppy/';
+%             filepath = '/work/lschumac/woidlinos/';
+    filepath = 'results/woidlinos/floppy/';
     if ~exist([filepath filename '.mat'],'file')%...
         %                 &&isempty(dir([filepath filename '_running_on_*.mat']))
         %             disp(['running ' filename])

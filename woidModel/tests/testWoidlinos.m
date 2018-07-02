@@ -17,8 +17,8 @@ param.v0 = 0.33; % v0: speed (default 0.05)
 rc = 0.035;
 param.rc = 0; % rc: core repulsion radius (default 0.07 mm)
 param.segmentLength = 1.13/(M - 1);
-param.dT = rc/param.v0/16; % dT: time step, gets adapted in simulation
 T = 50; % T: simulation duration (number of time-steps)
+param.dT = rc/param.v0/16; % dT: time step, gets adapted in simulation
 param.saveEvery = round(1/2/param.dT);
 param.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 % undulations
@@ -43,49 +43,54 @@ food = [];
 % xyarray = runWoids(5,40,18,L,param);
 % animateWoidTrajectories(xyarray,['woidlino_test_movies/test_clustered'],L);
 
-% test angle noise 
-N = 10;
-figure, hold on
-noiseLevels = [0.03, 0.04, 0.05];
-param.ri = 0; % no interaction
-for noiseLevel = noiseLevels
-    param.angleNoise = noiseLevel;% not much point making this any bigger than 10, because it's angular, and even smaller when worm has no stiffness
-    param.bc = 'free';
-    param.k_theta = 0;
-    L = [3 3];
-    rng(1)
-    xyarray = runWoids(600,N,M,L,param);
-    filename = ['woidlino_test_movies/test_free_'...
-        'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)];
-    % plot velocity autocorrelation of worm worm trajectory to calibrate
-    % persistence
-    for nn = 1:N
-    velocities = gradient(squeeze(xyarray(nn,1,:,:)))./(param.dT*param.saveEvery); % head orientation
-    vac(nn,:) = vectorAutoCorrelation(velocities,round(30./(param.dT*param.saveEvery)));
-    end
-    vac = mean(vac);
-    plot(linspace(0,30,length(vac)),vac)
-    % plot average heading change vs time ?
-end
-ylabel('normalised velocity autocorrelation')
-xlabel('time (s)')
-h = refline(0,0.23);
-h.LineStyle = '--';
-h.Color = [0 0 0];
-ylim([0 1])
-lh = legend(num2str(noiseLevels'),'Location','SOuthWest');
-lh.Title.String = 'noise \eta';
-set(gcf,'PaperUnits','centimeters')
-exportfig(gcf,[filename '_vac.eps'],'Color','rgb');
-system(['epstopdf ' filename '_vac.eps']);
-system(['rm ' filename '_vac.eps']);
+% % test angle noise 
+% N = 10;
+% figure, hold on
+% noiseLevels = [0.04, 0.05, 0.06];
+% param.ri = 0; % no interaction
+% param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
+% param.saveEvery = round(1/2/param.dT);
+% for noiseLevel = noiseLevels
+%     param.angleNoise = noiseLevel;% not much point making this any bigger than 10, because it's angular, and even smaller when worm has no stiffness
+%     param.bc = 'free';
+%     param.k_theta = 0;
+%     L = [3 3];
+%     rng(1)
+%     xyarray = runWoids(600,N,M,L,param);
+%     filename = ['woidlino_test_movies/test_free_'...
+%         'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta) '_dT' num2str(param.dT)];
+%     % plot velocity autocorrelation of worm worm trajectory to calibrate
+%     % persistence
+%     for nn = 1:N
+%     velocities = gradient(squeeze(xyarray(nn,1,:,:)))./(param.dT*param.saveEvery); % head orientation
+%     vac(nn,:) = vectorAutoCorrelation(velocities,round(30./(param.dT*param.saveEvery)));
+%     end
+%     vac = mean(vac);
+%     plot(linspace(0,30,length(vac)),vac)
+%     % plot average heading change vs time ?
+% end
+% ylabel('normalised velocity autocorrelation')
+% xlabel('time (s)')
+% h = refline(0,0.23);
+% h.LineStyle = '--';
+% h.Color = [0 0 0];
+% ylim([0 1])
+% lh = legend(num2str(noiseLevels'),'Location','SOuthWest');
+% lh.Title.String = 'noise \eta';
+% set(gcf,'PaperUnits','centimeters')
+% exportfig(gcf,[filename '_vac.eps'],'Color','rgb');
+% system(['epstopdf ' filename '_vac.eps']);
+% system(['rm ' filename '_vac.eps']);
 
-% % test haptotaxis
+% test haptotaxis
 % rng(2)
 % L = [3 3];
-% param.f_hapt = 0.25;
+% param.f_hapt = 0.1;
+% param.k_theta = 0;
+% param.angleNoise = 0.04;
 % xyarray = runWoids(20,2,M,L,param);
-% animateWoidTrajectories(xyarray,['woidlino_test_movies/test_periodic_haptotaxis_' num2str(param.f_hapt)],L);
+% filename = ['woidlino_test_movies/test_periodic_haptotaxis_' num2str(param.f_hapt) ...
+%     '_angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)];
 
 % % angle noise for multiple rods
 % % test angle noise 
@@ -96,11 +101,14 @@ system(['rm ' filename '_vac.eps']);
 %     'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)];
 
 % % test haptotaxis for multiple rods
-% rng(2)
-% param.f_hapt = 0.1;
-% param.k_theta = 2;
-% xyarray = runWoids(50,40,M,L,param);
-% animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40rods_haptotaxis_' num2str(param.f_hapt) '_ktheta_' num2str(param.k_theta)],L);
+L = [3.75 3.75];
+rng(2)
+param.f_hapt = 0.1;
+param.k_theta = 0;
+param.angleNoise = 0.04;
+xyarray = runWoids(50,10,M,L,param);
+filename = ['woidlino_test_movies/test_10rods_haptotaxis_' num2str(param.f_hapt) ...
+    '_angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)];
 
 % % test haptotaxis for multiple rods with angle noise
 % rng(2)
@@ -134,11 +142,18 @@ system(['rm ' filename '_vac.eps']);
 % xyarray = runWoids(T,N,M,L,param);
 % animateWoidTrajectories(xyarray,'woidlino_test_movies/test_periodic_square_contactForces',L,rc);
 % 
+% N = 1;
 % param.revRate = 0.1;
 % param.revTime = 10;
-% N = 1;
-% xyarray = runWoids(T,N,M,L,param);
-% animateWoidTrajectories(xyarray,'woidlino_test_movies/test_periodic_square_reversals',L,rc);
+% param.k_theta = 0;
+% param.angleNoise = 0.04*sqrt(2);
+% param.bc = 'free';
+% param.dT = rc/param.v0/8;
+% param.saveEvery = round(1/2/param.dT);
+% rng(1)
+% xyarray = runWoids(100,N,M,L,param);
+% filename = ['woidlino_test_movies/test_reversals_dT' num2str(param.dT) ...
+%     '_ktheta' num2str(param.k_theta) '_angleNoise' num2str(param.angleNoise)];
 % 
 % param.revRate = 0;
 % param.revRateClusterEdge = 1;
