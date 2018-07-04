@@ -16,8 +16,8 @@ elseif strcmp(reversalMode,'density_weighted')
 end
 
 % find which worms are poking their head or tail out
-tailContacts = findWoidNeighbors(distanceMatrix,contactRadius,tailInd);
-headContacts = findWoidNeighbors(distanceMatrix,contactRadius,headInd);
+tailContacts = findWoidNeighbors(distanceMatrix,3/2*contactRadius,tailInd);
+headContacts = findWoidNeighbors(distanceMatrix,3/2*contactRadius,headInd);
 
 % generates reversal states
 % find worms currently in reversal state

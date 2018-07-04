@@ -14,7 +14,7 @@ for n = 1:N
 end
 % weight neighbours by distance, such that any neighbours further than the
 % contact distance get a 1/r weighting
-nbrNMNMweighted = nbrNMNMLogInd.*rcontact./(max(distances,3*rcontact) - 2*rcontact);
+nbrNMNMweighted = nbrNMNMLogInd.*rcontact./max(distances,rcontact);
 numNbrsPerNode = sum(sum(nbrNMNMweighted,3),4); % count how many nodes of other objects each node is in contact with
 numNbrsAndNodes = sum(numNbrsPerNode,2); % sum num nbrs over nodes (of this object)
 end

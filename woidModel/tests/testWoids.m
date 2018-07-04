@@ -90,7 +90,7 @@ rng(1)
 % animateWoidTrajectories(xyarray,['woid_test_movies/singleWormM' num2str(M) '_feeding'],L,0.035,food);
 
 % % two worms
-% L = [2 2];
+L = [2.5 2.5];
 % xyarray = runWoids(20,2,M,L,'bc','noflux',param);
 % animateWoidTrajectories(xyarray,['woid_test_movies/twoWormsM' num2str(M) '_noflux'],L);
 % 
@@ -140,7 +140,16 @@ rng(1)
 % eps_LJ = 2e-3;
 % xyarray = runWoids(40,2,M,L,'bc','periodic',param,...
 %     'r_LJcutoff',5*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035,'LJnodes',1);
-% animateWoidTrajectories(xyarray,['woid_test_movies/twoWorms_periodic_LennardJones' num2str(eps_LJ,'%1.0e') '_head'],L);
+% movfilename = ['woid_test_movies/twoWorms_periodic_LennardJones' num2str(eps_LJ,'%1.0e') '_head'];
+
+% rng(1)
+% L = [7.5 7.5]./sqrt(2);
+% eps_LJ = 5e-5;
+% r_LJcutoff = 1.2;
+% xyarray = runWoids(40,4,M,L,'bc','periodic',param,'rc',0,...
+%     'r_LJcutoff',r_LJcutoff,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035,'LJnodes',1:M);
+% movfilename = ['woid_test_movies/40Worms_periodic_LennardJones' num2str(eps_LJ,'%1.0e') ...
+%     '_rcutoff_' num2str(r_LJcutoff) '_rc0'];
 %
 % rng(2)
 % xyarray = runWoids(20,2,M,L,'bc','periodic',param,'f_hapt',1);
@@ -153,7 +162,7 @@ rng(1)
 % animateWoidTrajectories(xyarray,'woid_test_movies/twoWorms_periodic_rev_density',L);
 
 % many worms
-L = [7.5, 7.5];
+% L = [7.5, 7.5];
 rng(1)
 % xyarray = runWoids(20,N,M,L,'bc','noflux',param);
 % animateWoidTrajectories(xyarray,['woid_test_movies/40wormsM' num2str(M) '_noflux'],L);
@@ -262,8 +271,9 @@ rng(1)
 %     '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
 %     '_angleNoise' num2str(param.angleNoise)],L,0.035,food);
 
-% test feeding
-T = 1000%7200;
+% % test feeding
+L = [7.5 7.5];
+T = 150%7200
 bc = 'periodic';
 param.k_l = 80;
 param.r_feed = 0%1/100;
@@ -280,16 +290,17 @@ param.ri = 5*0.035;
 param.vs = 0.018;
 param.v0 = 0.33;
 % param.omega_m = 2*pi*0.25
-param.f_hapt = 0%0.05;
-param.eps_LJ = 2e-5;
+param.f_hapt = 0;%0.05;
+param.eps_LJ = 1e-5
 param.LJmode = 'soft';
 param.LJnodes = 1:M;
 param.sigma_LJ = 2*0.035;
 param.r_LJcutoff = 34*0.035;
+param.rc = 0
 [xyarray, currentState, food] = runWoids(T,40,M,L,'bc',bc,param);
 movfilename = ['woid_test_movies/40WormM' num2str(M) '_sweeping_feedrate_' num2str(param.r_feed) ...
     '_kunroam_' num2str(param.k_unroam) '_haptotaxis_' num2str(param.f_hapt) ...
-    '_LJsoft_' num2str(param.eps_LJ) '_longRange_headOnly'
+    '_LJsoft_' num2str(param.eps_LJ) '_sigma' num2str(param.sigma_LJ) '_longRange_headOnly_rc_' num2str(param.rc) ...
     '_ri_' num2str(param.ri) ...
     ];
 
@@ -426,13 +437,13 @@ movfilename = ['woid_test_movies/40WormM' num2str(M) '_sweeping_feedrate_' num2s
 %% make movie and other plots
 animateWoidTrajectories(xyarray,movfilename,L,0.035,food);
 
-pcf_mean = inf_pcf(xyarray,'complexsim',min(param.dT*param.saveEvery/3,1));
-figure
-plot((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
-xlabel('r (mm)'), ylabel('pcf')
-set(gcf,'PaperUnits','centimeters')
-exportfig(gcf,[movfilename '.eps']);
-system(['epstopdf ' movfilename '.eps']);
-system(['rm ' movfilename '.eps']);
+% pcf_mean = inf_pcf(xyarray,'complexsim',min(param.dT*param.saveEvery/3,1));
+% figure
+% plot((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
+% xlabel('r (mm)'), ylabel('pcf')
+% set(gcf,'PaperUnits','centimeters')
+% exportfig(gcf,[movfilename '.eps']);
+% system(['epstopdf ' movfilename '.eps']);
+% system(['rm ' movfilename '.eps']);
 
 save(['../results/woids/tests/' strrep(movfilename,'woid_test_movies/','') '.mat'])

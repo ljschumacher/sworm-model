@@ -151,9 +151,9 @@ dTmin = dT0/10/sqrt(N)*v0; % set a mininum timestep below which dT won't be adap
 rc = iP.Results.rc;
 % temporary fix: need to have non-zero rc for reversals
 if rc==0
-    rcontact = 3*0.035;
+    rcontact = 2*0.035;
 else
-    rcontact = 3*rc;
+    rcontact = 2*rc;
 end
 bc = iP.Results.bc;
 if M>1
@@ -296,7 +296,7 @@ while t<T
     forceArray = calculateForces(distanceMatrixXY,distanceMatrix,...
         rc,orientations,reversalLogInd(:,timeCtr),segmentLength,...
         v,k_l,k_theta*v./v0,theta_0,phaseOffset,sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,...
-        LJmode,angleNoise*sqrt(dT./dT0),ri,rcontact*2/3,f_hapt,f_align);
+        LJmode,angleNoise*sqrt(dT./dT0),ri,rcontact,f_hapt,f_align);
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % adapt time-step such that it scales inversily with the max force
     dT = adaptTimeStep(dT0,v0,forceArray);
