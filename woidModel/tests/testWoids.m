@@ -144,7 +144,7 @@ L = [2.5 2.5];
 
 rng(1)
 L = [2 2]%./sqrt(2);
-param.eps_LJ = 1e-4;
+param.eps_LJ = 1e-3;
 param.r_LJcutoff = 1.2;
 param.sigma_LJ = 2*0.035;
 param.LJnodes = 1:M;

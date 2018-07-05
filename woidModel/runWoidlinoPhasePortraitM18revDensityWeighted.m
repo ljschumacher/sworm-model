@@ -49,8 +49,8 @@ paramAll.dT = min(1/2,rc0/paramAll.v0/16); % dT: time step, scales other paramet
 paramAll.saveEvery = round(1/paramAll.dT);
 
 dkdN_dwell_values = 0:0.05:0.45;
-dkdN_undwell_values = 0:0.05:0.6;
-drdN_rev_values = 0:0.15:0.45;
+dkdN_undwell_values = 0:0.05:0.45;
+drdN_rev_values = 0:0.05:0.45;
 
 paramCombis = combvec(drdN_rev_values,dkdN_dwell_values,dkdN_undwell_values);
 nParamCombis = size(paramCombis,2);
