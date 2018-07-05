@@ -144,14 +144,14 @@ L = [2.5 2.5];
 
 rng(1)
 L = [2 2]%./sqrt(2);
-param.eps_LJ = 5e-5;
+param.eps_LJ = 1e-4;
 param.r_LJcutoff = 1.2;
 param.sigma_LJ = 2*0.035;
 param.LJnodes = 1:M;
 param.v0 = 3e-4;
 param.vs = 1e-4;
 param.omega_m = 0;
-xyarray = runWoids(40,2,M,L,'bc','periodic',param,'rc',0);
+xyarray = runWoids(100,2,M,L,'bc','periodic',param,'rc',0);
 movfilename = ['woid_test_movies/twoWorms_periodic_LennardJones' num2str(param.eps_LJ,'%1.0e') ...
     '_rcutoff_' num2str(param.r_LJcutoff) '_rc0'];
 %
