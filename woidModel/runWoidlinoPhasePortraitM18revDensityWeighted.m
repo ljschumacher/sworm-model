@@ -48,9 +48,9 @@ paramAll.v0 = [0.33]; % npr1 0.33; N2 0.14
 paramAll.dT = min(1/2,rc0/paramAll.v0/16); % dT: time step, scales other parameters such as velocities and rates
 paramAll.saveEvery = round(1/paramAll.dT);
 
-dkdN_dwell_values = 0:0.15:0.75;
-dkdN_undwell_values = 0:0.15:1.5;
-drdN_rev_values = 0:0.15:0.75;
+dkdN_dwell_values = 0:0.05:0.45;
+dkdN_undwell_values = 0:0.05:0.6;
+drdN_rev_values = 0:0.15:0.45;
 
 paramCombis = combvec(drdN_rev_values,dkdN_dwell_values,dkdN_undwell_values);
 nParamCombis = size(paramCombis,2);
@@ -70,8 +70,8 @@ for repCtr = 1:numRepeats
         ...'_haptotaxis_' num2str(param.f_hapt) ...
         '_run' num2str(repCtr)];
     %         filepath = 'results/woidlinos/mapping/';
-    filepath = '/work/lschumac/woidlinos/';
-    %     filepath = 'results/woidlinos/floppy/';
+%     filepath = '/work/lschumac/woidlinos/';
+        filepath = 'results/woidlinos/floppy/';
     if ~exist([filepath filename '.mat'],'file')%...
         %         &&isempty(dir([filepath filename '_running_on_*.mat']))
         %             disp(['running ' filename])
@@ -79,10 +79,11 @@ for repCtr = 1:numRepeats
         %         [~, hostname] = system('hostname -s'); hostname = strrep(hostname,newline,'');
         %         tmp_filename = [filepath filename '_running_on_' hostname '.mat'];
         %         save(tmp_filename,'N','M','L','param')
-        rng(repCtr) % set random seed to be the same for each simulation
-        [xyarray, currentState] = runWoids(T,N,M,L,param);
-        xyarray = single(xyarray); % save space by using single precision
-        save([filepath filename '.mat'],'xyarray','T','N','M','L','param','currentState')
+        paramCtr
+% %         rng(repCtr) % set random seed to be the same for each simulation
+% %         [xyarray, currentState] = runWoids(T,N,M,L,param);
+% %         xyarray = single(xyarray); % save space by using single precision
+% %         save([filepath filename '.mat'],'xyarray','T','N','M','L','param','currentState')
         %         delete(tmp_filename)
     end
     %     end
