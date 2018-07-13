@@ -46,8 +46,8 @@ if ismember(nodeInd,LJnodes) % check if current node feels LJ force
         %         ./distanceMatrix(lennardjonesNbrs(:)); % normalise for distance
         switch LJmode
             case 'hard'
-                sr6 = (sigma_LJ./distanceMatrix(lennardjonesNbrs(:))).^6;
-                f_LJ = 48*eps_LJ./distanceMatrix(lennardjonesNbrs(:)).*(sr6.^2 - 1/2*sr6);
+                asigr = (0.2599210499*sigma_LJ + distanceMatrix(lennardjonesNbrs(:)));
+                f_LJ = 8*eps_LJ./asigr.*((sigma_LJ./asigr).^4 - 1/2*sigma_LJ./asigr);
             case 'soft'
                 asigr = (2/3*sigma_LJ + distanceMatrix(lennardjonesNbrs(:)));
                 f_LJ = 8*eps_LJ./asigr.*((sigma_LJ./asigr).^2 - 1/2*sigma_LJ./asigr);

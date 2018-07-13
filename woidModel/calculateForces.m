@@ -1,6 +1,6 @@
 function forceArray = calculateForces(distanceMatrixXY,distanceMatrix,rc,...
     headings,reversals,segmentLength,v_target,k_l,k_theta,theta_0,phaseOffset,...
-    sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,LJmode,angleNoise,ri,r_overlap,f_hapt,f_align)
+    sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,LJmode,angleNoise,ri,r_overlap,f_hapt,haptotaxisMode,f_align)
 % updates object directions according to update rules
 
 % issues/to-do's:
@@ -62,9 +62,15 @@ for objCtr = 1:N
     Fm(headInd,:) = [cos(headAngle), sin(headAngle)];
     % haptotaxis - move to the direction of other worms (should this be added before angular noise?)
     if f_hapt~=0 % haptotaxis could be attractive or repulsive
-        Fm(headInd,:) = Fm(headInd,:) ...
-            + calculateHaptotaxis(distanceMatrixXY(:,:,:,objCtr,headInd),...
-            distanceMatrix(:,:,objCtr,headInd),objCtr,ri,r_overlap,f_hapt);
+        if strcmp(haptotaxisMode,'weighted')
+            Fm(headInd,:) = Fm(headInd,:) ...
+                + calculateHaptotaxisWeighted(distanceMatrixXY(:,:,:,objCtr,headInd),...
+                distanceMatrix(:,:,objCtr,headInd),objCtr,ri,r_overlap,f_hapt);
+        else
+            Fm(headInd,:) = Fm(headInd,:) ...
+                + calculateHaptotaxis(distanceMatrixXY(:,:,:,objCtr,headInd),...
+                distanceMatrix(:,:,objCtr,headInd),objCtr,ri,r_overlap,f_hapt);
+        end
     end
     
     % Vicsek-type alignment force - only really used for demonstration

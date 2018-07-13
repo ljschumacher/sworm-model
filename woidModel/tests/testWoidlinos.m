@@ -19,7 +19,7 @@ param.rc = 0; % rc: core repulsion radius (default 0.07 mm)
 param.segmentLength = 1.13/(M - 1);
 T = 50; % T: simulation duration (number of time-steps)
 param.dT = rc/param.v0/16; % dT: time step, gets adapted in simulation
-param.saveEvery = round(1/2/param.dT);
+param.saveEvery = round(1/param.dT);
 param.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 % undulations
 param.omega_m = 0; % angular frequency of oscillation of movement direction, default 0.6 Hz
@@ -29,7 +29,7 @@ param.deltaPhase = 0; % for phase shift in undulations and initial positions, de
 param.ri = 3*rc;% ri: radius at which rods register contact (default 3 rc)
 % -- slow-down parameters --
 param.vs = param.v0;% vs: speed when slowed down (default v0/3)
-param.slowingNodes = [];% slowingNodes: which nodes register contact (default [1 M], ie head and tail)
+param.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default [1 M], ie head and tail)
 % -- Lennard-Jones parameters --
 param.r_LJcutoff = 4*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 param.sigma_LJ = 2*rc;
@@ -100,24 +100,68 @@ food = [];
 % filename = ['woidlino_test_movies/test_40rods_' ...
 %     'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)];
 
-% % test haptotaxis for multiple rods
-L = [3.75 3.75];
-rng(2)
-param.f_hapt = 0.1;
-param.k_theta = 0;
-param.angleNoise = 0.04;
-xyarray = runWoids(50,10,M,L,param);
-filename = ['woidlino_test_movies/test_10rods_haptotaxis_' num2str(param.f_hapt) ...
-    '_angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)];
-
-% % test haptotaxis for multiple rods with angle noise
+% % % test haptotaxis for multiple rods
+% L = [3.75 3.75];
 % rng(2)
-% param.f_hapt = 0.25;
-% param.k_theta = 2;
-% param.angleNoise = 1;
-% xyarray = runWoids(50,40,M,L,param);
-% animateWoidTrajectories(xyarray,['woidlino_test_movies/test_40rods_haptotaxis_' ...
-%     num2str(param.f_hapt) '_angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)],L);
+% param.f_hapt = 0.1;
+% param.k_theta = 0;
+% param.angleNoise = 0.04;
+% xyarray = runWoids(50,10,M,L,param);
+% filename = ['woidlino_test_movies/test_10rods_haptotaxis_' num2str(param.f_hapt) ...
+%     '_angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)];
+
+% % % test haptotaxis for multiple rods with angle noise
+% rng(1)
+% param.ri = 1.2;
+% param.f_hapt = 0.01;
+% param.k_theta = 0;
+% param.angleNoise = 0.05;
+% param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
+% param.slowingMode = 'stochastic_weighted';
+% param.k_dwell = 0.0036;
+% param.k_undwell = 1.1;
+% param.dkdN_dwell = 0.05;
+% param.dkdN_undwell = 0.05;
+% param.reversalMode = 'density_weighted';
+% param.drdN_rev = 0.05;
+% param.revRateClusterEdge = 0;
+% xyarray = runWoids(1000,40,M,L,param);
+% filename = ['woidlino_test_movies/test_40rods_haptotaxis_' ...
+%     num2str(param.f_hapt) '_angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)];
+
+% % test attraction with rc=0 for multiple rods with angle noise
+rng(1)
+param.ri = 1.2;
+param.f_hapt = 0;%0.2;
+% param.haptotaxisMode = 'weighted';
+param.k_theta = 0;
+param.angleNoise = 0.05;
+param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
+param.saveEvery = round(1/param.dT);
+param.slowingMode = 'stochastic_weighted';
+param.k_dwell = 0.0036;
+param.k_undwell = 1.1;
+param.dkdN_dwell = 0.05;
+param.dkdN_undwell = 0.05;
+param.reversalMode = 'density_weighted';
+param.drdN_rev = 0.05;
+param.revRateClusterEdge = 0;
+param.eps_LJ = 2e-5;
+param.LJmode = 'hard';
+param.LJnodes = 1;
+param.sigma_LJ = 2*0.035;
+param.r_LJcutoff = 1.2;
+N = 40;
+L = [7.5, 7.5];
+M = 19;
+[xyarray, currentState, food] = runWoids(1000,N,M,L,param);
+filename = ['woidlino_test_movies/test_' num2str(N) 'rods_M' num2str(M) ...
+    '_angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)...
+    '_' param.reversalMode '_ri_' num2str(param.ri) ...
+    ...'_haptotaxis_' param.haptotaxisMode '_' num2str(param.f_hapt) ...
+    '_LJ' param.LJmode '_' num2str(param.eps_LJ) '_longRange' '_headOnly'...
+    '_sigma_' num2str(param.sigma_LJ) ...
+    ];
 
 % L = [15 15];
 % N = 50;
@@ -281,10 +325,10 @@ filename = ['woidlino_test_movies/test_10rods_haptotaxis_' num2str(param.f_hapt)
 %% make movie and other plots
 animateWoidTrajectories(xyarray,filename,L,0.035,food);
 
-% pcf_mean = inf_pcf(xyarray,'complexsim',min(param.dT*param.saveEvery/3,1));
+% pcf_mean = inf_pcf(xyarray,'simulation',min(param.dT*param.saveEvery/3,1));
 % figure
-% plot((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
-% xlabel('r (mm)'), ylabel('pcf')
+% semilogy((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
+% xlabel('r (mm)'), ylabel('pcf'), ylim([0.1 100]), xlim([0 2])
 % set(gcf,'PaperUnits','centimeters')
 % exportfig(gcf,[filename '.eps']);
 % system(['epstopdf ' filename '.eps']);

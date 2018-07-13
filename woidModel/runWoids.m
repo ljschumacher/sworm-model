@@ -66,6 +66,7 @@
 % r_feed: feeding rate (1/s), in arbitrary concentration amounts
 % -- haptotaxis parameters
 % f_hapt: haptotaxis bias, can be attractive or repulse (default 0)
+% haptotaxisMode: whether to weight worms 'constant' or 'weighted' 1/r for distance
 %
 % OUTPUTS
 % xyarray: Array containing the position, and movement direction for
@@ -131,6 +132,7 @@ addOptional(iP,'k_unroam',0,@isnumeric) % rate to spontaneously leave the roamin
 addOptional(iP,'r_feed',0,@isnumeric) % feeding rate (1/s), in arbitrary concentration amounts
 % haptotaxis
 addOptional(iP,'f_hapt',0,@isnumeric) % haptotaxis bias, can be attractive or repulse (default 0)
+addOptional(iP,'haptotaxisMode','constant',@checkHaptotaxisMode) % 'constant' or 'density'
 % vicsek-type alignment
 addOptional(iP,'f_align',0,@isnumeric) % vicsek-type alignment, only for demonstration
 % simulation parameters
@@ -194,6 +196,7 @@ k_roam = iP.Results.k_roam;
 k_unroam = iP.Results.k_unroam;
 r_feed = iP.Results.r_feed;
 f_hapt = iP.Results.f_hapt;
+haptotaxisMode = iP.Results.haptotaxisMode;
 f_align = iP.Results.f_align;
 
 % check input relationships to each other
@@ -296,7 +299,7 @@ while t<T
     forceArray = calculateForces(distanceMatrixXY,distanceMatrix,...
         rc,orientations,reversalLogInd(:,timeCtr),segmentLength,...
         v,k_l,k_theta*v./v0,theta_0,phaseOffset,sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,...
-        LJmode,angleNoise*sqrt(dT./dT0),ri,rcontact,f_hapt,f_align);
+        LJmode,angleNoise*sqrt(dT./dT0),ri,rcontact,f_hapt,haptotaxisMode,f_align);
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % adapt time-step such that it scales inversily with the max force
     dT = adaptTimeStep(dT0,v0,forceArray);
@@ -371,6 +374,11 @@ end
 function RevModeCheck = checkReversalMode(s)
 validRevModes = {'contact','density','density_weighted'};
 RevModeCheck = any(strcmp(s,validRevModes));
+end
+
+function HaptoModeChek = checkHaptotaxisMode(s)
+validHaptoModes = {'constant','weighted'};
+HaptoModeCheck = any(strcmp(s,validHaptoModes));
 end
 
 function LJmodeCheck = checkLJmode(s)

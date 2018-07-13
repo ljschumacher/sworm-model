@@ -15,7 +15,7 @@ N = 40;
 M = 36;
 param.dT = 0.035/0.33/16; % baseline timestep, eg rc/v0/8 when bending
 % set this to  rc/v0/16 to get better reversal accuracy
-param.saveEvery = 32;
+param.saveEvery = round(1/param.dT);
 food = [];
 % single worm
 L = [2, 2];
@@ -142,18 +142,18 @@ L = [2.5 2.5];
 %     'r_LJcutoff',5*0.035,'eps_LJ',eps_LJ,'sigma_LJ',2*0.035,'LJnodes',1);
 % movfilename = ['woid_test_movies/twoWorms_periodic_LennardJones' num2str(eps_LJ,'%1.0e') '_head'];
 
-rng(1)
-L = [2 2]%./sqrt(2);
-param.eps_LJ = 1e-3;
-param.r_LJcutoff = 1.2;
-param.sigma_LJ = 2*0.035;
-param.LJnodes = 1:M;
-param.v0 = 3e-4;
-param.vs = 1e-4;
-param.omega_m = 0;
-xyarray = runWoids(100,2,M,L,'bc','periodic',param,'rc',0);
-movfilename = ['woid_test_movies/twoWorms_periodic_LennardJones' num2str(param.eps_LJ,'%1.0e') ...
-    '_rcutoff_' num2str(param.r_LJcutoff) '_rc0'];
+% rng(1)
+% L = [2 2]%./sqrt(2);
+% param.eps_LJ = 1e-3;
+% param.r_LJcutoff = 1.2;
+% param.sigma_LJ = 2*0.035;
+% param.LJnodes = 1:M;
+% param.v0 = 3e-4;
+% param.vs = 1e-4;
+% param.omega_m = 0;
+% xyarray = runWoids(100,2,M,L,'bc','periodic',param,'rc',0);
+% movfilename = ['woid_test_movies/twoWorms_periodic_LennardJones' num2str(param.eps_LJ,'%1.0e') ...
+%     '_rcutoff_' num2str(param.r_LJcutoff) '_rc0'];
 %
 % rng(2)
 % xyarray = runWoids(20,2,M,L,'bc','periodic',param,'f_hapt',1);
@@ -275,39 +275,39 @@ rng(1)
 %     '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
 %     '_angleNoise' num2str(param.angleNoise)],L,0.035,food);
 
-% % % test feeding
-% L = [7.5 7.5];
-% M = 36;
-% T = 1000%7200
-% bc = 'periodic';
-% param.k_l = 80;
-% param.r_feed = 0%1/100;
-% param.k_unroam = 10;
-% param.slowingMode = 'stochastic_bynode';
-% param.k_dwell = 0.0036;
-% param.k_undwell = 1.1;
-% param.dkdN_dwell = 0.05;
-% param.dkdN_undwell = 0.4;
-% param.reversalMode = 'density';
-% param.revRateClusterEdge = 0;
-% param.drdN_rev = 0.05;
-% param.ri = 5*0.035;
-% param.vs = 0.018;
-% param.v0 = 0.33;
-% % param.omega_m = 2*pi*0.25
-% param.f_hapt = 0.1;
-% param.eps_LJ = 0
-% param.LJmode = 'soft';
-% param.LJnodes = 1;
-% param.sigma_LJ = 2*0.035;
-% param.r_LJcutoff = -1%34*0.035;
-% param.rc = 0
-% [xyarray, currentState, food] = runWoids(T,40,M,L,'bc',bc,param);
-% movfilename = ['woid_test_movies/40WormM' num2str(M) '_sweeping_feedrate_' num2str(param.r_feed) ...
-%     '_kunroam_' num2str(param.k_unroam) '_haptotaxis_' num2str(param.f_hapt) ...
-%     '_LJsoft_' num2str(param.eps_LJ) '_rc_' num2str(param.rc) ...
-%     '_ri_' num2str(param.ri) ...
-%     ];
+% % test feeding
+L = [7.5 7.5];
+M = 37;
+T = 1000;
+bc = 'periodic';
+param.k_l = 80;
+param.r_feed = 0%1/100;
+param.k_unroam = 10;
+param.slowingMode = 'stochastic_bynode';
+param.k_dwell = 0.0036;
+param.k_undwell = 1.1;
+param.dkdN_dwell = 0.05;
+param.dkdN_undwell = 0.4;
+param.reversalMode = 'density';
+param.revRateClusterEdge = 0;
+param.drdN_rev = 0.05;
+param.ri = 5*0.035;
+param.vs = 0.018;
+param.v0 = 0.33;
+% param.omega_m = 2*pi*0.25
+param.f_hapt = 0;
+param.eps_LJ = 1.1e-5;
+param.LJmode = 'soft';
+param.LJnodes = 1;
+param.sigma_LJ = 2*0.035;
+param.r_LJcutoff = 34*0.035;
+param.rc = 0
+[xyarray, currentState, food] = runWoids(T,40,M,L,'bc',bc,param);
+movfilename = ['woid_test_movies/40WormM' num2str(M) '_sweeping_feedrate_' num2str(param.r_feed) ...
+    '_kunroam_' num2str(param.k_unroam) ...'_haptotaxis_' num2str(param.f_hapt) ...
+    '_LJsoft_' num2str(param.eps_LJ) '_longRange_headOnly_rc_' num2str(param.rc) ...
+    '_ri_' num2str(param.ri) ...
+    ];
 
 % % test attraction on head-only
 % eps_LJ = 5e-3;
@@ -442,13 +442,13 @@ rng(1)
 %% make movie and other plots
 animateWoidTrajectories(xyarray,movfilename,L,0.035,food);
 
-% pcf_mean = inf_pcf(xyarray,'complexsim',min(param.dT*param.saveEvery/3,1));
-% figure
-% plot((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
-% xlabel('r (mm)'), ylabel('pcf')
-% set(gcf,'PaperUnits','centimeters')
-% exportfig(gcf,[movfilename '.eps']);
-% system(['epstopdf ' movfilename '.eps']);
-% system(['rm ' movfilename '.eps']);
+pcf_mean = inf_pcf(xyarray,'complexsim',min(param.dT*param.saveEvery/3,1));
+figure
+semilogy((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
+xlabel('r (mm)'), ylabel('pcf'), ylim([0.1 100])
+set(gcf,'PaperUnits','centimeters')
+exportfig(gcf,[movfilename '.eps']);
+system(['epstopdf ' movfilename '.eps']);
+system(['rm ' movfilename '.eps']);
 
 save(['../results/woids/tests/' strrep(movfilename,'woid_test_movies/','') '.mat'])
