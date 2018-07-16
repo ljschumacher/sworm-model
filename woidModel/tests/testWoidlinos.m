@@ -44,21 +44,22 @@ food = [];
 % animateWoidTrajectories(xyarray,['woidlino_test_movies/test_clustered'],L);
 
 % % test angle noise 
-% N = 10;
+N = 1;
 % figure, hold on
 % noiseLevels = [0.04, 0.05, 0.06];
 % param.ri = 0; % no interaction
-% param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
-% param.saveEvery = round(1/2/param.dT);
+param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
+param.saveEvery = round(1/2/param.dT);
+param.angleNoise = 0.05;
 % for noiseLevel = noiseLevels
 %     param.angleNoise = noiseLevel;% not much point making this any bigger than 10, because it's angular, and even smaller when worm has no stiffness
-%     param.bc = 'free';
-%     param.k_theta = 0;
-%     L = [3 3];
-%     rng(1)
-%     xyarray = runWoids(600,N,M,L,param);
-%     filename = ['woidlino_test_movies/test_free_'...
-%         'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta) '_dT' num2str(param.dT)];
+    param.bc = 'free';
+    param.k_theta = 0;
+    L = [3 3];
+    rng(1)
+    xyarray = runWoids(100,N,M,L,param);
+    filename = ['woidlino_test_movies/test_free_'...
+        'angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta) '_dT' num2str(param.dT)];
 %     % plot velocity autocorrelation of worm worm trajectory to calibrate
 %     % persistence
 %     for nn = 1:N
@@ -129,39 +130,42 @@ food = [];
 % filename = ['woidlino_test_movies/test_40rods_haptotaxis_' ...
 %     num2str(param.f_hapt) '_angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)];
 
-% % test attraction with rc=0 for multiple rods with angle noise
-rng(1)
-param.ri = 1.2;
-param.f_hapt = 0;%0.2;
+% % % test attraction with rc=0 for multiple rods with angle noise
+% rng(1)
+% param.ri = 1.2;
+% param.r_feed = 1/100;
+% param.k_unroam = 10;
+% param.f_hapt = 0.2;
 % param.haptotaxisMode = 'weighted';
-param.k_theta = 0;
-param.angleNoise = 0.05;
-param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
-param.saveEvery = round(1/param.dT);
-param.slowingMode = 'stochastic_weighted';
-param.k_dwell = 0.0036;
-param.k_undwell = 1.1;
-param.dkdN_dwell = 0.05;
-param.dkdN_undwell = 0.05;
-param.reversalMode = 'density_weighted';
-param.drdN_rev = 0.05;
-param.revRateClusterEdge = 0;
-param.eps_LJ = 2e-5;
-param.LJmode = 'hard';
-param.LJnodes = 1;
-param.sigma_LJ = 2*0.035;
-param.r_LJcutoff = 1.2;
-N = 40;
-L = [7.5, 7.5];
-M = 19;
-[xyarray, currentState, food] = runWoids(1000,N,M,L,param);
-filename = ['woidlino_test_movies/test_' num2str(N) 'rods_M' num2str(M) ...
-    '_angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)...
-    '_' param.reversalMode '_ri_' num2str(param.ri) ...
-    ...'_haptotaxis_' param.haptotaxisMode '_' num2str(param.f_hapt) ...
-    '_LJ' param.LJmode '_' num2str(param.eps_LJ) '_longRange' '_headOnly'...
-    '_sigma_' num2str(param.sigma_LJ) ...
-    ];
+% param.k_theta = 0;
+% param.angleNoise = 0.05;
+% param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
+% param.saveEvery = round(1/param.dT);
+% param.slowingMode = 'stochastic_weighted';
+% param.k_dwell = 0.0036;
+% param.k_undwell = 1.1;
+% param.dkdN_dwell = 0.05;
+% param.dkdN_undwell = 0.05;
+% param.reversalMode = 'density_weighted';
+% param.drdN_rev = 0.05;
+% param.revRateClusterEdge = 0;
+% param.eps_LJ = 0;%1.5e-5;
+% param.LJmode = 'soft';
+% param.LJnodes = 1:M;
+% param.sigma_LJ = 2*0.035;
+% param.r_LJcutoff = -1%1.2
+% N = 40;
+% L = [7.5, 7.5];
+% M = 18;
+% [xyarray, currentState, food] = runWoids(7200,N,M,L,param);
+% filename = ['woidlino_test_movies/test_' num2str(N) 'rods_M' num2str(M) ...
+%     '_sweeping_feedrate_' num2str(param.r_feed) ...
+%     '_angleNoise' num2str(param.angleNoise) '_ktheta_' num2str(param.k_theta)...
+%     '_' param.reversalMode '_ri_' num2str(param.ri) ...
+%     '_haptotaxis_' param.haptotaxisMode '_' num2str(param.f_hapt) ...
+%     '_LJ' param.LJmode '_' num2str(param.eps_LJ) ...'_longRange' '_headOnly'...
+%     ...'_sigma_' num2str(param.sigma_LJ) ...
+%     ];
 
 % L = [15 15];
 % N = 50;
