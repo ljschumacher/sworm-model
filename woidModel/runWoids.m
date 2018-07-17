@@ -376,8 +376,8 @@ validRevModes = {'contact','density','density_weighted'};
 RevModeCheck = any(strcmp(s,validRevModes));
 end
 
-function HaptoModeChek = checkHaptotaxisMode(s)
-validHaptoModes = {'constant','weighted'};
+function HaptoModeCheck = checkHaptotaxisMode(s)
+validHaptoModes = {'constant','weighted','weighted_additive'};
 HaptoModeCheck = any(strcmp(s,validHaptoModes));
 end
 

@@ -1,4 +1,4 @@
-function [Fh] = calculateHaptotaxisWeighted(distanceMatrixFull,distanceMatrix,objInd,ri,r_overlap,f_hapt)
+function [Fh] = calculateHaptotaxisWeightedAdditive(distanceMatrixFull,distanceMatrix,objInd,ri,r_overlap,f_hapt)
 % calculates the haptotactic contribution to the motile force, i.e. the
 % bias of movement towards the mean direction of Nbrs within an interaction
 % radius
@@ -19,11 +19,11 @@ if any(haptoNbrs(:))
         distanceMatrix(haptoNbrs(:))); % bsxfun has similar performace to implicit expansion (below) but is mex-file compatible
     %     e_nN = [distanceMatrixFull(collisionNbrs(:)) distanceMatrixFull(find(collisionNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
     %         ./distanceMatrix(collisionNbrs(:)); % normalise for distance
-    Fh = f_hapt.*mean(-e_nN.*distanceweights); % minus unit vector as we want direction pointing FROM node TO Nbrs
+    Fh = f_hapt.*sum(-e_nN.*distanceweights); % minus unit vector as we want direction pointing FROM node TO Nbrs
     if any(overlapNbrs(:))
         e_nC = bsxfun(@rdivide,[distanceMatrixFull(overlapNbrs(:)) distanceMatrixFull(find(overlapNbrs(:)) + N*M)],...
             distanceMatrix(overlapNbrs(:))); % directions for overlapping Nbrs
-        Fh = Fh + f_hapt.*mean(e_nC); % different sign as force is now repulsive
+        Fh = Fh + f_hapt.*sum(e_nC); % different sign as force is now repulsive, constant distance weighting
     end
 else
     Fh = [0, 0];

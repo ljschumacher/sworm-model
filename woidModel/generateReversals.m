@@ -33,7 +33,7 @@ clustFwdWormsLogInd = tailContacts&headContacts&~currentReversalsLogInd;
 reversalLogInd(clustFwdWormsLogInd,timeCtr:(timeCtr+revTime)) ... % set reversal state for duration of reversal
     = repmat(logical(poissrnd(revRateCluster*dT,nnz(clustFwdWormsLogInd),1)),1,revTime+1);
 
-% stop reversal with increased rate if tail is sticking out of cluster (unless roaming)
+% stop reversal with increased rate if tail is sticking out of cluster 
 freeBwdTailsInd = find(~tailContacts&headContacts&currentReversalsLogInd&~roamingLogInd); % Ntrue by 1
 if strcmp(reversalMode,'contact')
     stoppedReversalsLogInd = logical(poissrnd(revRateClusterEdge*dT,numel(freeBwdTailsInd),1)); % Ntrue by 1
