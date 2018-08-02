@@ -113,7 +113,7 @@ food = [];
 % % test haptotaxis for multiple rods with angle noise
 rng(1)
 param.ri = 1.2;
-param.f_hapt = 0.025;
+param.f_hapt = 0.1;
 param.haptotaxisMode = 'weighted_additive';
 param.k_theta = 0;
 param.angleNoise = 0.05;
