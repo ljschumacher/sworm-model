@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="3250956582" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContacts.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="resolveContacts" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="2413511724" file="/media/linus/Data/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContacts.prj" location="/media/linus/Data/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="resolveContacts" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -17,7 +17,8 @@
       <param.DynamicMemoryAllocation>option.DynamicMemoryAllocation.Threshold</param.DynamicMemoryAllocation>
       <param.DynamicMemoryAllocationThreshold>65536</param.DynamicMemoryAllocationThreshold>
       <param.RowMajor>option.RowMajor.ColumnMajor</param.RowMajor>
-      <param.HighlightPotentialRowMajorIssues>false</param.HighlightPotentialRowMajorIssues>
+      <param.HighlightPotentialRowMajorIssues>true</param.HighlightPotentialRowMajorIssues>
+      <param.PreserveArrayDimensions>false</param.PreserveArrayDimensions>
       <param.StackUsageMax>200000</param.StackUsageMax>
       <param.FilePartitionMethod>option.FilePartitionMethod.MapMFileToCFile</param.FilePartitionMethod>
       <param.GenerateComments>true</param.GenerateComments>
@@ -31,6 +32,8 @@
       <param.MergeInstrumentationResults>false</param.MergeInstrumentationResults>
       <param.VerificationMode>option.VerificationMode.None</param.VerificationMode>
       <param.VerificationStatus>option.VerificationStatus.FailedTest</param.VerificationStatus>
+      <param.EnableMexProfiling>false</param.EnableMexProfiling>
+      <var.BuiltWithMexProfiling>false</var.BuiltWithMexProfiling>
       <param.CustomSourceCode />
       <param.CustomHeaderCode />
       <param.CustomInitializer />
@@ -72,6 +75,7 @@
         <param.DynamicMemoryAllocationThreshold />
         <param.RowMajor />
         <param.HighlightPotentialRowMajorIssues />
+        <param.PreserveArrayDimensions />
         <param.StackUsageMax />
         <param.FilePartitionMethod />
         <param.GenerateComments />
@@ -84,6 +88,8 @@
         <param.DefaultTestFile />
         <param.MergeInstrumentationResults />
         <param.VerificationMode />
+        <param.EnableMexProfiling />
+        <var.BuiltWithMexProfiling />
         <param.CustomSourceCode />
         <param.CustomHeaderCode />
         <param.CustomInitializer />
@@ -125,7 +131,8 @@
       <param.DynamicMemoryAllocation>option.DynamicMemoryAllocation.Threshold</param.DynamicMemoryAllocation>
       <param.DynamicMemoryAllocationThreshold>65536</param.DynamicMemoryAllocationThreshold>
       <param.RowMajor>option.RowMajor.ColumnMajor</param.RowMajor>
-      <param.HighlightPotentialRowMajorIssues>false</param.HighlightPotentialRowMajorIssues>
+      <param.HighlightPotentialRowMajorIssues>true</param.HighlightPotentialRowMajorIssues>
+      <param.PreserveArrayDimensions>false</param.PreserveArrayDimensions>
       <param.StackUsageMax>200000</param.StackUsageMax>
       <param.MultiInstanceCode />
       <param.FilePartitionMethod>option.FilePartitionMethod.MapMFileToCFile</param.FilePartitionMethod>
@@ -256,7 +263,16 @@
       <param.CustomLAPACKCallback />
       <param.CustomFFTCallback />
       <param.GenerateDefaultInSwitch />
+      <param.EnableTraceability />
       <param.UseECoderFeatures />
+      <param.psCustomPrjState />
+      <param.psCustomProjectFile />
+      <param.psCheckConfValue />
+      <param.psUniqueOutPutState />
+      <param.psOpenResultsState />
+      <param.psProductModeValue />
+      <param.psQuickConfValue />
+      <param.psOutputFolder />
       <unset>
         <param.grt.GenCodeOnly />
         <param.WorkingFolder />
@@ -272,6 +288,7 @@
         <param.DynamicMemoryAllocationThreshold />
         <param.RowMajor />
         <param.HighlightPotentialRowMajorIssues />
+        <param.PreserveArrayDimensions />
         <param.StackUsageMax />
         <param.MultiInstanceCode />
         <param.FilePartitionMethod />
@@ -386,7 +403,16 @@
         <param.CustomLAPACKCallback />
         <param.CustomFFTCallback />
         <param.GenerateDefaultInSwitch />
+        <param.EnableTraceability />
         <param.UseECoderFeatures />
+        <param.psCustomPrjState />
+        <param.psCustomProjectFile />
+        <param.psCheckConfValue />
+        <param.psUniqueOutPutState />
+        <param.psOpenResultsState />
+        <param.psProductModeValue />
+        <param.psQuickConfValue />
+        <param.psOutputFolder />
       </unset>
     </profile>
     <profile key="profile.hdl">
@@ -736,6 +762,8 @@
     <param.objective>option.objective.c</param.objective>
     <param.WorkflowStep>verifyCompatibility</param.WorkflowStep>
     <param.TestSnippets>
+      <item>xyarray = runWoids(1,40,18,[7.5, 7.5],'bc','periodic','dT',0.035/0.33/8);</item>
+      <item>xyarray = runWoids(1,40,36,[7.5, 7.5],'bc','periodic','dT',0.035/0.33/8);</item>
       <item>xyarray = runWoids(1,40,36,[7.5, 7.5],'bc','periodic','dT',0.035/0.33/16,'LJmode','soft','LJnodes',1:2);</item>
       <item>xyarray = runWoids(1,40,36,[7.5, 7.5],'bc','periodic','dT',0.035/0.33/16,'LJmode','soft','LJnodes',1);</item>
       <item>xyarray = runWoids(1,40,18,[7.5, 7.5],'bc','periodic','dT',0.035/0.33/16,'LJmode','soft','LJnodes',1);</item>
@@ -752,9 +780,9 @@
     <param.DefaultImportExportVariable>config</param.DefaultImportExportVariable>
     <param.ExternalFcnMajority>column</param.ExternalFcnMajority>
     <param.UseGlobals>option.UseGlobals.No</param.UseGlobals>
-    <param.outputfile>${PROJECT_ROOT}/resolveContactsLoop_N40_M36_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/resolveContactsLoop_N40_M18_mex.mexa64</param.outputfile>
     <param.version>R2012a</param.version>
-    <param.HasECoderFeatures>false</param.HasECoderFeatures>
+    <param.HasECoderFeatures>true</param.HasECoderFeatures>
     <param.HasGpuCoder>false</param.HasGpuCoder>
     <param.mex.mainhtml />
     <param.grt.mainhtml />
@@ -766,7 +794,7 @@
     <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
     <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
     <param.EnableScreener>true</param.EnableScreener>
-    <param.AnnotationChecksum>4184148183</param.AnnotationChecksum>
+    <param.AnnotationChecksum>2267822665</param.AnnotationChecksum>
     <var.LegacyTarget />
     <var.MirrorOnOpen>false</var.MirrorOnOpen>
     <param.FixedPointEnabled>false</param.FixedPointEnabled>
@@ -775,22 +803,22 @@
     <param.unifiedParamStorage />
     <var.gc.lastOutputRoot>codegen/mex/resolveContactsLoop</var.gc.lastOutputRoot>
     <var.gc.lastOutputType>MEX_FILE</var.gc.lastOutputType>
-    <var.gc.preBuildChecksum>3250956582</var.gc.preBuildChecksum>
+    <var.gc.preBuildChecksum>373336463</var.gc.preBuildChecksum>
     <var.cfi.lastOutputRoot>codegen/mex/resolveContactsLoop</var.cfi.lastOutputRoot>
-    <var.cfi.preBuildChecksum>3642976868</var.cfi.preBuildChecksum>
-    <var.lastCfiTestSnippet>xyarray = runWoids(1,40,36,[7.5, 7.5],'bc','periodic','dT',0.035/0.33/16,'LJmode','soft','LJnodes',1:2);</var.lastCfiTestSnippet>
+    <var.cfi.preBuildChecksum>2413511724</var.cfi.preBuildChecksum>
+    <var.lastCfiTestSnippet>xyarray = runWoids(1,40,18,[7.5, 7.5],'bc','periodic','dT',0.035/0.33/8);</var.lastCfiTestSnippet>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
-    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;2976936251&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
-    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
-    <param.forceMexBuild>true</param.forceMexBuild>
+    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/media/linus/Data/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;1453869512&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
+    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/media/linus/Data/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
+    <param.forceMexBuild>false</param.forceMexBuild>
     <param.configImportActive>false</param.configImportActive>
     <var.isGpuCoder>false</var.isGpuCoder>
     <var.notGpuCoder>true</var.notGpuCoder>
     <var.boundToGui>true</var.boundToGui>
-    <param.mex.outputfile>resolveContactsLoop_N40_M36_mex</param.mex.outputfile>
+    <param.mex.outputfile>resolveContactsLoop_N40_M18_mex</param.mex.outputfile>
     <param.grt.outputfile>resolveContactsLoop</param.grt.outputfile>
     <param.artifact>option.target.artifact.mex</param.artifact>
-    <param.outputfile>${PROJECT_ROOT}/resolveContactsLoop_N40_M36_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/resolveContactsLoop_N40_M18_mex.mexa64</param.outputfile>
     <param.EnableAutoExtrinsicCalls>true</param.EnableAutoExtrinsicCalls>
     <param.UsePreconditions>false</param.UsePreconditions>
     <param.FeatureFlags />
@@ -851,7 +879,7 @@
     <param.gpu.CustomComputeCapability />
     <param.gpu.CompilerFlags />
     <var.checkIssuesGpu>false</var.checkIssuesGpu>
-    <var.hasGpu>false</var.hasGpu>
+    <var.hasGpu>true</var.hasGpu>
     <unset>
       <param.objective />
       <param.DefaultImportExportVariable />
@@ -877,6 +905,7 @@
       <var.redirectedInputTypeData />
       <param.unifiedParamStorage />
       <var.outdatedOnRestore />
+      <param.forceMexBuild />
       <param.configImportActive />
       <var.isGpuCoder />
       <var.notGpuCoder />
@@ -945,7 +974,7 @@
     </unset>
     <fileset.entrypoints>
       <file custom-data-expanded="false" value="${PROJECT_ROOT}/resolveContactsLoop.m">
-        <Marker>1531154618724</Marker>
+        <Marker>1533205215483</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench />
@@ -964,27 +993,30 @@
           <idpTable>
             <type typeId="0">
               <Class>double</Class>
-              <Size>40 x 36 x 2</Size>
+              <Size>40 x 18 x 2</Size>
               <Value />
               <InitialValue />
               <UserDefined>true</UserDefined>
               <Complex>false</Complex>
+              <Sparse>false</Sparse>
             </type>
             <type typeId="1">
               <Class>double</Class>
-              <Size>40 x 36 x 2 x 40 x 36</Size>
+              <Size>40 x 18 x 2 x 40 x 18</Size>
               <Value />
               <InitialValue />
               <UserDefined>true</UserDefined>
               <Complex>false</Complex>
+              <Sparse>false</Sparse>
             </type>
             <type typeId="2">
               <Class>double</Class>
-              <Size>40 x 36 x 40 x 36</Size>
+              <Size>40 x 18 x 40 x 18</Size>
               <Value />
               <InitialValue />
               <UserDefined>true</UserDefined>
               <Complex>false</Complex>
+              <Sparse>false</Sparse>
             </type>
             <type typeId="3">
               <Class>double</Class>
@@ -993,14 +1025,16 @@
               <InitialValue />
               <UserDefined>false</UserDefined>
               <Complex>false</Complex>
+              <Sparse>false</Sparse>
             </type>
             <type typeId="4">
               <Class>double</Class>
-              <Size>1 x :36</Size>
+              <Size>1 x 18</Size>
               <Value />
               <InitialValue />
               <UserDefined>true</UserDefined>
               <Complex>false</Complex>
+              <Sparse>false</Sparse>
             </type>
             <type typeId="5">
               <Class>char</Class>
@@ -1014,14 +1048,15 @@
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="resolveContactsLoop_N40_M36_mex.mexmaci64" optional="false">/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop_N40_M36_mex.mexmaci64</file>
+      <file location="/media/linus/Data/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="resolveContactsLoop_N40_M18_mex.mexa64" optional="false">/media/linus/Data/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop_N40_M18_mex.mexa64</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/Applications/MATLAB_R2017b.app</root>
+      <root>/usr/local/MATLAB/R2018a</root>
       <toolboxes>
         <toolbox name="fixedpoint" />
         <toolbox name="matlabcoder" />
+        <toolbox name="embeddedcoder" />
       </toolboxes>
       <toolbox>
         <fixedpoint>
@@ -1033,20 +1068,25 @@
           <enabled>true</enabled>
         </matlabcoder>
       </toolbox>
+      <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
     </matlab>
     <platform>
       <unix>true</unix>
-      <mac>true</mac>
+      <mac>false</mac>
       <windows>false</windows>
       <win2k>false</win2k>
       <winxp>false</winxp>
       <vista>false</vista>
-      <linux>false</linux>
+      <linux>true</linux>
       <solaris>false</solaris>
-      <osver>10.13.5</osver>
+      <osver>4.15.0-29-generic</osver>
       <os32>false</os32>
       <os64>true</os64>
-      <arch>maci64</arch>
+      <arch>glnxa64</arch>
       <matlab>true</matlab>
     </platform>
   </configuration>
