@@ -31,31 +31,26 @@ paramAll.k_undwell = 1.1;
 paramAll.reversalMode = 'density';
 paramAll.revRateClusterEdge = 0;
 % -- Lennard-Jones parameters --
-paramAll.r_LJcutoff = 4*rc0;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
+paramAll.r_LJcutoff = -1;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
 paramAll.sigma_LJ = 0;  % particle size for Lennard-Jones force
 paramAll.eps_LJ = 0;
-if paramAll.eps_LJ>0
-    paramAll.r_LJcutoff = 4*rc;
-else
-    paramAll.r_LJcutoff = -1; % don't need to compute attraction if it's zero
-end
 % -- undulation parameters --
+paramAll.k_theta = 0;
 paramAll.theta_0 = 0;
 paramAll.omega_m = 0;
 paramAll.deltaPhase = 0;
-% paramAll.angleNoise = 1;
+paramAll.angleNoise = 0.05;
 % -- haptotaxis --
 % paramAll.f_hapt = 0.5;
 % -- speed and time-step --
 paramAll.v0 = 0.33; % npr1 0.33; N2 0.14
-paramAll.dT = min(1/2,rc0/paramAll.v0/16); % dT: time step, scales other parameters such as velocities and rates
+paramAll.dT = min(1/2,rc0/paramAll.v0/8); % dT: time step, scales other parameters such as velocities and rates
 paramAll.saveEvery = round(1/paramAll.dT);
 
 drdN_rev_values = 0:0.1:1;
 dkdN_dwell_values = 0:0.1:1;
 dkdN_undwell_values = 0:0.2:2;
 
-paramAll.k_theta = 2;
 for repCtr = 1:numRepeats
     param = paramAll;
     for drdN_rev = drdN_rev_values
@@ -65,16 +60,15 @@ for repCtr = 1:numRepeats
             for dkdN_undwell = dkdN_undwell_values
                 param.dkdN_undwell = dkdN_undwell;
                 filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
-                    ...'_angleNoise_' num2str(param.angleNoise) '_k_theta_' num2str(param.k_theta) ...
+                    '_angleNoise_' num2str(param.angleNoise) '_k_theta_' num2str(param.k_theta) ...
                     '_v0_' num2str(param.v0,'%1.0e') '_vs_' num2str(param.vs,'%1.0e') ...
                     '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
                     '_dkdN_' num2str(param.dkdN_dwell) '_' num2str(param.dkdN_undwell)...
-                    ...'_revRateClusterEdge_' num2str(param.revRateClusterEdge,'%1.0e')...
                     '_rev' param.reversalMode '_drdN_' num2str(param.drdN_rev) ...
                     ...'_haptotaxis_' num2str(param.f_hapt) ...
                     '_clusteredStart' ...
                     '_run' num2str(repCtr)];
-                filepath = 'results/woidlinos/';
+                filepath = 'results/woidlinos/clusteredStart/';
                 if ~exist([filepath filename '.mat'],'file')...
                         &&isempty(dir([filepath filename '_running_on_*.mat']))
                     disp(['running ' filename])

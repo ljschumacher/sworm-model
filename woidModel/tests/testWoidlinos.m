@@ -44,7 +44,7 @@ food = [];
 
 % % test angle noise 
 % N = 10;
-% M = 18;
+% M = 36
 % figure, hold on
 % noiseLevels = [0.04, 0.05, 0.06];
 % param.ri = 0; % no interaction
@@ -113,7 +113,7 @@ food = [];
 % % test haptotaxis for multiple rods with angle noise
 rng(1)
 param.ri = 1.2;
-param.f_hapt = 0.15;
+param.f_hapt = 0.2;
 param.haptotaxisMode = 'weighted_additive';
 param.k_theta = 0;
 param.angleNoise = 0.05;
