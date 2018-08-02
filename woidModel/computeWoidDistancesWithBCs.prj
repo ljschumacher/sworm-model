@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="3986183219" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="3986183219" file="/media/linus/Data/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.prj" location="/media/linus/Data/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex />
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -16,8 +16,9 @@
       <param.EnableVariableSizing>true</param.EnableVariableSizing>
       <param.DynamicMemoryAllocation>option.DynamicMemoryAllocation.Threshold</param.DynamicMemoryAllocation>
       <param.DynamicMemoryAllocationThreshold>65536</param.DynamicMemoryAllocationThreshold>
-      <param.RowMajor />
-      <param.HighlightPotentialRowMajorIssues />
+      <param.RowMajor>option.RowMajor.ColumnMajor</param.RowMajor>
+      <param.HighlightPotentialRowMajorIssues>true</param.HighlightPotentialRowMajorIssues>
+      <param.PreserveArrayDimensions>false</param.PreserveArrayDimensions>
       <param.StackUsageMax>200000</param.StackUsageMax>
       <param.FilePartitionMethod>option.FilePartitionMethod.MapMFileToCFile</param.FilePartitionMethod>
       <param.GenerateComments>true</param.GenerateComments>
@@ -31,6 +32,8 @@
       <param.MergeInstrumentationResults>false</param.MergeInstrumentationResults>
       <param.VerificationMode>option.VerificationMode.None</param.VerificationMode>
       <param.VerificationStatus>option.VerificationStatus.Passed</param.VerificationStatus>
+      <param.EnableMexProfiling>false</param.EnableMexProfiling>
+      <var.BuiltWithMexProfiling />
       <param.CustomSourceCode />
       <param.CustomHeaderCode />
       <param.CustomInitializer />
@@ -72,6 +75,7 @@
         <param.DynamicMemoryAllocationThreshold />
         <param.RowMajor />
         <param.HighlightPotentialRowMajorIssues />
+        <param.PreserveArrayDimensions />
         <param.StackUsageMax />
         <param.FilePartitionMethod />
         <param.GenerateComments />
@@ -84,6 +88,8 @@
         <param.DefaultTestFile />
         <param.MergeInstrumentationResults />
         <param.VerificationMode />
+        <param.EnableMexProfiling />
+        <var.BuiltWithMexProfiling />
         <param.CustomSourceCode />
         <param.CustomHeaderCode />
         <param.CustomInitializer />
@@ -124,8 +130,9 @@
       <param.EnableVariableSizing>true</param.EnableVariableSizing>
       <param.DynamicMemoryAllocation>option.DynamicMemoryAllocation.Threshold</param.DynamicMemoryAllocation>
       <param.DynamicMemoryAllocationThreshold>65536</param.DynamicMemoryAllocationThreshold>
-      <param.RowMajor />
-      <param.HighlightPotentialRowMajorIssues />
+      <param.RowMajor>option.RowMajor.ColumnMajor</param.RowMajor>
+      <param.HighlightPotentialRowMajorIssues>true</param.HighlightPotentialRowMajorIssues>
+      <param.PreserveArrayDimensions>false</param.PreserveArrayDimensions>
       <param.StackUsageMax>200000</param.StackUsageMax>
       <param.MultiInstanceCode />
       <param.FilePartitionMethod>option.FilePartitionMethod.MapMFileToCFile</param.FilePartitionMethod>
@@ -174,9 +181,9 @@
       <param.CustomSource />
       <param.CustomLibrary />
       <param.PostCodeGenCommand />
-      <param.TargetLangStandard>C++03 (ISO)</param.TargetLangStandard>
-      <param.CodeReplacementLibrary>None</param.CodeReplacementLibrary>
-      <param.DeprecatedCRLFlag>false</param.DeprecatedCRLFlag>
+      <param.TargetLangStandard />
+      <param.CodeReplacementLibrary />
+      <param.DeprecatedCRLFlag />
       <param.SameHardware>true</param.SameHardware>
       <param.Toolchain>Automatically locate an installed toolchain</param.Toolchain>
       <param.BuildConfiguration />
@@ -234,9 +241,9 @@
       <param.CompileTimeRecursionLimit>50</param.CompileTimeRecursionLimit>
       <param.EnableRuntimeRecursion>true</param.EnableRuntimeRecursion>
       <param.IncludeTerminateFcn />
-      <param.GenerateExampleMain>option.GenerateExampleMain.GenerateCodeOnly</param.GenerateExampleMain>
+      <param.GenerateExampleMain />
       <param.PreserveVariableNames>option.PreserveVariableNames.None</param.PreserveVariableNames>
-      <param.TargetLang>option.TargetLang.C</param.TargetLang>
+      <param.TargetLang />
       <param.CCompilerOptimization />
       <param.CCompilerCustomOptimizations />
       <param.GenerateMakefile />
@@ -256,7 +263,16 @@
       <param.CustomLAPACKCallback />
       <param.CustomFFTCallback />
       <param.GenerateDefaultInSwitch />
-      <param.UseECoderFeatures>false</param.UseECoderFeatures>
+      <param.EnableTraceability />
+      <param.UseECoderFeatures />
+      <param.psCustomPrjState />
+      <param.psCustomProjectFile />
+      <param.psCheckConfValue />
+      <param.psUniqueOutPutState />
+      <param.psOpenResultsState />
+      <param.psProductModeValue />
+      <param.psQuickConfValue />
+      <param.psOutputFolder />
       <unset>
         <param.grt.GenCodeOnly />
         <param.WorkingFolder />
@@ -272,6 +288,7 @@
         <param.DynamicMemoryAllocationThreshold />
         <param.RowMajor />
         <param.HighlightPotentialRowMajorIssues />
+        <param.PreserveArrayDimensions />
         <param.StackUsageMax />
         <param.MultiInstanceCode />
         <param.FilePartitionMethod />
@@ -386,7 +403,16 @@
         <param.CustomLAPACKCallback />
         <param.CustomFFTCallback />
         <param.GenerateDefaultInSwitch />
+        <param.EnableTraceability />
         <param.UseECoderFeatures />
+        <param.psCustomPrjState />
+        <param.psCustomProjectFile />
+        <param.psCheckConfValue />
+        <param.psUniqueOutPutState />
+        <param.psOpenResultsState />
+        <param.psProductModeValue />
+        <param.psQuickConfValue />
+        <param.psOutputFolder />
       </unset>
     </profile>
     <profile key="profile.hdl">
@@ -745,9 +771,9 @@
     <param.DefaultImportExportVariable />
     <param.ExternalFcnMajority />
     <param.UseGlobals>option.UseGlobals.No</param.UseGlobals>
-    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N200_M36_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N200_M36_mex.mexa64</param.outputfile>
     <param.version />
-    <param.HasECoderFeatures>false</param.HasECoderFeatures>
+    <param.HasECoderFeatures>true</param.HasECoderFeatures>
     <param.HasGpuCoder>false</param.HasGpuCoder>
     <param.mex.mainhtml />
     <param.grt.mainhtml />
@@ -774,7 +800,7 @@
     <var.lastCfiTestSnippet>computeWoidDistancesWithBCs(rand(200,18,2),[7.5 7.5],'periodic');</var.lastCfiTestSnippet>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
     <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;3904989744&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
-    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
+    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/media/linus/Data/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
     <param.forceMexBuild>false</param.forceMexBuild>
     <param.configImportActive>false</param.configImportActive>
     <var.isGpuCoder>false</var.isGpuCoder>
@@ -783,7 +809,7 @@
     <param.mex.outputfile>computeWoidDistancesWithBCs_N200_M36_mex</param.mex.outputfile>
     <param.grt.outputfile>computeWoidDistancesWithBCs</param.grt.outputfile>
     <param.artifact>option.target.artifact.mex</param.artifact>
-    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N200_M36_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N200_M36_mex.mexa64</param.outputfile>
     <param.EnableAutoExtrinsicCalls>true</param.EnableAutoExtrinsicCalls>
     <param.UsePreconditions>false</param.UsePreconditions>
     <param.FeatureFlags />
@@ -844,7 +870,7 @@
     <param.gpu.CustomComputeCapability />
     <param.gpu.CompilerFlags />
     <var.checkIssuesGpu>false</var.checkIssuesGpu>
-    <var.hasGpu>false</var.hasGpu>
+    <var.hasGpu>true</var.hasGpu>
     <unset>
       <param.objective />
       <param.DefaultImportExportVariable />
@@ -939,7 +965,7 @@
     </unset>
     <fileset.entrypoints>
       <file custom-data-expanded="false" value="${PROJECT_ROOT}/computeWoidDistancesWithBCs.m">
-        <Marker>1519137176203</Marker>
+        <Marker>1533207594586</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench />
@@ -957,6 +983,7 @@
               <InitialValue />
               <UserDefined>true</UserDefined>
               <Complex>false</Complex>
+              <Sparse>false</Sparse>
             </type>
             <type typeId="1">
               <Class>double</Class>
@@ -965,6 +992,7 @@
               <InitialValue />
               <UserDefined>false</UserDefined>
               <Complex>false</Complex>
+              <Sparse>false</Sparse>
             </type>
             <type typeId="2">
               <Class>char</Class>
@@ -978,14 +1006,15 @@
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs_N200_M36_mex.mexmaci64" optional="false">/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs_N200_M36_mex.mexmaci64</file>
+      <file location="/media/linus/Data/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs_N200_M36_mex.mexa64" optional="false">/media/linus/Data/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs_N200_M36_mex.mexa64</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/Applications/MATLAB_R2017b.app</root>
+      <root>/usr/local/MATLAB/R2018a</root>
       <toolboxes>
         <toolbox name="fixedpoint" />
         <toolbox name="matlabcoder" />
+        <toolbox name="embeddedcoder" />
       </toolboxes>
       <toolbox>
         <fixedpoint>
@@ -997,20 +1026,25 @@
           <enabled>true</enabled>
         </matlabcoder>
       </toolbox>
+      <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
     </matlab>
     <platform>
       <unix>true</unix>
-      <mac>true</mac>
+      <mac>false</mac>
       <windows>false</windows>
       <win2k>false</win2k>
       <winxp>false</winxp>
       <vista>false</vista>
-      <linux>false</linux>
+      <linux>true</linux>
       <solaris>false</solaris>
-      <osver>10.13.3</osver>
+      <osver>4.15.0-29-generic</osver>
       <os32>false</os32>
       <os64>true</os64>
-      <arch>maci64</arch>
+      <arch>glnxa64</arch>
       <matlab>true</matlab>
     </platform>
   </configuration>
