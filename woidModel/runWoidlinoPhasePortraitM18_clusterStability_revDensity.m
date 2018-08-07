@@ -16,42 +16,41 @@ numRepeats = 1;
 
 T = 300;
 rc0 = 0.035; % rc: core repulsion radius (default 0.035 mm)
-paramAll.rc = 0;
-paramAll.ri = 3*rc0;
-paramAll.bc = 'free'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
-paramAll.segmentLength = 1.13/(M - 1);
+param.rc = 0;
+param.ri = 3*rc0;
+param.bc = 'free'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
+param.segmentLength = 1.13/(M - 1);
 % -- slow-down parameters --
-paramAll.vs = 0.018;% vs: speed when slowed down (default v0/3)
-paramAll.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
-paramAll.slowingMode = 'stochastic_bynode';
-paramAll.k_dwell = 0.0036;
-paramAll.k_undwell = 1.1;
+param.vs = 0.018;% vs: speed when slowed down (default v0/3)
+param.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
+param.slowingMode = 'stochastic_bynode';
+param.k_dwell = 0.0036;
+param.k_undwell = 1.1;
 % -- reversal parameters --
-paramAll.reversalMode = 'density';
-paramAll.revRateClusterEdge = 0;
+param.reversalMode = 'density';
+param.revRateClusterEdge = 0;
 % -- Lennard-Jones parameters --
-paramAll.r_LJcutoff = -1;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
-paramAll.sigma_LJ = 0;  % particle size for Lennard-Jones force
-paramAll.eps_LJ = 0;
+param.r_LJcutoff = -1;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
+param.sigma_LJ = 0;  % particle size for Lennard-Jones force
+param.eps_LJ = 0;
 % -- undulation parameters --
-paramAll.k_theta = 0;
-paramAll.theta_0 = 0;
-paramAll.omega_m = 0;
-paramAll.deltaPhase = 0;
-paramAll.angleNoise = 0.05;
+param.k_theta = 0;
+param.theta_0 = 0;
+param.omega_m = 0;
+param.deltaPhase = 0;
+param.angleNoise = 0.05;
 % -- haptotaxis --
-% paramAll.f_hapt = 0.5;
+% param.f_hapt = 0.5;
 % -- speed and time-step --
-paramAll.v0 = 0.33; % npr1 0.33; N2 0.14
-paramAll.dT = min(1/2,rc0/paramAll.v0/8); % dT: time step, scales other parameters such as velocities and rates
-paramAll.saveEvery = round(1/paramAll.dT);
+param.v0 = 0.33; % npr1 0.33; N2 0.14
+param.dT = min(1/2,rc0/param.v0/8); % dT: time step, scales other parameters such as velocities and rates
+param.saveEvery = round(1/param.dT);
 
 drdN_rev_values = 0:0.1:1;
 dkdN_dwell_values = 0:0.1:1;
 dkdN_undwell_values = 0:0.2:2;
 
 for repCtr = 1:numRepeats
-    param = paramAll;
     for drdN_rev = drdN_rev_values
         param.drdN_rev = drdN_rev;
         for dkdN_dwell = dkdN_dwell_values

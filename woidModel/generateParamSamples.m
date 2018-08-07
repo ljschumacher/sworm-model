@@ -1,34 +1,52 @@
 % generate random parameter samples
 clear all
 
-nSim = 7500; % number of samples
-nParam = 2; % number of parameters
+nSamples = 1e5; % number of samples
+nParam = 3; % number of parameters
 
 % seed random number generator for reproducibility
-rng(3)
+rng(1)
 
-% use rand for uniform prior
-samplesRaw = rand(nParam,nSim)'; 
-% generate as nParam by nSim and then transpose, so that the random numbers are used
-% parameters first, then number of samples. This makes it easier to add
-% more samples later on
+% set parameters
+M = 18;
+angleNoise = 0.05;
+k_theta = 0;
+slowingMode = 'stochastic_bynode';
+k_dwell = 0.0036;
+k_undwell = 1.1;
+reversalMode = 'density';
+% load reduced prior gmmodel
+load(['priors3D_M_' num2str(M) '_noVolExcl' ...
+    '_angleNoise_' num2str(angleNoise) '_k_theta_' num2str(k_theta)...
+    '_slowing_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...
+    '_rev' reversalMode ...'_haptotaxis_' num2str(f_hapt) ...
+    '.mat'],'supportLimits','prior_npr1')
 
-% scale samples to the appropriate range for the parameters
-revRate_range = [0 3];
-revRateClusterEdge = samplesRaw(:,1).*(revRate_range(2) - revRate_range(1)) + revRate_range(1);
+% sample from prior
+samplesRaw = random(prior_npr1,nSamples);
 
-dkdN_range = [0 1];
-dkdN = samplesRaw(:,2).*(dkdN_range(2) - dkdN_range(1)) + dkdN_range(1);
+% enfore support Limits
+while any(any(samplesRaw<=supportLimits(1,:) |...
+        samplesRaw>=supportLimits(2,:),2))
+    replaceLogIdcs = any(samplesRaw<=supportLimits(1,:) |...
+        samplesRaw>=supportLimits(2,:),2);
+    nReplace = nnz(replaceLogIdcs);
+    samplesRaw(replaceLogIdcs,:) = random(prior_npr1,nReplace);
+end
 
-% Ris_range = [2/3 6];
-% Ris = samplesRaw(:,3).*(Ris_range(2) - Ris_range(1)) + Ris_range(1);
-% 
-% Rir_range = [2/3 6];
-% Rir = samplesRaw(:,4).*(Rir_range(2) - Rir_range(1)) + Rir_range(1);
+drdN_rev = samplesRaw(:,1);
+
+dkdN_dwell = samplesRaw(:,2);
+
+dkdN_undwell = samplesRaw(:,3);
 
 % make a table of the parameters
-paramSamples = table(revRateClusterEdge,dkdN);
+paramSamples = table(drdN_rev,dkdN_dwell,dkdN_undwell);
 
 % save parameter samples
-save(['paramSamples_nSim' num2str(nSim) '_nParam' num2str(nParam)],...
-    'paramSamples','revRate_range','dkdN_range')
+save(['paramSamples_nSamples' num2str(nSamples) '_nParam' num2str(nParam) ...
+    '_M_' num2str(M) '_noVolExcl' ...
+    '_angleNoise_' num2str(angleNoise) '_k_theta_' num2str(k_theta)...
+    '_slowing_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...
+    '_rev' reversalMode ...'_haptotaxis_' num2str(f_hapt)
+    '.mat'],'paramSamples','supportLimits')

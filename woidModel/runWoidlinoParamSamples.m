@@ -12,51 +12,87 @@ param.rc = 0;
 param.ri = 3*rc;
 param.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 param.segmentLength = 1.13/(M - 1);
-param.k_l = 40; % stiffness of linear springs connecting nodes
 % -- slow-down parameters --
 param.vs = 0.018; % npr1 0.018; N2 0.014
 param.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
 param.slowingMode = 'stochastic_bynode';
 param.k_dwell = 0.0036; % npr1 0.0036; N2 0.25
 param.k_undwell = 1.1; % npr1 1.1; N2 0.45
+% -- reversal parameters --
+param.reversalMode = 'density';
+param.revRateClusterEdge = 0;
 % -- Lennard-Jones parameters --
-param.r_LJcutoff = 4*rc;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
-param.sigma_LJ = 2*rc;  % particle size for Lennard-Jones force
+param.r_LJcutoff = -1;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
+param.sigma_LJ = 0;  % particle size for Lennard-Jones force
 param.eps_LJ = 0;
-if param.eps_LJ>0
-    param.r_LJcutoff = 4*rc;
-else
-    param.r_LJcutoff = -1; % don't need to compute attraction if it's zero
-end
 % -- undulation parameters --
+param.k_theta = 0;
 param.theta_0 = 0;
 param.omega_m = 0;
 param.deltaPhase = 0;
+param.angleNoise = 0.05;
+% -- haptotaxis --
+% param.f_hapt = 0.5;
 % -- speed and time-step --
 param.v0 = [0.33]; % npr1 0.33; N2 0.14
-param.dT = min(1/2,rc/param.v0/16); % dT: time step, scales other parameters such as velocities and rates
+param.dT = min(1/2,rc/param.v0/8); % dT: time step, scales other parameters such as velocities and rates
 param.saveEvery = round(1/param.dT);
 
-% load randomly generated parameter samples
-load('paramSamples_log_nSim50000_nParam2.mat','paramSamples')
-
+% load parameter samples
+load(['paramSamples_nSamples100000_nParam3_M_' num2str(M) '_noVolExcl' ...
+    '_angleNoise_' num2str(param.angleNoise) '_k_theta_' num2str(param.k_theta)...
+    '_slowing_' param.slowingMode '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell)...
+    '_rev' param.reversalMode ...'_haptotaxis_' num2str(f_hapt)
+    '.mat'],'paramSamples','supportLimits')
 % set model parameters from generated samples
-param.revRateClusterEdge = paramSamples.revRateClusterEdge(sampleCtr);
-param.dkdN_dwell = paramSamples.dkdN(sampleCtr);
-param.dkdN_undwell = param.dkdN_dwell;
+param.drdN_rev = paramSamples.drdN_rev(sampleCtr);
+param.dkdN_dwell = paramSamples.dkdN_dwell(sampleCtr);
+param.dkdN_undwell = paramSamples.dkdN_undwell(sampleCtr);
 
-filename = ['/work/lschumac/woidlinos/wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
+filepath = '/exports/eddie/scratch/lschuma2/woidlinos';
+filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
     '_v0_' num2str(param.v0) '_vs_' num2str(param.vs) ...
-    ...'_Ris_' num2str(param.Ris) ...
-    '_' param.slowingMode 'SlowDown' '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell) ...
-    '_dkdN_' num2str(param.dkdN_dwell)...
-    '_revRateClusterEdge_' num2str(param.revRateClusterEdge) ...
-    ...'_Rir_' num2str(param.Rir)
+    '_angleNoise_' num2str(param.angleNoise) '_k_theta_' num2str(param.k_theta)...
+    '_slow_' param.slowingMode '_dwell_' num2str(param.k_dwell) '_' num2str(param.k_undwell)...
+    '_dkdN_' num2str(param.dkdN_dwell) '_' num2str(param.dkdN_undwell)...
+    '_rev' param.reversalMode '_drdN_' num2str(param.drdN_rev) ...
     '_sample_' num2str(sampleCtr)];
-if ~exist([filename '.mat'],'file')
-    rng('shuffle') % set random seed to be DIFFERENT for each simulation
-    [xyarray, currentState] = runWoids(T,N,M,L,param);
-    xyarray = single(xyarray); % save space by using single precision
-    save([filename '.mat'],'xyarray','T','N','M','L','param','currentState')
+if ~exist([filepath filename '.mat'],'file')
+    %% check for pair stability, which we don't want
+    % set up paired initial conditions
+    rng(5) % this happens to give a good pair of initial positions
+    [~, initialState] = runWoids(1,2,M,[2.4, 2.4],param);
+    minPdist = zeros(10,1);
+    for repCtr = 1:10
+        rng(repCtr)
+        [pairxyarray, ~] = runWoids(60,2,M,[2.4, 2.4],param,'resumeState',initialState);
+        % compute minimum seperation
+        worm1 = squeeze(pairxyarray(1,:,:,end));
+        worm2 = squeeze(pairxyarray(2,:,:,end));
+        X = worm1(:,1) - worm2(:,1)';
+        Y = worm1(:,2) - worm2(:,2)';
+        D = sqrt(X.^2 + Y.^2);
+        minPdist(repCtr) = min(D(:));
+    end
+    if median(minPdist)<1
+        disp('params result in stable pair, discontinuing simulation')
+        % save minPdist result?
+    elseif median(minPdist)>=1
+        %% check for cluster stability, which we do/don't want (npr1/N2)
+        rng(sampleCtr)
+        [clustxyarray, ~] = runWoids(300,N,M,[3, 3],param);
+        % compute radius of gyration (of worm heads)
+        Rgyr = sqrt(sum(var(clustxyarray(:,1,:,end))));
+        if Rgyr>4
+            disp('params result in unstable cluster, discontinuing simulation')
+            % save Rgyr result?
+        elseif Rgyr<=4
+            %% run full-length simulation
+            rng(sampleCtr) % set random seed to be DIFFERENT for each simulation
+            [xyarray, currentState] = runWoids(T,N,M,L,param);
+            xyarray = single(xyarray); % save space by using single precision
+            save([filename '.mat'],'xyarray','T','N','M','L','param','currentState')
+        end
+    end
 end
 end
