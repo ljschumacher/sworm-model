@@ -18,7 +18,6 @@ T = 300;
 rc0 = 0.035; % rc: core repulsion radius (default 0.035 mm)
 paramAll.rc = 0;
 paramAll.ri = 3*rc0;
-% saveevery = round(1/2/param.dT);
 paramAll.bc = 'free'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 paramAll.segmentLength = 1.13/(M - 1);
 % -- slow-down parameters --
