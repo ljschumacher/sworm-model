@@ -6,7 +6,7 @@ function [] = runWoidlinoParamSamples(sampleCtr)
 N = 40; % N: number of objects
 M = 18; % M: number of nodes in each object
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
-T = 1000;
+T = 2000;
 rc = 0.035; % rc: core repulsion radius (default 0.035 mm)
 param.rc = 0;
 param.ri = 3*rc;
@@ -60,6 +60,7 @@ filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
     '_sample_' num2str(sampleCtr)];
 if ~exist([filepath filename '.mat'],'file')
     %% check for pair stability, which we don't want
+    disp('Checking pair stability...')
     % set up paired initial conditions
     rng(5) % this happens to give a good pair of initial positions
     param.bc = 'free';
@@ -82,6 +83,7 @@ if ~exist([filepath filename '.mat'],'file')
         % save minPdist result?
     elseif median(minPdist)>=1
         %% check for cluster stability, which we do/don't want (npr1/N2)
+        disp('Checking cluster stability...')
         param.bc = 'free';
         rng(sampleCtr)
         [clustxyarray, ~] = runWoids(300,N,M,[3, 3],param);
@@ -93,6 +95,7 @@ if ~exist([filepath filename '.mat'],'file')
             % save Rgyr result?
         elseif Rgyr<=4
             %% run full-length simulation
+            disp('Running full-length simulation...')
             param.bc = 'periodic';
             rng(sampleCtr) % set random seed to be DIFFERENT for each simulation
             [xyarray, currentState] = runWoids(T,N,M,L,param);
