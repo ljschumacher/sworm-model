@@ -49,8 +49,8 @@ param.drdN_rev = paramSamples.drdN_rev(sampleCtr);
 param.dkdN_dwell = paramSamples.dkdN_dwell(sampleCtr);
 param.dkdN_undwell = paramSamples.dkdN_undwell(sampleCtr);
 
-% filepath = '/exports/eddie/scratch/lschuma2/woidlinos';
-filepath = 'results/woidlions/paramSamples/';
+filepath = '/exports/eddie/scratch/lschuma2/woidlinos/';
+% filepath = 'results/woidlinos/paramSamples/';
 filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
     '_v0_' num2str(param.v0) '_vs_' num2str(param.vs) ...
     '_angleNoise_' num2str(param.angleNoise) '_k_theta_' num2str(param.k_theta)...
@@ -86,7 +86,7 @@ if ~exist([filepath filename '.mat'],'file')
         disp('Checking cluster stability...')
         param.bc = 'free';
         rng(sampleCtr)
-        [clustxyarray, ~] = runWoids(300,N,M,[3, 3],param);
+        [clustxyarray, ~] = runWoids(300,N,M,1.8,param);
         % compute radius of gyration (of worm heads)
         Rgyr = sqrt(sum(var(clustxyarray(:,1,:,end))));
         if Rgyr>4
@@ -100,7 +100,7 @@ if ~exist([filepath filename '.mat'],'file')
             rng(sampleCtr) % set random seed to be DIFFERENT for each simulation
             [xyarray, currentState] = runWoids(T,N,M,L,param);
             xyarray = single(xyarray); % save space by using single precision
-            save([filename '.mat'],'xyarray','T','N','M','L','param','currentState')
+            save([filepath filename '.mat'],'xyarray','T','N','M','L','param','currentState')
         end
     end
 end
