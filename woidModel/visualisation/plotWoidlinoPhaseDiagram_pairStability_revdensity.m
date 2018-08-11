@@ -38,13 +38,14 @@ omega_m = 0;
 deltaPhase = 0;
 angleNoise = 0.05;
 % -- haptotaxis --
-% f_hapt = 0.5;
-% -- speed and time-step --
+Rif = 1.2/0.035;
+haptotaxisMode = 'weighted_additive';% -- speed and time-step --
 v0 = 0.33; % npr1 0.33; N2 0.14
 
-drdN_rev_values = 0:0.1:1;
-dkdN_dwell_values = 0:0.1:1;
-dkdN_undwell_values = 0:0.2:2;
+drdN_rev_values = linspace(0,1,10);
+dkdN_dwell_values = linspace(0,1,10);
+dkdN_undwell_values = linspace(0,2,10);
+f_hapt_values = linspace(0,0.02,10);
 
 filepath = '../results/woidlinos/pairedStart/';
 filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
@@ -52,7 +53,7 @@ filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
     '_v0_' num2str(v0,'%1.0e') '_vs_' num2str(vs,'%1.0e') ...
     '_' slowingMode 'SlowDown' '_dwell_' num2str(k_dwell) '_' num2str(k_undwell) ...
     '_rev' reversalMode ...
-    ...'_haptotaxis_' num2str(f_hapt) ...
+    '_haptotaxis_' haptotaxisMode ...
     '_pairedStart' ...
     '_minDistances.mat'];
 
@@ -73,8 +74,8 @@ yd = dslice.YData;
 zd = dslice.ZData;
 delete(dslice)
 
-% take mean over replicate simulations
-mminPdist = median(minPdist,4);
+% take median over replicate simulations
+mminPdist = nanmedian(minPdist,5);
 
 h = slice(dkdN_dwell_values,drdN_rev_values,dkdN_undwell_values,log2(mminPdist),[1],[],[ 0]);
 hold on
@@ -109,7 +110,7 @@ filename = ['../figures/woidlinos/woidlinoPhaseDiagram_pairStability_3D'...
     '_N_' num2str(N) '_M_' num2str(M) '_L_' num2str(L(1)) '_noVolExcl' ...
     '_angleNoise_' num2str(angleNoise) '_k_theta_' num2str(k_theta)...
     '_slowing_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...
-    '_rev' reversalMode ...'_haptotaxis_' num2str(f_hapt) ...
+    '_rev' reversalMode '_haptotaxis_' haptotaxisMode ...
     '_revDensity.eps'];
 exportfig(phasePortraitFig,filename, exportOptions)
 system(['epstopdf ' filename]);

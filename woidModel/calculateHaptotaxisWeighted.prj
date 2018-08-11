@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="2964182534" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="2058605321" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateHaptotaxisWeighted.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="calculateHaptotaxisWeighted" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -118,9 +118,9 @@
       <param.BuildFolder>option.BuildFolder.Project</param.BuildFolder>
       <param.SpecifiedBuildFolder />
       <param.SearchPaths />
-      <param.SaturateOnIntegerOverflow />
+      <param.SaturateOnIntegerOverflow>false</param.SaturateOnIntegerOverflow>
       <param.PurelyIntegerCode />
-      <param.SupportNonFinite />
+      <param.SupportNonFinite>false</param.SupportNonFinite>
       <param.EnableVariableSizing>true</param.EnableVariableSizing>
       <param.DynamicMemoryAllocation>option.DynamicMemoryAllocation.Threshold</param.DynamicMemoryAllocation>
       <param.DynamicMemoryAllocationThreshold>65536</param.DynamicMemoryAllocationThreshold>
@@ -236,7 +236,7 @@
       <param.IncludeTerminateFcn />
       <param.GenerateExampleMain>option.GenerateExampleMain.GenerateCodeOnly</param.GenerateExampleMain>
       <param.PreserveVariableNames>option.PreserveVariableNames.None</param.PreserveVariableNames>
-      <param.TargetLang>option.TargetLang.C</param.TargetLang>
+      <param.TargetLang>option.TargetLang.CPP</param.TargetLang>
       <param.CCompilerOptimization />
       <param.CCompilerCustomOptimizations />
       <param.GenerateMakefile />
@@ -256,17 +256,14 @@
       <param.CustomLAPACKCallback />
       <param.CustomFFTCallback />
       <param.GenerateDefaultInSwitch />
-      <param.UseECoderFeatures />
+      <param.UseECoderFeatures>false</param.UseECoderFeatures>
       <unset>
-        <param.grt.GenCodeOnly />
         <param.WorkingFolder />
         <param.SpecifiedWorkingFolder />
         <param.BuildFolder />
         <param.SpecifiedBuildFolder />
         <param.SearchPaths />
-        <param.SaturateOnIntegerOverflow />
         <param.PurelyIntegerCode />
-        <param.SupportNonFinite />
         <param.EnableVariableSizing />
         <param.DynamicMemoryAllocation />
         <param.DynamicMemoryAllocationThreshold />
@@ -366,7 +363,6 @@
         <param.IncludeTerminateFcn />
         <param.GenerateExampleMain />
         <param.PreserveVariableNames />
-        <param.TargetLang />
         <param.CCompilerOptimization />
         <param.CCompilerCustomOptimizations />
         <param.GenerateMakefile />
@@ -736,17 +732,12 @@
     <param.objective>option.objective.c</param.objective>
     <param.WorkflowStep>workflowSummary</param.WorkflowStep>
     <param.TestSnippets>
-      <item>computeWoidDistancesWithBCs(rand(40,18,2),7.5,'free');</item>
-      <item>computeWoidDistancesWithBCs(rand(200,18,2),[7.5 7.5],'periodic');</item>
-      <item>computeWoidDistancesWithBCs(rand(200,36,2),[7.5 7.5],'periodic');</item>
-      <item>computeWoidDistancesWithBCs(rand(60,49,2),[7.5 7.5],'periodic');</item>
-      <item>computeWoidDistancesWithBCs(rand(40,49,2),[7.5 7.5],'periodic');</item>
-      <item>computeWoidDistancesWithBCs(rand(40,49,2),[7.5 7.5],'periodic')</item>
+      <item>calculateHaptotaxisWeighted(rand(40,18,2),rand(40,18),1,3.6,0.7,rand(1))</item>
     </param.TestSnippets>
     <param.DefaultImportExportVariable>config</param.DefaultImportExportVariable>
     <param.ExternalFcnMajority>column</param.ExternalFcnMajority>
     <param.UseGlobals>option.UseGlobals.No</param.UseGlobals>
-    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N40_M18_free_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/calculateHaptotaxisWeighted_mex.mexmaci64</param.outputfile>
     <param.version>R2012a</param.version>
     <param.HasECoderFeatures>false</param.HasECoderFeatures>
     <param.HasGpuCoder>false</param.HasGpuCoder>
@@ -760,31 +751,31 @@
     <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
     <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
     <param.EnableScreener>true</param.EnableScreener>
-    <param.AnnotationChecksum>1394285395</param.AnnotationChecksum>
+    <param.AnnotationChecksum>2814854262</param.AnnotationChecksum>
     <var.LegacyTarget />
     <var.MirrorOnOpen>false</var.MirrorOnOpen>
     <param.FixedPointEnabled>false</param.FixedPointEnabled>
     <var.redirectedInputTypeData />
-    <var.DismissScreener>true</var.DismissScreener>
+    <var.DismissScreener>false</var.DismissScreener>
     <param.unifiedParamStorage />
-    <var.gc.lastOutputRoot>codegen/mex/computeWoidDistancesWithBCs</var.gc.lastOutputRoot>
+    <var.gc.lastOutputRoot>codegen/mex/calculateHaptotaxisWeighted</var.gc.lastOutputRoot>
     <var.gc.lastOutputType>MEX_FILE</var.gc.lastOutputType>
-    <var.gc.preBuildChecksum>678673986</var.gc.preBuildChecksum>
-    <var.cfi.lastOutputRoot>codegen/mex/computeWoidDistancesWithBCs</var.cfi.lastOutputRoot>
-    <var.cfi.preBuildChecksum>3773676524</var.cfi.preBuildChecksum>
-    <var.lastCfiTestSnippet>computeWoidDistancesWithBCs(rand(40,18,2),7.5,'free');</var.lastCfiTestSnippet>
+    <var.gc.preBuildChecksum>1835128565</var.gc.preBuildChecksum>
+    <var.cfi.lastOutputRoot>codegen/mex/calculateHaptotaxisWeighted</var.cfi.lastOutputRoot>
+    <var.cfi.preBuildChecksum>1109054117</var.cfi.preBuildChecksum>
+    <var.lastCfiTestSnippet>calculateHaptotaxisWeighted(rand(40,18,2),rand(40,18),1,3.6,0.7,rand(1))</var.lastCfiTestSnippet>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
-    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;3904989744&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
-    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
+    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateHaptotaxisWeighted.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;2752370957&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
+    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateHaptotaxisWeighted.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
     <param.forceMexBuild>false</param.forceMexBuild>
     <param.configImportActive>false</param.configImportActive>
     <var.isGpuCoder>false</var.isGpuCoder>
     <var.notGpuCoder>true</var.notGpuCoder>
     <var.boundToGui>true</var.boundToGui>
-    <param.mex.outputfile>computeWoidDistancesWithBCs_N40_M18_free_mex</param.mex.outputfile>
-    <param.grt.outputfile>computeWoidDistancesWithBCs</param.grt.outputfile>
+    <param.mex.outputfile>calculateHaptotaxisWeighted_mex</param.mex.outputfile>
+    <param.grt.outputfile>calculateHaptotaxisWeighted_N40_M18_mex</param.grt.outputfile>
     <param.artifact>option.target.artifact.mex</param.artifact>
-    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N40_M18_free_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/calculateHaptotaxisWeighted_mex.mexmaci64</param.outputfile>
     <param.EnableAutoExtrinsicCalls>true</param.EnableAutoExtrinsicCalls>
     <param.UsePreconditions>false</param.UsePreconditions>
     <param.FeatureFlags />
@@ -869,13 +860,14 @@
       <var.MirrorOnOpen />
       <param.FixedPointEnabled />
       <var.redirectedInputTypeData />
+      <var.DismissScreener />
       <param.unifiedParamStorage />
       <var.outdatedOnRestore />
       <param.forceMexBuild />
       <param.configImportActive />
       <var.isGpuCoder />
       <var.notGpuCoder />
-      <param.grt.outputfile />
+      <param.mex.outputfile />
       <param.artifact />
       <param.EnableAutoExtrinsicCalls />
       <param.UsePreconditions />
@@ -939,17 +931,20 @@
       <var.hasGpu />
     </unset>
     <fileset.entrypoints>
-      <file custom-data-expanded="false" value="${PROJECT_ROOT}/computeWoidDistancesWithBCs.m">
-        <Marker>1533907701891</Marker>
+      <file custom-data-expanded="false" value="${PROJECT_ROOT}/calculateHaptotaxisWeighted.m">
+        <Marker>1534002653198</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench />
     <fileset.inputtypes>
-      <file custom-data-expanded="false" value="${PROJECT_ROOT}/computeWoidDistancesWithBCs.m">
-        <Inputs fileName="computeWoidDistancesWithBCs.m" functionName="computeWoidDistancesWithBCs" nargout="1">
-          <Input Name="positionArray" typeId="0" />
-          <Input Name="L" typeId="1" />
-          <Input Name="bc" typeId="2" />
+      <file custom-data-expanded="false" value="${PROJECT_ROOT}/calculateHaptotaxisWeighted.m">
+        <Inputs fileName="calculateHaptotaxisWeighted.m" functionName="calculateHaptotaxisWeighted" nargout="1">
+          <Input Name="distanceMatrixFull" typeId="0" />
+          <Input Name="distanceMatrix" typeId="1" />
+          <Input Name="objInd" typeId="2" />
+          <Input Name="ri" typeId="2" />
+          <Input Name="r_overlap" typeId="2" />
+          <Input Name="f_hapt" typeId="2" />
           <idpTable>
             <type typeId="0">
               <Class>double</Class>
@@ -961,25 +956,26 @@
             </type>
             <type typeId="1">
               <Class>double</Class>
-              <Size>1 x 1</Size>
+              <Size>40 x 18</Size>
               <Value />
               <InitialValue />
               <UserDefined>false</UserDefined>
               <Complex>false</Complex>
             </type>
             <type typeId="2">
-              <Class>char</Class>
-              <Size>1 x 4</Size>
+              <Class>double</Class>
+              <Size>1 x 1</Size>
               <Value />
               <InitialValue />
               <UserDefined>false</UserDefined>
+              <Complex>false</Complex>
             </type>
           </idpTable>
         </Inputs>
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs_N40_M18_free_mex.mexmaci64" optional="false">/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs_N40_M18_free_mex.mexmaci64</file>
+      <file location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="calculateHaptotaxisWeighted_mex.mexmaci64" optional="false">/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateHaptotaxisWeighted_mex.mexmaci64</file>
     </build-deliverables>
     <workflow />
     <matlab>

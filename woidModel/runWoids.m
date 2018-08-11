@@ -67,6 +67,7 @@
 % -- haptotaxis parameters
 % f_hapt: haptotaxis bias, can be attractive or repulse (default 0)
 % haptotaxisMode: whether to weight worms 'constant' or 'weighted' 1/r for distance
+% Rif: relative interaction radius for haptotaxis, default 1 (ie = ri)
 %
 % OUTPUTS
 % xyarray: Array containing the position, and movement direction for
@@ -133,6 +134,7 @@ addOptional(iP,'r_feed',0,@isnumeric) % feeding rate (1/s), in arbitrary concent
 % haptotaxis
 addOptional(iP,'f_hapt',0,@isnumeric) % haptotaxis bias, can be attractive or repulse (default 0)
 addOptional(iP,'haptotaxisMode','constant',@checkHaptotaxisMode) % 'constant' or 'density'
+addOptional(iP,'Rif',1,@isnumeric) % relative interaction radius for force contributions (haptotaxis, alignment), default 1 (ie = ri)
 % vicsek-type alignment
 addOptional(iP,'f_align',0,@isnumeric) % vicsek-type alignment, only for demonstration
 % simulation parameters
@@ -180,6 +182,7 @@ tailNodes = iP.Results.tailNodes;
 ri = iP.Results.ri;
 Rir = iP.Results.Rir;
 Ris = iP.Results.Ris;
+Rif = iP.Results.Rif;
 vs = iP.Results.vs;
 slowingNodes = iP.Results.slowingNodes;
 slowingMode = iP.Results.slowingMode;
@@ -267,12 +270,14 @@ saveCtr = 1;
 disp(['Running simulation...' datestr(now)])
 while t<T
     % find distances between all pairs of objects
-    if N==40&&M==49&&numel(L)==2&&strcmp(bc,'periodic') % check if we can use compiled mex function
+    if N==40&&M==18&&numel(L)==2&&strcmp(bc,'periodic') % check if we can use compiled mex function
+        distanceMatrixXY = computeWoidDistancesWithBCs_M18_mex(positions,L,bc);
+    elseif N==40&&M==18&&numel(L)==1&&strcmp(bc,'free') % check if we can use compiled mex function
+        distanceMatrixXY = computeWoidDistancesWithBCs_N40_M18_free_mex(positions,L,bc);
+    elseif N==40&&M==49&&numel(L)==2&&strcmp(bc,'periodic') % check if we can use compiled mex function
         distanceMatrixXY = computeWoidDistancesWithBCs_mex(positions,L,bc);
     elseif N==40&&M==36&&numel(L)==2&&strcmp(bc,'periodic') % check if we can use compiled mex function
         distanceMatrixXY = computeWoidDistancesWithBCs_M36_mex(positions,L,bc);
-    elseif N==40&&M==18&&numel(L)==2&&strcmp(bc,'periodic') % check if we can use compiled mex function
-        distanceMatrixXY = computeWoidDistancesWithBCs_M18_mex(positions,L,bc);
     elseif N==200&&M==18&&numel(L)==2&&strcmp(bc,'periodic')
         distanceMatrixXY = computeWoidDistancesWithBCs_N200_M18_mex(positions,L,bc);
     elseif N==200&&M==36&&numel(L)==2&&strcmp(bc,'periodic')
@@ -296,10 +301,17 @@ while t<T
     [orientations, phaseOffset] = updateWoidOscillators(orientations,theta_0,...
         omega,dT,phaseOffset,deltaPhase,[reversalLogIndPrev, reversalLogInd(:, timeCtr)]);
     % calculate forces
-    forceArray = calculateForces(distanceMatrixXY,distanceMatrix,...
-        rc,orientations,reversalLogInd(:,timeCtr),segmentLength,...
-        v,k_l,k_theta*v./v0,theta_0,phaseOffset,sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,...
-        LJmode,angleNoise*sqrt(dT./dT0),ri,rcontact,f_hapt,haptotaxisMode,roamingLogInd,f_align);
+    if N==40 && M==18 && strcmp(haptotaxisMode,'weighted_additive')
+        forceArray = calculateForces_mex(distanceMatrixXY,distanceMatrix,...
+            rc,orientations,reversalLogInd(:,timeCtr),segmentLength,...
+            v,k_l,k_theta*v./v0,theta_0,phaseOffset,sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,...
+            LJmode,angleNoise*sqrt(dT./dT0),Rif*ri,rcontact,f_hapt,haptotaxisMode,roamingLogInd,f_align);
+    else
+        forceArray = calculateForces(distanceMatrixXY,distanceMatrix,...
+            rc,orientations,reversalLogInd(:,timeCtr),segmentLength,...
+            v,k_l,k_theta*v./v0,theta_0,phaseOffset,sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,...
+            LJmode,angleNoise*sqrt(dT./dT0),Rif*ri,rcontact,f_hapt,haptotaxisMode,roamingLogInd,f_align);
+    end
     assert(~any(isinf(forceArray(:))|isnan(forceArray(:))),'Can an unstoppable force move an immovable object? Er...')
     % adapt time-step such that it scales inversily with the max force
     dT = adaptTimeStep(dT0,v0,forceArray);

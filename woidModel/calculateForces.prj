@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="2964182534" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="3067116213" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateForces.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="calculateForces" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -30,7 +30,7 @@
       <param.DefaultTestFile />
       <param.MergeInstrumentationResults>false</param.MergeInstrumentationResults>
       <param.VerificationMode>option.VerificationMode.None</param.VerificationMode>
-      <param.VerificationStatus>option.VerificationStatus.Passed</param.VerificationStatus>
+      <param.VerificationStatus>option.VerificationStatus.FailedInference</param.VerificationStatus>
       <param.CustomSourceCode />
       <param.CustomHeaderCode />
       <param.CustomInitializer />
@@ -118,28 +118,28 @@
       <param.BuildFolder>option.BuildFolder.Project</param.BuildFolder>
       <param.SpecifiedBuildFolder />
       <param.SearchPaths />
-      <param.SaturateOnIntegerOverflow />
-      <param.PurelyIntegerCode />
-      <param.SupportNonFinite />
+      <param.SaturateOnIntegerOverflow>true</param.SaturateOnIntegerOverflow>
+      <param.PurelyIntegerCode>false</param.PurelyIntegerCode>
+      <param.SupportNonFinite>true</param.SupportNonFinite>
       <param.EnableVariableSizing>true</param.EnableVariableSizing>
       <param.DynamicMemoryAllocation>option.DynamicMemoryAllocation.Threshold</param.DynamicMemoryAllocation>
       <param.DynamicMemoryAllocationThreshold>65536</param.DynamicMemoryAllocationThreshold>
       <param.RowMajor>option.RowMajor.ColumnMajor</param.RowMajor>
       <param.HighlightPotentialRowMajorIssues>false</param.HighlightPotentialRowMajorIssues>
       <param.StackUsageMax>200000</param.StackUsageMax>
-      <param.MultiInstanceCode />
+      <param.MultiInstanceCode>false</param.MultiInstanceCode>
       <param.FilePartitionMethod>option.FilePartitionMethod.MapMFileToCFile</param.FilePartitionMethod>
       <param.GenerateComments>true</param.GenerateComments>
-      <param.CommentStyle />
+      <param.CommentStyle>option.CommentStyle.Auto</param.CommentStyle>
       <param.MATLABSourceComments>false</param.MATLABSourceComments>
-      <param.MATLABFcnDesc />
-      <param.DataTypeReplacement />
-      <param.ConvertIfToSwitch />
-      <param.PreserveExternInFcnDecls />
-      <param.EnableSignedLeftShifts />
-      <param.EnableSignedRightShifts />
-      <param.ParenthesesLevel />
-      <param.MaxIdLength />
+      <param.MATLABFcnDesc>true</param.MATLABFcnDesc>
+      <param.DataTypeReplacement>option.DataTypeReplacement.CBuiltIn</param.DataTypeReplacement>
+      <param.ConvertIfToSwitch>false</param.ConvertIfToSwitch>
+      <param.PreserveExternInFcnDecls>true</param.PreserveExternInFcnDecls>
+      <param.EnableSignedLeftShifts>true</param.EnableSignedLeftShifts>
+      <param.EnableSignedRightShifts>true</param.EnableSignedRightShifts>
+      <param.ParenthesesLevel>option.ParenthesesLevel.Nominal</param.ParenthesesLevel>
+      <param.MaxIdLength>31</param.MaxIdLength>
       <param.CustomSymbolStrGlobalVar>$M$N</param.CustomSymbolStrGlobalVar>
       <param.CustomSymbolStrType>$M$N</param.CustomSymbolStrType>
       <param.CustomSymbolStrField>$M$N</param.CustomSymbolStrField>
@@ -147,25 +147,25 @@
       <param.CustomSymbolStrTmpVar>$M$N</param.CustomSymbolStrTmpVar>
       <param.CustomSymbolStrMacro>$M$N</param.CustomSymbolStrMacro>
       <param.CustomSymbolStrEMXArray>emxArray_$M$N</param.CustomSymbolStrEMXArray>
-      <param.CustomSymbolStrEMXArrayFcn />
+      <param.CustomSymbolStrEMXArrayFcn>emx$M$N</param.CustomSymbolStrEMXArrayFcn>
       <param.ReservedNameArray />
       <param.RuntimeChecks>false</param.RuntimeChecks>
-      <param.Verbose />
+      <param.Verbose>false</param.Verbose>
       <param.GenerateReport>true</param.GenerateReport>
-      <param.GenerateCodeMetricsReport />
-      <param.GenerateCodeReplacementReport />
-      <param.HighlightPotentialDataTypeIssues />
+      <param.GenerateCodeMetricsReport>true</param.GenerateCodeMetricsReport>
+      <param.GenerateCodeReplacementReport>false</param.GenerateCodeReplacementReport>
+      <param.HighlightPotentialDataTypeIssues>false</param.HighlightPotentialDataTypeIssues>
       <param.LaunchReport>false</param.LaunchReport>
       <param.ReportPotentialDifferences>false</param.ReportPotentialDifferences>
-      <param.SILDebugging />
-      <param.SILPILCheckConstantInputs />
-      <param.SILPILSyncGlobalData />
-      <param.CodeExecutionProfiling />
+      <param.SILDebugging>false</param.SILDebugging>
+      <param.SILPILCheckConstantInputs>true</param.SILPILCheckConstantInputs>
+      <param.SILPILSyncGlobalData>true</param.SILPILSyncGlobalData>
+      <param.CodeExecutionProfiling>false</param.CodeExecutionProfiling>
       <param.DefaultTestFile />
       <param.MergeInstrumentationResults>false</param.MergeInstrumentationResults>
       <param.RanPilSilVerification>false</param.RanPilSilVerification>
       <param.VerificationMode>option.VerificationMode.None</param.VerificationMode>
-      <param.VerificationStatus />
+      <param.VerificationStatus>option.VerificationStatus.Inactive</param.VerificationStatus>
       <param.CustomSourceCode />
       <param.CustomHeaderCode />
       <param.CustomInitializer />
@@ -174,12 +174,12 @@
       <param.CustomSource />
       <param.CustomLibrary />
       <param.PostCodeGenCommand />
-      <param.TargetLangStandard />
-      <param.CodeReplacementLibrary />
+      <param.TargetLangStandard>C++03 (ISO)</param.TargetLangStandard>
+      <param.CodeReplacementLibrary>None</param.CodeReplacementLibrary>
       <param.DeprecatedCRLFlag />
       <param.SameHardware>true</param.SameHardware>
       <param.Toolchain>Automatically locate an installed toolchain</param.Toolchain>
-      <param.BuildConfiguration />
+      <param.BuildConfiguration>Faster Builds</param.BuildConfiguration>
       <param.CustomToolchainOptions />
       <var.ToolchainSettingsVisible />
       <param.target.Data />
@@ -227,19 +227,19 @@
       <param.HardwareAtomicIntegerSize.Target>option.HardwareAtomicIntegerSize.Char</param.HardwareAtomicIntegerSize.Target>
       <param.HardwareAtomicFloatSize.Target>option.HardwareAtomicFloatSize.None</param.HardwareAtomicFloatSize.Target>
       <param.HardwareDivisionRounding.Target>option.HardwareDivisionRounding.Zero</param.HardwareDivisionRounding.Target>
-      <param.CastingMode />
-      <param.IndentStyle />
-      <param.IndentSize />
+      <param.CastingMode>option.CastingMode.Nominal</param.CastingMode>
+      <param.IndentStyle>option.IndentStyle.K&amp;R</param.IndentStyle>
+      <param.IndentSize>2</param.IndentSize>
       <param.ConstantFoldingTimeout>40000</param.ConstantFoldingTimeout>
       <param.CompileTimeRecursionLimit>50</param.CompileTimeRecursionLimit>
       <param.EnableRuntimeRecursion>true</param.EnableRuntimeRecursion>
-      <param.IncludeTerminateFcn />
+      <param.IncludeTerminateFcn>true</param.IncludeTerminateFcn>
       <param.GenerateExampleMain>option.GenerateExampleMain.GenerateCodeOnly</param.GenerateExampleMain>
       <param.PreserveVariableNames>option.PreserveVariableNames.None</param.PreserveVariableNames>
       <param.TargetLang>option.TargetLang.C</param.TargetLang>
       <param.CCompilerOptimization />
       <param.CCompilerCustomOptimizations />
-      <param.GenerateMakefile />
+      <param.GenerateMakefile>true</param.GenerateMakefile>
       <param.BuildToolEnable>false</param.BuildToolEnable>
       <param.MakeCommand />
       <param.TemplateMakefile />
@@ -247,18 +247,17 @@
       <param.InlineThreshold>10</param.InlineThreshold>
       <param.InlineThresholdMax>200</param.InlineThresholdMax>
       <param.InlineStackLimit>4000</param.InlineStackLimit>
-      <param.EnableStrengthReduction />
+      <param.EnableStrengthReduction>false</param.EnableStrengthReduction>
       <param.EnableMemcpy>true</param.EnableMemcpy>
       <param.MemcpyThreshold>64</param.MemcpyThreshold>
       <param.EnableOpenMP>true</param.EnableOpenMP>
       <param.InitFltsAndDblsToZero>true</param.InitFltsAndDblsToZero>
-      <param.PassStructByReference />
+      <param.PassStructByReference>true</param.PassStructByReference>
       <param.CustomLAPACKCallback />
       <param.CustomFFTCallback />
-      <param.GenerateDefaultInSwitch />
-      <param.UseECoderFeatures />
+      <param.GenerateDefaultInSwitch>false</param.GenerateDefaultInSwitch>
+      <param.UseECoderFeatures>false</param.UseECoderFeatures>
       <unset>
-        <param.grt.GenCodeOnly />
         <param.WorkingFolder />
         <param.SpecifiedWorkingFolder />
         <param.BuildFolder />
@@ -736,17 +735,12 @@
     <param.objective>option.objective.c</param.objective>
     <param.WorkflowStep>workflowSummary</param.WorkflowStep>
     <param.TestSnippets>
-      <item>computeWoidDistancesWithBCs(rand(40,18,2),7.5,'free');</item>
-      <item>computeWoidDistancesWithBCs(rand(200,18,2),[7.5 7.5],'periodic');</item>
-      <item>computeWoidDistancesWithBCs(rand(200,36,2),[7.5 7.5],'periodic');</item>
-      <item>computeWoidDistancesWithBCs(rand(60,49,2),[7.5 7.5],'periodic');</item>
-      <item>computeWoidDistancesWithBCs(rand(40,49,2),[7.5 7.5],'periodic');</item>
-      <item>computeWoidDistancesWithBCs(rand(40,49,2),[7.5 7.5],'periodic')</item>
+      <item>calculateForces(rand(40,18,40,18,2),rand(40,18,40,18),0.035,rand(40,18),false(40,1),0.0665,rand(40,1),40,zeros(40,1),0,rand(40,18),0,-1,0,1:18,'soft',0.05,3.6,0.07,rand(1),'weighted_additive',false(40,1),0)</item>
     </param.TestSnippets>
     <param.DefaultImportExportVariable>config</param.DefaultImportExportVariable>
     <param.ExternalFcnMajority>column</param.ExternalFcnMajority>
     <param.UseGlobals>option.UseGlobals.No</param.UseGlobals>
-    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N40_M18_free_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/calculateForces_mex.mexmaci64</param.outputfile>
     <param.version>R2012a</param.version>
     <param.HasECoderFeatures>false</param.HasECoderFeatures>
     <param.HasGpuCoder>false</param.HasGpuCoder>
@@ -760,31 +754,30 @@
     <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
     <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
     <param.EnableScreener>true</param.EnableScreener>
-    <param.AnnotationChecksum>1394285395</param.AnnotationChecksum>
+    <param.AnnotationChecksum>3446990011</param.AnnotationChecksum>
     <var.LegacyTarget />
     <var.MirrorOnOpen>false</var.MirrorOnOpen>
     <param.FixedPointEnabled>false</param.FixedPointEnabled>
     <var.redirectedInputTypeData />
-    <var.DismissScreener>true</var.DismissScreener>
+    <var.DismissScreener>false</var.DismissScreener>
     <param.unifiedParamStorage />
-    <var.gc.lastOutputRoot>codegen/mex/computeWoidDistancesWithBCs</var.gc.lastOutputRoot>
+    <var.gc.lastOutputRoot>codegen/mex/calculateForces</var.gc.lastOutputRoot>
     <var.gc.lastOutputType>MEX_FILE</var.gc.lastOutputType>
-    <var.gc.preBuildChecksum>678673986</var.gc.preBuildChecksum>
-    <var.cfi.lastOutputRoot>codegen/mex/computeWoidDistancesWithBCs</var.cfi.lastOutputRoot>
-    <var.cfi.preBuildChecksum>3773676524</var.cfi.preBuildChecksum>
-    <var.lastCfiTestSnippet>computeWoidDistancesWithBCs(rand(40,18,2),7.5,'free');</var.lastCfiTestSnippet>
+    <var.gc.preBuildChecksum>1881928404</var.gc.preBuildChecksum>
+    <var.cfi.lastOutputRoot>codegen/mex/calculateForces</var.cfi.lastOutputRoot>
+    <var.cfi.preBuildChecksum>921401235</var.cfi.preBuildChecksum>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
-    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;3904989744&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
-    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
+    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateAlignmentForce.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateForces.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateHaptotaxis.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateHaptotaxisWeighted.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContacts.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;2935519887&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
+    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateAlignmentForce.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateForces.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateHaptotaxisWeighted.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
     <param.forceMexBuild>false</param.forceMexBuild>
     <param.configImportActive>false</param.configImportActive>
     <var.isGpuCoder>false</var.isGpuCoder>
     <var.notGpuCoder>true</var.notGpuCoder>
     <var.boundToGui>true</var.boundToGui>
-    <param.mex.outputfile>computeWoidDistancesWithBCs_N40_M18_free_mex</param.mex.outputfile>
-    <param.grt.outputfile>computeWoidDistancesWithBCs</param.grt.outputfile>
+    <param.mex.outputfile>calculateForces_mex</param.mex.outputfile>
+    <param.grt.outputfile>calculateForces</param.grt.outputfile>
     <param.artifact>option.target.artifact.mex</param.artifact>
-    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N40_M18_free_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/calculateForces_mex.mexmaci64</param.outputfile>
     <param.EnableAutoExtrinsicCalls>true</param.EnableAutoExtrinsicCalls>
     <param.UsePreconditions>false</param.UsePreconditions>
     <param.FeatureFlags />
@@ -869,12 +862,14 @@
       <var.MirrorOnOpen />
       <param.FixedPointEnabled />
       <var.redirectedInputTypeData />
+      <var.DismissScreener />
       <param.unifiedParamStorage />
       <var.outdatedOnRestore />
       <param.forceMexBuild />
       <param.configImportActive />
       <var.isGpuCoder />
       <var.notGpuCoder />
+      <param.mex.outputfile />
       <param.grt.outputfile />
       <param.artifact />
       <param.EnableAutoExtrinsicCalls />
@@ -939,21 +934,41 @@
       <var.hasGpu />
     </unset>
     <fileset.entrypoints>
-      <file custom-data-expanded="false" value="${PROJECT_ROOT}/computeWoidDistancesWithBCs.m">
-        <Marker>1533907701891</Marker>
+      <file custom-data-expanded="false" value="${PROJECT_ROOT}/calculateForces.m">
+        <Marker>1534002601704</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench />
     <fileset.inputtypes>
-      <file custom-data-expanded="false" value="${PROJECT_ROOT}/computeWoidDistancesWithBCs.m">
-        <Inputs fileName="computeWoidDistancesWithBCs.m" functionName="computeWoidDistancesWithBCs" nargout="1">
-          <Input Name="positionArray" typeId="0" />
-          <Input Name="L" typeId="1" />
-          <Input Name="bc" typeId="2" />
+      <file custom-data-expanded="false" value="${PROJECT_ROOT}/calculateForces.m">
+        <Inputs fileName="calculateForces.m" functionName="calculateForces" nargout="1">
+          <Input Name="distanceMatrixXY" typeId="0" />
+          <Input Name="distanceMatrix" typeId="1" />
+          <Input Name="rc" typeId="2" />
+          <Input Name="headings" typeId="3" />
+          <Input Name="reversals" typeId="4" />
+          <Input Name="segmentLength" typeId="2" />
+          <Input Name="v_target" typeId="5" />
+          <Input Name="k_l" typeId="2" />
+          <Input Name="k_theta" typeId="5" />
+          <Input Name="theta_0" typeId="2" />
+          <Input Name="phaseOffset" typeId="3" />
+          <Input Name="sigma_LJ" typeId="2" />
+          <Input Name="r_LJcutoff" typeId="2" />
+          <Input Name="eps_LJ" typeId="2" />
+          <Input Name="LJnodes" typeId="6" />
+          <Input Name="LJmode" typeId="7" />
+          <Input Name="angleNoise" typeId="2" />
+          <Input Name="ri" typeId="2" />
+          <Input Name="r_overlap" typeId="2" />
+          <Input Name="f_hapt" typeId="2" />
+          <Input Name="haptotaxisMode" typeId="8" />
+          <Input Name="roamingLogInd" typeId="4" />
+          <Input Name="f_align" typeId="2" />
           <idpTable>
             <type typeId="0">
               <Class>double</Class>
-              <Size>40 x 18 x 2</Size>
+              <Size>40 x 18 x 40 x 18 x 2</Size>
               <Value />
               <InitialValue />
               <UserDefined>false</UserDefined>
@@ -961,15 +976,61 @@
             </type>
             <type typeId="1">
               <Class>double</Class>
-              <Size>1 x 1</Size>
+              <Size>40 x 18 x 40 x 18</Size>
               <Value />
               <InitialValue />
               <UserDefined>false</UserDefined>
               <Complex>false</Complex>
             </type>
             <type typeId="2">
+              <Class>double</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>false</UserDefined>
+              <Complex>false</Complex>
+            </type>
+            <type typeId="3">
+              <Class>double</Class>
+              <Size>40 x 18</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>false</UserDefined>
+              <Complex>false</Complex>
+            </type>
+            <type typeId="4">
+              <Class>logical</Class>
+              <Size>40 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>false</UserDefined>
+            </type>
+            <type typeId="5">
+              <Class>double</Class>
+              <Size>40 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>false</UserDefined>
+              <Complex>false</Complex>
+            </type>
+            <type typeId="6">
+              <Class>double</Class>
+              <Size>1 x 18</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>false</UserDefined>
+              <Complex>false</Complex>
+            </type>
+            <type typeId="7">
               <Class>char</Class>
               <Size>1 x 4</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>false</UserDefined>
+            </type>
+            <type typeId="8">
+              <Class>char</Class>
+              <Size>1 x 17</Size>
               <Value />
               <InitialValue />
               <UserDefined>false</UserDefined>
@@ -979,7 +1040,7 @@
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs_N40_M18_free_mex.mexmaci64" optional="false">/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs_N40_M18_free_mex.mexmaci64</file>
+      <file location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="calculateForces_mex.mexmaci64" optional="false">/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateForces_mex.mexmaci64</file>
     </build-deliverables>
     <workflow />
     <matlab>

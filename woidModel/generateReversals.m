@@ -3,8 +3,15 @@ function reversalLogInd = generateReversals(reversalLogInd,timeCtr,distanceMatri
     revRateClusterEdge,roamingLogInd,drdN_rev)
 if strcmp(reversalMode,'density')
     % increase reversal rate based on local density
-    num_nbr_head = countNbrsByNode(distanceMatrix,interactionRadius,headInd)./numel(headInd); % average number of neighbouring nodes in contact
-    num_nbr_tail = countNbrsByNode(distanceMatrix,interactionRadius,tailInd)./numel(tailInd); % average number of neighbouring nodes in contact
+    N = size(distanceMatrix,1);
+    M = size(distanceMatrix,2);
+% %     if N==40&&M==18
+% %         num_nbr_head = countNbrsByNode_mex(distanceMatrix,interactionRadius,headInd)./numel(headInd); % average number of neighbouring nodes in contact
+% %         num_nbr_tail = countNbrsByNode_mex(distanceMatrix,interactionRadius,tailInd)./numel(tailInd); % average number of neighbouring nodes in contact
+% %     else
+        num_nbr_head = countNbrsByNode(distanceMatrix,interactionRadius,headInd)./numel(headInd); % average number of neighbouring nodes in contact
+        num_nbr_tail = countNbrsByNode(distanceMatrix,interactionRadius,tailInd)./numel(tailInd); % average number of neighbouring nodes in contact
+% %     end
     revRateClusterEdgeTailOut = revRateClusterEdge + drdN_rev.*num_nbr_head;
     revRateClusterEdgeHeadOut = revRateClusterEdge + drdN_rev.*num_nbr_tail;
 elseif strcmp(reversalMode,'density_weighted')

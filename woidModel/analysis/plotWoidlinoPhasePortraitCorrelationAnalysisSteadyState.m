@@ -16,98 +16,78 @@ exportOptions = struct('Format','eps2',...
 N = 40;
 M = 18;
 L = 7.5;
-attractionStrength = 0;
-numRepeats = 3;
-% revRatesClusterEdge = [0, 0.2, 0.4, 0.8, 1.6];
-revRatesClusterEdge = 0:5;
-speeds = [0.33];
-% slowspeeds = fliplr([0.33, 0.1, 0.05, 0.025, 0.0125]);
-% slowspeeds = fliplr([0.33, 0.05, 0.025, 0.0125]);
-slowspeeds = [0.018];
+numRepeats = 1;
 trackedNodes = 1:max(round(M*0.16),1);
-distBinwidth = 0.1; % in units of mm, sensibly to be chosen similar worm width or radius
-maxDist = 2;
+maxDist = 1.2;
+distBinwidth = 0.1;
+
+% -- slow-down parameters --
+vs = 0.018;% vs: speed when slowed down (default v0/3)
 slowingMode = 'stochastic_bynode';
 k_dwell = 0.0036;
 k_undwell = 1.1;
-dkdN_dwell_values = fliplr(0:0.2:1);
-% angleNoise = 1;
+% -- reversal parameters --
+reversalMode = 'density';
+% -- Lennard-Jones parameters --
+r_LJcutoff = -1;% r_LJcutoff: cut-off above which LJ-force is not acting anymore (default 0)
+sigma_LJ = 0;  % particle size for Lennard-Jones force
+eps_LJ = 0;
+% -- undulation parameters --
+k_theta = 0;
+theta_0 = 0;
+omega_m = 0;
+deltaPhase = 0;
+angleNoise = 0.05;
+% -- haptotaxis --
+% f_hapt = 0.5;
+% -- speed and time-step --
+v0 = 0.33; % npr1 0.33; N2 0.14
 
-secondVariables = dkdN_dwell_values;
+filepath = '../results/woidlinos/paramSamples/';
+files = dir([filepath '*.mat']);
+nPlots = 100;
 
-for speed = speeds
-    poscorrFig = figure;
-    plotCtr = 1;
-    poscorrFig.Name = ['v_0 = ' num2str(speed)];
-    for slowspeed = slowspeeds
-        for dkdN_dwell = dkdN_dwell_values
-            for revRateClusterEdge = revRatesClusterEdge
-                for repCtr = 1:numRepeats
-                    filename = ['../results/woidlinos/mapping/wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L) ...
-                        ...'_noVolExcl' '_angleNoise_' num2str(angleNoise)...
-                        '_v0_' num2str(speed,'%1.0e') '_vs_' num2str(slowspeed,'%1.0e') ...
-                        '_' slowingMode 'SlowDown' '_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...
-                        '_dkdN_' num2str(dkdN_dwell) ...
-                        ...'_epsLJ_' num2str(attractionStrength,'%1.0e') ...
-                        '_revRateClusterEdge_' num2str(revRateClusterEdge,'%1.0e') ...
-                        '_run' num2str(repCtr) '.mat'];
-                    if exist(filename,'file')
-                        thisFile = load(filename);
-                        maxNumFrames = size(thisFile.xyarray,4);
-                        burnIn = round(500./thisFile.T*maxNumFrames); % used for visualizing cut-off
-                        numFrames =  0.1*maxNumFrames; % sample some percentage of frames
-                        framesAnalyzed = round(linspace(1,maxNumFrames,numFrames)); % regularly sample frames without replacement
-         
-                        %% calculate stats
-                        [~,~, ~,~, ~,~,...
-                            gr,distBins,~,~] = ...
-                            correlationanalysisSimulations(thisFile,trackedNodes,distBinwidth,framesAnalyzed,maxDist);
-                        % get maximum of gr
-                        [grmax, ~] = max(smoothdata(gr,2,'movmean',3));
-                        % plot lines for this file
-                        % speed v distance
-                        subplot(length(secondVariables),length(revRatesClusterEdge),plotCtr)
-                        plot(framesAnalyzed,smoothdata(grmax,'movmean',7))
-                        if repCtr==1
-                            hold on
-                            plot(burnIn*[1 1],[0 max(grmax)],'k--')
-                        end
-                    end
-                end
-                %% format plots
-                formatAxes(revRateClusterEdge,dkdN_dwell);
-                % advance to next subplot
-                plotCtr = plotCtr + 1;
-            end
-        end
+pcfFig = figure;
+for plotCtr = 1:nPlots
+    thisFile = load([filepath files(plotCtr).name]);
+    maxNumFrames = size(thisFile.xyarray,4);
+    burnIn = round(1000./thisFile.T*maxNumFrames); % used for visualizing cut-off
+    numFrames =  0.1*maxNumFrames; % sample some percentage of frames
+    framesAnalyzed = round(linspace(1,maxNumFrames,numFrames)); % regularly sample frames without replacement
+    
+    %% calculate stats
+    [~,~, ~,~, ~,~,...
+        gr,~,~,~] = ...
+        correlationanalysisSimulations(thisFile,trackedNodes,distBinwidth,framesAnalyzed,maxDist);
+    % get maximum of gr
+    [grmax, ~] = max(smoothdata(gr,2,'movmean',3));
+    % plot lines for this file
+    % speed v distance
+    sumStat = smoothdata(grmax,'movmean',3);
+    plot(framesAnalyzed,sumStat./mean(sumStat(round(burnIn./maxNumFrames*numel(sumStat)):end)),...
+        'Color',[0 0 0 0.25])
+    if plotCtr==1
+        hold on
+        plot(burnIn*[1 1],[0 max(grmax)],'k--')
     end
-    %% export figures
-    % radial distribution / pair correlation
-    poscorrFig.PaperUnits = 'centimeters';
-    fignameprefix = ['figures/diagnostics/grmaxOverTime'];
-    fignamesuffix = ['_M' num2str(M)...
-        'N_' num2str(thisFile.N) '_L_' num2str(thisFile.L(1)) ...
-        ...'_noVolExcl' '_angleNoise_' num2str(angleNoise)...
-        '_speed_' num2str(speed,'%1.0e') ...
-        '_slowing_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...
-        ...'_epsLJ_' num2str(attractionStrength,'%1.0e')...
-        '.eps'];
-    filename = [fignameprefix 'Radialdistribution' fignamesuffix];
-    exportfig(poscorrFig,filename, exportOptions)
-    system(['epstopdf ' filename]);
-    system(['rm ' filename]);
-end
 end
 
-function ax = formatAxes(revRateClusterEdge,var2)
-title(['r=' num2str(revRateClusterEdge) ', dk/dN =' num2str(var2)],...
-    'FontWeight','normal')
-ax = gca;
-ax.Position = ax.Position.*[1 1 1.2 1.2] - [0.0 0.0 0 0]; % stretch panel
-% ax.XLim = [0 2];
-% ax.XTick = 0:2;
-ax.XTickLabel = [];
-% ax.YTickLabel = [];
-ax.Box = 'on';
-grid on
+ylim([0 2])
+ylabel('summart statistic (relative to mean after burn-in')
+xlim([0 maxNumFrames])
+xlabel('timesteps')
+%% export figures
+% radial distribution / pair correlation
+pcfFig.PaperUnits = 'centimeters';
+fignameprefix = ['figures/diagnostics/grmaxOverTime'];
+fignamesuffix = ['_wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
+    '_v0_' num2str(v0) '_vs_' num2str(vs) ...
+    '_angleNoise_' num2str(angleNoise) '_k_theta_' num2str(k_theta)...
+    '_slow_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...
+    '_rev' reversalMode  ...
+    '_' num2str(nPlots) 'samples.eps'];
+filename = [fignameprefix 'Radialdistribution' fignamesuffix];
+exportfig(pcfFig,filename, exportOptions)
+system(['epstopdf ' filename]);
+system(['rm ' filename]);
 end

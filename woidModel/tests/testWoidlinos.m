@@ -66,11 +66,13 @@ food = [];
 % end
 % end
 
-% test clustered initial conditions
-rng(1)
+% test paired initial conditions with haptotaxis
+L = [2.4]
+rngCtr = 5
+% xyarray2 = runWoids(5,1,M,L,'bc','noflux',param,'resumeState',currentState);
+% xyarray = cat(4,xyarray1,xyarray2(:,:,:,2:end));
 param.bc = 'free';
 param.sigma_LJ = 0;
-L = 1.8;
 param.k_theta = 0;
 param.angleNoise = 0.05;
 param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
@@ -78,14 +80,45 @@ param.saveEvery = round(1/param.dT/4);
 param.slowingMode = 'stochastic_bynode';
 param.k_dwell = 0.0036;
 param.k_undwell = 1.1;
-param.dkdN_dwell = 0.05;
-param.dkdN_undwell = 0.05;
+param.dkdN_dwell = 0;
+param.dkdN_undwell = 0;
 param.reversalMode = 'density';
-param.drdN_rev = 0.05;
+param.drdN_rev = 0;
 param.revRateClusterEdge = 0;
+param.Rif = 1.2/0.035;
+param.f_hapt = 0.2;
+param.haptotaxisMode = 'weighted_additive';
 param.r_LJcutoff = -1
-xyarray = runWoids(3,40,18,L,param);
-filename = ['woidlino_test_movies/test_clustered_L_' num2str(L(1)) '_Rgyr_' num2str(sqrt(sum(var(xyarray(:,1,:,end)))),2)];
+% set up initial conditions
+rng(rngCtr)
+[~, currentState] = runWoids(1,2,M,[L L],param);
+% continue with random seed
+rng('shuffle')
+xyarray = runWoids(60,2,M,[L L],param,'resumeState',currentState);
+filename = ['woidlino_test_movies/test_paired_' num2str(rngCtr) '_L_' num2str(L)...
+    '_haptotaxis_' param.haptotaxisMode '_' num2str(param.f_hapt) ];
+animateWoidTrajectories(xyarray,filename,[L L],0.035,food);
+
+% % test clustered initial conditions
+% rng(1)
+% param.bc = 'free';
+% param.sigma_LJ = 0;
+% L = 1.8;
+% param.k_theta = 0;
+% param.angleNoise = 0.05;
+% param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
+% param.saveEvery = round(1/param.dT/4);
+% param.slowingMode = 'stochastic_bynode';
+% param.k_dwell = 0.0036;
+% param.k_undwell = 1.1;
+% param.dkdN_dwell = 0.05;
+% param.dkdN_undwell = 0.05;
+% param.reversalMode = 'density';
+% param.drdN_rev = 0.05;
+% param.revRateClusterEdge = 0;
+% param.r_LJcutoff = -1
+% xyarray = runWoids(3,40,18,L,param);
+% filename = ['woidlino_test_movies/test_clustered_L_' num2str(L(1)) '_Rgyr_' num2str(sqrt(sum(var(xyarray(:,1,:,end)))),2)];
 
 % % test angle noise 
 % N = 10;
@@ -379,15 +412,15 @@ filename = ['woidlino_test_movies/test_clustered_L_' num2str(L(1)) '_Rgyr_' num2
 %     '_dwell_' num2str(param.k_dwell) '_'
 %     num2str(param.k_undwell)],L,rc0);\
 %% make movie and other plots
-animateWoidTrajectories(xyarray,filename,L,0.035,food);
-
-pcf_mean = inf_pcf(xyarray,'simulation',min(param.dT*param.saveEvery/3,1));
-figure
-semilogy((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
-xlabel('r (mm)'), ylabel('pcf'), ylim([0.1 100]), xlim([0 2])
-set(gcf,'PaperUnits','centimeters')
-exportfig(gcf,[filename '.eps']);
-system(['epstopdf ' filename '.eps']);
-system(['rm ' filename '.eps']);
+% animateWoidTrajectories(xyarray,filename,L,0.035,food);
+% 
+% pcf_mean = inf_pcf(xyarray,'simulation',min(param.dT*param.saveEvery/3,1));
+% figure
+% semilogy((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
+% xlabel('r (mm)'), ylabel('pcf'), ylim([0.1 100]), xlim([0 2])
+% set(gcf,'PaperUnits','centimeters')
+% exportfig(gcf,[filename '.eps']);
+% system(['epstopdf ' filename '.eps']);
+% system(['rm ' filename '.eps']);
 % 
 % save(['../results/woidlinos/tests/' strrep(filename,'woidlino_test_movies/','') '.mat'])

@@ -49,8 +49,8 @@ param.drdN_rev = paramSamples.drdN_rev(sampleCtr);
 param.dkdN_dwell = paramSamples.dkdN_dwell(sampleCtr);
 param.dkdN_undwell = paramSamples.dkdN_undwell(sampleCtr);
 
-filepath = '/exports/eddie/scratch/lschuma2/woidlinos/';
-%filepath = 'results/woidlinos/paramSamples/';
+% filepath = '/exports/eddie/scratch/lschuma2/woidlinos/';
+filepath = 'results/woidlinos/paramSamples/';
 filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
     '_v0_' num2str(param.v0) '_vs_' num2str(param.vs) ...
     '_angleNoise_' num2str(param.angleNoise) '_k_theta_' num2str(param.k_theta)...

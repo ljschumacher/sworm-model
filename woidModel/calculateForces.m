@@ -63,9 +63,15 @@ for objCtr = 1:N
     % haptotaxis - move to the direction of other worms (should this be added before angular noise?)
     if f_hapt~=0 % haptotaxis could be attractive or repulsive
         if strcmp(haptotaxisMode,'weighted_additive')%&&~roamingLogInd(objCtr) % only update those worms which are not roaming
-            Fm(headInd,:) = Fm(headInd,:) ...
-                + calculateHaptotaxisWeighted(distanceMatrixXY(:,:,:,objCtr,headInd),...
-                distanceMatrix(:,:,objCtr,headInd),objCtr,ri,r_overlap,f_hapt);
+% %             if N==40&&M==18
+% %                 Fm(headInd,:) = Fm(headInd,:) ...
+% %                     + calculateHaptotaxisWeighted_mex(distanceMatrixXY(:,:,:,objCtr,headInd),...
+% %                     distanceMatrix(:,:,objCtr,headInd),objCtr,ri,r_overlap,f_hapt);
+% %             else
+                Fm(headInd,:) = Fm(headInd,:) ...
+                    + calculateHaptotaxisWeighted(distanceMatrixXY(:,:,:,objCtr,headInd),...
+                    distanceMatrix(:,:,objCtr,headInd),objCtr,ri,r_overlap,f_hapt);
+% %             end
         elseif strcmp(haptotaxisMode,'weighted')%&&~roamingLogInd(objCtr) % only update those worms which are not roaming
             Fm(headInd,:) = Fm(headInd,:) ...
                 + calculateHaptotaxisWeighted(distanceMatrixXY(:,:,:,objCtr,headInd),...
@@ -86,7 +92,8 @@ for objCtr = 1:N
     % body motile force
     Fm(bodyInd,:) = movState*ds(bodyInd,:);
     % fix magnitue of motile force to give target velocity
-    Fm = v_target(objCtr).*Fm./sqrt(sum(Fm.^2,2));
+% %     Fm = v_target(objCtr).*Fm./sqrt(sum(Fm.^2,2));
+    Fm = v_target(objCtr).*bsxfun(@rdivide,Fm,sqrt(sum(Fm.^2,2)));
     
     % length constraint
     if k_l>0&&M>1
@@ -94,12 +101,15 @@ for objCtr = 1:N
         for nodeCtr = 1:M-1
             dl(nodeCtr,:) = distanceMatrixXY(objCtr,nodeCtr,[x y],objCtr,nodeCtr+1); % direction to next node
         end
-        dl = dl./l.*(l - segmentLength);% normalised for segment length and deviation from segmentLength
+% %         dl = dl./l.*(l - segmentLength);% normalised for segment length and deviation from segmentLength
+        dl = bsxfun(@rdivide,dl,l./(l - segmentLength));
         dl_max = segmentLength;
         dl_nl = min(abs(l - segmentLength),0.99*dl_max);% non-linear contribution saturates to avoid force decrease for
         % l - segL > segLmax, which could happen for finite timestep
         nl = 1./abs(1 - (dl_nl/dl_max).^2); % non-linear part of spring
-        Fl = k_l.*(cat(1,dl.*nl,zeros(1,2)) - cat(1,zeros(1,2),dl.*nl)); % add forces to next and previous nodes shifted
+% %         Fl = k_l.*(cat(1,dl.*nl,zeros(1,2)) - cat(1,zeros(1,2),dl.*nl)); % add forces to next and previous nodes shifted
+        Fl = k_l.*(cat(1,bsxfun(@times,dl,nl),zeros(1,2)) ...
+            - cat(1,zeros(1,2),bsxfun(@times,dl,nl))); % add forces to next and previous nodes shifted
     else
         Fl = zeros(size(Fm));
     end
@@ -119,8 +129,11 @@ for objCtr = 1:N
         %     % uncomment for debugging...
         %     plot(gradient(bodyAngles)), hold on, plot(gradient(sin(phaseOffset(objCtr,:))'))
         
-        momentsfwd = torques.*l(1:end-1).*e_phi(1:end-1,:);
-        momentsbwd = torques.*l(2:end).*e_phi(2:end,:);
+% %         momentsfwd = torques.*l(1:end-1).*e_phi(1:end-1,:);
+        momentsfwd = bsxfun(@times,torques.*l(1:end-1),e_phi(1:end-1,:));
+% %         momentsbwd = torques.*l(2:end).*e_phi(2:end,:);
+        momentsbwd = bsxfun(@times,torques.*l(2:end),e_phi(2:end,:));
+
         %     F_theta = NaN(M,2); % pre-allocate to index nodes in order depending on movement state
         F_theta = [momentsfwd; 0 0; 0 0] ... % rotational force from node n+1 onto n
             + [0 0; 0 0; momentsbwd] ...% rotational force from node n-1 onto n
@@ -132,29 +145,33 @@ for objCtr = 1:N
     forceArray(objCtr,:,:) = Fm + Fl + F_theta;
 end
 % resolve contact forces
-if N==40&&M==49 % check if we can use compiled mex function
-    Fc = resolveContactsLoop_mex(forceArray,distanceMatrixXY,...
-        distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes, LJmode);
-elseif N==40&&M==36 % check if we can use compiled mex function
-    Fc = resolveContactsLoop_N40_M36_mex(forceArray,distanceMatrixXY,...
-        distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes, LJmode);
-elseif N==40&&M==18 % check if we can use compiled mex function
-    Fc = resolveContactsLoop_N40_M18_mex(forceArray,distanceMatrixXY,...
-        distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes, LJmode);
-elseif N==200&&M==18 % check if we can use compiled mex function
-    Fc = resolveContactsLoop_N200_M18_mex(forceArray,distanceMatrixXY,...
-        distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes, LJmode);
-elseif N==200&&M==36 % check if we can use compiled mex function
-    Fc = resolveContactsLoop_N200_M36_mex(forceArray,distanceMatrixXY,...
-        distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes, LJmode);
-else
-    Fc = NaN(N,M,2);
-    for objCtr = 1:N
-        for nodeCtr = 1:M
-            Fc(objCtr,nodeCtr,:) = resolveContacts(forceArray,distanceMatrixXY(:,:,:,objCtr,nodeCtr),...
-                distanceMatrix(:,:,objCtr,nodeCtr),objCtr,nodeCtr,2*rc,...
-                sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,LJmode); % factor of two so that rc is node radius
+if rc>0||r_LJcutoff>0
+    if N==40&&M==49 % check if we can use compiled mex function
+        Fc = resolveContactsLoop_mex(forceArray,distanceMatrixXY,...
+            distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes, LJmode);
+    elseif N==40&&M==36 % check if we can use compiled mex function
+        Fc = resolveContactsLoop_N40_M36_mex(forceArray,distanceMatrixXY,...
+            distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes, LJmode);
+    elseif N==40&&M==18 % check if we can use compiled mex function
+% %         Fc = resolveContactsLoop_N40_M18_mex(forceArray,distanceMatrixXY,...
+% %             distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes, LJmode);
+        Fc = resolveContactsLoop(forceArray,distanceMatrixXY,...
+            distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes, LJmode);
+    elseif N==200&&M==18 % check if we can use compiled mex function
+        Fc = resolveContactsLoop_N200_M18_mex(forceArray,distanceMatrixXY,...
+            distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes, LJmode);
+    elseif N==200&&M==36 % check if we can use compiled mex function
+        Fc = resolveContactsLoop_N200_M36_mex(forceArray,distanceMatrixXY,...
+            distanceMatrix,2*rc,sigma_LJ,r_LJcutoff,eps_LJ, LJnodes, LJmode);
+    else
+        Fc = NaN(N,M,2);
+        for objCtr = 1:N
+            for nodeCtr = 1:M
+                Fc(objCtr,nodeCtr,:) = resolveContacts(forceArray,distanceMatrixXY(:,:,:,objCtr,nodeCtr),...
+                    distanceMatrix(:,:,objCtr,nodeCtr),objCtr,nodeCtr,2*rc,...
+                    sigma_LJ,r_LJcutoff,eps_LJ,LJnodes,LJmode); % factor of two so that rc is node radius
+            end
         end
     end
+    forceArray = forceArray + Fc;
 end
-forceArray = forceArray + Fc;
