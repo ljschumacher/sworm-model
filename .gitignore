@@ -4,3 +4,4 @@
 *.fig
 *.avi
 *.mp4
+woidModel/results/woidlinos/*.mat
