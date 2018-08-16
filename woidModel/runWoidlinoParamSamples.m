@@ -51,8 +51,8 @@ param.dkdN_dwell = paramSamples.dkdN_dwell(sampleCtr);
 param.dkdN_undwell = paramSamples.dkdN_undwell(sampleCtr);
 param.f_hapt = paramSamples.f_hapt(sampleCtr);
 
-filepath = '/exports/eddie/scratch/lschuma2/woidlinos/PRW_4D_r1/';
-% filepath = 'results/woidlinos/paramSamples/PRW_4D_r1/';
+% filepath = '/exports/eddie/scratch/lschuma2/woidlinos/PRW_4D_r1/';
+filepath = 'results/woidlinos/paramSamples/PRW_4D_r1/';
 filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
     '_v0_' num2str(param.v0) '_vs_' num2str(param.vs) ...
     '_angleNoise_' num2str(param.angleNoise) '_k_theta_' num2str(param.k_theta)...
@@ -61,6 +61,8 @@ filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
     '_rev' param.reversalMode '_drdN_' num2str(param.drdN_rev) ...
     '_haptotaxis_' param.haptotaxisMode '_' num2str(param.f_hapt) ...
     '_sample_' num2str(sampleCtr)];
+pStabThresh = 1;
+cStabThresh = 3;
 if ~exist([filepath filename '.mat'],'file')
     %% check for pair stability, which we don't want
     disp('Checking pair stability...')
@@ -80,11 +82,11 @@ if ~exist([filepath filename '.mat'],'file')
         D = sqrt(X.^2 + Y.^2);
         minPdist(repCtr) = min(D(:));
     end
-    if median(minPdist)<1
+    if median(minPdist)<pStabThresh
         disp(['params result in stable pair (median min separation ' ...
             num2str(median(minPdist)) '), discontinuing simulation'])
         % save minPdist result?
-    elseif median(minPdist)>=1
+    elseif median(minPdist)>=pStabThresh
         %% check for cluster stability, which we do/don't want (npr1/N2)
         disp('Checking cluster stability...')
         param.bc = 'free';
@@ -92,11 +94,11 @@ if ~exist([filepath filename '.mat'],'file')
         [clustxyarray, ~] = runWoids(300,N,M,1.8,param);
         % compute radius of gyration (of worm heads)
         Rgyr = sqrt(sum(var(clustxyarray(:,1,:,end))));
-        if Rgyr>4
+        if Rgyr>cStabThresh
             disp(['params result in unstable cluster (Rgyr ' num2str(Rgyr) ...
                 '), discontinuing simulation'])
             % save Rgyr result?
-        elseif Rgyr<=3
+        elseif Rgyr<=cStabThresh
             %% run full-length simulation
             disp('Running full-length simulation...')
             param.bc = 'periodic';
