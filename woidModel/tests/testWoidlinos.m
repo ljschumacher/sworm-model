@@ -84,7 +84,7 @@ param.reversalMode = 'density';
 param.drdN_rev = 0;
 param.revRateClusterEdge = 0;
 param.Rif = 1.2/0.035;
-param.f_hapt = 0.002;
+param.f_hapt = 0.12;
 param.haptotaxisMode = 'weighted_additive';
 param.r_LJcutoff = -1
 % set up initial conditions
@@ -92,11 +92,13 @@ rng(5)
 [~, currentState] = runWoids(1,2,M,L,param);
 % continue with random seed
 % rng('shuffle')
-rng(1)
+for rngCtr = 1:5
+rng(rngCtr)
 xyarray = runWoids(60,2,M,L,param,'resumeState',currentState);
 filename = ['woidlino_test_movies/test_paired_5_L_' num2str(L(1))...
-    '_haptotaxis_' param.haptotaxisMode '_' num2str(param.f_hapt) ];
+    '_haptotaxis_' param.haptotaxisMode '_' num2str(param.f_hapt) '_r' num2str(rngCtr)];
 animateWoidTrajectories(xyarray,filename,L,0.035,food);
+end
 % 
 % % test clustered initial conditions
 % rng(1)

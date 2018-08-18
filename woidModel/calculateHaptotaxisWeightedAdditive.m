@@ -19,11 +19,11 @@ if any(haptoNbrs(:))
         distanceMatrix(haptoNbrs(:))); % bsxfun has similar performace to implicit expansion (below) but is mex-file compatible
     %     e_nN = [distanceMatrixFull(collisionNbrs(:)) distanceMatrixFull(find(collisionNbrs(:)) + N*M)]... %direction FROM neighbours TO object [x, y]
     %         ./distanceMatrix(collisionNbrs(:)); % normalise for distance
-    Fh = f_hapt.*sum(-e_nN.*distanceweights); % minus unit vector as we want direction pointing FROM node TO Nbrs
+    Fh = f_hapt.*sum(-e_nN.*distanceweights)/M; % minus unit vector as we want direction pointing FROM node TO Nbrs
     if any(overlapNbrs(:))
         e_nC = bsxfun(@rdivide,[distanceMatrixFull(overlapNbrs(:)) distanceMatrixFull(find(overlapNbrs(:)) + N*M)],...
             distanceMatrix(overlapNbrs(:))); % directions for overlapping Nbrs
-        Fh = Fh + f_hapt.*sum(e_nC); % different sign as force is now repulsive, constant distance weighting
+        Fh = Fh + f_hapt.*sum(e_nC)/M; % different sign as force is now repulsive, constant distance weighting
     end
 else
     Fh = [0, 0];
