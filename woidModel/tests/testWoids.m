@@ -275,10 +275,45 @@ rng(1)
 %     '_sweeping_feedrate_' num2str(param.r_feed) '_kunroam_' num2str(param.k_unroam)...
 %     '_angleNoise' num2str(param.angleNoise)],L,0.035,food);
 
-% % test feeding
+% % % test feeding
+% rng(1)
+% L = [7.5 7.5];
+% M = 37;
+% T = 1000;
+% bc = 'periodic';
+% param.k_l = 80;
+% param.r_feed = 0%1/100;
+% param.k_unroam = 10;
+% param.slowingMode = 'stochastic_bynode';
+% param.k_dwell = 0.0036;
+% param.k_undwell = 1.1;
+% param.dkdN_dwell = 0.05;
+% param.dkdN_undwell = 0.4;
+% param.reversalMode = 'density';
+% param.revRateClusterEdge = 0;
+% param.drdN_rev = 0.05;
+% param.ri = 5*0.035;
+% param.vs = 0.018;
+% param.v0 = 0.33;
+% % param.omega_m = 2*pi*0.25
+% param.f_hapt = 0;
+% param.eps_LJ = 1.125e-5;
+% param.LJmode = 'hard';
+% param.LJnodes = 1;
+% param.sigma_LJ = 2*0.035;
+% param.r_LJcutoff = 34*0.035;
+% param.rc = 0
+% [xyarray, currentState, food] = runWoids(T,40,M,L,'bc',bc,param);
+% movfilename = ['woid_test_movies/40WormM' num2str(M) '_sweeping_feedrate_' num2str(param.r_feed) ...
+%     '_kunroam_' num2str(param.k_unroam) ...'_haptotaxis_' num2str(param.f_hapt) ...
+%     '_LJ' paramLJmode '_' num2str(param.eps_LJ) '_longRange_headOnly_rc_' num2str(param.rc) ...
+%     '_ri_' num2str(param.ri) ...
+%     ];
+
+% % test old best-inferred + attraction
 rng(1)
 L = [7.5 7.5];
-M = 37;
+M = 36;
 T = 1000;
 bc = 'periodic';
 param.k_l = 80;
@@ -287,26 +322,26 @@ param.k_unroam = 10;
 param.slowingMode = 'stochastic_bynode';
 param.k_dwell = 0.0036;
 param.k_undwell = 1.1;
-param.dkdN_dwell = 0.05;
-param.dkdN_undwell = 0.4;
-param.reversalMode = 'density';
-param.revRateClusterEdge = 0;
-param.drdN_rev = 0.05;
-param.ri = 5*0.035;
+param.dkdN_dwell = 0.77199;
+param.dkdN_undwell = 0.77199;
+param.reversalMode = 'contact';
+param.revRateClusterEdge = 56866;
+% param.drdN_rev = 0.05;
+param.ri = 3*0.035;
 param.vs = 0.018;
 param.v0 = 0.33;
 % param.omega_m = 2*pi*0.25
 param.f_hapt = 0;
-param.eps_LJ = 1.125e-5;
-param.LJmode = 'hard';
-param.LJnodes = 1;
+param.eps_LJ = 2e-5;
+param.LJmode = 'soft';
+param.LJnodes = 1:M;
 param.sigma_LJ = 2*0.035;
-param.r_LJcutoff = 34*0.035;
-param.rc = 0
+param.r_LJcutoff = 1.2;
+param.rc = 0.035;
 [xyarray, currentState, food] = runWoids(T,40,M,L,'bc',bc,param);
 movfilename = ['woid_test_movies/40WormM' num2str(M) '_sweeping_feedrate_' num2str(param.r_feed) ...
     '_kunroam_' num2str(param.k_unroam) ...'_haptotaxis_' num2str(param.f_hapt) ...
-    '_LJ' paramLJmode '_' num2str(param.eps_LJ) '_longRange_headOnly_rc_' num2str(param.rc) ...
+    '_LJ' paramLJmode '_' num2str(param.eps_LJ) '_longRange_rc_' num2str(param.rc) ...
     '_ri_' num2str(param.ri) ...
     ];
 
