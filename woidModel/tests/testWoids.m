@@ -314,10 +314,10 @@ rng(1)
 rng(1)
 L = [7.5 7.5];
 M = 36;
-T = 1000;
+T = 3600;
 bc = 'periodic';
 param.k_l = 80;
-param.r_feed = 0%1/100;
+param.r_feed = 1/100;
 param.k_unroam = 10;
 param.slowingMode = 'stochastic_bynode';
 param.k_dwell = 0.0036;
