@@ -476,15 +476,15 @@ movfilename = ['woid_test_movies/40WormM' num2str(M) '_sweeping_feedrate_' num2s
 % movfilename = ['woid_test_movies/40WormM' num2str(M) '_circBound' '_midRange'];
 
 %% make movie and other plots
-animateWoidTrajectories(xyarray,movfilename,L,0.035,food);
-
-pcf_mean = inf_pcf(xyarray,'complexsim',min(param.dT*param.saveEvery/3,1));
-figure
-semilogy((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
-xlabel('r (mm)'), ylabel('pcf'), ylim([0.1 100])
-set(gcf,'PaperUnits','centimeters')
-exportfig(gcf,[movfilename '.eps']);
-system(['epstopdf ' movfilename '.eps']);
-system(['rm ' movfilename '.eps']);
+% animateWoidTrajectories(xyarray,movfilename,L,0.035,food);
+% 
+% pcf_mean = inf_pcf(xyarray,'complexsim',min(param.dT*param.saveEvery/3,1));
+% figure
+% semilogy((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
+% xlabel('r (mm)'), ylabel('pcf'), ylim([0.1 100])
+% set(gcf,'PaperUnits','centimeters')
+% exportfig(gcf,[movfilename '.eps']);
+% system(['epstopdf ' movfilename '.eps']);
+% system(['rm ' movfilename '.eps']);
 
 save(['../results/woids/tests/' strrep(movfilename,'woid_test_movies/','') '.mat'])
