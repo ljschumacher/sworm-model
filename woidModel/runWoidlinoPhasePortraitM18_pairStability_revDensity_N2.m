@@ -49,7 +49,7 @@ param.saveEvery = round(1/param.dT);
 drdN_rev_values = linspace(0,1,10);
 dkdN_dwell_values = linspace(0,1,10);
 dkdN_undwell_values = linspace(0,2,10);
-f_hapt_values = linspace(0,0.02,10);
+f_hapt_values = linspace(0,0.12,10);
 
 ndrevVals = numel(drdN_rev_values);
 ndwellVals = numel(dkdN_dwell_values);
@@ -66,7 +66,7 @@ filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
     '_haptotaxis_' param.haptotaxisMode ...
     '_pairedStart' ...
     '_minDistances'];
-for repCtr = 2:numRepeats
+for repCtr = 1:numRepeats
     parfor revRateCtr = 1:ndrevVals
         pm = param;
         pm.drdN_rev = drdN_rev_values(revRateCtr);
