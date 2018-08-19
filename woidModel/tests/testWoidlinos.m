@@ -92,7 +92,7 @@ rng(5)
 [~, currentState] = runWoids(1,2,M,L,param);
 % continue with random seed
 % rng('shuffle')
-for rngCtr = 1:5
+for rngCtr = 1
 rng(rngCtr)
 xyarray = runWoids(60,2,M,L,param,'resumeState',currentState);
 filename = ['woidlino_test_movies/test_paired_5_L_' num2str(L(1))...
