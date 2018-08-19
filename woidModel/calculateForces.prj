@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="3212265249" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateForces.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="calculateForces" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="441666293" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateForces.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="calculateForces" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -256,7 +256,7 @@
       <param.CustomLAPACKCallback />
       <param.CustomFFTCallback />
       <param.GenerateDefaultInSwitch />
-      <param.UseECoderFeatures>false</param.UseECoderFeatures>
+      <param.UseECoderFeatures />
       <unset>
         <param.WorkingFolder />
         <param.SpecifiedWorkingFolder />
@@ -733,8 +733,9 @@
       </unset>
     </profile>
     <param.objective>option.objective.c</param.objective>
-    <param.WorkflowStep>generateCode</param.WorkflowStep>
+    <param.WorkflowStep>workflowSummary</param.WorkflowStep>
     <param.TestSnippets>
+      <item>calculateForces(rand(40,18,40,18,2),rand(40,18,40,18),0.035,rand(40,18),false(40,1),0.0665,rand(40,1),40,zeros(40,1),0,rand(40,18),0,-1,0,1:18,'soft',0.05,1.2,0.07,rand(1),'weighted_additive',false(40,1),0)</item>
       <item>calculateForces(rand(40,36,40,36,2),rand(40,36,40,36),0.035,rand(40,36),false(40,1),0.0665,rand(40,1),40,zeros(40,1),0,rand(40,36),2*0.035,1.2,2e-05,1:36,'soft',0,3*0.035,0.07,0,'constant',false(40,1),0)</item>
       <item>calculateForces(rand(40,36,40,36,2),rand(40,36,40,36),0.035,rand(40,36),false(40,1),0.0665,rand(40,1),40,zeros(40,1),0,rand(40,18),2*0.035,1.2,2e-05,1:36,'soft',0,3*0.035,0.07,0,'constant',false(40,1),0)</item>
       <item>calculateForces(rand(40,18,40,18,2),rand(40,18,40,18),0.035,rand(40,18),false(40,1),0.0665,rand(40,1),40,zeros(40,1),0,rand(40,18),0,-1,0,1:18,'soft',0.05,3.6,0.07,rand(1),'weighted_additive',false(40,1),0)</item>
@@ -742,7 +743,7 @@
     <param.DefaultImportExportVariable>config</param.DefaultImportExportVariable>
     <param.ExternalFcnMajority>column</param.ExternalFcnMajority>
     <param.UseGlobals>option.UseGlobals.No</param.UseGlobals>
-    <param.outputfile>${PROJECT_ROOT}/calculateForces_N40_M36_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/calculateForce_mex.mexmaci64</param.outputfile>
     <param.version>R2012a</param.version>
     <param.HasECoderFeatures>false</param.HasECoderFeatures>
     <param.HasGpuCoder>false</param.HasGpuCoder>
@@ -756,7 +757,7 @@
     <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
     <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
     <param.EnableScreener>true</param.EnableScreener>
-    <param.AnnotationChecksum>3108147343</param.AnnotationChecksum>
+    <param.AnnotationChecksum>2979244596</param.AnnotationChecksum>
     <var.LegacyTarget />
     <var.MirrorOnOpen>false</var.MirrorOnOpen>
     <param.FixedPointEnabled>false</param.FixedPointEnabled>
@@ -765,22 +766,22 @@
     <param.unifiedParamStorage />
     <var.gc.lastOutputRoot>codegen/mex/calculateForces</var.gc.lastOutputRoot>
     <var.gc.lastOutputType>MEX_FILE</var.gc.lastOutputType>
-    <var.gc.preBuildChecksum>3212265249</var.gc.preBuildChecksum>
+    <var.gc.preBuildChecksum>441666293</var.gc.preBuildChecksum>
     <var.cfi.lastOutputRoot>codegen/mex/calculateForces</var.cfi.lastOutputRoot>
-    <var.cfi.preBuildChecksum>1194582919</var.cfi.preBuildChecksum>
-    <var.lastCfiTestSnippet>calculateForces(rand(40,36,40,36,2),rand(40,36,40,36),0.035,rand(40,36),false(40,1),0.0665,rand(40,1),40,zeros(40,1),0,rand(40,36),2*0.035,1.2,2e-05,1:36,'soft',0,3*0.035,0.07,0,'constant',false(40,1),0)</var.lastCfiTestSnippet>
+    <var.cfi.preBuildChecksum>345829471</var.cfi.preBuildChecksum>
+    <var.lastCfiTestSnippet>calculateForces(rand(40,18,40,18,2),rand(40,18,40,18),0.035,rand(40,18),false(40,1),0.0665,rand(40,1),40,zeros(40,1),0,rand(40,18),0,-1,0,1:18,'soft',0.05,1.2,0.07,rand(1),'weighted_additive',false(40,1),0)</var.lastCfiTestSnippet>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
-    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateAlignmentForce.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateForces.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateHaptotaxis.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateHaptotaxisWeighted.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;800449497&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
-    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateAlignmentForce.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateForces.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateHaptotaxis.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateHaptotaxisWeighted.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
+    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateAlignmentForce.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateForces.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateHaptotaxisWeightedAdditive.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;3879183028&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
+    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateAlignmentForce.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateForces.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateHaptotaxisWeightedAdditive.m&lt;/file&gt;&lt;file&gt;/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/resolveContactsLoop.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
     <param.forceMexBuild>false</param.forceMexBuild>
     <param.configImportActive>false</param.configImportActive>
     <var.isGpuCoder>false</var.isGpuCoder>
     <var.notGpuCoder>true</var.notGpuCoder>
     <var.boundToGui>true</var.boundToGui>
-    <param.mex.outputfile>calculateForces_N40_M36_mex</param.mex.outputfile>
+    <param.mex.outputfile>calculateForce_mex</param.mex.outputfile>
     <param.grt.outputfile>calculateForces</param.grt.outputfile>
     <param.artifact>option.target.artifact.mex</param.artifact>
-    <param.outputfile>${PROJECT_ROOT}/calculateForces_N40_M36_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/calculateForce_mex.mexmaci64</param.outputfile>
     <param.EnableAutoExtrinsicCalls>true</param.EnableAutoExtrinsicCalls>
     <param.UsePreconditions>false</param.UsePreconditions>
     <param.FeatureFlags />
@@ -937,7 +938,7 @@
     </unset>
     <fileset.entrypoints>
       <file custom-data-expanded="false" value="${PROJECT_ROOT}/calculateForces.m">
-        <Marker>1534681606373</Marker>
+        <Marker>1534693068694</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench />
@@ -970,7 +971,7 @@
           <idpTable>
             <type typeId="0">
               <Class>double</Class>
-              <Size>40 x 36 x 40 x 36 x 2</Size>
+              <Size>40 x 18 x 40 x 18 x 2</Size>
               <Value />
               <InitialValue />
               <UserDefined>true</UserDefined>
@@ -978,7 +979,7 @@
             </type>
             <type typeId="1">
               <Class>double</Class>
-              <Size>40 x 36 x 40 x 36</Size>
+              <Size>40 x 18 x 40 x 18</Size>
               <Value />
               <InitialValue />
               <UserDefined>true</UserDefined>
@@ -994,7 +995,7 @@
             </type>
             <type typeId="3">
               <Class>double</Class>
-              <Size>40 x 36</Size>
+              <Size>40 x 18</Size>
               <Value />
               <InitialValue />
               <UserDefined>true</UserDefined>
@@ -1017,7 +1018,7 @@
             </type>
             <type typeId="6">
               <Class>double</Class>
-              <Size>1 x 36</Size>
+              <Size>1 x 18</Size>
               <Value />
               <InitialValue />
               <UserDefined>true</UserDefined>
@@ -1032,7 +1033,7 @@
             </type>
             <type typeId="8">
               <Class>char</Class>
-              <Size>1 x 8</Size>
+              <Size>1 x 17</Size>
               <Value />
               <InitialValue />
               <UserDefined>true</UserDefined>
@@ -1042,7 +1043,7 @@
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="calculateForces_N40_M36_mex.mexmaci64" optional="false">/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateForces_N40_M36_mex.mexmaci64</file>
+      <file location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="calculateForce_mex.mexmaci64" optional="false">/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/calculateForce_mex.mexmaci64</file>
     </build-deliverables>
     <workflow />
     <matlab>
