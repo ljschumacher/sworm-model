@@ -50,7 +50,7 @@ param.saveEvery = round(1/param.dT);
 drdN_rev_values = linspace(0,1,10);
 dkdN_dwell_values = linspace(0,1,10);
 dkdN_undwell_values = linspace(0,2,10);
-f_hapt_values = linspace(0,0.02,10);
+f_hapt_values = linspace(0,0.12,10);
 
 ndrevVals = numel(drdN_rev_values);
 ndwellVals = numel(dkdN_dwell_values);
