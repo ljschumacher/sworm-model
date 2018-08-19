@@ -1,7 +1,7 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
   <configuration build-checksum="2964182534" file="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs.prj" location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
-      <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
+      <param.BuiltInstrumentedMex />
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
       <param.WorkingFolder>option.WorkingFolder.Project</param.WorkingFolder>
       <param.SpecifiedWorkingFolder />
@@ -16,8 +16,8 @@
       <param.EnableVariableSizing>true</param.EnableVariableSizing>
       <param.DynamicMemoryAllocation>option.DynamicMemoryAllocation.Threshold</param.DynamicMemoryAllocation>
       <param.DynamicMemoryAllocationThreshold>65536</param.DynamicMemoryAllocationThreshold>
-      <param.RowMajor>option.RowMajor.ColumnMajor</param.RowMajor>
-      <param.HighlightPotentialRowMajorIssues>false</param.HighlightPotentialRowMajorIssues>
+      <param.RowMajor />
+      <param.HighlightPotentialRowMajorIssues />
       <param.StackUsageMax>200000</param.StackUsageMax>
       <param.FilePartitionMethod>option.FilePartitionMethod.MapMFileToCFile</param.FilePartitionMethod>
       <param.GenerateComments>true</param.GenerateComments>
@@ -56,7 +56,7 @@
       <param.ConstantInputs>option.ConstantInputs.CheckValues</param.ConstantInputs>
       <param.EnableCRICodeCoverage>true</param.EnableCRICodeCoverage>
       <param.EnableJIT>true</param.EnableJIT>
-      <param.EnableJITSilentBailOut>false</param.EnableJITSilentBailOut>
+      <param.EnableJITSilentBailOut />
       <param.CheckForIssuesJIT>true</param.CheckForIssuesJIT>
       <unset>
         <param.BuiltInstrumentedMex />
@@ -124,8 +124,8 @@
       <param.EnableVariableSizing>true</param.EnableVariableSizing>
       <param.DynamicMemoryAllocation>option.DynamicMemoryAllocation.Threshold</param.DynamicMemoryAllocation>
       <param.DynamicMemoryAllocationThreshold>65536</param.DynamicMemoryAllocationThreshold>
-      <param.RowMajor>option.RowMajor.ColumnMajor</param.RowMajor>
-      <param.HighlightPotentialRowMajorIssues>false</param.HighlightPotentialRowMajorIssues>
+      <param.RowMajor />
+      <param.HighlightPotentialRowMajorIssues />
       <param.StackUsageMax>200000</param.StackUsageMax>
       <param.MultiInstanceCode />
       <param.FilePartitionMethod>option.FilePartitionMethod.MapMFileToCFile</param.FilePartitionMethod>
@@ -236,11 +236,11 @@
       <param.IncludeTerminateFcn />
       <param.GenerateExampleMain>option.GenerateExampleMain.GenerateCodeOnly</param.GenerateExampleMain>
       <param.PreserveVariableNames>option.PreserveVariableNames.None</param.PreserveVariableNames>
-      <param.TargetLang>option.TargetLang.C</param.TargetLang>
+      <param.TargetLang />
       <param.CCompilerOptimization />
       <param.CCompilerCustomOptimizations />
       <param.GenerateMakefile />
-      <param.BuildToolEnable>false</param.BuildToolEnable>
+      <param.BuildToolEnable />
       <param.MakeCommand />
       <param.TemplateMakefile />
       <param.BuildToolConfiguration />
@@ -256,7 +256,7 @@
       <param.CustomLAPACKCallback />
       <param.CustomFFTCallback />
       <param.GenerateDefaultInSwitch />
-      <param.UseECoderFeatures />
+      <param.UseECoderFeatures>false</param.UseECoderFeatures>
       <unset>
         <param.grt.GenCodeOnly />
         <param.WorkingFolder />
@@ -734,8 +734,9 @@
       </unset>
     </profile>
     <param.objective>option.objective.c</param.objective>
-    <param.WorkflowStep>workflowSummary</param.WorkflowStep>
+    <param.WorkflowStep>generateCode</param.WorkflowStep>
     <param.TestSnippets>
+      <item>computeWoidDistancesWithBCs(rand(40,36,2),7.5,'periodic');</item>
       <item>computeWoidDistancesWithBCs(rand(40,18,2),7.5,'free');</item>
       <item>computeWoidDistancesWithBCs(rand(200,18,2),[7.5 7.5],'periodic');</item>
       <item>computeWoidDistancesWithBCs(rand(200,36,2),[7.5 7.5],'periodic');</item>
@@ -743,22 +744,22 @@
       <item>computeWoidDistancesWithBCs(rand(40,49,2),[7.5 7.5],'periodic');</item>
       <item>computeWoidDistancesWithBCs(rand(40,49,2),[7.5 7.5],'periodic')</item>
     </param.TestSnippets>
-    <param.DefaultImportExportVariable>config</param.DefaultImportExportVariable>
-    <param.ExternalFcnMajority>column</param.ExternalFcnMajority>
+    <param.DefaultImportExportVariable />
+    <param.ExternalFcnMajority />
     <param.UseGlobals>option.UseGlobals.No</param.UseGlobals>
-    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N40_M18_free_mex.mexmaci64</param.outputfile>
-    <param.version>R2012a</param.version>
+    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N40_M36_mex.mexmaci64</param.outputfile>
+    <param.version />
     <param.HasECoderFeatures>false</param.HasECoderFeatures>
     <param.HasGpuCoder>false</param.HasGpuCoder>
     <param.mex.mainhtml />
     <param.grt.mainhtml />
     <param.CallGeneratedCodeFromTest>true</param.CallGeneratedCodeFromTest>
     <param.AutoInferDefaultFile />
-    <param.AutoInferUseVariableSize>false</param.AutoInferUseVariableSize>
-    <param.AutoInferUseUnboundedSize>false</param.AutoInferUseUnboundedSize>
-    <param.AutoInferVariableSizeThreshold>1024</param.AutoInferVariableSizeThreshold>
-    <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
-    <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
+    <param.AutoInferUseVariableSize />
+    <param.AutoInferUseUnboundedSize />
+    <param.AutoInferVariableSizeThreshold />
+    <param.AutoInferUnboundedSizeThreshold />
+    <param.EnableFixedPointStep />
     <param.EnableScreener>true</param.EnableScreener>
     <param.AnnotationChecksum>1394285395</param.AnnotationChecksum>
     <var.LegacyTarget />
@@ -781,15 +782,15 @@
     <var.isGpuCoder>false</var.isGpuCoder>
     <var.notGpuCoder>true</var.notGpuCoder>
     <var.boundToGui>true</var.boundToGui>
-    <param.mex.outputfile>computeWoidDistancesWithBCs_N40_M18_free_mex</param.mex.outputfile>
+    <param.mex.outputfile>computeWoidDistancesWithBCs_N40_M36_mex</param.mex.outputfile>
     <param.grt.outputfile>computeWoidDistancesWithBCs</param.grt.outputfile>
     <param.artifact>option.target.artifact.mex</param.artifact>
-    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N40_M18_free_mex.mexmaci64</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/computeWoidDistancesWithBCs_N40_M36_mex.mexmaci64</param.outputfile>
     <param.EnableAutoExtrinsicCalls>true</param.EnableAutoExtrinsicCalls>
     <param.UsePreconditions>false</param.UsePreconditions>
     <param.FeatureFlags />
     <param.FixedPointMode>option.FixedPointMode.None</param.FixedPointMode>
-    <param.AutoScaleLoopIndexVariables>false</param.AutoScaleLoopIndexVariables>
+    <param.AutoScaleLoopIndexVariables />
     <param.ComputedFixedPointData />
     <param.UserFixedPointData />
     <param.DefaultWordLength>16</param.DefaultWordLength>
@@ -819,8 +820,8 @@
     <param.EnableCodeEfficiencyChecks>false</param.EnableCodeEfficiencyChecks>
     <param.DefaultFixedPointSignedness>option.DefaultFixedPointSignedness.Automatic</param.DefaultFixedPointSignedness>
     <param.FixedPointTypeProposalMode>option.FixedPointTypeProposalMode.ProposeFractionLengths</param.FixedPointTypeProposalMode>
-    <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
-    <var.lastFixedPointAction>option.fixedPointAction.none</var.lastFixedPointAction>
+    <param.EnableFixedPointStep />
+    <var.lastFixedPointAction />
     <var.lastSimContext />
     <var.lastVerifyContext />
     <param.fpDataRoot />
@@ -828,19 +829,19 @@
     <var.snapshotChecksum />
     <param.fpLastConvertChecksum />
     <var.functionBlockSid />
-    <param.fptSignedness>false</param.fptSignedness>
+    <param.fptSignedness />
     <var.FixedPointAnalysisMode>option.FixedPointAnalysisMode.Sim</var.FixedPointAnalysisMode>
     <param.FixedPointUseDesignRanges>false</param.FixedPointUseDesignRanges>
     <param.gpu.Enabled>false</param.gpu.Enabled>
     <param.gpu.KernelNamePrefix />
     <param.gpu.MallocMode />
-    <param.gpu.MallocThreshold>200</param.gpu.MallocThreshold>
-    <param.gpu.StackLimitPerThread>1024</param.gpu.StackLimitPerThread>
+    <param.gpu.MallocThreshold />
+    <param.gpu.StackLimitPerThread />
     <param.gpu.EnableCUBLAS>false</param.gpu.EnableCUBLAS>
     <param.gpu.EnableCUSOLVER>false</param.gpu.EnableCUSOLVER>
     <param.gpu.EnableCUFFT>false</param.gpu.EnableCUFFT>
     <param.gpu.Benchmarking>false</param.gpu.Benchmarking>
-    <param.gpu.SafeBuild>false</param.gpu.SafeBuild>
+    <param.gpu.SafeBuild />
     <param.gpu.ComputeCapability />
     <param.gpu.CustomComputeCapability />
     <param.gpu.CompilerFlags />
@@ -940,7 +941,7 @@
     </unset>
     <fileset.entrypoints>
       <file custom-data-expanded="false" value="${PROJECT_ROOT}/computeWoidDistancesWithBCs.m">
-        <Marker>1533907701891</Marker>
+        <Marker>1534680795675</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench />
@@ -953,10 +954,10 @@
           <idpTable>
             <type typeId="0">
               <Class>double</Class>
-              <Size>40 x 18 x 2</Size>
+              <Size>40 x 36 x 2</Size>
               <Value />
               <InitialValue />
-              <UserDefined>false</UserDefined>
+              <UserDefined>true</UserDefined>
               <Complex>false</Complex>
             </type>
             <type typeId="1">
@@ -969,17 +970,17 @@
             </type>
             <type typeId="2">
               <Class>char</Class>
-              <Size>1 x 4</Size>
+              <Size>1 x 8</Size>
               <Value />
               <InitialValue />
-              <UserDefined>false</UserDefined>
+              <UserDefined>true</UserDefined>
             </type>
           </idpTable>
         </Inputs>
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs_N40_M18_free_mex.mexmaci64" optional="false">/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs_N40_M18_free_mex.mexmaci64</file>
+      <file location="/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel" name="computeWoidDistancesWithBCs_N40_M36_mex.mexmaci64" optional="false">/Users/linus/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/computeWoidDistancesWithBCs_N40_M36_mex.mexmaci64</file>
     </build-deliverables>
     <workflow />
     <matlab>
