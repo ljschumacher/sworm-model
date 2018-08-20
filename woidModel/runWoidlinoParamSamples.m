@@ -51,8 +51,8 @@ param.dkdN_dwell = paramSamples.dkdN_dwell(sampleCtr);
 param.dkdN_undwell = paramSamples.dkdN_undwell(sampleCtr);
 param.f_hapt = paramSamples.f_hapt(sampleCtr);
 
-% filepath = '/exports/eddie/scratch/lschuma2/woidlinos/PRW_4D_r1/';
-filepath = 'results/woidlinos/paramSamples/PRW_4D_r1/';
+% filepath = '/exports/eddie/scratch/lschuma2/woidlinos/PRW_4D_r1/npr_1/';
+filepath = 'results/woidlinos/paramSamples/PRW_4D_taxis_weighted_additive_r1/npr_1';
 filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
     '_v0_' num2str(param.v0) '_vs_' num2str(param.vs) ...
     '_angleNoise_' num2str(param.angleNoise) '_k_theta_' num2str(param.k_theta)...
