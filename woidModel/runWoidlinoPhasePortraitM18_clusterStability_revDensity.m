@@ -72,7 +72,6 @@ load([filepath filename],'minPdist')
 minPdist = nanmedian(minPdist,5);
 
 pStabThresh = 1; % distance that pairs need to be apart
-
 for repCtr = 1:numRepeats
     for revRateCtr = 1:ndrevVals
         param.drdN_rev = drdN_rev_values(revRateCtr);
@@ -95,7 +94,7 @@ for repCtr = 1:numRepeats
                             '_haptotaxis_' param.haptotaxisMode '_' num2str(param.f_hapt) ...
                             '_clusteredStart' ...
                             '_run' num2str(repCtr)];
-                        filepath = 'results/woidlinos/clusteredStart/';
+                        filepath = 'results/woidlinos/clusteredStart/npr_1/';
                         if ~exist([filepath filename '.mat'],'file')...
                                 &&isempty(dir([filepath filename '_running_on_*.mat']))
                             disp(['running ' filename])

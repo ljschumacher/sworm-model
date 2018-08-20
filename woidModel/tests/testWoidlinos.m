@@ -72,19 +72,21 @@ L = [2.4, 2.4]
 param.bc = 'free';
 param.sigma_LJ = 0;
 param.k_theta = 0;
-param.angleNoise = 0.05;
-param.dT = rc/param.v0/8; % dT: time step, gets adapted in simulation
+param.angleNoise = 0.0326;
+param.v0 = 0.14;
+param.vs = 0.014;
+param.dT = rc/0.33/8; % dT: time step, gets adapted in simulation
 param.saveEvery = round(1/param.dT/4);
 param.slowingMode = 'stochastic_bynode';
-param.k_dwell = 0.0036;
-param.k_undwell = 1.1;
+param.k_dwell = 0.25;
+param.k_undwell = 0.45;
 param.dkdN_dwell = 0;
 param.dkdN_undwell = 0;
 param.reversalMode = 'density';
 param.drdN_rev = 0;
 param.revRateClusterEdge = 0;
 param.Rif = 1.2/0.035;
-param.f_hapt = 0.12;
+param.f_hapt = 0.0133;
 param.haptotaxisMode = 'weighted_additive';
 param.r_LJcutoff = -1
 % set up initial conditions
@@ -92,11 +94,11 @@ rng(5)
 [~, currentState] = runWoids(1,2,M,L,param);
 % continue with random seed
 % rng('shuffle')
-for rngCtr = 1
+for rngCtr = 1:5
 rng(rngCtr)
 xyarray = runWoids(60,2,M,L,param,'resumeState',currentState);
 filename = ['woidlino_test_movies/test_paired_5_L_' num2str(L(1))...
-    '_haptotaxis_' param.haptotaxisMode '_' num2str(param.f_hapt) '_r' num2str(rngCtr)];
+    '_haptotaxis_' param.haptotaxisMode '_' num2str(param.f_hapt) '_r' num2str(rngCtr) '_N2'];
 animateWoidTrajectories(xyarray,filename,L,0.035,food);
 end
 % 
