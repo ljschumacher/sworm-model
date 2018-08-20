@@ -9,11 +9,11 @@ rng(1)
 
 % set parameters
 M = 18;
-angleNoise = 0.0326;
+angleNoise = 0.05;
 k_theta = 0;
 slowingMode = 'stochastic_bynode';
-k_dwell = 0.25;
-k_undwell = 0.45;
+k_dwell = 0.0036;
+k_undwell = 1.1;
 reversalMode = 'density';
 haptotaxisMode = 'weighted_additive';
 
@@ -22,10 +22,10 @@ load(['priors4D_M_' num2str(M) '_noVolExcl' ...
     '_angleNoise_' num2str(angleNoise) '_k_theta_' num2str(k_theta)...
     '_slowing_' slowingMode '_dwell_' num2str(k_dwell) '_' num2str(k_undwell)...
     '_rev' reversalMode '_haptotaxis_' haptotaxisMode ...
-    '.mat'],'supportLimits','prior_N2')
+    '.mat'],'supportLimits','prior_npr1')
 
 % sample from prior
-samplesRaw = random(prior_N2,nSamples);
+samplesRaw = random(prior_npr1,nSamples);
 
 % enfore support Limits
 while any(any(samplesRaw<=supportLimits(1,:) |...
@@ -33,7 +33,7 @@ while any(any(samplesRaw<=supportLimits(1,:) |...
     replaceLogIdcs = any(samplesRaw<=supportLimits(1,:) |...
         samplesRaw>=supportLimits(2,:),2);
     nReplace = nnz(replaceLogIdcs);
-    samplesRaw(replaceLogIdcs,:) = random(prior_N2,nReplace);
+    samplesRaw(replaceLogIdcs,:) = random(prior_npr1,nReplace);
 end
 
 drdN_rev = samplesRaw(:,1);
