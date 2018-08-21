@@ -3,9 +3,9 @@
 clear
 close all
 
-samplesToPlot = [17585 13108 14020];
+samplesToPlot = [838];
 nSamples = numel(samplesToPlot);
-filepath = '/data2/linus/paramSamples/woidlinos/woidM18paramD2/';
+filepath = '~/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/results/woidlinos/paramSamples/PRW_4D_taxis_weighted_additive_r1/npr_1/';
 addpath('../')
 
 for sampleCtr = 1:nSamples

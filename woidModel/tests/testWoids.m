@@ -314,10 +314,11 @@ rng(1)
 rng(1)
 L = [7.5 7.5];
 M = 36;
-T = 3600;
+T = 2000;
 bc = 'periodic';
 param.k_l = 80;
-param.r_feed = 1/100;
+param.r_feed = 1/400;
+param.saveEvery = round(2/param.dT);
 param.k_unroam = 10;
 param.slowingMode = 'stochastic_bynode';
 param.k_dwell = 0.0036;
@@ -480,7 +481,7 @@ animateWoidTrajectories(xyarray,movfilename,L,0.035,food);
 
 pcf_mean = inf_pcf(xyarray,'complexsim',min(param.dT*param.saveEvery/3,1));
 figure
-semilogy((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
+semilogy((0.1:0.1:1.2) - 0.1/2,pcf_mean,'LineWidth',2)
 xlabel('r (mm)'), ylabel('pcf'), ylim([0.1 100])
 set(gcf,'PaperUnits','centimeters')
 exportfig(gcf,[movfilename '.eps']);

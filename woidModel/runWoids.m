@@ -243,10 +243,17 @@ else
     xyarray = NaN(N,M,2,numSavepoints);
     xyarray(:,:,:,1) = positions;
     if r_feed>0
-        foodGrid = resumeState.foodGrid;
-        food = NaN(size(foodGrid,1),size(foodGrid,2),numSavepoints);
-        food(:,:,1) = foodGrid;
-        Ngrid = size(foodGrid);
+        if ~isempty(resumeState.foodGrid)
+            foodGrid = resumeState.foodGrid;
+            food = NaN(size(foodGrid,1),size(foodGrid,2),numSavepoints);
+            food(:,:,1) = foodGrid;
+            Ngrid = size(foodGrid);
+        else
+            % preallocate food lattice
+            Ngrid = ceil(L./(4*max(rc,0.035))); % determine how many grid points to use
+            foodGrid = ones(Ngrid);
+            food = ones(Ngrid(1),Ngrid(2),numSavepoints);
+        end
     else
         foodGrid = [];
         food = [];
