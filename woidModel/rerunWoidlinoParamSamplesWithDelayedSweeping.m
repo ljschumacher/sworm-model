@@ -7,13 +7,14 @@ filepath = '~/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/results
 
 thisfile = dir([filepath '*v0_0.33_*sample_' num2str(sampleCtr) '.mat']);
 if exist([filepath thisfile.name],'file')
-    newfilename =  [strrep(thisfile.name,'.mat','') '_sweeping_feedrate_' num2str(r_feed)];
+    newfilename =  [strrep(thisfile.name,'.mat','') '_delayedsweeping_feedrate_' num2str(r_feed)];
     if~exist(['movies/woidlinoMovies/paramSampleMovies/' ...
             newfilename '.mp4'],'file')
         load([filepath thisfile.name]);
         % set parameters for sweeping simulation
         param.r_feed = r_feed;
-        Textend = 500;
+        param.k_unroam = 10;
+        Textend = 1000;
         % extend simulation - this will overwrite xyarray
         [xyarray, currentState, food] = runWoids(Textend,N,M,L,param,'resumeState',currentState);
         % save results, from continuation point only

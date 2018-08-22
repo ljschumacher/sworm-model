@@ -315,22 +315,22 @@ param.LJmode = 'soft';
 % % test soft lennard-jones potential
 % param.eps_LJ = 1e-1;
 % [xyarray, currentState] = runWoids(500,40,M,L,param);
-% movfilename = ['woidlino_test_movies/40Worms_noslow_norev_LJsoft' num2str(eps_LJ,'%1.0e')];
+% filename = ['woidlino_test_movies/40Worms_noslow_norev_LJsoft' num2str(eps_LJ,'%1.0e')];
 
-% % % test soft lennard-jones potential - slow movement
-% param.eps_LJ = 2e-2;
-% param.v0 = 0.033;
-% param.vs = 0.033;
-% param.angleNoise = 0.0158;
-% [xyarray, currentState] = runWoids(500,40,M,L,param);
-% movfilename = ['woidlino_test_movies/40Worms_noslow_norev_LJsoft' num2str(eps_LJ,'%1.0e') '_v' num2str(param.v0)];
-
-% %  test alignment
-param.f_align = 1;
-param.ri = 4*0.035;
+% % test soft lennard-jones potential - slow movement
+param.eps_LJ = 5e-3;
+param.v0 = 0.33;
+param.vs = param.v0;
+param.angleNoise = 0.05*sqrt(param.v0/0.33);
 [xyarray, currentState] = runWoids(500,40,M,L,param);
-movfilename = ['woidlino_test_movies/40Worms_noslow_norev_align_' num2str(f_align) ...
-      '_ri_' num2str(ri,2)];
+filename = ['woidlino_test_movies/40Worms_noslow_norev_LJsoft' num2str(param.eps_LJ,'%1.0e') '_v' num2str(param.v0)];
+
+% % %  test alignment
+% param.f_align = 1;
+% param.ri = 4*0.035;
+% [xyarray, currentState] = runWoids(500,40,M,L,param);
+% filename = ['woidlino_test_movies/40Worms_noslow_norev_align_' num2str(param.f_align) ...
+%       '_ri_' num2str(param.ri,2)];
 
 % 
 % 
@@ -397,7 +397,7 @@ animateWoidTrajectories(xyarray,filename,L,0.035,food);
 
 pcf_mean = inf_pcf(xyarray,'simulation',min(param.dT*param.saveEvery/3,1));
 figure
-semilogy((0.1:0.1:2) - 0.1/2,pcf_mean,'LineWidth',2)
+semilogy((0.1:0.1:1.2) - 0.1/2,pcf_mean,'LineWidth',2)
 xlabel('r (mm)'), ylabel('pcf'), ylim([0.1 100]), xlim([0 2])
 set(gcf,'PaperUnits','centimeters')
 exportfig(gcf,[filename '.eps']);

@@ -3,7 +3,7 @@
 clear
 close all
 
-samplesToPlot = [838];
+samplesToPlot = [11792];
 nSamples = numel(samplesToPlot);
 filepath = '~/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/results/woidlinos/paramSamples/PRW_4D_taxis_weighted_additive_r1/npr_1/';
 addpath('../')
