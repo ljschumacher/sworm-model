@@ -14,11 +14,12 @@ if exist([filepath thisfile.name],'file')
         % set parameters for sweeping simulation
         param.r_feed = r_feed;
         param.k_unroam = 10;
-        T = 4000;
+        T = 5400;
         param.saveEvery = round(2/param.dT);
         % run simulation
         [xyarray, currentState, food] = runWoids(T,N,M,L,param);
-        save(['results/woidlinos/paramSamples/sweeping/' newfilename '.mat'],'xyarray','T','N','M','L','param','currentState')
+        save(['results/woidlinos/paramSamples/sweeping/' newfilename '.mat'],...
+            'food','xyarray','T','N','M','L','param','currentState')
         % make movie
         animateWoidTrajectories(xyarray,['movies/woidlinoMovies/paramSampleMovies/' newfilename '.mp4'],...
             L,0.035,food);
