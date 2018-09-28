@@ -141,6 +141,8 @@ addOptional(iP,'f_align',0,@isnumeric) % vicsek-type alignment, only for demonst
 addOptional(iP,'saveEvery',1,checkInt);
 addOptional(iP,'resumeState',struct([]),@checkResumeState); % current state of previous simulation to initialize from
 
+addpath('mex/')
+
 parse(iP,T,N,M,L,varargin{:})
 dT0 = iP.Results.dT;
 dT = dT0; % set initial time-step (will be adapted during simulation)
