@@ -1,6 +1,7 @@
-function [] = runWoidlinoParamSamplesN2(sampleCtr)
+function [] = runWoidlinoParamSamples(sampleCtr)
 % run simulations of simplified woid model with single node per woid
 % for previously generated random parameter samples
+addpath('../')
 
 % general model parameters for all simulations - unless set otherwise
 N = 40; % N: number of objects
@@ -13,11 +14,11 @@ param.ri = 3*rc;
 param.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 param.segmentLength = 1.13/(M - 1);
 % -- slow-down parameters --
-param.vs = 0.014; % npr1 0.018; N2 0.014
+param.vs = 0.018; % npr1 0.018; N2 0.014
 param.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
 param.slowingMode = 'stochastic_bynode';
-param.k_dwell = 0.25; % npr1 0.0036; N2 0.25
-param.k_undwell = 0.45; % npr1 1.1; N2 0.45
+param.k_dwell = 0.0036; % npr1 0.0036; N2 0.25
+param.k_undwell = 1.1; % npr1 1.1; N2 0.45
 % -- reversal parameters --
 param.reversalMode = 'density';
 param.revRateClusterEdge = 0;
@@ -30,17 +31,17 @@ param.k_theta = 0;
 param.theta_0 = 0;
 param.omega_m = 0;
 param.deltaPhase = 0;
-param.angleNoise = 0.0326;
+param.angleNoise = 0.05;
 % -- haptotaxis --
 param.Rif = 1.2/0.035;
 param.haptotaxisMode = 'weighted_additive';
 % -- speed and time-step --
-param.v0 = [0.14]; % npr1 0.33; N2 0.14
-param.dT = min(1/2,rc/0.33/8); % dT: time step, scales other parameters such as velocities and rates
+param.v0 = [0.33]; % npr1 0.33; N2 0.14
+param.dT = min(1/2,rc/param.v0/8); % dT: time step, scales other parameters such as velocities and rates
 param.saveEvery = round(1/param.dT);
 
 % load parameter samples
-load(['paramSamples_nSamples100000_log_PRW_4D_wa_r2_N2'...
+load(['paramSamples_nSamples100000_log_PRW_4D_wa_r2_npr1'...
     '.mat'],'paramSamples','supportLimits')
 % set model parameters from generated samples
 param.drdN_rev = paramSamples.drdN_rev(sampleCtr);
@@ -48,8 +49,8 @@ param.dkdN_dwell = paramSamples.dkdN_dwell(sampleCtr);
 param.dkdN_undwell = paramSamples.dkdN_undwell(sampleCtr);
 param.f_hapt = paramSamples.f_hapt(sampleCtr);
 
-% filepath = '/exports/eddie/scratch/lschuma2/woidlinos/PRW_4D_r2/N2/';
-filepath = 'results/woidlinos/paramSamples/PRW_4D_taxis_weighted_additive_r2/N2/';
+% filepath = '/exports/eddie/scratch/lschuma2/woidlinos/PRW_4D_r2/npr_1/';
+filepath = '../results/woidlinos/paramSamples/PRW_4D_taxis_weighted_additive_r2/npr_1/';
 filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
     '_v0_' num2str(param.v0) '_vs_' num2str(param.vs) ...
     '_angleNoise_' num2str(param.angleNoise) '_k_theta_' num2str(param.k_theta)...
@@ -91,11 +92,11 @@ if ~exist([filepath filename '.mat'],'file')
         [clustxyarray, ~] = runWoids(300,N,M,1.8,param);
         % compute radius of gyration (of worm heads)
         Rgyr = sqrt(sum(var(clustxyarray(:,1,:,end))));
-        if Rgyr<cStabThresh
-            disp(['params result in stable cluster (Rgyr ' num2str(Rgyr) ...
+        if Rgyr>cStabThresh
+            disp(['params result in unstable cluster (Rgyr ' num2str(Rgyr) ...
                 '), discontinuing simulation'])
             % save Rgyr result?
-        elseif Rgyr>=cStabThresh
+        elseif Rgyr<=cStabThresh
             %% run full-length simulation
             disp('Running full-length simulation...')
             param.bc = 'periodic';
