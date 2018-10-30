@@ -1,4 +1,4 @@
-function [] = plotActivityMap(filename,folder,nSnapShots)
+ function [] = plotActivityMap(filename,folder,nSnapShots)
 % make a heatmap of worm positions from any simulation results...
 
 % frameFraction is the % of frames from the end that get plotted

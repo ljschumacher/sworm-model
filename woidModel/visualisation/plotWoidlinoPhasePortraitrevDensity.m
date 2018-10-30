@@ -12,7 +12,7 @@ exportOptions = struct('Format','eps2',...
     'FontMode','fixed',...
     'FontSize',10,...
     'LineWidth',1,...
-    'Renderer','painters');
+    'Renderer','opengl');
 
 M = 18;
 L = [7.5 7.5];
@@ -61,11 +61,12 @@ ndwellVals = numel(dkdN_dwell_values);
 aspectRatio = ndrevRates/(ndwellVals);
 
 % highlight panels
-select_panels = [7];
-select_colors = lines(1);
+select_panels = [7, 17];
+select_colors = lines(2);
 for repCtr =1:1
     phasePortraitFig = figure;
     plotCtr = 1;
+    selectCtr = 1;
     for dkdN_dwell = dkdN_dwell_values
         for drdN_rev = drdN_rev_values
             filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
@@ -88,7 +89,8 @@ for repCtr =1:1
                 %                         elseif plotCtr==select_panels(2)
                 %                             thisColor = select_colors(2,:);
                 if ismember(plotCtr,select_panels)
-                    thisColor = select_colors;
+                    thisColor = select_colors(selectCtr,:);
+                    selectCtr = selectCtr + 1;
                 else
                     thisColor = plotColor;
                 end
@@ -111,8 +113,8 @@ for repCtr =1:1
     ax.YTickLabel = num2str(fliplr(dkdN_dwell_values)');
     ax.TickDir = 'out';
     ax.Position = ax.Position.*[1 1 1 1];
-    xlabel('dr_{rev}/d\rho')
-    ylabel('dk/d\rho')
+    xlabel('r''')
+    ylabel('k''')
     %% export figure
     phasePortraitFig.Position(3) = phasePortraitFig.Position(4)*aspectRatio; % resize figure
     phasePortraitFig.PaperUnits = 'centimeters';

@@ -9,7 +9,7 @@ rng(2)
 
 % load posterior gmmodel
 posteriorfilename = ['../../wormtracking/trackingAnalysis/inference/inf_results/'...
-    'posteriors_log_PRW_4D_wa_r1_0.1.mat'];
+    'posteriors_PRW_4D_wa_r1_0.1.mat'];
 load(posteriorfilename)
 
 posti_N2 = posterior{2};
