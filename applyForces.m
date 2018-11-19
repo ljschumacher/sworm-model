@@ -27,6 +27,6 @@ assert(~any(abs(arrayPrev(:) - arrayNow(:))>4*max(v(:))*dT),...
     'Uh-oh, something has gone wrong... (large displacements)')
 
 % correct heading (e.g. if movement has been constrained)
-headings = correctHeading(forceArray,headings,bc,L);
+headings = correctHeading(forceArray);
 
 [xyOut, headingsOut] = checkWoidBoundaryConditions(arrayNow,headings,bc,L);
