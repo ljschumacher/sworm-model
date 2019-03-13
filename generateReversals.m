@@ -5,13 +5,10 @@ if strcmp(reversalMode,'density')
     % increase reversal rate based on local density
     N = size(distanceMatrix,1);
     M = size(distanceMatrix,2);
-% %     if N==40&&M==18
-% %         num_nbr_head = countNbrsByNode_mex(distanceMatrix,interactionRadius,headInd)./numel(headInd); % average number of neighbouring nodes in contact
-% %         num_nbr_tail = countNbrsByNode_mex(distanceMatrix,interactionRadius,tailInd)./numel(tailInd); % average number of neighbouring nodes in contact
-% %     else
-        num_nbr_head = countNbrsByNode(distanceMatrix,interactionRadius,headInd)./numel(headInd); % average number of neighbouring nodes in contact
-        num_nbr_tail = countNbrsByNode(distanceMatrix,interactionRadius,tailInd)./numel(tailInd); % average number of neighbouring nodes in contact
-% %     end
+    % count neighbours within some radius around head and tail
+    num_nbr_head = countNbrsByNode(distanceMatrix,interactionRadius,headInd)./numel(headInd); % average number of neighbouring nodes in contact
+    num_nbr_tail = countNbrsByNode(distanceMatrix,interactionRadius,tailInd)./numel(tailInd); % average number of neighbouring nodes in contact
+    % num_nbr is number per node-interaction area, i.e. a density
     revRateClusterEdgeTailOut = revRateClusterEdge + drdN_rev.*num_nbr_head;
     revRateClusterEdgeHeadOut = revRateClusterEdge + drdN_rev.*num_nbr_tail;
 elseif strcmp(reversalMode,'density_weighted')
@@ -40,7 +37,7 @@ clustFwdWormsLogInd = tailContacts&headContacts&~currentReversalsLogInd;
 reversalLogInd(clustFwdWormsLogInd,timeCtr:(timeCtr+revTime)) ... % set reversal state for duration of reversal
     = repmat(logical(poissrnd(revRateCluster*dT,nnz(clustFwdWormsLogInd),1)),1,revTime+1);
 
-% stop reversal with increased rate if tail is sticking out of cluster 
+% stop reversal with increased rate if tail is sticking out of cluster
 freeBwdTailsInd = find(~tailContacts&headContacts&currentReversalsLogInd&~roamingLogInd); % Ntrue by 1
 if strcmp(reversalMode,'contact')
     stoppedReversalsLogInd = logical(poissrnd(revRateClusterEdge*dT,numel(freeBwdTailsInd),1)); % Ntrue by 1

@@ -1,112 +1,89 @@
-% plot correlation analysis
+% plot correlation analysis for simulations
 
-% issues/to-do:
 
 clear
 close all
 
+% set pdf export options
 exportOptions = struct('Format','eps2',...
     'Color','rgb',...
     'Width',10,...
     'Resolution',300,...
     'FontMode','fixed',...
-    'FontSize',12,...
-    'LineWidth',1,...
-    'Renderer','opengl');
+    'FontSize',10,...
+    'LineWidth',1);
 
-distBinwidth = 0.035; % in units of mm, sensibly to be chosen similar worm width or radius
+% set plotting options
+distBinWidth = 0.1; % in units of mm, sensibly to be chosen similar worm width or radius
 maxDist = 2;
-% simulations = {'DA609_noflux','N2_noflux','DA609_noflux_slowingNodesAll',...
-%     'DA609_noflux_lennardjones1e-04'};
-resultsfiles = rdir('../results/woids/*N_40_L_7.5_v0*.mat');
-for ii = 1:length(resultsfiles)
-    simulations{ii} = strrep(strrep(resultsfiles(ii).name,'../results/woids/woids_',''),'.mat','');
-end
-nSims = length(simulations);
-plotColors = lines(nSims);
-trackedNodesNames = {'head'};%,'body'};
-trackedNodesDict = containers.Map({'head','body'},{1:8; 1:49});% which nodes to calculate the tracking stats from, to compare eg with pharynx labeled expmntal data
+plotbins = (0:distBinWidth:(maxDist-distBinWidth)) + distBinWidth/2;
+nBins = numel(plotbins);
+ylabels = {'directional cross-corr.','velocity cross-corr.','vel. to nbr dir. corr.'};
+figurepath = 'figures/';
+figurePrefices = {'dircrosscorr/dircrosscorr_','velcrosscorr/velcrosscorr_','velnbrcorr/velnbrcorr_'};
 
-for trackedNodesName = trackedNodesNames
-    trackedNodes = trackedNodesDict(trackedNodesName{1});
-    for simCtr = 1:nSims % can be parfor
-        filenames = {[simulations{simCtr}]};
-        speedFig = figure; hold on
-        dircorrFig = figure; hold on
-        velcorrFig = figure; hold on
-        poscorrFig = figure; hold on
-        %% load data
-        numFiles = length(filenames);
-        for fileCtr = 1:numFiles
-% %             filename = ['../results/' filenames{fileCtr} '.mat'];
-            filename = ['../results/woids/woids_' filenames{fileCtr} '.mat'];
-            thisFile = load(filename);
+% set simulation file
+filepath = '~/Dropbox/projects/collectiveBehaviour/sworm-model/results/woidlinos/paramSamples/PRW_4D_taxis_weighted_additive_r2/postiPredictiveCheck/';
+filenames = rdir([filepath '*run1.mat']);
+nFiles = numel(filenames);
+numReps = 5;
+
+% set analysis parameters
+trackedNodes = 1:3;
+
+% loop over file to plot
+for fileCtr = 1:nFiles
+    fileName = strrep(filenames(fileCtr).name,filepath,'');
+    corr_o_mean = NaN(numReps,nBins);
+    corr_o_ci = NaN(numReps,nBins,2);
+    corr_v_mean = NaN(numReps,nBins);
+    corr_vn_mean = NaN(numReps,nBins);
+    corr_v_ci = NaN(numReps,nBins,2);
+    corr_vn_ci = NaN(numReps,nBins,2);
+    if exist([filepath fileName],'file')
+        for repCtr = 1:numReps
+            thisFileName = strrep(fileName,'run1',['run' num2str(repCtr)]);
+            thisFile = load([filepath thisFileName]);
+            %% analyse simulation data
+            % pick frames to analyse, e.g. second half of simulation
             maxNumFrames = size(thisFile.xyarray,4);
             burnIn = round(0.5*maxNumFrames);
-            numFrames =  min(round((maxNumFrames - burnIn)*thisFile.param.dT*thisFile.saveevery/3),maxNumFrames - burnIn); %maxNumFrames-burnIn;
-            framesAnalyzed = burnIn + randperm(maxNumFrames - burnIn,numFrames); % randomly sample frames without replacement
-%             framesAnalyzed = round(linspace(burnIn,maxNumFrames,numFrames));
-%             framesAnalyzed = burnIn+1:maxNumFrames;
-            %% calculate stats
-            [s_med,s_ci, corr_o_med,corr_o_ci, corr_v_med,corr_v_ci, gr,distBins,nearestDistBins,pairDistBins] = ...
-    correlationanalysisSimulations(thisFile,trackedNodes,distBinwidth,framesAnalyzed,maxDist);
-            %% plot data
-            % speed v distance
-            boundedline(nearestDistBins,s_med,[s_med - s_ci(:,1), s_ci(:,2) - s_med],...
-                'alpha',speedFig.Children,'cmap',plotColors(simCtr,:))
-            % directional and velocity cross-correlation
-            boundedline(pairDistBins,corr_o_med,[corr_o_med - corr_o_ci(:,1), corr_o_ci(:,2) - corr_o_med],...
-                'alpha',dircorrFig.Children,'cmap',plotColors(simCtr,:))
-            boundedline(pairDistBins,corr_v_med,[corr_v_med - corr_v_ci(:,1), corr_v_ci(:,2) - corr_v_med],...
-                'alpha',velcorrFig.Children,'cmap',plotColors(simCtr,:))
-            % radial distribution / pair correlation
-            boundedline(distBins(2:end)-distBinwidth/2,mean(gr,2),...
-                [nanstd(gr,0,2) nanstd(gr,0,2)]./sqrt(numFrames),...
-                'alpha',poscorrFig.Children,'cmap',plotColors(simCtr,:))
+            framesAnalyzed = burnIn+1:maxNumFrames;
+            % calculate stats
+            [corr_o_mean(repCtr,:),corr_o_ci(repCtr,:,:),...
+                corr_v_mean(repCtr,:),corr_v_ci(repCtr,:,:),...
+                corr_vn_mean(repCtr,:),corr_vn_ci(repCtr,:,:),~,~,nbrDistBins,pairDistBins] = ...
+                correlationanalysisSimulations(thisFile,trackedNodes,distBinWidth,framesAnalyzed,maxDist);
         end
-        %% format and export figures
-        for figHandle = [speedFig, dircorrFig, velcorrFig, poscorrFig] % common formating for both figures
-            title(figHandle.Children,{simulations{simCtr} ; [trackedNodesName{1} ' tracked']},...
-                'FontWeight','normal','Interpreter','none');
-            set(figHandle,'PaperUnits','centimeters')
-        end
-        % speed v distance
-        speedFig.Children.XLim = [0 2];
-        ylabel(speedFig.Children,'speed (mm/s)')
-        xlabel(speedFig.Children,'distance to nearest neighbour (mm)')
-        speedFig.Children.Box = 'on';
-        speedFig.Children.XDir = 'reverse';
-        figurename = ['figures/speedvdistance/speedvsneighbourdistance_' simulations{simCtr} '_' trackedNodesName{1}];
-        exportfig(speedFig,[figurename '.eps'],exportOptions)
-        system(['epstopdf ' figurename '.eps']);
-        system(['rm ' figurename '.eps']);
+        %% plot analysis results
+        dircorrFig = figure; hold on
+        velcorrFig = figure; hold on
+        velncorrFig = figure; hold on
         % directional and velocity cross-correlation
-%         dircorrFig.Children.YLim = [-1 1];
-        dircorrFig.Children.XLim = [0 2];
-        ylabel(dircorrFig.Children,'directional correlation')
-        xlabel(dircorrFig.Children,'distance r (mm)')
-        figurename = ['figures/dircrosscorr/dircrosscorr' simulations{simCtr} '_' trackedNodesName{1}];
-        exportfig(dircorrFig,[figurename '.eps'],exportOptions)
-        system(['epstopdf ' figurename '.eps']);
-        system(['rm ' figurename '.eps']);
-        %
-%         velcorrFig.Children.YLim = [-1 1];
-        velcorrFig.Children.XLim = [0 2];
-        ylabel(velcorrFig.Children,'velocity correlation')
-        xlabel(velcorrFig.Children,'distance r (mm)')
-        figurename = ['figures/velcrosscorr/velcrosscorr' simulations{simCtr} '_' trackedNodesName{1}];
-        exportfig(velcorrFig,[figurename '.eps'],exportOptions)
-        system(['epstopdf ' figurename '.eps']);
-        system(['rm ' figurename '.eps']);
-        % radial distribution / pair correlation
-        poscorrFig.Children.XLim = [0 2];
-        ylabel(poscorrFig.Children,'positional correlation g(r)')
-        xlabel(poscorrFig.Children,'distance r (mm)')
-        figurename = ['figures/radialdistribution/radialdistributionfunction_' simulations{simCtr} '_' trackedNodesName{1}];
-        exportfig(poscorrFig,[figurename '.eps'],exportOptions)
-        system(['epstopdf ' figurename '.eps']);
-        system(['rm ' figurename '.eps']);
-        %%
-        close all
+        boundedline(plotbins,mean(corr_o_mean),...
+            [mean(corr_o_mean - corr_o_ci(:,:,1)); mean(corr_o_ci(:,:,2) - corr_o_mean)]',...
+            dircorrFig.Children)
+        boundedline(plotbins,mean(corr_v_mean),...
+            [mean(corr_v_mean - corr_v_ci(:,:,1)); mean(corr_v_ci(:,:,2) - corr_v_mean)]',...
+            velcorrFig.Children)
+        boundedline(plotbins,mean(corr_vn_mean),...
+            [mean(corr_vn_mean - corr_vn_ci(:,:,1)); mean(corr_vn_ci(:,:,2) - corr_vn_mean)]',...
+            velncorrFig.Children)
+        %% format and export figures
+        figHandles = [dircorrFig, velcorrFig, velncorrFig];
+        for  figCtr = 1:length(figHandles)% common formating for all figures
+            figHandle = figHandles(figCtr);
+            figHandle.Children.XLim = [0 maxDist];
+            set(figHandle,'PaperUnits','centimeters')
+            plot(figHandle.Children,plotbins,zeros(size(plotbins)),'k--')
+            xlabel(figHandle.Children,'distance r (mm)')
+            ylabel(figHandle.Children,ylabels{figCtr})
+            % export figure
+            figurename = [figurepath figurePrefices{figCtr} ...
+                strrep(strrep(fileName,'run1',''),'.mat','')];
+            exportfig(figHandle,[figurename '.eps'],exportOptions)
+            system(['epstopdf ' figurename '.eps']);
+            system(['rm ' figurename '.eps']);
+        end
     end
 end

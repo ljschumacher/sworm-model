@@ -3,7 +3,7 @@ function [] = rerunWoidlinoParamSamplesWithSweeping(sampleCtr,r_feed)
 % rerun parameter samples with sweeping
 addpath('visualisation/')
 
-filepath = '~/Dropbox/projects/collectiveBehaviour/sworm-model/woidModel/results/woidlinos/paramSamples/PRW_4D_taxis_weighted_additive_r1/npr_1/';
+filepath = '~/Dropbox/projects/collectiveBehaviour/sworm-model/results/woidlinos/paramSamples/PRW_4D_taxis_weighted_additive_r2/npr_1/';
 
 thisfile = dir([filepath '*v0_0.33_*sample_' num2str(sampleCtr) '.mat']);
 if exist([filepath thisfile.name],'file')

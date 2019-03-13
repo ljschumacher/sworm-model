@@ -1,20 +1,12 @@
-function [s_med,s_ci, corr_o_med,corr_o_ci, corr_v_med,corr_v_ci, gr,distBins,nNbrDistBins,pairDistBins] = ...
+function [corr_o_mean,corr_o_ci, corr_v_mean,corr_v_ci,corr_vn_mean,corr_vn_ci, gr,distBins,nbrDistBins,pairDistBins] = ...
     correlationanalysisSimulations(simfile,trackedNodes,distBinWidth,framesAnalyzed,maxDist)
 % calculate directional & velocity correlation, and
 % radial distribution functions
 
 % issues/to-do:
-% - for periodic bounadry conditions, if the tracked nodes overlap a
+% - for periodic boundary conditions, if the tracked nodes overlap a
 % boundary, it's not clear how to best find the centroid
 % - Area in g(r) needs to be adjusted if arena is circular
-
-% define functions for grpstats
-mad1 = @(x) mad(x,1); % median absolute deviation
-% alternatively could use boxplot-style confidence intervals on the mean,
-% which are 1.57*iqr/sqrt(n) - unclear how justified this is
-iqrci = @(x) 1.57*iqr(x)/sqrt(numel(x));
-% or one could use a bootstrapped confidence interval
-bootserr = @(x) bootci(1e2,{@nanmedian,x},'alpha',0.05,'Options',struct('UseParallel',false));
 
 % convert result to double precision
 simfile.xyarray = double(simfile.xyarray);
@@ -59,6 +51,10 @@ if numel(trackedNodes)>1
     end
     ox = squeeze(mean(dxds,2));
     oy = squeeze(mean(dyds,2));
+    % normalise orientation for "head size"
+    headSize = sqrt(ox.^2 + oy.^2);
+    ox = ox./headSize;
+    oy = oy./headSize;
 end
 % central difference (should be equibalent to matlab's gradient function
 dxdt = ([dxdt, dxdt(:,end)] + [dxdt(:,1), dxdt])./2;
@@ -69,57 +65,67 @@ if ~isfield(simfile,'dT')
 end
 vx = dxdt./(simfile.dT*saveEvery);
 vy = dydt./(simfile.dT*saveEvery);
-speed = sqrt(vx(:,framesAnalyzed).^2 + vy(:,framesAnalyzed).^2);
 N = simfile.N;
 pairdist = NaN(N*(N-1)/2,numFrames);
-dxcorr = NaN(size(pairdist));
-vxcorr = NaN(size(pairdist));
+dirxcorr = NaN(size(pairdist));
+velxcorr = NaN(size(pairdist));
+velnbrcorr = NaN(N*(N-1),numFrames);
 distBins = 0:distBinWidth:maxDist;
 gr = NaN(length(distBins) - 1,numFrames);
 Area = simfile.L(1)*simfile.L(end); % should work for both scalar L and [Lx, Ly]
-nNbrDist = NaN(N,numFrames);
+nbrDist = NaN(N*(N-1),numFrames);
 for frameCtr = 1:numFrames
     frame = framesAnalyzed(frameCtr);
     if numel(trackedNodes)>1
-        dxcorr(:,frameCtr) = vectorCrossCorrelation2D(ox(:,frame),oy(:,frame),true,true); % directional correlation
+        dirxcorr(:,frameCtr) = vectorCrossCorrelation2D(ox(:,frame),oy(:,frame),false,false); % directional correlation
     end
-    vxcorr(:,frameCtr) = vectorCrossCorrelation2D(vx(:,frame),vy(:,frame),true,false); % velocity correlation
+    velxcorr(:,frameCtr) = vectorCrossCorrelation2D(vx(:,frame),vy(:,frame),true,false); % velocity correlation
+    dx = x(:,frame) - x(:,frame)';
+    dy = y(:,frame) - y(:,frame)';
     if strcmp(simfile.param.bc,'periodic')
         pairdist(:,frameCtr) = computeDistancesWithPeriodicBoundary([x(:,frame) y(:,frame)],simfile.L);
+        dx = correctForPeriodicBoundary(dx,simfile.L(1));
+        dy = correctForPeriodicBoundary(dy,simfile.L(2));
     else
         pairdist(:,frameCtr) = pdist([x(:,frame) y(:,frame)]); % distance between all pairs, in micrometer
     end
     gr(:,frameCtr) = histcounts(pairdist(:,frameCtr),distBins,'Normalization','count'); % radial distribution function
     gr(:,frameCtr) = gr(:,frameCtr)'.*Area./(pi*(distBins(2:end).^2 - (distBins(2:end) - distBinWidth).^2))...
         /(N*(N-1)/2); % normalisation by number of pairs, not double-counting
-    distanceMatrix = squareform(pairdist(:,frameCtr)); % distance of every worm to every other
-    nNbrDist(:,frameCtr) = min(distanceMatrix + max(max(distanceMatrix))*eye(size(distanceMatrix)));
+    
+    dD = sqrt(dx.^2 + dy.^2); % this should be equivalent to squareform(pairdist(:,frameCtr)
+    selfNbrIndcs = dD(:)==0;
+    velnbrcorrThisFrame = vectorPairedCorrelation2D(vx(:,frame),vy(:,frame),dx./dD,dy./dD,true,false);
+    % don't keep entries where self is neighbour
+    velnbrcorr(:,frameCtr) = velnbrcorrThisFrame(~selfNbrIndcs);
+    nbrDist(:,frameCtr) = dD(~selfNbrIndcs);  
 end
 % bin distance data
-[nNbrDistcounts,nNbrDistBins,nNbrDistbinIdx]  = histcounts(nNbrDist(:),...
+[nbrDistcounts,nbrDistBins,nbrDistbinIdx]  = histcounts(nbrDist(:),...
     'BinWidth',distBinWidth,'BinLimits',[0 maxDist]);
 [pairDistcounts,pairDistBins,pairDistbinIdx]  = histcounts(pairdist(:),...
     'BinWidth',distBinWidth,'BinLimits',[0 maxDist]);
 % convert bin edges to centres (for plotting)
-nNbrDistBins = nNbrDistBins(1:end-1) + diff(nNbrDistBins)/2;
-pairDistBins = pairDistBins(1:end-1) + diff(pairDistBins)/2;
-% ignore larger distance values and bins with only one element, as this will cause bootsci to fault
-nNdistkeepIdcs = nNbrDistbinIdx>0&ismember(nNbrDistbinIdx,find(nNbrDistcounts>1));
-nNbrDistBins = nNbrDistBins(nNbrDistcounts>1);
-speed = speed(nNdistkeepIdcs);
-nNbrDistbinIdx = nNbrDistbinIdx(nNdistkeepIdcs);
-pdistkeepIdcs = pairDistbinIdx>0&ismember(pairDistbinIdx,find(pairDistcounts>1));
-pairDistBins = pairDistBins(pairDistcounts>1);
-dxcorr = dxcorr(pdistkeepIdcs);
-vxcorr = vxcorr(pdistkeepIdcs);
+nbrDistBins = nbrDistBins + mean(diff(nbrDistBins))/2;
+pairDistBins = pairDistBins + mean(diff(pairDistBins))/2;
+% ignore larger distance values (bin=0) %and bins with only one element
+nbrdistkeepIdcs = nbrDistbinIdx>0;%&ismember(nbrDistbinIdx,find(nbrDistcounts>1));
+% nbrDistBins = nbrDistBins(nbrDistcounts>1);
+nbrDistbinIdx = nbrDistbinIdx(nbrdistkeepIdcs);
+velnbrcorr = velnbrcorr(nbrdistkeepIdcs);
+pdistkeepIdcs = pairDistbinIdx>0;%&ismember(pairDistbinIdx,find(pairDistcounts>1));
+% pairDistBins = pairDistBins(pairDistcounts>1);
+dirxcorr = dirxcorr(pdistkeepIdcs);
+velxcorr = velxcorr(pdistkeepIdcs);
 pairDistbinIdx = pairDistbinIdx(pdistkeepIdcs);
 
-[s_med,s_ci] = grpstats(speed(:),nNbrDistbinIdx,{@median,bootserr});
-[corr_v_med,corr_v_ci] = grpstats(vxcorr(:),pairDistbinIdx,{@median,bootserr});
+[corr_v_mean,corr_v_ci] = grpstats(velxcorr(:),pairDistbinIdx,{'mean','meanci'});
+[corr_vn_mean,corr_vn_ci] = grpstats(velnbrcorr(:),nbrDistbinIdx,{'mean','meanci'});
+
 if numel(trackedNodes)>1
-    [corr_o_med,corr_o_ci] = grpstats(dxcorr(:),pairDistbinIdx,{@median,bootserr});
+    [corr_o_mean,corr_o_ci] = grpstats(dirxcorr(:),pairDistbinIdx,{'mean','meanci'});
 else
-    corr_o_med = NaN(size(corr_v_med));
+    corr_o_mean = NaN(size(corr_v_mean));
     corr_o_ci = NaN(size(corr_v_ci));
 end
 end

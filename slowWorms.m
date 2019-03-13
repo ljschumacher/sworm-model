@@ -19,11 +19,7 @@ if ~isempty(slowingNodes)&&any(~roamingLogInd)
         dwellLogInd = updateDwellingState(dwellLogInd,k_dwell,k_undwell,dkdN_dwell,dkdN_undwell,num_nbr_per_node,dT);
         v = v0*~dwellLogInd + vs*dwellLogInd;
     elseif strcmp(slowingMode,'stochastic_bynode')
-% %         if size(distanceMatrix,1)==40 && size(distanceMatrix,2)==18
-% %             num_nbr = countNbrsByNode_mex(distanceMatrix,ri,slowingNodes); % number of neighbouring nodes in contact
-% %         else
-            num_nbr = countNbrsByNode(distanceMatrix,ri,slowingNodes); % number of neighbouring nodes in contact
-% %         end
+        num_nbr = countNbrsByNode(distanceMatrix,ri,slowingNodes); % number of neighbouring nodes in contact
         num_nbr_per_node = num_nbr./numel(slowingNodes); % normalise for number of nodes sensing density
         % switch to fast / slow states
         dwellLogInd = updateDwellingState(dwellLogInd,k_dwell,k_undwell,dkdN_dwell,dkdN_undwell,num_nbr_per_node,dT);
