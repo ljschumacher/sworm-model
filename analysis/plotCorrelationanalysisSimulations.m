@@ -24,7 +24,7 @@ figurePrefices = {'dircrosscorr/dircrosscorr_','velcrosscorr/velcrosscorr_','vel
 
 % set simulation file
 filepath = '~/Dropbox/projects/collectiveBehaviour/sworm-model/results/woidlinos/paramSamples/PRW_4D_taxis_weighted_additive_r2/postiPredictiveCheck/';
-filenames = rdir([filepath '*run1_undulating.mat']);
+filenames = rdir([filepath '*run1.mat']);
 nFiles = numel(filenames);
 numReps = 5;
 
@@ -75,6 +75,7 @@ for fileCtr = 1:nFiles
             figHandle = figHandles(figCtr);
             figHandle.Children.XLim = [0 maxDist];
             figHandle.Children.YLim = [-0.5 0.5];
+            box(figHandle.Children,'on')
             set(figHandle,'PaperUnits','centimeters')
             plot(figHandle.Children,plotbins,zeros(size(plotbins)),'k--')
             xlabel(figHandle.Children,'distance r (mm)')
