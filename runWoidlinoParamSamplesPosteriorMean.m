@@ -43,7 +43,7 @@ posteriorfilename = ['../wormtracking/trackingAnalysis/inference/inf_results/'..
 load(posteriorfilename)
 
 % generate samples from posterior
-postiSamples = random(posterior{1},1e6);
+postiSamples = random(posterior{1},2e6);
 
 % truncate boundaries
 for dimCtr = 1:size(postiSamples,2)
@@ -52,6 +52,7 @@ for dimCtr = 1:size(postiSamples,2)
     postiSamples(overLogIndcs|underLogIndcs,:) = [];
 end
 postiMean = mean(postiSamples);
+% or get this without sampling with posterior{1}.ComponentProportion*posterior{1}.mu
 % set model parameters from posterior
 param.drdN_rev = postiMean(1);
 param.dkdN_dwell = postiMean(2);
@@ -62,7 +63,7 @@ addpath('visualisation/')
 
 filepath = '~/Dropbox/projects/collectiveBehaviour/sworm-model/results/woidlinos/paramSamples/PRW_4D_taxis_weighted_additive_r2/postiPredictiveCheck/';
 
-numReps = 5;
+numReps = 10;
 for repCtr = 1:numReps
     filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
         '_v0_' num2str(param.v0) '_vs_' num2str(param.vs) ...

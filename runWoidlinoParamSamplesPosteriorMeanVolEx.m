@@ -1,12 +1,12 @@
-function [] = runWoidlinoParamSamplesPosteriorMeanNoTaxis(makeMovie)
+function [] = runWoidlinoParamSamplesPosteriorMeanVolEx(makeMovie)
 
 % general model parameters for all simulations - unless set otherwise
 N = 40; % N: number of objects
-M = 18; % M: number of nodes in each object
+M = 36; % M: number of nodes in each object
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 T = 2000;
 rc = 0.035; % rc: core repulsion radius (default 0.035 mm)
-param.rc = 0;
+param.rc = rc;
 param.ri = 3*rc;
 param.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 param.segmentLength = 1.13/(M - 1);
@@ -52,17 +52,18 @@ for dimCtr = 1:size(postiSamples,2)
     postiSamples(overLogIndcs|underLogIndcs,:) = [];
 end
 postiMean = mean(postiSamples);
+% or get this without sampling with posterior{1}.ComponentProportion*posterior{1}.mu
 % set model parameters from posterior
 param.drdN_rev = postiMean(1);
 param.dkdN_dwell = postiMean(2);
 param.dkdN_undwell = postiMean(3);
-param.f_hapt = 0;
+param.f_hapt = 10^postiMean(4);
 
 addpath('visualisation/')
 
 filepath = '~/Dropbox/projects/collectiveBehaviour/sworm-model/results/woidlinos/paramSamples/PRW_4D_taxis_weighted_additive_r2/postiPredictiveCheck/';
 
-numReps = 10;
+numReps = 3;
 for repCtr = 1:numReps
     filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
         '_v0_' num2str(param.v0) '_vs_' num2str(param.vs) ...

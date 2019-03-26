@@ -1,4 +1,4 @@
-function [] = runWoidlinoParamSamplesPosteriorMeanNoTaxis(makeMovie)
+function [] = runWoidlinoParamSamplesPosteriorMeanN2(makeMovie)
 
 % general model parameters for all simulations - unless set otherwise
 N = 40; % N: number of objects
@@ -11,11 +11,11 @@ param.ri = 3*rc;
 param.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
 param.segmentLength = 1.13/(M - 1);
 % -- slow-down parameters --
-param.vs = 0.018; % npr1 0.018; N2 0.014
+param.vs = 0.014; % npr1 0.018; N2 0.014
 param.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
 param.slowingMode = 'stochastic_bynode';
-param.k_dwell = 0.0036; % npr1 0.0036; N2 0.25
-param.k_undwell = 1.1; % npr1 1.1; N2 0.45
+param.k_dwell = 0.25; % npr1 0.0036; N2 0.25
+param.k_undwell = 0.45; % npr1 1.1; N2 0.45
 % -- reversal parameters --
 param.reversalMode = 'density';
 param.revRateClusterEdge = 0;
@@ -28,12 +28,12 @@ param.k_theta = 0;
 param.theta_0 = 0;
 param.omega_m = 0;
 param.deltaPhase = 0;
-param.angleNoise = 0.05;
+param.angleNoise = 0.0326; % 0.05 npr-1 0.0326 N2
 % -- haptotaxis --
 param.Rif = 1.2/0.035;
 param.haptotaxisMode = 'weighted_additive';
 % -- speed and time-step --
-param.v0 = [0.33]; % npr1 0.33; N2 0.14
+param.v0 = [0.14]; % npr1 0.33; N2 0.14
 param.dT = min(1/2,rc/param.v0/8); % dT: time step, scales other parameters such as velocities and rates
 param.saveEvery = round(1/param.dT);
 
@@ -43,7 +43,7 @@ posteriorfilename = ['../wormtracking/trackingAnalysis/inference/inf_results/'..
 load(posteriorfilename)
 
 % generate samples from posterior
-postiSamples = random(posterior{1},1e6);
+postiSamples = random(posterior{2},2e6); % {1} for npr-1 {2} for N2
 
 % truncate boundaries
 for dimCtr = 1:size(postiSamples,2)
@@ -52,11 +52,12 @@ for dimCtr = 1:size(postiSamples,2)
     postiSamples(overLogIndcs|underLogIndcs,:) = [];
 end
 postiMean = mean(postiSamples);
+% or get this without sampling with posterior{1}.ComponentProportion*posterior{1}.mu
 % set model parameters from posterior
 param.drdN_rev = postiMean(1);
 param.dkdN_dwell = postiMean(2);
 param.dkdN_undwell = postiMean(3);
-param.f_hapt = 0;
+param.f_hapt = 10^postiMean(4);
 
 addpath('visualisation/')
 

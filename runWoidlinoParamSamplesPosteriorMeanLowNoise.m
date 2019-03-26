@@ -28,7 +28,7 @@ param.k_theta = 0;
 param.theta_0 = 0;
 param.omega_m = 0;
 param.deltaPhase = 0;
-param.angleNoise = 0.005;
+param.angleNoise = 0.0;%05;
 % -- haptotaxis --
 param.Rif = 1.2/0.035;
 param.haptotaxisMode = 'weighted_additive';
@@ -62,7 +62,7 @@ addpath('visualisation/')
 
 filepath = '~/Dropbox/projects/collectiveBehaviour/sworm-model/results/woidlinos/paramSamples/PRW_4D_taxis_weighted_additive_r2/postiPredictiveCheck/';
 
-numReps = 5;
+numReps = 10;
 for repCtr = 1:numReps
     filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
         '_v0_' num2str(param.v0) '_vs_' num2str(param.vs) ...

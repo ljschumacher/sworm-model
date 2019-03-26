@@ -1,15 +1,15 @@
-function [] = runWoidlinoParamSamplesPosteriorMeanNoTaxis(makeMovie)
+function [] = runWoidlinoParamSamplesPosteriorMeanShorterAgents(makeMovie)
 
 % general model parameters for all simulations - unless set otherwise
 N = 40; % N: number of objects
-M = 18; % M: number of nodes in each object
+M = 4; % M: number of nodes in each object
 L = [7.5, 7.5]; % L: size of region containing initial positions - scalar will give circle of radius L, [Lx Ly] will give rectangular domain
 T = 2000;
 rc = 0.035; % rc: core repulsion radius (default 0.035 mm)
 param.rc = 0;
 param.ri = 3*rc;
 param.bc = 'periodic'; % bc: boundary condition, 'free', 'periodic', or 'noflux' (default 'free'), can be single number or 2 element array {'bcx','bcy'} for different bcs along different dimensions
-param.segmentLength = 1.13/(M - 1);
+param.segmentLength = 1.13/(18/M)/(M - 1);
 % -- slow-down parameters --
 param.vs = 0.018; % npr1 0.018; N2 0.014
 param.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
@@ -52,11 +52,12 @@ for dimCtr = 1:size(postiSamples,2)
     postiSamples(overLogIndcs|underLogIndcs,:) = [];
 end
 postiMean = mean(postiSamples);
+% or get this without sampling with posterior{1}.ComponentProportion*posterior{1}.mu
 % set model parameters from posterior
 param.drdN_rev = postiMean(1);
 param.dkdN_dwell = postiMean(2);
 param.dkdN_undwell = postiMean(3);
-param.f_hapt = 0;
+param.f_hapt = 10^postiMean(4);
 
 addpath('visualisation/')
 

@@ -1,4 +1,4 @@
-function [] = runWoidlinoParamSamplesPosteriorMeanNoTaxis(makeMovie)
+function [] = runWoidlinoParamSamplesPosteriorMeanHighNoise(makeMovie)
 
 % general model parameters for all simulations - unless set otherwise
 N = 40; % N: number of objects
@@ -28,7 +28,7 @@ param.k_theta = 0;
 param.theta_0 = 0;
 param.omega_m = 0;
 param.deltaPhase = 0;
-param.angleNoise = 0.05;
+param.angleNoise = 0.08;
 % -- haptotaxis --
 param.Rif = 1.2/0.035;
 param.haptotaxisMode = 'weighted_additive';
@@ -56,7 +56,7 @@ postiMean = mean(postiSamples);
 param.drdN_rev = postiMean(1);
 param.dkdN_dwell = postiMean(2);
 param.dkdN_undwell = postiMean(3);
-param.f_hapt = 0;
+param.f_hapt = 10^postiMean(4);
 
 addpath('visualisation/')
 

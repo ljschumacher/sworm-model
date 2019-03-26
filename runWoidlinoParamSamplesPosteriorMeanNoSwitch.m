@@ -14,8 +14,8 @@ param.segmentLength = 1.13/(M - 1);
 param.vs = 0.018; % npr1 0.018; N2 0.014
 param.slowingNodes = 1:M;% slowingNodes: which nodes register contact (default head and tail)
 param.slowingMode = 'stochastic_bynode';
-param.k_dwell = 0.0036; % npr1 0.0036; N2 0.25
-param.k_undwell = 1.1; % npr1 1.1; N2 0.45
+param.k_dwell = 0; % npr1 0.0036; N2 0.25
+param.k_undwell = 100; % npr1 1.1; N2 0.45
 % -- reversal parameters --
 param.reversalMode = 'density';
 param.revRateClusterEdge = 0;
@@ -62,7 +62,7 @@ addpath('visualisation/')
 
 filepath = '~/Dropbox/projects/collectiveBehaviour/sworm-model/results/woidlinos/paramSamples/PRW_4D_taxis_weighted_additive_r2/postiPredictiveCheck/';
 
-numReps = 5;
+numReps = 10;
 for repCtr = 1:numReps
     filename = ['wlM' num2str(M) '_N_' num2str(N) '_L_' num2str(L(1)) ...
         '_v0_' num2str(param.v0) '_vs_' num2str(param.vs) ...
