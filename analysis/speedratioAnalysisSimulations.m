@@ -1,5 +1,5 @@
 function [speedFractions, densitybinedges] = ...
-    speedratioAnalysisSimulations(simfile,trackedNodes,framesAnalyzed,nBins)
+    speedratioAnalysisSimulations(simfile,trackedNodes,framesAnalyzed,nBins,speedThresh)
 % calculate directional & velocity correlation, and
 % radial distribution functions
 
@@ -81,8 +81,8 @@ for binCtr = 1:nBins
     [thisbincounts, thisbinedges] = histcounts(speed(thisBinLogInd),...
         'BinWidth',10,'Normalization','Probability');
     % calculate proportion in high and low speed states
-    speedFractions(binCtr,1) = sum(thisbincounts(thisbinedges(2:end)<=100));
-    speedFractions(binCtr,2) = sum(thisbincounts(thisbinedges(1:end-1)>100));
+    speedFractions(binCtr,1) = sum(thisbincounts(thisbinedges(2:end)<=speedThresh));
+    speedFractions(binCtr,2) = sum(thisbincounts(thisbinedges(1:end-1)>speedThresh));
 end
 
 end

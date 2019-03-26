@@ -16,6 +16,8 @@ exportOptions = struct('Format','eps2',...
 % set plotting options
 nBins = 10;
 figurepath = 'figures/speedratio/';
+plotColors = lines(2);
+strainCtr = 2;
 
 % set simulation file
 filepath = '~/Dropbox/projects/collectiveBehaviour/sworm-model/results/woidlinos/paramSamples/PRW_4D_taxis_weighted_additive_r2/postiPredictiveCheck/';
@@ -25,6 +27,7 @@ numReps = 10;
 
 % set analysis parameters
 trackedNodes = 1:3;
+speedThresh = 50;
 
 % loop over file to plot
 for fileCtr = 1:nFiles
@@ -33,22 +36,28 @@ for fileCtr = 1:nFiles
     if exist([filepath fileName],'file')
         for repCtr = 1:numReps
             thisFileName = strrep(fileName,'run1',['run' num2str(repCtr)]);
-            thisFile = load([filepath thisFileName]);
-            %% analyse simulation data
-            % pick frames to analyse, e.g. second half of simulation
-            maxNumFrames = size(thisFile.xyarray,4);
-            burnIn = round(0.5*maxNumFrames);
-            framesAnalyzed = (burnIn+1):maxNumFrames;
-            % calculate stats
-            [speedRatios(repCtr,:,:),densitybinedges] = ...
-                speedratioAnalysisSimulations(thisFile,trackedNodes,framesAnalyzed,nBins);
+            if exist([filepath thisFileName],'file')
+                
+                thisFile = load([filepath thisFileName]);
+                %% analyse simulation data
+                % pick frames to analyse, e.g. second half of simulation
+                maxNumFrames = size(thisFile.xyarray,4);
+                burnIn = round(0.5*maxNumFrames);
+                framesAnalyzed = (burnIn+1):maxNumFrames;
+                % calculate stats
+                [speedRatios(repCtr,:,:),densitybinedges] = ...
+                    speedratioAnalysisSimulations(thisFile,trackedNodes,framesAnalyzed,nBins,speedThresh);
+            elseif ~exist([filepath thisFileName],'file')
+                disp(['no results for ' thisFileName])
+            end
         end
         %% plot analysis results
         figure; hold on
         errorbar(densitybinedges(1:nBins),nanmean(speedRatios(:,:,2))./nanmean(speedRatios(:,:,1)),...
             sqrt((nanstd(speedRatios(:,:,2))./nanmean(speedRatios(:,:,2))).^2 ...
             + (nanstd(speedRatios(:,:,1))./nanmean(speedRatios(:,:,1))).^2) ...
-        .*nanmean(speedRatios(:,:,2))./nanmean(speedRatios(:,:,1))./sqrt(numReps))
+            .*nanmean(speedRatios(:,:,2))./nanmean(speedRatios(:,:,1))./sqrt(numReps),...
+            'Color',plotColors(strainCtr,:))
         
         %% format and export figures
         figHandle = gcf;
@@ -56,7 +65,7 @@ for fileCtr = 1:nFiles
         set(figHandle,'PaperUnits','centimeters')
         ylabel('P_f/P_s')
         xlabel('local density, \rho_6 (worms/mm^2)')
-%         ylim([0 ceil(10*max(nanmean(speedRatios(:,:,2))./nanmean(speedRatios(:,:,1))))/10])
+        %         ylim([0 ceil(10*max(nanmean(speedRatios(:,:,2))./nanmean(speedRatios(:,:,1))))/10])
         % export figure
         figurename = [figurepath 'speedRatio_' ...
             strrep(strrep(fileName,'run1',''),'.mat','')];
